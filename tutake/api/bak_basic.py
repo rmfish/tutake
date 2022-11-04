@@ -195,7 +195,7 @@ class BakBasic(BaseDao, TuShareBase):
             'offset',
         ])}
 
-        @sleep(timeout=5, time_append=3, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))

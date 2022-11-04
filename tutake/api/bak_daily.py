@@ -138,8 +138,8 @@ class BakDaily(BaseDao, TuShareBase):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if "5000" != "":
+            default_limit = int("5000")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
@@ -157,12 +157,22 @@ class BakDaily(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return [{}]
+        import pendulum
+        start = pendulum.parse('20170614')
+        now = pendulum.now()
+        params = []
+        while start < now:
+            params.append({"trade_date": now.format('YYYYMMDD')})
+            now = now.add(days=-1)
+        return params
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
+        min_date = self.min("trade_date", "trade_date = '%s'" % params['trade_date'])
+        if min_date == params['trade_date']:
+            return None
         return params
 
     def process(self, process_type: ProcessType):
@@ -199,7 +209,7 @@ class BakDaily(BaseDao, TuShareBase):
             kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = "5000"
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -217,7 +227,7 @@ class BakDaily(BaseDao, TuShareBase):
             ])
         }
 
-        @sleep(timeout=5, time_append=3, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.bak_daily with args: {}".format(kwargs))
