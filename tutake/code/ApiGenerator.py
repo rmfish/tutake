@@ -69,7 +69,7 @@ class CodeGenerator(object):
 
     def generate_dao_code(self, apis):
         tmpl = self.env.get_template('dao.tmpl')
-        self.render_code("dao.py", tmpl.render({"apis": apis}))
+        self.render_code("dao", tmpl.render({"apis": apis}))
 
     def generate_order_by(self, api):
         """
@@ -126,14 +126,16 @@ if __name__ == '__main__':
     api_dir = realpath("{}/../api".format(current_dir))
 
     generator = CodeGenerator(tmpl_dir, api_dir)
+    api_ids = [94]
     parent_id = [15, 24]
     api_params = []
     for api_id in parent_id:
         apis = get_api_children(api_id)
         for i in apis:
             api_params.append(generator.generate_api_code(i['id']))
+    for i in api_ids:
+        api_params.append(generator.generate_api_code(i))
     generator.generate_dao_code(api_params)
 
-    # api_id = [19, 25, 26, 100, 104, 112, 123, 193, 194]
     # for i in api_id:
     #     render_api(i, dir, output)

@@ -194,6 +194,8 @@ class SuspendD(BaseDao, TuShareBase):
 
 
 if __name__ == '__main__':
+    pd.set_option('display.max_columns', 500)    # 显示列数
+    pd.set_option('display.width', 1000)
     logger.setLevel(logging.DEBUG)
     api = SuspendD()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
