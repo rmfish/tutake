@@ -9,6 +9,7 @@ from tutake.api.dao import DAO
 from tutake.api.process_type import ProcessType
 from tutake.api.tushare_base import TuShareBase
 from tutake.utils.config import config
+from tutake.utils.decorator import sleep
 """
 Tushare suspend_d接口
 数据接口-沪深股票-行情数据-每日停复牌信息  https://tushare.pro/document/2?doc_id=214
@@ -174,6 +175,7 @@ class SuspendD(BaseDao, TuShareBase):
             ])
         }
 
+        @sleep(timeout=5, time_append=3, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.suspend_d with args: {}".format(kwargs))
@@ -194,6 +196,6 @@ class SuspendD(BaseDao, TuShareBase):
 if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     api = SuspendD()
-    api.process(ProcessType.HISTORY)  # 同步历史数据
+    # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.suspend_d())    # 数据查询接口

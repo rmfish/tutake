@@ -9,6 +9,7 @@ from tutake.api.dao import DAO
 from tutake.api.process_type import ProcessType
 from tutake.api.tushare_base import TuShareBase
 from tutake.utils.config import config
+from tutake.utils.decorator import sleep
 """
 Tushare stock_basic接口
 数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
@@ -200,6 +201,7 @@ class StockBasic(BaseDao, TuShareBase):
             ])
         }
 
+        @sleep(timeout=5, time_append=3, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.stock_basic with args: {}".format(kwargs))

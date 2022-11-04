@@ -9,6 +9,7 @@ from tutake.api.dao import DAO
 from tutake.api.process_type import ProcessType
 from tutake.api.tushare_base import TuShareBase
 from tutake.utils.config import config
+from tutake.utils.decorator import sleep
 """
 Tushare stk_rewards接口
 数据接口-沪深股票-基础数据-管理层薪酬和持股  https://tushare.pro/document/2?doc_id=194
@@ -160,6 +161,7 @@ class StkRewards(BaseDao, TuShareBase):
             'offset',
         ])}
 
+        @sleep(timeout=5, time_append=3, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.stk_rewards with args: {}".format(kwargs))
