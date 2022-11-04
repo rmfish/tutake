@@ -14,7 +14,7 @@ def sleep(timeout, time_append=0, retry=3, match=None):
                     if match is not None:
                         if not re.match(match, str(err), re.M | re.I):
                             raise err
-                    print(f'Sleeping and retry for {timeout + appended} seconds. {function.__name__} {args}')
+                    print(f'Sleeping and retry for {timeout + appended} seconds. {function.__name__} {args} {str(err)}')
                     time.sleep(timeout + appended)
                     appended += time_append
                     retries += 1

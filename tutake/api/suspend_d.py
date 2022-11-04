@@ -85,8 +85,8 @@ class SuspendD(BaseDao, TuShareBase):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if "5000" != "":
+            default_limit = int("5000")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
@@ -104,7 +104,8 @@ class SuspendD(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return [{}]
+        cnt = self.count()
+        return [{"offset": cnt}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
@@ -133,7 +134,9 @@ class SuspendD(BaseDao, TuShareBase):
                     if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
                         logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
-                    continue
+                    else:
+                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
+                        continue
 
     def fetch_and_append(self, process_type: ProcessType, **kwargs):
         """
@@ -152,10 +155,10 @@ class SuspendD(BaseDao, TuShareBase):
             }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = "5000"
         init_offset = 0
         offset = 0
-        if kwargs.get('offset') and kwargs.get('offset').isnumeric():
+        if kwargs.get('offset'):
             offset = int(kwargs['offset'])
             init_offset = offset
 
@@ -182,7 +185,7 @@ class SuspendD(BaseDao, TuShareBase):
         pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
-        while kwargs['limit'] != "" and df.shape[0] == kwargs['limit']:
+        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
             df = fetch_save(offset)
             offset += df.shape[0]
         return offset - init_offset
@@ -191,6 +194,6 @@ class SuspendD(BaseDao, TuShareBase):
 if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     api = SuspendD()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.suspend_d())    # 数据查询接口

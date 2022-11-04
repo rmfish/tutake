@@ -81,8 +81,8 @@ class AdjFactor(BaseDao, TuShareBase):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if "6000" != "":
+            default_limit = int("6000")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
@@ -100,13 +100,38 @@ class AdjFactor(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return [{}]
+        return self.dao.stock_basic.column_data(['ts_code', 'list_date'])
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        return params
+        from datetime import datetime, timedelta
+        date_format = '%Y%m%d'
+        if process_type == ProcessType.HISTORY:
+            min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
+            if min_date is None:
+                params['end_date'] = ""
+            elif params.get('list_date') and params.get('list_date') == min_date:
+                # 如果时间相等不用执行
+                return None
+            else:
+                min_date = datetime.strptime(min_date, date_format)
+                end_date = min_date - timedelta(days=1)
+                params['end_date'] = end_date.strftime(date_format)
+            return params
+        else:
+            max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
+            if max_date is None:
+                params['start_date'] = ""
+            elif max_date == datetime.now().strftime(date_format):
+                # 如果已经是最新时间
+                return None
+            else:
+                max_date = datetime.strptime(max_date, date_format)
+                start_date = max_date + timedelta(days=1)
+                params['start_date'] = start_date.strftime(date_format)
+            return params
 
     def process(self, process_type: ProcessType):
         """
@@ -129,7 +154,9 @@ class AdjFactor(BaseDao, TuShareBase):
                     if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
                         logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
-                    continue
+                    else:
+                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
+                        continue
 
     def fetch_and_append(self, process_type: ProcessType, **kwargs):
         """
@@ -140,10 +167,10 @@ class AdjFactor(BaseDao, TuShareBase):
             kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = "6000"
         init_offset = 0
         offset = 0
-        if kwargs.get('offset') and kwargs.get('offset').isnumeric():
+        if kwargs.get('offset'):
             offset = int(kwargs['offset'])
             init_offset = offset
 
@@ -169,7 +196,7 @@ class AdjFactor(BaseDao, TuShareBase):
         pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
-        while kwargs['limit'] != "" and df.shape[0] == kwargs['limit']:
+        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
             df = fetch_save(offset)
             offset += df.shape[0]
         return offset - init_offset

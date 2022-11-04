@@ -149,7 +149,9 @@ class StkManagers(BaseDao, TuShareBase):
                     if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
                         logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
-                    continue
+                    else:
+                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
+                        continue
 
     def fetch_and_append(self, process_type: ProcessType, **kwargs):
         """
@@ -163,7 +165,7 @@ class StkManagers(BaseDao, TuShareBase):
             kwargs['limit'] = ""
         init_offset = 0
         offset = 0
-        if kwargs.get('offset') and kwargs.get('offset').isnumeric():
+        if kwargs.get('offset'):
             offset = int(kwargs['offset'])
             init_offset = offset
 
@@ -192,7 +194,7 @@ class StkManagers(BaseDao, TuShareBase):
         pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
-        while kwargs['limit'] != "" and df.shape[0] == kwargs['limit']:
+        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
             df = fetch_save(offset)
             offset += df.shape[0]
         return offset - init_offset
