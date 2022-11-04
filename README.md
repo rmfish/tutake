@@ -1,6 +1,7 @@
 # Tutake
 
 Take data from TuShare, respect TuShare!
+自动生成代码，将TuShare的数据同步到本地，并同时保留Tushare的API进行本地数据的读取
 
 ### 背景
 
@@ -24,9 +25,8 @@ tutake
 ```
 
 #### 代码执行
-数据的同步基本分为历史数据同步处理和增量数据数据两种场景，执行也很简单，以Tushare daily接口为例：
-##### 相关接口信息
-数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
+数据的同步基本分为`历史数据`和`增量数据`处理两种场景，执行也很简单，以  `Tushare stock_basic`接口为例：
+对应接口介绍 数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
 
 自动生成的代码是 `stock_basic.py`
 在main函数中能看到默认生成的代码：
@@ -34,11 +34,11 @@ tutake
 if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     api = StockBasic()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.stock_basic())  # 数据查询接口
 ```
-执行后的结果(要先执行`api.process(ProcessType.HISTORY)` 才会数据)：
+执行后的结果：
 ```python
         ts_code  symbol  name  area  ... list_status list_date delist_date is_hs
 0     000001.SZ  000001  平安银行    深圳  ...           L  19910403        None     S
@@ -55,6 +55,35 @@ if __name__ == '__main__':
 
 [4977 rows x 15 columns]
 
+```
+***
+再以`Tushare daily`接口为例:
+```python
+# 数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
+if __name__ == '__main__':
+    logger.setLevel(logging.DEBUG)
+    api = Daily()
+    api.process(ProcessType.HISTORY)  # 同步历史数据
+    # api.process(ProcessType.INCREASE)  # 同步增量数据
+    print(api.daily())  # 数据查询接口
+
+```
+这样就开始下载并导入A股历史的日K数据（可能需要花几个小时的时间，1G多的数据，还没做性能优化），务必要求 `StockBasic`的   `api.process(ProcessType.HISTORY)`已经成功执行，显示结果：
+```python
+            id    ts_code trade_date  ...  pct_chg         vol       amount
+0     12412042  000001.SZ   20221104  ...   3.6398  1776112.23  1903720.944
+1     12412043  000002.SZ   20221104  ...   2.9326  1077514.38  1500447.963
+2     12412044  000004.SZ   20221104  ...   1.1416    11770.00    10392.991
+3     12412045  000005.SZ   20221104  ...   1.1834    78672.00    13352.921
+4     12412046  000006.SZ   20221104  ...   2.1390    89775.00    34065.087
+...        ...        ...        ...  ...      ...         ...          ...
+5995      4108  002368.SZ   20221102  ...  -1.0601   314414.13   873025.365
+5996      4107  002369.SZ   20221102  ...   2.3454   343787.09   164993.228
+5997      4106  002370.SZ   20221102  ...   0.5825   534621.43   277528.784
+5998      4105  002371.SZ   20221102  ...  -1.2343    76915.84  2022068.928
+5999      4104  002372.SZ   20221102  ...   1.3022   107220.93   201927.556
+
+[6000 rows x 12 columns]
 ```
 
 ***
