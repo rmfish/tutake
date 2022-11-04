@@ -14,8 +14,7 @@ Tushare moneyflow接口
 数据接口-沪深股票-行情数据-个股资金流向  https://tushare.pro/document/2?doc_id=170
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_moneyflow.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_moneyflow.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -60,8 +59,7 @@ class Moneyflow(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareMoneyflow,
-                         'tushare_moneyflow')
+        BaseDao.__init__(self, engine, session_factory, TushareMoneyflow, 'tushare_moneyflow')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -115,7 +113,7 @@ class Moneyflow(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareMoneyflow).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -162,14 +160,10 @@ class Moneyflow(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -179,14 +173,7 @@ class Moneyflow(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "ts_code": "",
-                "trade_date": "",
-                "start_date": "",
-                "end_date": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = ""
@@ -197,8 +184,7 @@ class Moneyflow(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'trade_date',
                 'start_date',
@@ -212,19 +198,13 @@ class Moneyflow(BaseDao, TuShareBase):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.moneyflow with args: {}".format(kwargs))
             fields = [
-                "ts_code", "trade_date", "buy_sm_vol", "buy_sm_amount",
-                "sell_sm_vol", "sell_sm_amount", "buy_md_vol", "buy_md_amount",
-                "sell_md_vol", "sell_md_amount", "buy_lg_vol", "buy_lg_amount",
-                "sell_lg_vol", "sell_lg_amount", "buy_elg_vol",
-                "buy_elg_amount", "sell_elg_vol", "sell_elg_amount",
-                "net_mf_vol", "net_mf_amount", "trade_count"
+                "ts_code", "trade_date", "buy_sm_vol", "buy_sm_amount", "sell_sm_vol", "sell_sm_amount", "buy_md_vol",
+                "buy_md_amount", "sell_md_vol", "sell_md_amount", "buy_lg_vol", "buy_lg_amount", "sell_lg_vol",
+                "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
+                "net_mf_amount", "trade_count"
             ]
             res = pro.moneyflow(**kwargs, fields=fields)
-            res.to_sql('tushare_moneyflow',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_moneyflow', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -241,4 +221,4 @@ if __name__ == '__main__':
     api = Moneyflow()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.moneyflow())  # 数据查询接口
+    print(api.moneyflow())    # 数据查询接口

@@ -7,4 +7,5 @@ database:
 
 api:
   driver_url: sqlite:////Users/xxx/tutake/meta
+  cookie: #tushare的Cookie 只有在要抓api信息时才需要
 

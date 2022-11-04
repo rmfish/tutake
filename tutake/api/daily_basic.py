@@ -14,8 +14,7 @@ Tushare daily_basic接口
 数据接口-沪深股票-行情数据-每日指标  https://tushare.pro/document/2?doc_id=32
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_daily_basic.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_daily_basic.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -58,8 +57,7 @@ class DailyBasic(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareDailyBasic,
-                         'tushare_daily_basic')
+        BaseDao.__init__(self, engine, session_factory, TushareDailyBasic, 'tushare_daily_basic')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -111,7 +109,7 @@ class DailyBasic(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareDailyBasic).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -158,14 +156,10 @@ class DailyBasic(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -175,14 +169,7 @@ class DailyBasic(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "ts_code": "",
-                "trade_date": "",
-                "start_date": "",
-                "end_date": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = ""
@@ -193,8 +180,7 @@ class DailyBasic(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'trade_date',
                 'start_date',
@@ -208,17 +194,12 @@ class DailyBasic(BaseDao, TuShareBase):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.daily_basic with args: {}".format(kwargs))
             fields = [
-                "ts_code", "trade_date", "close", "turnover_rate",
-                "turnover_rate_f", "volume_ratio", "pe", "pe_ttm", "pb", "ps",
-                "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share",
-                "free_share", "total_mv", "circ_mv", "limit_status"
+                "ts_code", "trade_date", "close", "turnover_rate", "turnover_rate_f", "volume_ratio", "pe", "pe_ttm",
+                "pb", "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv",
+                "circ_mv", "limit_status"
             ]
             res = pro.daily_basic(**kwargs, fields=fields)
-            res.to_sql('tushare_daily_basic',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_daily_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -235,4 +216,4 @@ if __name__ == '__main__':
     api = DailyBasic()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.daily_basic())  # 数据查询接口
+    print(api.daily_basic())    # 数据查询接口

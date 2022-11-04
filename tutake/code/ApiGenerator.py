@@ -33,7 +33,7 @@ class CodeGenerator(object):
     def render_code(self, file_name, code):
         with open("{}/{}.py".format(self.output_dir, file_name), 'w') as file:
             try:
-                formatted, changed = FormatCode(code)
+                formatted, changed = FormatCode(code,style_config='setup.cfg')
                 file.write(formatted)
             except Exception as err:
                 file.write(code)

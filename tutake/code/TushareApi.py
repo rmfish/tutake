@@ -108,7 +108,7 @@ def get_api_path(api_id):
 
 
 def dump():
-    cookie = 'session-id=a2ed39db-ce32-4c45-a528-26d061f41591; uid=2|1:0|10:1667280804|3:uid|8:Mjk2MDMy|401fedb63e36b459acff5a218f3bf3c3e227112291491c6b7b35a4d68ffff443; username="2|1:0|10:1667280804|8:username|16:c2hhICoqKiBidTc=|2f363ee53cfb6bdcc5f85acb88c66cfe3824a722d2cde0f815ed2a717e2a3243"'
+    cookie = config["api"]["cookie"]
 
     def save_api(apis, parent_id=None):
         for i in range(len(apis)):

@@ -14,8 +14,7 @@ Tushare stock_basic接口
 数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -53,8 +52,7 @@ class StockBasic(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareStockBasic,
-                         'tushare_stock_basic')
+        BaseDao.__init__(self, engine, session_factory, TushareStockBasic, 'tushare_stock_basic')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -106,7 +104,7 @@ class StockBasic(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareStockBasic).filter_by(**params)
         query = query.order_by(text("ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -155,14 +153,10 @@ class StockBasic(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -192,8 +186,7 @@ class StockBasic(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'name',
                 'exchange',
@@ -209,16 +202,11 @@ class StockBasic(BaseDao, TuShareBase):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.stock_basic with args: {}".format(kwargs))
             fields = [
-                "ts_code", "symbol", "name", "area", "industry", "fullname",
-                "enname", "cnspell", "market", "exchange", "curr_type",
-                "list_status", "list_date", "delist_date", "is_hs"
+                "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
+                "curr_type", "list_status", "list_date", "delist_date", "is_hs"
             ]
             res = pro.stock_basic(**kwargs, fields=fields)
-            res.to_sql('tushare_stock_basic',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_stock_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -235,4 +223,4 @@ if __name__ == '__main__':
     api = StockBasic()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.stock_basic())  # 数据查询接口
+    print(api.stock_basic())    # 数据查询接口

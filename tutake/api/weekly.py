@@ -14,8 +14,7 @@ Tushare weekly接口
 数据接口-沪深股票-行情数据-周线行情  https://tushare.pro/document/2?doc_id=144
 """
 
-engine = create_engine("%s/%s" %
-                       (config['database']['driver_url'], 'tushare_weekly.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_weekly.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -50,8 +49,7 @@ class Weekly(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareWeekly,
-                         'tushare_weekly')
+        BaseDao.__init__(self, engine, session_factory, TushareWeekly, 'tushare_weekly')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -95,7 +93,7 @@ class Weekly(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareWeekly).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -127,24 +125,21 @@ class Weekly(BaseDao, TuShareBase):
         from datetime import datetime, timedelta
         date_format = '%Y%m%d'
         if process_type == ProcessType.HISTORY:
-            min_date = self.min("trade_date",
-                                "ts_code = '%s'" % params['ts_code'])
+            min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
             if min_date is None:
                 params['end_date'] = ""
             else:
                 min_date = datetime.strptime(min_date, date_format)
                 end_date = min_date - timedelta(days=7)
                 if params.get('list_date'):
-                    list_date = datetime.strptime(params.get('list_date'),
-                                                  date_format)
+                    list_date = datetime.strptime(params.get('list_date'), date_format)
                     interval = (end_date - list_date).days
                     if interval < 0:
                         return None
                 params['end_date'] = end_date.strftime(date_format)
             return params
         else:
-            max_date = self.max("trade_date",
-                                "ts_code = '%s'" % params['ts_code'])
+            max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
             if max_date is None:
                 params['start_date'] = ""
             else:
@@ -173,14 +168,10 @@ class Weekly(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -190,14 +181,7 @@ class Weekly(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "ts_code": "",
-                "trade_date": "",
-                "start_date": "",
-                "end_date": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = "4500"
@@ -208,8 +192,7 @@ class Weekly(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'trade_date',
                 'start_date',
@@ -223,15 +206,11 @@ class Weekly(BaseDao, TuShareBase):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.weekly with args: {}".format(kwargs))
             fields = [
-                "ts_code", "trade_date", "close", "open", "high", "low",
-                "pre_close", "change", "pct_chg", "vol", "amount"
+                "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol",
+                "amount"
             ]
             res = pro.weekly(**kwargs, fields=fields)
-            res.to_sql('tushare_weekly',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_weekly', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -248,4 +227,4 @@ if __name__ == '__main__':
     api = Weekly()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.weekly())  # 数据查询接口
+    print(api.weekly())    # 数据查询接口

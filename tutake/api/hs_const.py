@@ -14,8 +14,7 @@ Tushare hs_const接口
 数据接口-沪深股票-基础数据-沪深股通成分股  https://tushare.pro/document/2?doc_id=104
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -44,8 +43,7 @@ class HsConst(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareHsConst,
-                         'tushare_hs_const')
+        BaseDao.__init__(self, engine, session_factory, TushareHsConst, 'tushare_hs_const')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -68,18 +66,16 @@ class HsConst(BaseDao, TuShareBase):
          is_new(str)  是否最新
         
         """
-        args = [
-            n for n in [
-                'hs_type',
-                'is_new',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        args = [n for n in [
+            'hs_type',
+            'is_new',
+            'limit',
+            'offset',
+        ] if n not in ['limit', 'offset']]
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareHsConst).filter_by(**params)
         query = query.order_by(text("ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -128,14 +124,10 @@ class HsConst(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -155,26 +147,19 @@ class HsConst(BaseDao, TuShareBase):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
-                'hs_type',
-                'is_new',
-                'limit',
-                'offset',
-            ])
-        }
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & list([
+            'hs_type',
+            'is_new',
+            'limit',
+            'offset',
+        ])}
 
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.hs_const with args: {}".format(kwargs))
             fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
             res = pro.hs_const(**kwargs, fields=fields)
-            res.to_sql('tushare_hs_const',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_hs_const', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -191,4 +176,4 @@ if __name__ == '__main__':
     api = HsConst()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.hs_const())  # 数据查询接口
+    print(api.hs_const())    # 数据查询接口

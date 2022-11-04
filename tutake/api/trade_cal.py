@@ -14,8 +14,7 @@ Tushare trade_cal接口
 数据接口-沪深股票-基础数据-交易日历  https://tushare.pro/document/2?doc_id=26
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -43,8 +42,7 @@ class TradeCal(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareTradeCal,
-                         'tushare_trade_cal')
+        BaseDao.__init__(self, engine, session_factory, TushareTradeCal, 'tushare_trade_cal')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -83,7 +81,7 @@ class TradeCal(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareTradeCal).filter_by(**params)
 
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -132,14 +130,10 @@ class TradeCal(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -168,8 +162,7 @@ class TradeCal(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'exchange',
                 'cal_date',
                 'start_date',
@@ -185,11 +178,7 @@ class TradeCal(BaseDao, TuShareBase):
             logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
             fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
             res = pro.trade_cal(**kwargs, fields=fields)
-            res.to_sql('tushare_trade_cal',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_trade_cal', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -206,4 +195,4 @@ if __name__ == '__main__':
     api = TradeCal()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.trade_cal())  # 数据查询接口
+    print(api.trade_cal())    # 数据查询接口

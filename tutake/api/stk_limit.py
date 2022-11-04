@@ -14,8 +14,7 @@ Tushare stk_limit接口
 数据接口-沪深股票-行情数据-每日涨跌停价格  https://tushare.pro/document/2?doc_id=183
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_stk_limit.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_stk_limit.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -44,8 +43,7 @@ class StkLimit(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareStkLimit,
-                         'tushare_stk_limit')
+        BaseDao.__init__(self, engine, session_factory, TushareStkLimit, 'tushare_stk_limit')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -83,7 +81,7 @@ class StkLimit(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareStkLimit).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -130,14 +128,10 @@ class StkLimit(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -147,14 +141,7 @@ class StkLimit(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "ts_code": "",
-                "trade_date": "",
-                "start_date": "",
-                "end_date": "",
-                "offset": "",
-                "limit": ""
-            }
+            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = ""
@@ -165,8 +152,7 @@ class StkLimit(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'trade_date',
                 'start_date',
@@ -179,15 +165,9 @@ class StkLimit(BaseDao, TuShareBase):
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.stk_limit with args: {}".format(kwargs))
-            fields = [
-                "trade_date", "ts_code", "pre_close", "up_limit", "down_limit"
-            ]
+            fields = ["trade_date", "ts_code", "pre_close", "up_limit", "down_limit"]
             res = pro.stk_limit(**kwargs, fields=fields)
-            res.to_sql('tushare_stk_limit',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_stk_limit', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -204,4 +184,4 @@ if __name__ == '__main__':
     api = StkLimit()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.stk_limit())  # 数据查询接口
+    print(api.stk_limit())    # 数据查询接口

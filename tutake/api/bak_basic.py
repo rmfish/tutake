@@ -14,8 +14,7 @@ Tushare bak_basic接口
 数据接口-沪深股票-基础数据-备用列表  https://tushare.pro/document/2?doc_id=262
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -63,8 +62,7 @@ class BakBasic(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareBakBasic,
-                         'tushare_bak_basic')
+        BaseDao.__init__(self, engine, session_factory, TushareBakBasic, 'tushare_bak_basic')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -106,18 +104,16 @@ class BakBasic(BaseDao, TuShareBase):
          holder_num(int)  股东人数
         
         """
-        args = [
-            n for n in [
-                'trade_date',
-                'ts_code',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        args = [n for n in [
+            'trade_date',
+            'ts_code',
+            'limit',
+            'offset',
+        ] if n not in ['limit', 'offset']]
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareBakBasic).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -166,14 +162,10 @@ class BakBasic(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -183,12 +175,7 @@ class BakBasic(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "trade_date": "",
-                "ts_code": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = {"trade_date": "", "ts_code": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = ""
@@ -198,32 +185,23 @@ class BakBasic(BaseDao, TuShareBase):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
-                'trade_date',
-                'ts_code',
-                'limit',
-                'offset',
-            ])
-        }
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & list([
+            'trade_date',
+            'ts_code',
+            'limit',
+            'offset',
+        ])}
 
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))
             fields = [
-                "trade_date", "ts_code", "name", "industry", "area", "pe",
-                "float_share", "total_share", "total_assets", "liquid_assets",
-                "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps",
-                "pb", "list_date", "undp", "per_undp", "rev_yoy", "profit_yoy",
-                "gpr", "npr", "holder_num"
+                "trade_date", "ts_code", "name", "industry", "area", "pe", "float_share", "total_share", "total_assets",
+                "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date",
+                "undp", "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
             ]
             res = pro.bak_basic(**kwargs, fields=fields)
-            res.to_sql('tushare_bak_basic',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_bak_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -240,4 +218,4 @@ if __name__ == '__main__':
     api = BakBasic()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.bak_basic())  # 数据查询接口
+    print(api.bak_basic())    # 数据查询接口

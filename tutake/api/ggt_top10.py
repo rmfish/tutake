@@ -14,8 +14,7 @@ Tushare ggt_top10接口
 数据接口-沪深股票-行情数据-港股通十大成交股  https://tushare.pro/document/2?doc_id=49
 """
 
-engine = create_engine(
-    "%s/%s" % (config['database']['driver_url'], 'tushare_ggt_top10.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_ggt_top10.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -56,8 +55,7 @@ class GgtTop10(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareGgtTop10,
-                         'tushare_ggt_top10')
+        BaseDao.__init__(self, engine, session_factory, TushareGgtTop10, 'tushare_ggt_top10')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
@@ -109,7 +107,7 @@ class GgtTop10(BaseDao, TuShareBase):
         params = {key: kwargs[key] for key in kwargs.keys() & args}
         query = session_factory().query(TushareGgtTop10).filter_by(**params)
         query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000  # 默认10000条 避免导致数据库压力过大
+        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
@@ -156,14 +154,10 @@ class GgtTop10(BaseDao, TuShareBase):
                     continue
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format(
-                        "daily", cnt))
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[
-                            0].startswith("抱歉，您每天最多访问该接口"):
-                        logger.error(
-                            "Throw exception with param: {} err:{}".format(
-                                new_param, err))
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
                         return
                     continue
 
@@ -192,8 +186,7 @@ class GgtTop10(BaseDao, TuShareBase):
             init_offset = offset
 
         kwargs = {
-            key: kwargs[key]
-            for key in kwargs.keys() & list([
+            key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
                 'trade_date',
                 'start_date',
@@ -208,17 +201,11 @@ class GgtTop10(BaseDao, TuShareBase):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.ggt_top10 with args: {}".format(kwargs))
             fields = [
-                "trade_date", "ts_code", "name", "close", "p_change", "rank",
-                "market_type", "amount", "net_amount", "sh_amount",
-                "sh_net_amount", "sh_buy", "sh_sell", "sz_amount",
-                "sz_net_amount", "sz_buy", "sz_sell"
+                "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
+                "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
             ]
             res = pro.ggt_top10(**kwargs, fields=fields)
-            res.to_sql('tushare_ggt_top10',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
+            res.to_sql('tushare_ggt_top10', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -235,4 +222,4 @@ if __name__ == '__main__':
     api = GgtTop10()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.ggt_top10())  # 数据查询接口
+    print(api.ggt_top10())    # 数据查询接口
