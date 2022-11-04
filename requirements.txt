@@ -1,0 +1,7 @@
+Jinja2==3.1.2
+pandas==1.5.1
+PyYAML==6.0
+requests==2.28.1
+SQLAlchemy==1.4.42
+tushare==1.2.85
+yapf==0.32.0

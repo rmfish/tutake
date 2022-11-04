@@ -1,0 +1,37 @@
+from importlib import import_module
+
+
+class Singleton(object):
+    def __init__(self, cls):
+        self._cls = cls
+        self._instance = {}
+
+    def __call__(self):
+        if self._cls not in self._instance:
+            self._instance[self._cls] = self._cls()
+        return self._instance[self._cls]
+
+
+@Singleton
+class DAO(object):
+    def __init__(self):
+        self.instances = {}
+        pass
+
+    def __getattr__(self, name):
+        if not self.instances.get(name):
+            self.instances[name] = self._init_dao(name)
+        return self.instances.get(name)
+
+    def _init_dao(self, name):
+{% for api in apis %}
+        if name == '{{api.name}}':
+            {{api.name}}_module = import_module("tutake.api.{{api.name}}")
+            clazz = getattr({{api.name}}_module, "{{api.title_name}}")
+            return clazz()
+{% endfor %}
+
+
+if __name__ == '__main__':
+    dao1 = DAO()
+    print(dao1.stock_basic.count())

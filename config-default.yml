@@ -1,0 +1,10 @@
+#执行时需要将这个文件调整为 config.yml
+tushare:
+  token:
+
+database:
+  driver_url: sqlite:////Users/xxx/tutake/data
+
+api:
+  driver_url: sqlite:////Users/xxx/tutake/meta
+

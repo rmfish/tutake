@@ -1,0 +1,161 @@
+import pandas as pd
+import logging
+from sqlalchemy import Integer, String, Float, Column, create_engine, text
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+from tutake.api.base_dao import BaseDao
+from tutake.api.dao import DAO
+from tutake.api.process_type import ProcessType
+from tutake.api.tushare_base import TuShareBase
+from tutake.utils.config import config
+
+"""
+Tushare {{name}}接口
+{{path}}  https://tushare.pro/document/2?doc_id={{id}}
+"""
+
+engine = create_engine("%s/%s" % (config['database']['driver_url'], '{{database}}.db'))
+session_factory = sessionmaker()
+session_factory.configure(bind=engine)
+Base = declarative_base()
+logger = logging.getLogger('api.tushare.{{name}}')
+
+
+class {{entity_name}}(Base):
+    __tablename__ = "{{table_name}}"
+    {% if not exist_primary_key %}id = Column(Integer, primary_key=True , autoincrement=True)
+    {% endif %}{% for output in outputs %}{{output.name}} = Column({{output.data_type|get_sql_type}}{% if output.primary_key %}, primary_key=True{% endif %}, comment='{{output.desc}}')
+    {% endfor %}
+
+{{entity_name}}.__table__.create(bind=engine, checkfirst=True)
+
+
+class {{title_name}}(BaseDao, TuShareBase):
+    instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.instance is None:
+            cls.instance = super().__new__(cls)
+        return cls.instance
+
+    def __init__(self):
+        BaseDao.__init__(self, engine, session_factory, {{entity_name}}, '{{table_name}}')
+        TuShareBase.__init__(self)
+        self.dao = DAO()
+
+    def {{name}}(self, **kwargs):
+        """
+        {{desc}}
+
+        | Arguments:
+        {% for input in inputs %}| {{input.name}}({{input.data_type}}): {% if input.must=='Y' %}required{% endif %}  {{input.desc}}
+        {% endfor %}
+
+        :return: DataFrame
+        {% for output in outputs %} {{output.name}}({{output.data_type}})  {{output.desc}}
+        {% endfor %}
+        """
+        args = [n for n in [{% for input in inputs %}'{{input.name}}', {% endfor %}] if n not in ['limit', 'offset']]
+        params = {key: kwargs[key] for key in kwargs.keys() & args}
+        query = session_factory().query({{entity_name}}).filter_by(**params)
+        {% autoescape false %}{% if order_by %}query = query.order_by(text("{{order_by}}")) {% endif %}{% endautoescape %}
+        input_limit = 10000 # 默认10000条 避免导致数据库压力过大
+        if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
+            input_limit = int(kwargs.get('limit'))
+            query = query.limit(input_limit)
+        if "{{default_limit}}" != "":
+            default_limit = int("{{default_limit}}")
+            if default_limit < input_limit:
+                query = query.limit(default_limit)
+        if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
+            query = query.offset(int(kwargs.get('offset')))
+        return pd.read_sql(query.statement, query.session.bind)
+
+    def prepare(self, process_type: ProcessType):
+        """
+        同步历史数据准备工作
+        :return:
+        """
+        {% autoescape false %}{{prepare_code}}{% endautoescape %}
+
+    def tushare_parameters(self, process_type: ProcessType):
+        """
+        同步历史数据调用的参数
+        :return: list(dict)
+        """
+        {% autoescape false %}{{tushare_parameters_code}}{% endautoescape %}
+
+    def param_loop_process(self, process_type: ProcessType, **params):
+        """
+        每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
+        """
+        {% autoescape false %}{{param_loop_process_code}}{% endautoescape %}
+
+    def process(self, process_type: ProcessType):
+        """
+        同步历史数据
+        :return:
+        """
+        self.prepare(process_type)
+        params = self.tushare_parameters(process_type)
+        logger.debug("Process tushare params is {}".format(params))
+        if params:
+            for param in params:
+                new_param = self.param_loop_process(process_type, **param)
+                if new_param is None:
+                    logger.debug("Skip exec param: {}".format(param))
+                    continue
+                try:
+                    cnt = self.fetch_and_append(process_type, **new_param)
+                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
+                except Exception as err:
+                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
+                        return
+                    continue
+
+    def fetch_and_append(self, process_type: ProcessType, **kwargs):
+        """
+        获取tushare数据并append到数据库中
+        :return: 数量行数
+        """
+        if len(kwargs.keys()) == 0:
+            kwargs = {
+                {% for input in inputs %}"{{input.name}}": ""{% if not loop.last %},
+                {% endif %}{% endfor %}
+            }
+        # 初始化offset和limit
+        if not kwargs.get("limit"):
+            kwargs['limit'] = "{{default_limit}}"
+        init_offset = 0
+        offset = 0
+        if kwargs.get('offset') and kwargs.get('offset').isnumeric():
+            offset = int(kwargs['offset'])
+            init_offset = offset
+
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & list([{% for input in inputs %}'{{input.name}}', {% endfor %}])}
+        def fetch_save(offset_val=0):
+            kwargs['offset'] = str(offset_val)
+            logger.debug("Invoke pro.{{name}} with args: {}".format(kwargs))
+            fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
+            res = pro.{{name}}(**kwargs, fields=fields)
+            res.to_sql('{{table_name}}', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+            return res
+
+        pro = self.tushare_api()
+        df = fetch_save(offset)
+        offset += df.shape[0]
+        while kwargs['limit'] != "" and df.shape[0] == kwargs['limit']:
+            df = fetch_save(offset)
+            offset += df.shape[0]
+        return offset - init_offset
+
+
+if __name__ == '__main__':
+    logger.setLevel(logging.DEBUG)
+    api = {{title_name}}()
+    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    # api.process(ProcessType.INCREASE)  # 同步增量数据
+    print(api.{{name}}())  # 数据查询接口
+
