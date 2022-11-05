@@ -149,7 +149,7 @@ class BakBasic(BaseDao, TuShareBase):
         from datetime import datetime, timedelta
         date_format = '%Y%m%d'
         if process_type == ProcessType.HISTORY:
-            min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
+            min_date = self.min("trade_date", "ts_code = '%s' and trade_date !=''" % params['ts_code'])
             if min_date is None:
                 params['end_date'] = ""
             elif params.get('list_date') and params.get('list_date') == min_date:
