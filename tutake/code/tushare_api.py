@@ -30,6 +30,7 @@ class TushareApi(Base):
     validations = Column(String)
     database = Column(String)
     default_limit = Column(String)
+    is_ready = Column(Integer)
     if_exists = Column(String)
     order_by = Column(String)
     code_prepare = Column(String)
@@ -74,6 +75,12 @@ def update_api_detail(session, api_id, api_json):
 
 def get_api_children(parent_id):
     apis = session_factory().query(TushareApi).filter_by(parent_id=parent_id).all()
+    if apis:
+        return [assemble_api(i) for i in apis]
+
+
+def get_ready_api():
+    apis = session_factory().query(TushareApi).filter_by(is_ready=1).all()
     if apis:
         return [assemble_api(i) for i in apis]
 

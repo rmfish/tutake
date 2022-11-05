@@ -1,53 +1,55 @@
+# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
 import pandas as pd
 import logging
 from sqlalchemy import Integer, String, Float, Column, create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import BaseDao
-from tutake.api.dao import DAO
-from tutake.api.process_type import ProcessType
-from tutake.api.tushare_base import TuShareBase
+from tutake.api.tushare.base_dao import BaseDao
+from tutake.api.tushare.dao import DAO
+from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
 """
-Tushare ggt_top10接口
-数据接口-沪深股票-行情数据-港股通十大成交股  https://tushare.pro/document/2?doc_id=49
+Tushare stock_company接口
+数据接口-沪深股票-基础数据-上市公司基本信息  https://tushare.pro/document/2?doc_id=112
 """
 
-engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_ggt_top10.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
-logger = logging.getLogger('api.tushare.ggt_top10')
+logger = logging.getLogger('api.tushare.stock_company')
 
 
-class TushareGgtTop10(Base):
-    __tablename__ = "tushare_ggt_top10"
+class TushareStockCompany(Base):
+    __tablename__ = "tushare_stock_company"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    trade_date = Column(String, comment='交易日期')
-    ts_code = Column(String, comment='股票代码')
-    name = Column(String, comment='股票名称')
-    close = Column(Float, comment='收盘价')
-    p_change = Column(Float, comment='涨跌幅')
-    rank = Column(String, comment='资金排名')
-    market_type = Column(String, comment='市场类型 2：港股通（沪） 4：港股通（深）')
-    amount = Column(Float, comment='累计成交金额')
-    net_amount = Column(Float, comment='净买入金额')
-    sh_amount = Column(Float, comment='沪市成交金额')
-    sh_net_amount = Column(Float, comment='沪市净买入金额')
-    sh_buy = Column(Float, comment='沪市买入金额')
-    sh_sell = Column(Float, comment='沪市卖出金额')
-    sz_amount = Column(Float, comment='深市成交金额')
-    sz_net_amount = Column(Float, comment='深市净买入金额')
-    sz_buy = Column(Float, comment='深市买入金额')
-    sz_sell = Column(Float, comment='深市卖出金额')
+    ts_code = Column(String, index=True, comment='股票代码')
+    exchange = Column(String, index=True, comment='交易所代码SSE上交所 SZSE深交所')
+    chairman = Column(String, comment='法人代表')
+    manager = Column(String, comment='总经理')
+    secretary = Column(String, comment='董秘')
+    reg_capital = Column(Float, comment='注册资本')
+    setup_date = Column(String, comment='注册日期')
+    province = Column(String, comment='所在省份')
+    city = Column(String, comment='所在城市')
+    introduction = Column(String, comment='公司介绍')
+    website = Column(String, comment='公司主页')
+    email = Column(String, comment='电子邮件')
+    office = Column(String, comment='办公室')
+    ann_date = Column(String, comment='公告日期')
+    business_scope = Column(String, comment='经营范围')
+    employees = Column(Integer, comment='员工人数')
+    main_business = Column(String, comment='主要业务及产品')
 
 
-TushareGgtTop10.__table__.create(bind=engine, checkfirst=True)
+TushareStockCompany.__table__.create(bind=engine, checkfirst=True)
 
 
-class GgtTop10(BaseDao, TuShareBase):
+class StockCompany(BaseDao, TuShareBase):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -56,75 +58,72 @@ class GgtTop10(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareGgtTop10, 'tushare_ggt_top10')
+        BaseDao.__init__(self, engine, session_factory, TushareStockCompany, 'tushare_stock_company')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
-    def ggt_top10(self, **kwargs):
+    def stock_company(self, **kwargs):
         """
         
 
         | Arguments:
-        | ts_code(str):   股票代码
-        | trade_date(str):   交易日期
-        | start_date(str):   开始日期
-        | end_date(str):   结束日期
-        | market_type(str):   市场类型 2：港股通（沪） 4：港股通（深）
+        | ts_code(str):   TS股票代码
+        | exchange(str):   交易所代码
+        | status(str):   状态
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
 
         :return: DataFrame
-         trade_date(str)  交易日期
          ts_code(str)  股票代码
-         name(str)  股票名称
-         close(float)  收盘价
-         p_change(float)  涨跌幅
-         rank(str)  资金排名
-         market_type(str)  市场类型 2：港股通（沪） 4：港股通（深）
-         amount(float)  累计成交金额
-         net_amount(float)  净买入金额
-         sh_amount(float)  沪市成交金额
-         sh_net_amount(float)  沪市净买入金额
-         sh_buy(float)  沪市买入金额
-         sh_sell(float)  沪市卖出金额
-         sz_amount(float)  深市成交金额
-         sz_net_amount(float)  深市净买入金额
-         sz_buy(float)  深市买入金额
-         sz_sell(float)  深市卖出金额
+         exchange(str)  交易所代码SSE上交所 SZSE深交所
+         chairman(str)  法人代表
+         manager(str)  总经理
+         secretary(str)  董秘
+         reg_capital(float)  注册资本
+         setup_date(str)  注册日期
+         province(str)  所在省份
+         city(str)  所在城市
+         introduction(str)  公司介绍
+         website(str)  公司主页
+         email(str)  电子邮件
+         office(str)  办公室
+         ann_date(str)  公告日期
+         business_scope(str)  经营范围
+         employees(int)  员工人数
+         main_business(str)  主要业务及产品
         
         """
-        args = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'market_type',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        args = [n for n in [
+            'ts_code',
+            'exchange',
+            'status',
+            'limit',
+            'offset',
+        ] if n not in ['limit', 'offset']]
         params = {key: kwargs[key] for key in kwargs.keys() & args}
-        query = session_factory().query(TushareGgtTop10).filter_by(**params)
-        query = query.order_by(text("trade_date desc,ts_code"))
+        query = session_factory().query(TushareStockCompany).filter_by(**params)
+        query = query.order_by(text("ts_code"))
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if "4500" != "":
+            default_limit = int("4500")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
-        return pd.read_sql(query.statement, query.session.bind)
+        df = pd.read_sql(query.statement, query.session.bind)
+        return df.drop(['id'], axis=1, errors='ignore')
 
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
         :return:
         """
+        logger.warning("Delete all data of {}")
+        self.delete_all()
 
     def tushare_parameters(self, process_type: ProcessType):
         """
@@ -170,18 +169,10 @@ class GgtTop10(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "ts_code": "",
-                "trade_date": "",
-                "start_date": "",
-                "end_date": "",
-                "market_type": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = {"ts_code": "", "exchange": "", "status": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = "4500"
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -191,10 +182,8 @@ class GgtTop10(BaseDao, TuShareBase):
         kwargs = {
             key: kwargs[key] for key in kwargs.keys() & list([
                 'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'market_type',
+                'exchange',
+                'status',
                 'limit',
                 'offset',
             ])
@@ -203,13 +192,14 @@ class GgtTop10(BaseDao, TuShareBase):
         @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
-            logger.debug("Invoke pro.ggt_top10 with args: {}".format(kwargs))
+            logger.debug("Invoke pro.stock_company with args: {}".format(kwargs))
             fields = [
-                "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
-                "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
+                "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province",
+                "city", "introduction", "website", "email", "office", "ann_date", "business_scope", "employees",
+                "main_business"
             ]
-            res = pro.ggt_top10(**kwargs, fields=fields)
-            res.to_sql('tushare_ggt_top10', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+            res = pro.stock_company(**kwargs, fields=fields)
+            res.to_sql('tushare_stock_company', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -225,7 +215,7 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.DEBUG)
-    api = GgtTop10()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api = StockCompany()
+    api.process(ProcessType.HISTORY)    # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.ggt_top10())    # 数据查询接口
+    print(api.stock_company())    # 数据查询接口

@@ -3,7 +3,7 @@ import logging
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.TushareApi import get_api, get_api_path, get_api_children
+from tutake.code.tushare_api import get_api, get_api_path, get_api_children, get_ready_api
 from tutake.utils.file_utils import file_dir, realpath
 
 logger = logging.getLogger("api.generate")
@@ -33,14 +33,14 @@ class CodeGenerator(object):
     def render_code(self, file_name, code):
         with open("{}/{}.py".format(self.output_dir, file_name), 'w') as file:
             try:
-                formatted, changed = FormatCode(code,style_config='setup.cfg')
+                formatted, changed = FormatCode(code, style_config='setup.cfg')
                 file.write(formatted)
             except Exception as err:
                 file.write(code)
                 logger.error("Exp in render code {} {}".format(file_name, err))
 
     def generate_api_code(self, api_id):
-        temp = self.env.get_template('api_replace.tmpl')
+        temp = self.env.get_template('tushare_api.tmpl')
         api = get_api(api_id)
         if api.get('name'):
             print("Render code {} {}.py".format(api_id, api.get('name')))
@@ -52,12 +52,11 @@ class CodeGenerator(object):
                 api['database'] = 'tushare_%s' % api['name']
             if not api.get('default_limit'):
                 api['default_limit'] = ""
-            if len([i for i in api['outputs'] if 'primary_key' in i and i['primary_key']]) > 0:
-                api['exist_primary_key'] = True
 
             api['title_name'] = "{}".format(api['name'].replace('_', ' ').title().replace(' ', ''))
             api['entity_name'] = "Tushare{}".format(api['title_name'])
 
+            self.set_index(api)
             self.generate_order_by(api)
             self.generate_prepare(api)
             self.generate_tushare_parameters(api)
@@ -66,6 +65,16 @@ class CodeGenerator(object):
         else:
             logger.warning("Miss name info with api. {} {}".format(api.get('id'), api.get('title')))
         return api
+
+    def set_index(self, api):
+        inputs = api["inputs"]
+        outputs = api["outputs"]
+        input_params = [_input["name"] for _input in inputs]
+        for _output in outputs:
+            if _output["name"] in input_params and not _output.get("primary_key"):
+                _output['index'] = True
+        if len([i for i in api['outputs'] if 'primary_key' in i and i['primary_key']]) > 0:
+            api['exist_primary_key'] = True
 
     def generate_dao_code(self, apis):
         tmpl = self.env.get_template('dao.tmpl')
@@ -123,16 +132,21 @@ class CodeGenerator(object):
 if __name__ == '__main__':
     current_dir = file_dir(__file__)
     tmpl_dir = "{}/tmpl".format(current_dir)
-    api_dir = realpath("{}/../api".format(current_dir))
+    api_dir = realpath("{}/../api/tushare".format(current_dir))
 
     generator = CodeGenerator(tmpl_dir, api_dir)
-    api_ids = [94]
-    parent_id = [15, 24]
     api_params = []
-    for api_id in parent_id:
-        apis = get_api_children(api_id)
-        for i in apis:
-            api_params.append(generator.generate_api_code(i['id']))
+    apis = get_ready_api()
+    for i in apis:
+        api_params.append(generator.generate_api_code(i['id']))
+
+    # parent_id = [15, 24]
+    # for api_id in parent_id:
+    #     apis = get_api_children(api_id)
+    #     for i in apis:
+    #         api_params.append(generator.generate_api_code(i['id']))
+
+    api_ids = [94]
     for i in api_ids:
         api_params.append(generator.generate_api_code(i))
     generator.generate_dao_code(api_params)

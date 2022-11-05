@@ -1,48 +1,42 @@
+# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
 import pandas as pd
 import logging
 from sqlalchemy import Integer, String, Float, Column, create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import BaseDao
-from tutake.api.dao import DAO
-from tutake.api.process_type import ProcessType
-from tutake.api.tushare_base import TuShareBase
+from tutake.api.tushare.base_dao import BaseDao
+from tutake.api.tushare.dao import DAO
+from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
 """
-Tushare new_share接口
-数据接口-沪深股票-基础数据-IPO新股上市  https://tushare.pro/document/2?doc_id=123
+Tushare suspend_d接口
+数据接口-沪深股票-行情数据-每日停复牌信息  https://tushare.pro/document/2?doc_id=214
 """
 
-engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_suspend_d.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
-logger = logging.getLogger('api.tushare.new_share')
+logger = logging.getLogger('api.tushare.suspend_d')
 
 
-class TushareNewShare(Base):
-    __tablename__ = "tushare_new_share"
+class TushareSuspendD(Base):
+    __tablename__ = "tushare_suspend_d"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    ts_code = Column(String, comment='TS股票代码')
-    sub_code = Column(String, comment='申购代码')
-    name = Column(String, comment='名称')
-    ipo_date = Column(String, comment='上网发行日期')
-    issue_date = Column(String, comment='上市日期')
-    amount = Column(Float, comment='发行总量（万股）')
-    market_amount = Column(Float, comment='上网发行总量（万股）')
-    price = Column(Float, comment='发行价格')
-    pe = Column(Float, comment='市盈率')
-    limit_amount = Column(Float, comment='个人申购上限（万股）')
-    funds = Column(Float, comment='募集资金（亿元）')
-    ballot = Column(Float, comment='中签率')
+    ts_code = Column(String, index=True, comment='TS代码')
+    trade_date = Column(String, index=True, comment='停复牌日期')
+    suspend_timing = Column(String, comment='日内停牌时间段')
+    suspend_type = Column(String, index=True, comment='停复牌类型：S-停牌，R-复牌')
 
 
-TushareNewShare.__table__.create(bind=engine, checkfirst=True)
+TushareSuspendD.__table__.create(bind=engine, checkfirst=True)
 
 
-class NewShare(BaseDao, TuShareBase):
+class SuspendD(BaseDao, TuShareBase):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -51,71 +45,71 @@ class NewShare(BaseDao, TuShareBase):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareNewShare, 'tushare_new_share')
+        BaseDao.__init__(self, engine, session_factory, TushareSuspendD, 'tushare_suspend_d')
         TuShareBase.__init__(self)
         self.dao = DAO()
 
-    def new_share(self, **kwargs):
+    def suspend_d(self, **kwargs):
         """
-        新股上市
+        
 
         | Arguments:
-        | start_date(str):   开始日期
-        | end_date(str):   结束日期
+        | ts_code(str):   股票代码(可输入多值)
+        | suspend_type(str):   停复牌类型：S-停牌,R-复牌
+        | trade_date(str):   停复牌日期
+        | start_date(str):   停复牌查询开始日期
+        | end_date(str):   停复牌查询结束日期
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
 
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         sub_code(str)  申购代码
-         name(str)  名称
-         ipo_date(str)  上网发行日期
-         issue_date(str)  上市日期
-         amount(float)  发行总量（万股）
-         market_amount(float)  上网发行总量（万股）
-         price(float)  发行价格
-         pe(float)  市盈率
-         limit_amount(float)  个人申购上限（万股）
-         funds(float)  募集资金（亿元）
-         ballot(float)  中签率
+         ts_code(str)  TS代码
+         trade_date(str)  停复牌日期
+         suspend_timing(str)  日内停牌时间段
+         suspend_type(str)  停复牌类型：S-停牌，R-复牌
         
         """
-        args = [n for n in [
-            'start_date',
-            'end_date',
-            'limit',
-            'offset',
-        ] if n not in ['limit', 'offset']]
+        args = [
+            n for n in [
+                'ts_code',
+                'suspend_type',
+                'trade_date',
+                'start_date',
+                'end_date',
+                'limit',
+                'offset',
+            ] if n not in ['limit', 'offset']
+        ]
         params = {key: kwargs[key] for key in kwargs.keys() & args}
-        query = session_factory().query(TushareNewShare).filter_by(**params)
-        query = query.order_by(text("ts_code"))
+        query = session_factory().query(TushareSuspendD).filter_by(**params)
+        query = query.order_by(text("trade_date desc,ts_code"))
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "2000" != "":
-            default_limit = int("2000")
+        if "5000" != "":
+            default_limit = int("5000")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
-        return pd.read_sql(query.statement, query.session.bind)
+        df = pd.read_sql(query.statement, query.session.bind)
+        return df.drop(['id'], axis=1, errors='ignore')
 
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
         :return:
         """
-        logger.warning("Delete all data of {}")
-        self.delete_all()
 
     def tushare_parameters(self, process_type: ProcessType):
         """
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return [{}]
+        cnt = self.count()
+        return [{"offset": cnt}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
@@ -154,33 +148,43 @@ class NewShare(BaseDao, TuShareBase):
         :return: 数量行数
         """
         if len(kwargs.keys()) == 0:
-            kwargs = {"start_date": "", "end_date": "", "limit": "", "offset": ""}
+            kwargs = {
+                "ts_code": "",
+                "suspend_type": "",
+                "trade_date": "",
+                "start_date": "",
+                "end_date": "",
+                "limit": "",
+                "offset": ""
+            }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = "2000"
+            kwargs['limit'] = "5000"
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {key: kwargs[key] for key in kwargs.keys() & list([
-            'start_date',
-            'end_date',
-            'limit',
-            'offset',
-        ])}
+        kwargs = {
+            key: kwargs[key] for key in kwargs.keys() & list([
+                'ts_code',
+                'suspend_type',
+                'trade_date',
+                'start_date',
+                'end_date',
+                'limit',
+                'offset',
+            ])
+        }
 
         @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
-            logger.debug("Invoke pro.new_share with args: {}".format(kwargs))
-            fields = [
-                "ts_code", "sub_code", "name", "ipo_date", "issue_date", "amount", "market_amount", "price", "pe",
-                "limit_amount", "funds", "ballot"
-            ]
-            res = pro.new_share(**kwargs, fields=fields)
-            res.to_sql('tushare_new_share', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+            logger.debug("Invoke pro.suspend_d with args: {}".format(kwargs))
+            fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
+            res = pro.suspend_d(**kwargs, fields=fields)
+            res.to_sql('tushare_suspend_d', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         pro = self.tushare_api()
@@ -196,7 +200,7 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.DEBUG)
-    api = NewShare()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api = SuspendD()
+    api.process(ProcessType.HISTORY)    # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.new_share())    # 数据查询接口
+    print(api.suspend_d())    # 数据查询接口
