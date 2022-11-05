@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare namechange接口
 数据接口-沪深股票-基础数据-股票曾用名  https://tushare.pro/document/2?doc_id=100
 
-Created on 2022/11/05
 @author: rmfish
 """
 

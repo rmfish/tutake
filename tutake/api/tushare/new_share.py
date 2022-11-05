@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare new_share接口
 数据接口-沪深股票-基础数据-IPO新股上市  https://tushare.pro/document/2?doc_id=123
 
-Created on 2022/11/05
 @author: rmfish
 """
 

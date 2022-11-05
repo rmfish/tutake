@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare bak_daily接口
 数据接口-沪深股票-行情数据-备用行情  https://tushare.pro/document/2?doc_id=255
 
-Created on 2022/11/05
 @author: rmfish
 """
 

@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare weekly接口
 数据接口-沪深股票-行情数据-周线行情  https://tushare.pro/document/2?doc_id=144
 
-Created on 2022/11/05
 @author: rmfish
 """
 

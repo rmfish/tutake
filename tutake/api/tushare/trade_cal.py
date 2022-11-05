@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare trade_cal接口
 数据接口-沪深股票-基础数据-交易日历  https://tushare.pro/document/2?doc_id=26
 
-Created on 2022/11/05
 @author: rmfish
 """
 

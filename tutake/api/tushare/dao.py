@@ -67,6 +67,14 @@ class DAO(object):
             monthly_module = import_module("tutake.api.tushare.monthly")
             clazz = getattr(monthly_module, "Monthly")
             return clazz()
+        if name == 'stk_managers':
+            stk_managers_module = import_module("tutake.api.tushare.stk_managers")
+            clazz = getattr(stk_managers_module, "StkManagers")
+            return clazz()
+        if name == 'stk_rewards':
+            stk_rewards_module = import_module("tutake.api.tushare.stk_rewards")
+            clazz = getattr(stk_rewards_module, "StkRewards")
+            return clazz()
         if name == 'suspend_d':
             suspend_d_module = import_module("tutake.api.tushare.suspend_d")
             clazz = getattr(suspend_d_module, "SuspendD")

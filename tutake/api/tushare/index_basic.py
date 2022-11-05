@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare index_basic接口
 数据接口-指数-指数基本信息  https://tushare.pro/document/2?doc_id=94
 
-Created on 2022/11/05
 @author: rmfish
 """
 

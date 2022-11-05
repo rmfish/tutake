@@ -4,7 +4,6 @@ This file is auto generator by CodeGenerator. Don't modify it directly, instead 
 Tushare bak_basic接口
 数据接口-沪深股票-基础数据-备用列表  https://tushare.pro/document/2?doc_id=262
 
-Created on 2022/11/05
 @author: rmfish
 """
 
@@ -156,38 +155,34 @@ class BakBasic(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return self.dao.stock_basic.column_data(['ts_code', 'list_date'])
+        import pendulum
+        _start_day = pendulum.parse('20160101')
+        params = []
+        if process_type == ProcessType.HISTORY:
+            _min_date = self.min('trade_date', condition="trade_date != ''")
+            if _min_date is None:
+                _min_date = pendulum.now()
+            else:
+                _min_date = pendulum.parse(_min_date).add(days=-1)
+            while _min_date > _start_day:
+                params.append({'trade_date': _min_date.format("YYYYMMDD")})
+                _min_date = _min_date.add(days=-1)
+        else:
+            _max_date = self.max('trade_date', condition="trade_date != ''")
+            if _max_date is None:
+                _max_date = _start_day
+            else:
+                _max_date = pendulum.parse(_max_date).add(days=1)
+            while _max_date > pendulum.now():
+                params.append({'trade_date': _max_date.format("YYYYMMDD")})
+                _max_date = _max_date.add(days=1)
+        return params
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        from datetime import datetime, timedelta
-        date_format = '%Y%m%d'
-        if process_type == ProcessType.HISTORY:
-            min_date = self.min("trade_date", "ts_code = '%s' and trade_date !=''" % params['ts_code'])
-            if min_date is None:
-                params['end_date'] = ""
-            elif params.get('list_date') and params.get('list_date') == min_date:
-                # 如果时间相等不用执行
-                return None
-            else:
-                min_date = datetime.strptime(min_date, date_format)
-                end_date = min_date - timedelta(days=1)
-                params['end_date'] = end_date.strftime(date_format)
-            return params
-        else:
-            max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
-            if max_date is None:
-                params['start_date'] = ""
-            elif max_date == datetime.now().strftime(date_format):
-                # 如果已经是最新时间
-                return None
-            else:
-                max_date = datetime.strptime(max_date, date_format)
-                start_date = max_date + timedelta(days=1)
-                params['start_date'] = start_date.strftime(date_format)
-            return params
+        return params
 
     def process(self, process_type: ProcessType):
         """
