@@ -1,4 +1,12 @@
-# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+"""
+This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
+Tushare stock_basic接口
+数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
+
+Created on 2022/11/05
+@author: rmfish
+"""
 
 import pandas as pd
 import logging
@@ -12,10 +20,6 @@ from tutake.api.tushare.process_type import ProcessType
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
-"""
-Tushare stock_basic接口
-数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
-"""
 
 engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
@@ -58,11 +62,26 @@ class StockBasic(BaseDao, TuShareBase):
         BaseDao.__init__(self, engine, session_factory, TushareStockBasic, 'tushare_stock_basic')
         TuShareBase.__init__(self)
         self.dao = DAO()
+        self.query_fields = [
+            n for n in [
+                'ts_code',
+                'name',
+                'exchange',
+                'market',
+                'is_hs',
+                'list_status',
+                'limit',
+                'offset',
+            ] if n not in ['limit', 'offset']
+        ]
+        self.entity_fields = [
+            "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
+            "curr_type", "list_status", "list_date", "delist_date", "is_hs"
+        ]
 
-    def stock_basic(self, **kwargs):
+    def stock_basic(self, fields='', **kwargs):
         """
         
-
         | Arguments:
         | ts_code(str):   TS股票代码
         | name(str):   名称
@@ -92,20 +111,16 @@ class StockBasic(BaseDao, TuShareBase):
          is_hs(str)  是否沪深港通标的，N否 H沪股通 S深股通
         
         """
-        args = [
-            n for n in [
-                'ts_code',
-                'name',
-                'exchange',
-                'market',
-                'is_hs',
-                'list_status',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
-        params = {key: kwargs[key] for key in kwargs.keys() & args}
+        params = {
+            key: kwargs[key]
+            for key in kwargs.keys()
+            if key in self.query_fields and key is not None and kwargs[key] != ''
+        }
         query = session_factory().query(TushareStockBasic).filter_by(**params)
+        if fields != '':
+            entities = (
+                getattr(TushareStockBasic, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
+            query = query.with_entities(*entities)
         query = query.order_by(text("ts_code"))
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
@@ -208,11 +223,7 @@ class StockBasic(BaseDao, TuShareBase):
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.stock_basic with args: {}".format(kwargs))
-            fields = [
-                "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
-                "curr_type", "list_status", "list_date", "delist_date", "is_hs"
-            ]
-            res = pro.stock_basic(**kwargs, fields=fields)
+            res = pro.stock_basic(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_stock_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 

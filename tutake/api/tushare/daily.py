@@ -1,4 +1,12 @@
-# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+"""
+This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
+Tushare daily接口
+数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
+
+Created on 2022/11/05
+@author: rmfish
+"""
 
 import pandas as pd
 import logging
@@ -12,10 +20,6 @@ from tutake.api.tushare.process_type import ProcessType
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
-"""
-Tushare daily接口
-数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
-"""
 
 engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_daily.db'))
 session_factory = sessionmaker()
@@ -55,11 +59,23 @@ class Daily(BaseDao, TuShareBase):
         BaseDao.__init__(self, engine, session_factory, TushareDaily, 'tushare_daily')
         TuShareBase.__init__(self)
         self.dao = DAO()
+        self.query_fields = [
+            n for n in [
+                'ts_code',
+                'trade_date',
+                'start_date',
+                'end_date',
+                'offset',
+                'limit',
+            ] if n not in ['limit', 'offset']
+        ]
+        self.entity_fields = [
+            "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount"
+        ]
 
-    def daily(self, **kwargs):
+    def daily(self, fields='', **kwargs):
         """
         日线行情
-
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
@@ -83,18 +99,15 @@ class Daily(BaseDao, TuShareBase):
          amount(float)  成交额
         
         """
-        args = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'offset',
-                'limit',
-            ] if n not in ['limit', 'offset']
-        ]
-        params = {key: kwargs[key] for key in kwargs.keys() & args}
+        params = {
+            key: kwargs[key]
+            for key in kwargs.keys()
+            if key in self.query_fields and key is not None and kwargs[key] != ''
+        }
         query = session_factory().query(TushareDaily).filter_by(**params)
+        if fields != '':
+            entities = (getattr(TushareDaily, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
+            query = query.with_entities(*entities)
         query = query.order_by(text("trade_date desc,ts_code"))
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
@@ -209,11 +222,7 @@ class Daily(BaseDao, TuShareBase):
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.daily with args: {}".format(kwargs))
-            fields = [
-                "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol",
-                "amount"
-            ]
-            res = pro.daily(**kwargs, fields=fields)
+            res = pro.daily(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 

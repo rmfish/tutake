@@ -1,5 +1,5 @@
 import logging
-
+import pendulum
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
 
@@ -27,6 +27,7 @@ class CodeGenerator(object):
         loader = jinja2.FileSystemLoader(tmpl_dir)
         env = jinja2.Environment(autoescape=True, loader=loader)
         env.filters['get_sql_type'] = get_sql_type
+        env.globals['now'] = pendulum.now().format("YYYY/MM/DD")
         self.env = env
         self.output_dir = output_dir
 

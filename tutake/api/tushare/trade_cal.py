@@ -1,4 +1,12 @@
-# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+"""
+This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
+Tushare trade_cal接口
+数据接口-沪深股票-基础数据-交易日历  https://tushare.pro/document/2?doc_id=26
+
+Created on 2022/11/05
+@author: rmfish
+"""
 
 import pandas as pd
 import logging
@@ -12,10 +20,6 @@ from tutake.api.tushare.process_type import ProcessType
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
-"""
-Tushare trade_cal接口
-数据接口-沪深股票-基础数据-交易日历  https://tushare.pro/document/2?doc_id=26
-"""
 
 engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
@@ -48,11 +52,22 @@ class TradeCal(BaseDao, TuShareBase):
         BaseDao.__init__(self, engine, session_factory, TushareTradeCal, 'tushare_trade_cal')
         TuShareBase.__init__(self)
         self.dao = DAO()
+        self.query_fields = [
+            n for n in [
+                'exchange',
+                'cal_date',
+                'start_date',
+                'end_date',
+                'is_open',
+                'limit',
+                'offset',
+            ] if n not in ['limit', 'offset']
+        ]
+        self.entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
 
-    def trade_cal(self, **kwargs):
+    def trade_cal(self, fields='', **kwargs):
         """
         
-
         | Arguments:
         | exchange(str):   交易所 SSE上交所 SZSE深交所
         | cal_date(str):   日历日期
@@ -70,19 +85,16 @@ class TradeCal(BaseDao, TuShareBase):
          pretrade_date(str)  上一个交易日
         
         """
-        args = [
-            n for n in [
-                'exchange',
-                'cal_date',
-                'start_date',
-                'end_date',
-                'is_open',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
-        params = {key: kwargs[key] for key in kwargs.keys() & args}
+        params = {
+            key: kwargs[key]
+            for key in kwargs.keys()
+            if key in self.query_fields and key is not None and kwargs[key] != ''
+        }
         query = session_factory().query(TushareTradeCal).filter_by(**params)
+        if fields != '':
+            entities = (
+                getattr(TushareTradeCal, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
+            query = query.with_entities(*entities)
 
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
@@ -183,8 +195,7 @@ class TradeCal(BaseDao, TuShareBase):
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
-            fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
-            res = pro.trade_cal(**kwargs, fields=fields)
+            res = pro.trade_cal(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_trade_cal', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 

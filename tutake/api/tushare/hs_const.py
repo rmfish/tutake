@@ -1,4 +1,12 @@
-# This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+"""
+This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
+
+Tushare hs_const接口
+数据接口-沪深股票-基础数据-沪深股通成分股  https://tushare.pro/document/2?doc_id=104
+
+Created on 2022/11/05
+@author: rmfish
+"""
 
 import pandas as pd
 import logging
@@ -12,10 +20,6 @@ from tutake.api.tushare.process_type import ProcessType
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
-"""
-Tushare hs_const接口
-数据接口-沪深股票-基础数据-沪深股通成分股  https://tushare.pro/document/2?doc_id=104
-"""
 
 engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_basic_data.db'))
 session_factory = sessionmaker()
@@ -49,11 +53,17 @@ class HsConst(BaseDao, TuShareBase):
         BaseDao.__init__(self, engine, session_factory, TushareHsConst, 'tushare_hs_const')
         TuShareBase.__init__(self)
         self.dao = DAO()
+        self.query_fields = [n for n in [
+            'hs_type',
+            'is_new',
+            'limit',
+            'offset',
+        ] if n not in ['limit', 'offset']]
+        self.entity_fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
 
-    def hs_const(self, **kwargs):
+    def hs_const(self, fields='', **kwargs):
         """
         
-
         | Arguments:
         | hs_type(str): required  类型SH沪股通SZ深股通
         | is_new(str):   是否最新1最新0不是
@@ -69,14 +79,16 @@ class HsConst(BaseDao, TuShareBase):
          is_new(str)  是否最新
         
         """
-        args = [n for n in [
-            'hs_type',
-            'is_new',
-            'limit',
-            'offset',
-        ] if n not in ['limit', 'offset']]
-        params = {key: kwargs[key] for key in kwargs.keys() & args}
+        params = {
+            key: kwargs[key]
+            for key in kwargs.keys()
+            if key in self.query_fields and key is not None and kwargs[key] != ''
+        }
         query = session_factory().query(TushareHsConst).filter_by(**params)
+        if fields != '':
+            entities = (
+                getattr(TushareHsConst, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
+            query = query.with_entities(*entities)
         query = query.order_by(text("ts_code"))
         input_limit = 10000    # 默认10000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
@@ -164,8 +176,7 @@ class HsConst(BaseDao, TuShareBase):
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.hs_const with args: {}".format(kwargs))
-            fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
-            res = pro.hs_const(**kwargs, fields=fields)
+            res = pro.hs_const(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_hs_const', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
