@@ -28,72 +28,72 @@ class DAO(object):
     def _init_dao(self, name):
 
         if name == 'stock_basic':
-            stock_basic_module = import_module("tutake.api.stock_basic")
+            stock_basic_module = import_module("tutake.api.tushare.stock_basic")
             clazz = getattr(stock_basic_module, "StockBasic")
             return clazz()
 
         if name == 'trade_cal':
-            trade_cal_module = import_module("tutake.api.trade_cal")
+            trade_cal_module = import_module("tutake.api.tushare.trade_cal")
             clazz = getattr(trade_cal_module, "TradeCal")
             return clazz()
 
         if name == 'daily':
-            daily_module = import_module("tutake.api.daily")
+            daily_module = import_module("tutake.api.tushare.daily")
             clazz = getattr(daily_module, "Daily")
             return clazz()
 
         if name == 'adj_factor':
-            adj_factor_module = import_module("tutake.api.adj_factor")
+            adj_factor_module = import_module("tutake.api.tushare.adj_factor")
             clazz = getattr(adj_factor_module, "AdjFactor")
             return clazz()
 
         if name == 'namechange':
-            namechange_module = import_module("tutake.api.namechange")
+            namechange_module = import_module("tutake.api.tushare.namechange")
             clazz = getattr(namechange_module, "Namechange")
             return clazz()
 
         if name == 'hs_const':
-            hs_const_module = import_module("tutake.api.hs_const")
+            hs_const_module = import_module("tutake.api.tushare.hs_const")
             clazz = getattr(hs_const_module, "HsConst")
             return clazz()
 
         if name == 'stock_company':
-            stock_company_module = import_module("tutake.api.stock_company")
+            stock_company_module = import_module("tutake.api.tushare.stock_company")
             clazz = getattr(stock_company_module, "StockCompany")
             return clazz()
 
         if name == 'new_share':
-            new_share_module = import_module("tutake.api.new_share")
+            new_share_module = import_module("tutake.api.tushare.new_share")
             clazz = getattr(new_share_module, "NewShare")
             return clazz()
 
         if name == 'weekly':
-            weekly_module = import_module("tutake.api.weekly")
+            weekly_module = import_module("tutake.api.tushare.weekly")
             clazz = getattr(weekly_module, "Weekly")
             return clazz()
 
         if name == 'monthly':
-            monthly_module = import_module("tutake.api.monthly")
+            monthly_module = import_module("tutake.api.tushare.monthly")
             clazz = getattr(monthly_module, "Monthly")
             return clazz()
 
         if name == 'suspend_d':
-            suspend_d_module = import_module("tutake.api.suspend_d")
+            suspend_d_module = import_module("tutake.api.tushare.suspend_d")
             clazz = getattr(suspend_d_module, "SuspendD")
             return clazz()
 
         if name == 'bak_daily':
-            bak_daily_module = import_module("tutake.api.bak_daily")
+            bak_daily_module = import_module("tutake.api.tushare.bak_daily")
             clazz = getattr(bak_daily_module, "BakDaily")
             return clazz()
 
         if name == 'bak_basic':
-            bak_basic_module = import_module("tutake.api.bak_basic")
+            bak_basic_module = import_module("tutake.api.tushare.bak_basic")
             clazz = getattr(bak_basic_module, "BakBasic")
             return clazz()
 
         if name == 'index_basic':
-            index_basic_module = import_module("tutake.api.index_basic")
+            index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
             return clazz()
 
