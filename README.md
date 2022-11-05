@@ -92,9 +92,28 @@ tutake
 |- config-default.yml 配置文件模板，使用前需要把文件复制为config.yml才有效
 ```
 
-### 支持接口
+### 已支持接口
 目前调试测试的接口:
 <a href="tutake/api/tushare">tutake/api/tushare</a>
+
+
+### 替代Tushare使用
+Tutake的接口和Tushare完全保持一致，同时也支持failover到Tushare，具体可以看测试代码：
+<a href="test/test.py">test.py</a>
+
+```python
+import tutake as ts
+
+if __name__ == '__main__':
+    # 代码可以完全不用修改，只需要将import tushare改成tutake
+    pro = ts.pro_api()
+    print(pro.stock_basic(exchange='', list_status='L', fields='ts_code,symbol,name,area,industry,list_date'))
+    print(pro.stock_basic(limit=100))
+
+    # 如果增加tushare_token 则支持使用Tushare进行Failover，未实现的函数依然调用tushare
+    pro = ts.pro_api("tushare_token")   
+    print(pro.shibor())
+```
 
 
 ### 说明
