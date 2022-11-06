@@ -1,0 +1,54 @@
+{
+    "desc": "获取券商月度金股",
+    "name": "broker_recommend",
+    "id": 267,
+    "outputs": [{
+        "column": "MONTH",
+        "name": "month",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "月度"
+    }, {
+        "column": "BROKER",
+        "name": "broker",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "券商"
+    }, {
+        "column": "TS_CODE",
+        "name": "ts_code",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票代码"
+    }, {
+        "column": "NAME",
+        "name": "name",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票简称"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 291,
+    "title": "券商月度金股",
+    "inputs": [{
+        "name": "month",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "月度（YYYYMM）"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [],
+    "default_limit": null,
+    "order_by": null
+}

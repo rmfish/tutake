@@ -28,14 +28,7 @@ class TushareApi(Base):
     inputs = Column(String)
     outputs = Column(String)
     validations = Column(String)
-    database = Column(String)
-    default_limit = Column(String)
     is_ready = Column(Integer)
-    if_exists = Column(String)
-    order_by = Column(String)
-    code_prepare = Column(String)
-    code_tushare_parameters = Column(String)
-    code_param_loop_process = Column(String)
 
     def __init__(self, api_id, title, desc, parent_id):
         self.id = api_id
@@ -83,6 +76,18 @@ def get_ready_api():
     apis = session_factory().query(TushareApi).filter_by(is_ready=1).all()
     if apis:
         return [assemble_api(i) for i in apis]
+
+
+def get_all_leaf_api():
+    """
+    获得所有子接口
+    :return:
+    """
+    apis = session_factory().query(TushareApi).all()
+    parent_ids = [_api.parent_id for _api in apis if _api.parent_id]
+    leaf_apis = [api for api in apis if api.id not in parent_ids]
+    if leaf_apis:
+        return [assemble_api(i) for i in leaf_apis]
 
 
 def get_api(api_id):

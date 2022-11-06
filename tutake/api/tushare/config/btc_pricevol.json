@@ -1,0 +1,53 @@
+{
+    "desc": "",
+    "name": "btc_pricevol",
+    "id": 77,
+    "outputs": [{
+        "name": "date",
+        "column": "date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "日期"
+    }, {
+        "name": "price",
+        "column": "price",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "价格"
+    }, {
+        "name": "volume",
+        "column": "volume",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "交易量"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 52,
+    "title": "比特币每日量价",
+    "inputs": [{
+        "name": "start_date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "开始时间"
+    }, {
+        "name": "end_date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "结束时间"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [],
+    "default_limit": null,
+    "order_by": null
+}

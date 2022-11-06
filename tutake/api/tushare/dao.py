@@ -27,6 +27,10 @@ class DAO(object):
 
     def instance_from_name(self, name):
 
+        if name == 'fund_basic':
+            fund_basic_module = import_module("tutake.api.tushare.fund_basic")
+            clazz = getattr(fund_basic_module, "FundBasic")
+            return clazz()
         if name == 'stock_basic':
             stock_basic_module = import_module("tutake.api.tushare.stock_basic")
             clazz = getattr(stock_basic_module, "StockBasic")

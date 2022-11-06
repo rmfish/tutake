@@ -1,0 +1,85 @@
+{
+    "desc": "",
+    "name": "concept_detail",
+    "id": 126,
+    "outputs": [{
+        "column": "CONCEPT_CODE",
+        "name": "id",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "概念代码"
+    }, {
+        "column": "CONCEPT_NAME",
+        "name": "concept_name",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "概念名称"
+    }, {
+        "column": "TS_CODE",
+        "name": "ts_code",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票代码"
+    }, {
+        "column": "NAME",
+        "name": "name",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票名称"
+    }, {
+        "column": "IN_DATE",
+        "name": "in_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "纳入日期"
+    }, {
+        "column": "OUT_DATE",
+        "name": "out_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "剔除日期"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 17,
+    "title": "概念股明细列表",
+    "inputs": [{
+        "name": "id",
+        "data_type": "str",
+        "must": "N",
+        "desc": "概念分类ID"
+    }, {
+        "name": "ts_code",
+        "data_type": "str",
+        "must": "N",
+        "desc": "股票代码"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [{
+        "name": "id",
+        "validator": "required",
+        "options": null,
+        "trigger": {
+            "link": "and",
+            "exp": [{
+                "name": "ts_code",
+                "operator": "=",
+                "type": "builtin",
+                "value": "None"
+            }]
+        },
+        "message": "概念ID和股票代码至少输入一个参数"
+    }],
+    "default_limit": null,
+    "order_by": null
+}

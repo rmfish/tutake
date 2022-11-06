@@ -1,0 +1,73 @@
+{
+    "title": "交易日历",
+    "parent_id": 24,
+    "inputs": [{
+        "name": "exchange",
+        "data_type": "str",
+        "must": "N",
+        "default": "SSE",
+        "desc": "交易所 SSE上交所 SZSE深交所"
+    }, {
+        "name": "cal_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "日历日期"
+    }, {
+        "name": "start_date",
+        "data_type": "str",
+        "must": "N"
+    }, {
+        "name": "end_date",
+        "data_type": "str",
+        "must": "N"
+    }, {
+        "name": "is_open",
+        "must": "N",
+        "data_type": "str",
+        "desc": "是否交易 0休市 1交易"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [],
+    "database": "tushare_basic_data",
+    "is_ready": 1,
+    "order_by": null,
+    "name": "trade_cal",
+    "id": 26,
+    "desc": "",
+    "outputs": [{
+        "name": "exchange",
+        "column": "EXCHANGE",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "交易所 SSE上交所 SZSE深交所"
+    }, {
+        "name": "cal_date",
+        "column": "CAL_DATE",
+        "must": "Y",
+        "data_type": "str",
+        "desc": "日历日期"
+    }, {
+        "name": "is_open",
+        "column": "IS_OPEN",
+        "must": "Y",
+        "data_type": "str",
+        "desc": "是否交易 0休市 1交易"
+    }, {
+        "name": "pretrade_date",
+        "column": "PRETRADE_DATE",
+        "must": "Y",
+        "data_type": "str",
+        "desc": "上一个交易日"
+    }],
+    "default_limit": null,
+    "if_exists": null
+}

@@ -1,0 +1,47 @@
+{
+    "desc": "",
+    "name": "btc_marketcap",
+    "id": 76,
+    "outputs": [{
+        "name": "date",
+        "column": "date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "日期"
+    }, {
+        "name": "marketcap",
+        "column": "marketcap",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "市值"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 52,
+    "title": "比特币每日市值",
+    "inputs": [{
+        "name": "start_date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "开始时间"
+    }, {
+        "name": "end_date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "结束时间"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [],
+    "default_limit": null,
+    "order_by": null
+}

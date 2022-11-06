@@ -1,0 +1,87 @@
+{
+  "title": "复权因子",
+  "parent_id": 15,
+  "inputs": [
+    {
+      "name": "ts_code",
+      "data_type": "str",
+      "must": "N",
+      "desc": "股票代码"
+    },
+    {
+      "name": "trade_date",
+      "data_type": "str",
+      "must": "N",
+      "desc": "交易日期"
+    },
+    {
+      "name": "start_date",
+      "data_type": "str",
+      "must": "N",
+      "desc": "开始日期"
+    },
+    {
+      "name": "end_date",
+      "data_type": "str",
+      "must": "N",
+      "desc": "结束日期"
+    },
+    {
+      "name": "limit",
+      "data_type": "int",
+      "must": "N",
+      "desc": "单次返回数据长度"
+    },
+    {
+      "name": "offset",
+      "data_type": "int",
+      "must": "N",
+      "desc": "请求数据的开始位移量"
+    }
+  ],
+  "validations": [
+    {
+      "trigger": [
+        {
+          "name": "trade_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required",
+      "name": "ts_code"
+    }
+  ],
+  "database": null,
+  "is_ready": 1,
+  "order_by": null,
+  "name": "adj_factor",
+  "id": 28,
+  "desc": "",
+  "outputs": [
+    {
+      "name": "ts_code",
+      "column": "TS_CODE",
+      "data_type": "str",
+      "must": "Y",
+      "desc": "股票代码"
+    },
+    {
+      "name": "trade_date",
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "must": "Y",
+      "desc": "交易日期"
+    },
+    {
+      "name": "adj_factor",
+      "column": "ADJ_FACTOR",
+      "must": "Y",
+      "data_type": "number",
+      "desc": "复权因子"
+    }
+  ],
+  "default_limit": "6000",
+  "if_exists": null
+}

@@ -1,0 +1,83 @@
+{
+    "desc": "",
+    "name": "cyq_chips",
+    "id": 294,
+    "outputs": [{
+        "column": "TS_CODE",
+        "name": "ts_code",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票代码"
+    }, {
+        "column": "TRADE_DATE_STR",
+        "name": "trade_date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "交易日期"
+    }, {
+        "column": "PRICE",
+        "name": "price",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "成本价格"
+    }, {
+        "column": "PERCENT",
+        "name": "percent",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "价格占比（%）"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 291,
+    "title": "每日筹码分布",
+    "inputs": [{
+        "name": "ts_code",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "股票代码"
+    }, {
+        "name": "trade_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "交易日期（YYYYMMDD）"
+    }, {
+        "name": "start_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "开始日期"
+    }, {
+        "name": "end_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "结束日期"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [{
+        "name": "ts_code",
+        "validator": "required",
+        "options": null,
+        "trigger": {
+            "link": "and",
+            "exp": [{
+                "name": "trade_date",
+                "operator": "=",
+                "type": "builtin",
+                "value": "None"
+            }]
+        },
+        "message": "ts_code,trade_date至少输入一个参数"
+    }],
+    "default_limit": null,
+    "order_by": null
+}

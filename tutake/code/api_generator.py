@@ -1,3 +1,4 @@
+import json
 import logging
 import os
 
@@ -5,7 +6,7 @@ import pendulum
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.tushare_api import get_api, get_api_path, get_api_children, get_ready_api
+from tutake.code.tushare_api import get_api, get_api_path, get_api_children, get_ready_api, get_all_leaf_api
 from tutake.utils.file_utils import file_dir, realpath
 
 logger = logging.getLogger("api.generate")
@@ -33,8 +34,8 @@ class CodeGenerator(object):
         self.env = env
         self.output_dir = output_dir
 
-    def render_code(self, file_name: str, code: str, overwrite: bool = True):
-        file_path = "{}/{}.py".format(self.output_dir, file_name)
+    def render_code(self, file_name: str, code: str, overwrite: bool = True, file_suffix: str = 'py'):
+        file_path = "{}/{}.{}".format(self.output_dir, file_name, file_suffix)
         if os.path.exists(file_path) and not overwrite:
             # 如果文件存在，且设置不覆盖，就直接退出
             return
@@ -47,34 +48,40 @@ class CodeGenerator(object):
                 file.write(code)
                 logger.error("Exp in render code {} {}".format(file_name, err))
 
+    def _load_api_config(self, api):
+        config_file = "%s/config/%s.json" % (self.output_dir, api['name'])
+        if os.path.exists(config_file):
+            f = open(config_file)
+            data = json.load(f)
+            return {**api, **data}
+        else:
+            return api
+
     def generate_api_code(self, api_id):
         api_tmpl = self.env.get_template('tushare_api.tmpl')
         api_ext_tmpl = self.env.get_template('tushare_api_ext.tmpl')
-        api = get_api(api_id)
-        if api.get('name'):
-            print("Render code {} {}.py".format(api_id, api.get('name')))
-            api['path'] = '-'.join(tups[1] for tups in get_api_path(api_id))
-            api['table_name'] = "tushare_{}".format(api.get("name"))
-            if not api.get('if_exists'):
-                api['if_exists'] = 'append'
-            if not api.get('database'):
-                api['database'] = 'tushare_%s' % api['name']
-            if not api.get('default_limit'):
-                api['default_limit'] = ""
+        api_config = self._load_api_config(get_api(api_id))
+        if api_config.get('name'):
+            print("Render code {} {}.py".format(api_id, api_config.get('name')))
+            api_config['path'] = '-'.join(tups[1] for tups in get_api_path(api_id))
+            api_config['table_name'] = "tushare_{}".format(api_config.get("name"))
+            if not api_config.get('if_exists'):
+                api_config['if_exists'] = 'append'
+            if not api_config.get('database'):
+                api_config['database'] = 'tushare_%s' % api_config['name']
+            if not api_config.get('default_limit'):
+                api_config['default_limit'] = ""
 
-            api['title_name'] = "{}".format(api['name'].replace('_', ' ').title().replace(' ', ''))
-            api['entity_name'] = "Tushare{}".format(api['title_name'])
+            api_config['title_name'] = "{}".format(api_config['name'].replace('_', ' ').title().replace(' ', ''))
+            api_config['entity_name'] = "Tushare{}".format(api_config['title_name'])
 
-            self.set_index(api)
-            self.generate_order_by(api)
-            self.generate_prepare(api)
-            self.generate_tushare_parameters(api)
-            self.generate_param_loop_process(api)
-            self.render_code(api['name'], api_tmpl.render(api))
-            self.render_code("%s_ext" % api['name'], api_ext_tmpl.render(api), False)
+            self.set_index(api_config)
+            self.generate_order_by(api_config)
+            self.render_code(api_config['name'], api_tmpl.render(api_config))
+            self.render_code("extends/%s_ext" % api_config['name'], api_ext_tmpl.render(api_config), False)
         else:
-            logger.warning("Miss name info with api. {} {}".format(api.get('id'), api.get('title')))
-        return api
+            logger.warning("Miss name info with api. {} {}".format(api_config.get('id'), api_config.get('title')))
+        return api_config
 
     def set_index(self, api):
         inputs = api["inputs"]
@@ -89,6 +96,19 @@ class CodeGenerator(object):
     def generate_dao_code(self, apis):
         tmpl = self.env.get_template('dao.tmpl')
         self.render_code("dao", tmpl.render({"apis": apis}))
+
+    def _generate_config_code(self, apis):
+        for api in apis:
+            api['database'] = None
+            api['default_limit'] = None
+            api['order_by'] = None
+            print("Generate config %s.json" % api['name'])
+            self.render_code("config/%s" % api['name'], json.dumps(api, indent=4, ensure_ascii=False),
+                             False, file_suffix='json')
+
+    def generate_config(self):
+        leaf_apis = get_all_leaf_api()
+        self._generate_config_code(leaf_apis)
 
     def generate_order_by(self, api):
         """
@@ -107,37 +127,6 @@ class CodeGenerator(object):
         if len(api.get('order_by')) == 0:
             api['order_by'] = None
 
-    def generate_prepare(self, api):
-        """
-        生成prepare代码块
-        :param api:
-        :return:
-        """
-        code_prepare = api.get('code_prepare')
-        if code_prepare:
-            if code_prepare == 'deleteAll()':
-                api['prepare_code'] = '''logger.warning("Delete all data of {}")
-        self.delete_all()'''
-
-    def generate_tushare_parameters(self, api):
-        """
-        生成parameters代码
-        :param api:
-        :return:
-        """
-        code_tushare_parameters = api.get('code_tushare_parameters')
-        if code_tushare_parameters:
-            api['tushare_parameters_code'] = code_tushare_parameters
-        else:
-            api['tushare_parameters_code'] = "return [{}]"
-
-    def generate_param_loop_process(self, api):
-        code_param_loop_process = api.get('code_param_loop_process')
-        if code_param_loop_process:
-            api['param_loop_process_code'] = code_param_loop_process
-        else:
-            api['param_loop_process_code'] = "return params"
-
 
 if __name__ == '__main__':
     current_dir = file_dir(__file__)
@@ -146,6 +135,9 @@ if __name__ == '__main__':
 
     generator = CodeGenerator(tmpl_dir, api_dir)
     api_params = []
+
+    # generator.generate_config()
+
     apis = get_ready_api()
     for i in apis:
         api_params.append(generator.generate_api_code(i['id']))
@@ -160,6 +152,3 @@ if __name__ == '__main__':
     for i in api_ids:
         api_params.append(generator.generate_api_code(i))
     generator.generate_dao_code(api_params)
-
-    # for i in api_id:
-    #     render_api(i, dir, output)

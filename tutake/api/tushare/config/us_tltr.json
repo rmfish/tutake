@@ -1,0 +1,69 @@
+{
+    "desc": "获取美国国债长期利率数据",
+    "name": "us_tltr",
+    "id": 222,
+    "outputs": [{
+        "column": "DATE",
+        "name": "date",
+        "data_type": "str",
+        "must": "Y",
+        "desc": "日期"
+    }, {
+        "column": "LTC",
+        "name": "ltc",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "收益率 LT COMPOSITE (>10 Yrs)"
+    }, {
+        "column": "CMT",
+        "name": "cmt",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "20年期CMT利率(TREASURY 20-Yr CMT)"
+    }, {
+        "column": "E_FACTOR",
+        "name": "e_factor",
+        "data_type": "float",
+        "must": "Y",
+        "desc": "外推因子EXTRAPOLATION FACTOR"
+    }],
+    "database": null,
+    "is_ready": null,
+    "if_exists": null,
+    "parent_id": 218,
+    "title": "国债长期利率",
+    "inputs": [{
+        "name": "date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "日期"
+    }, {
+        "name": "start_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "开始日期"
+    }, {
+        "name": "end_date",
+        "data_type": "str",
+        "must": "N",
+        "desc": "结束日期"
+    }, {
+        "name": "fields",
+        "data_type": "str",
+        "must": "N",
+        "desc": "指定字段"
+    }, {
+        "name": "limit",
+        "data_type": "int",
+        "must": "N",
+        "desc": "单次返回数据长度"
+    }, {
+        "name": "offset",
+        "data_type": "int",
+        "must": "N",
+        "desc": "请求数据的开始位移量"
+    }],
+    "validations": [],
+    "default_limit": null,
+    "order_by": null
+}
