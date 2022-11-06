@@ -1,4 +1,6 @@
 import logging
+import os
+
 import pendulum
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
@@ -31,8 +33,13 @@ class CodeGenerator(object):
         self.env = env
         self.output_dir = output_dir
 
-    def render_code(self, file_name, code):
-        with open("{}/{}.py".format(self.output_dir, file_name), 'w') as file:
+    def render_code(self, file_name: str, code: str, overwrite: bool = True):
+        file_path = "{}/{}.py".format(self.output_dir, file_name)
+        if os.path.exists(file_path) and not overwrite:
+            # 如果文件存在，且设置不覆盖，就直接退出
+            return
+
+        with open(file_path, 'w') as file:
             try:
                 formatted, changed = FormatCode(code, style_config='setup.cfg')
                 file.write(formatted)
@@ -41,7 +48,8 @@ class CodeGenerator(object):
                 logger.error("Exp in render code {} {}".format(file_name, err))
 
     def generate_api_code(self, api_id):
-        temp = self.env.get_template('tushare_api.tmpl')
+        api_tmpl = self.env.get_template('tushare_api.tmpl')
+        api_ext_tmpl = self.env.get_template('tushare_api_ext.tmpl')
         api = get_api(api_id)
         if api.get('name'):
             print("Render code {} {}.py".format(api_id, api.get('name')))
@@ -62,7 +70,8 @@ class CodeGenerator(object):
             self.generate_prepare(api)
             self.generate_tushare_parameters(api)
             self.generate_param_loop_process(api)
-            self.render_code(api['name'], temp.render(api))
+            self.render_code(api['name'], api_tmpl.render(api))
+            self.render_code("%s_ext" % api['name'], api_ext_tmpl.render(api), False)
         else:
             logger.warning("Miss name info with api. {} {}".format(api.get('id'), api.get('title')))
         return api

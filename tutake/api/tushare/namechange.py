@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.namechange_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -41,7 +42,7 @@ class TushareNamechange(Base):
 TushareNamechange.__table__.create(bind=engine, checkfirst=True)
 
 
-class Namechange(BaseDao, TuShareBase):
+class Namechange(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -111,10 +112,7 @@ class Namechange(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
-        logger.warning("Delete all data of {}")
-        self.delete_all()
 
     def tushare_parameters(self, process_type: ProcessType):
         """
@@ -196,6 +194,10 @@ class Namechange(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(Namechange, 'prepare', prepare_ext)
+setattr(Namechange, 'tushare_parameters', tushare_parameters_ext)
+setattr(Namechange, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数

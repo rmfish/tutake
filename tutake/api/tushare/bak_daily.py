@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.bak_daily_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -66,7 +67,7 @@ class TushareBakDaily(Base):
 TushareBakDaily.__table__.create(bind=engine, checkfirst=True)
 
 
-class BakDaily(BaseDao, TuShareBase):
+class BakDaily(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -168,7 +169,6 @@ class BakDaily(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
 
     def tushare_parameters(self, process_type: ProcessType):
@@ -176,22 +176,12 @@ class BakDaily(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        import pendulum
-        start = pendulum.parse('20170614')
-        now = pendulum.now()
-        params = []
-        while start < now:
-            params.append({"trade_date": now.format('YYYYMMDD')})
-            now = now.add(days=-1)
-        return params
+        return [{}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        min_date = self.min("trade_date", "trade_date = '%s'" % params['trade_date'])
-        if min_date == params['trade_date']:
-            return None
         return params
 
     def process(self, process_type: ProcessType):
@@ -262,6 +252,10 @@ class BakDaily(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(BakDaily, 'prepare', prepare_ext)
+setattr(BakDaily, 'tushare_parameters', tushare_parameters_ext)
+setattr(BakDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数

@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.stock_company_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -52,7 +53,7 @@ class TushareStockCompany(Base):
 TushareStockCompany.__table__.create(bind=engine, checkfirst=True)
 
 
-class StockCompany(BaseDao, TuShareBase):
+class StockCompany(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -136,10 +137,7 @@ class StockCompany(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
-        logger.warning("Delete all data of {}")
-        self.delete_all()
 
     def tushare_parameters(self, process_type: ProcessType):
         """
@@ -221,6 +219,10 @@ class StockCompany(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(StockCompany, 'prepare', prepare_ext)
+setattr(StockCompany, 'tushare_parameters', tushare_parameters_ext)
+setattr(StockCompany, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数

@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.hs_const_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -40,7 +41,7 @@ class TushareHsConst(Base):
 TushareHsConst.__table__.create(bind=engine, checkfirst=True)
 
 
-class HsConst(BaseDao, TuShareBase):
+class HsConst(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -105,17 +106,14 @@ class HsConst(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
-        logger.warning("Delete all data of {}")
-        self.delete_all()
 
     def tushare_parameters(self, process_type: ProcessType):
         """
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return [{"hs_type": "SH"}, {"hs_type": "SZ"}]
+        return [{}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
@@ -187,6 +185,10 @@ class HsConst(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(HsConst, 'prepare', prepare_ext)
+setattr(HsConst, 'tushare_parameters', tushare_parameters_ext)
+setattr(HsConst, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数

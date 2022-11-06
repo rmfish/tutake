@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.weekly_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -46,7 +47,7 @@ class TushareWeekly(Base):
 TushareWeekly.__table__.create(bind=engine, checkfirst=True)
 
 
-class Weekly(BaseDao, TuShareBase):
+class Weekly(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -124,7 +125,6 @@ class Weekly(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
 
     def tushare_parameters(self, process_type: ProcessType):
@@ -132,41 +132,13 @@ class Weekly(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return self.dao.stock_basic.column_data(['ts_code', 'list_date'])
+        return [{}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        from datetime import datetime, timedelta
-        date_format = '%Y%m%d'
-        if process_type == ProcessType.HISTORY:
-            min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
-            if min_date is None:
-                params['end_date'] = ""
-            else:
-                min_date = datetime.strptime(min_date, date_format)
-                end_date = min_date - timedelta(days=7)
-                if params.get('list_date'):
-                    list_date = datetime.strptime(params.get('list_date'), date_format)
-                    interval = (end_date - list_date).days
-                    if interval < 0:
-                        return None
-                params['end_date'] = end_date.strftime(date_format)
-            return params
-        else:
-            max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
-            if max_date is None:
-                params['start_date'] = ""
-            else:
-                max_date = datetime.strptime(max_date, date_format)
-                start_date = max_date + timedelta(days=7)
-                if params.get('list_date'):
-                    if (start_date - datetime.now()).days > 0:
-                        return None
-                    else:
-                        params['start_date'] = start_date.strftime(date_format)
-            return params
+        return params
 
     def process(self, process_type: ProcessType):
         """
@@ -236,6 +208,10 @@ class Weekly(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(Weekly, 'prepare', prepare_ext)
+setattr(Weekly, 'tushare_parameters', tushare_parameters_ext)
+setattr(Weekly, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数

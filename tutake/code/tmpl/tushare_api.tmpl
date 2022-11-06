@@ -16,7 +16,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.{{name}}_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -38,7 +39,7 @@ class {{entity_name}}(Base):
 {{entity_name}}.__table__.create(bind=engine, checkfirst=True)
 
 
-class {{title_name}}(BaseDao, TuShareBase):
+class {{title_name}}(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -86,22 +87,20 @@ class {{title_name}}(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
-        {% autoescape false %}{{prepare_code}}{% endautoescape %}
 
     def tushare_parameters(self, process_type: ProcessType):
         """
         同步历史数据调用的参数
         :return: list(dict)
         """
-        {% autoescape false %}{{tushare_parameters_code}}{% endautoescape %}
+        return [{}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        {% autoescape false %}{{param_loop_process_code}}{% endautoescape %}
+        return params
 
     def process(self, process_type: ProcessType):
         """
@@ -163,6 +162,11 @@ class {{title_name}}(BaseDao, TuShareBase):
             df = fetch_save(offset)
             offset += df.shape[0]
         return offset - init_offset
+
+
+setattr({{title_name}}, 'prepare', prepare_ext)
+setattr({{title_name}}, 'tushare_parameters', tushare_parameters_ext)
+setattr({{title_name}}, 'param_loop_process', param_loop_process_ext)
 
 
 if __name__ == '__main__':

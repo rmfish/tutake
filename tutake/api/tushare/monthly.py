@@ -15,7 +15,8 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process_type import ProcessType
+from tutake.api.tushare.monthly_ext import *
+from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import config
 from tutake.utils.decorator import sleep
@@ -46,7 +47,7 @@ class TushareMonthly(Base):
 TushareMonthly.__table__.create(bind=engine, checkfirst=True)
 
 
-class Monthly(BaseDao, TuShareBase):
+class Monthly(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -125,7 +126,6 @@ class Monthly(BaseDao, TuShareBase):
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作
-        :return:
         """
 
     def tushare_parameters(self, process_type: ProcessType):
@@ -133,38 +133,13 @@ class Monthly(BaseDao, TuShareBase):
         同步历史数据调用的参数
         :return: list(dict)
         """
-        return self.dao.stock_basic.column_data(['ts_code', 'list_date'])
+        return [{}]
 
     def param_loop_process(self, process_type: ProcessType, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
-        import pendulum
-        date_format = 'YYYYMMDD'
-        if process_type == ProcessType.HISTORY:
-            min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
-            if min_date is None:
-                params['end_date'] = ""
-            else:
-                min_date = pendulum.parse(min_date).add(months=-1)    # 数据库中最小的月份再往前一个月
-                if params.get('list_date'):
-                    list_date = pendulum.parse(params.get('list_date'))
-                    if list_date.to_date_string()[:-2] > min_date.to_date_string()[:-2]:
-                        return None
-                params['end_date'] = min_date.format(date_format)
-            return params
-        else:
-            max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
-            if max_date is None:
-                params['start_date'] = ""
-            else:
-                start_date = pendulum.parse(max_date).add(months=1)
-                if params.get('list_date'):
-                    if start_date.to_date_string()[:-2] > pendulum.now().to_date_string()[:-2]:
-                        return None
-                    else:
-                        params['start_date'] = start_date.format(date_format)
-            return params
+        return params
 
     def process(self, process_type: ProcessType):
         """
@@ -234,6 +209,10 @@ class Monthly(BaseDao, TuShareBase):
             offset += df.shape[0]
         return offset - init_offset
 
+
+setattr(Monthly, 'prepare', prepare_ext)
+setattr(Monthly, 'tushare_parameters', tushare_parameters_ext)
+setattr(Monthly, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数
