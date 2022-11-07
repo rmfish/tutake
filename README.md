@@ -20,9 +20,14 @@ Take data from Tushare, respect Tushare!
 clone 代码后复制配置文件 `config-default.yml` -> `config.yml`
 需要配置两个参数：
 
-```python
-tushare.token  # Tushare的token 尽量使用高积分的Token，否则会有很多接口和频率的限制
-tutake.data.driver_url  # sqlite的driver的地址，制定到存放下载数据的目录，注意不同操作系统的/可能会有差异
+```yaml
+#执行时需要将这个文件调整为 config.yml
+tutake:
+  data:
+    driver_url: sqlite:////Users/xxx/tutake/data  # sqlite的driver的地址，制定到存放下载数据的目录，注意不同操作系统的/可能会有差异
+
+tushare:
+  token: # Tushare的token 尽量使用高积分的Token，否则会有很多接口和频率的限制
 ```
 
 ### Step2 下载股票列表
@@ -90,7 +95,7 @@ if __name__ == '__main__':
 
 ## 只作为客户端使用
 
-如果数据下载完成后，只做客户端使用，基本Tushare的接口，如果设置Tushare的Token，还支持接口的降级（未实现的接口直接调用Tushare）
+如果数据下载完成后，只做客户端使用，和Tushare的接口完全保持一致，如果设置Tushare的Token，还支持接口的降级（未实现的接口直接调用Tushare）
 ```python
 import tutake as ts
 
