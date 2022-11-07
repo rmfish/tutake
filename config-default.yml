@@ -1,11 +1,13 @@
 #执行时需要将这个文件调整为 config.yml
+tutake:
+  dir: #可以指定保存tutake和meta的全局目录
+  data:
+    driver_url: sqlite:////Users/xxx/tutake/data  #单独指定数据的目录
+  process:
+    thread_cnt: 10 #调用tushare的并发线程数
+
 tushare:
-  token:
-
-database:
-  driver_url: sqlite:////Users/xxx/tutake/data
-
-api:
-  driver_url: sqlite:////Users/xxx/tutake/meta
-  cookie: #tushare的Cookie 只有在要抓api信息时才需要
-
+  meta:
+    driver_url: sqlite:////Users/xxx/tutake/data
+    cookie:
+  token: # tushare api 的token

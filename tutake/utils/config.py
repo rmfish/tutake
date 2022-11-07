@@ -79,6 +79,7 @@ TUSHARE_TOKEN_KEY = "tushare.token"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
 TUSHARE_API_META_DIR_KEY = "tushare.meta.driver_url"
 TUSHARE_DIR_KEY = "tutake.dir"
+TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 
 
 class TutakeConfig(object):
@@ -167,6 +168,9 @@ class TutakeConfig(object):
 
     def get_tushare_token(self):
         return self.require_config(TUSHARE_TOKEN_KEY)
+
+    def get_process_thread_cnt(self):
+        return self.require_config(TUTAKE_PROCESS_THREAD_CNT_KEY)
 
 
 tutake_config = TutakeConfig(project_root())

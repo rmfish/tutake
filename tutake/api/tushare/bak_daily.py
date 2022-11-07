@@ -6,6 +6,7 @@ Tushare bak_daily接口
 
 @author: rmfish
 """
+from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
 import logging
@@ -13,7 +14,7 @@ from sqlalchemy import Integer, String, Float, Column, create_engine, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.tushare.base_dao import BaseDao
+from tutake.api.tushare.base_dao import BaseDao, ProcessException, ProcessPercent
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.bak_daily_ext import *
 from tutake.api.tushare.process import ProcessType, DataProcess
@@ -193,21 +194,42 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
         params = self.tushare_parameters(process_type)
         logger.debug("Process tushare params is {}".format(params))
         if params:
-            for param in params:
+            percent = ProcessPercent(len(params))
+
+            def action(param):
                 new_param = self.param_loop_process(process_type, **param)
                 if new_param is None:
-                    logger.debug("Skip exec param: {}".format(param))
-                    continue
+                    logger.debug("[{}] Skip exec param: {}".format(percent.format(), param))
+                    return
                 try:
                     cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.debug("Fetch and append {} data, cnt is {}".format("daily", cnt))
+                    logger.info("[{}] Fetch and append {} data, cnt is {} . param is {}".format(
+                        percent.format(), "bak_daily", cnt, param))
                 except Exception as err:
-                    if err.args[0].startswith("抱歉，您没有访问该接口的权限") or err.args[0].startswith("抱歉，您每天最多访问该接口"):
+                    if isinstance(err.args[0], str) and (err.args[0].startswith("抱歉，您没有访问该接口的权限")
+                                                         or err.args[0].startswith("抱歉，您每天最多访问该接口")):
                         logger.error("Throw exception with param: {} err:{}".format(new_param, err))
-                        return
+                        raise Exception("Exit with tushare api flow limit. {}", err.args[0])
                     else:
                         logger.error("Execute fetch_and_append throw exp. {}".format(err))
-                        continue
+                        return ProcessException(param=new_param, cause=err)
+
+            with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
+                repeat_params = []
+                for result in pool.map(action, params):
+                    percent.finish()
+                    if isinstance(result, ProcessException):
+                        repeat_params.append(result.param)
+                    elif isinstance(result, Exception):
+                        return
+                # 过程中出现错误的，需要补偿执行
+                cnt = len(repeat_params)
+                if cnt > 0:
+                    percent = ProcessPercent(cnt)
+                    logger.warning("Failed process with exception.Cnt {}  All params is {}".format(cnt, repeat_params))
+                    for p in repeat_params:
+                        action(p)
+                        percent.finish()
 
     def fetch_and_append(self, process_type: ProcessType, **kwargs):
         """
@@ -260,7 +282,7 @@ setattr(BakDaily, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)    # 显示列数
     pd.set_option('display.width', 1000)
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     api = BakDaily()
     api.process(ProcessType.HISTORY)    # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据

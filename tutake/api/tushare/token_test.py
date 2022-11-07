@@ -1,5 +1,6 @@
-from tutake.utils.config import config
 import tushare as ts
+
+from tutake.utils.config import tutake_config
 
 
 def is_useful_token(token):
@@ -34,7 +35,7 @@ def is_5000_token(token):
 
 
 if __name__ == '__main__':
-    tokens = set(config['tushare']['tokens'])
+    tokens = set(tutake_config.get_config('tushare.tokens'))
     print("Token 总数 %d" % len(tokens))
     for i in tokens:
         if is_useful_token(i):

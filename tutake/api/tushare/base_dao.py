@@ -51,3 +51,35 @@ class BaseDao:
             rs = con.execute(sql)
             for i in rs:
                 return i[0]
+
+
+class ProcessException(BaseException):
+    def __init__(self, param: dict, cause: Exception):  # real signature unknown
+        super().__init__(param, cause)
+        self.param = param
+        self.cause = cause
+
+
+class ProcessPercent(object):
+    def __init__(self, total):
+        self.total = total
+        self.finished = 0
+
+    def finish(self, cnt: int = 1):
+        self.finished += cnt
+
+    def percent(self):
+        return self.finished / self.total
+
+    def format(self):
+        return '{}%'.format('%.2f' % (self.percent() * 100))
+
+
+if __name__ == '__main__':
+    percent = ProcessPercent(7)
+    percent.finish()
+    print(percent.percent() * 100)
+    print(percent.format())
+
+    err = ProcessException({"a": 'a'}, Exception())
+    print("{}".format(err.param))
