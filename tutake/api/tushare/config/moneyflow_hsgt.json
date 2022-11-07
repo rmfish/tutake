@@ -86,6 +86,6 @@
         "validator": "required",
         "name": "trade_date"
     }],
-    "default_limit": null,
+    "default_limit": 300,
     "order_by": null
 }

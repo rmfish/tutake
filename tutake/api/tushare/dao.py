@@ -37,6 +37,10 @@ class DAO(object):
             adj_factor_module = import_module("tutake.api.tushare.adj_factor")
             clazz = getattr(adj_factor_module, "AdjFactor")
             return clazz()
+        if name == 'moneyflow_hsgt':
+            moneyflow_hsgt_module = import_module("tutake.api.tushare.moneyflow_hsgt")
+            clazz = getattr(moneyflow_hsgt_module, "MoneyflowHsgt")
+            return clazz()
         if name == 'namechange':
             namechange_module = import_module("tutake.api.tushare.namechange")
             clazz = getattr(namechange_module, "Namechange")
@@ -60,6 +64,10 @@ class DAO(object):
         if name == 'monthly':
             monthly_module = import_module("tutake.api.tushare.monthly")
             clazz = getattr(monthly_module, "Monthly")
+            return clazz()
+        if name == 'moneyflow':
+            moneyflow_module = import_module("tutake.api.tushare.moneyflow")
+            clazz = getattr(moneyflow_module, "Moneyflow")
             return clazz()
         if name == 'stk_managers':
             stk_managers_module = import_module("tutake.api.tushare.stk_managers")

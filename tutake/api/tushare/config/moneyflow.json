@@ -191,6 +191,6 @@
         },
         "message": "股票代码和日期至少输入一个参数"
     }],
-    "default_limit": null,
+    "default_limit": 5000,
     "order_by": null
 }
