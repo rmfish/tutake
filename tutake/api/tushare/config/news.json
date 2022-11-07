@@ -1,71 +1,97 @@
 {
-    "desc": "",
-    "name": "news",
-    "id": 143,
-    "outputs": [{
-        "name": "datetime",
-        "column": "datetime",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "时间"
-    }, {
-        "name": "content",
-        "column": "content",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "内容"
-    }, {
-        "name": "title",
-        "column": "title",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标题"
-    }, {
-        "name": "channels",
-        "column": "channels",
-        "data_type": "str",
-        "must": "N",
-        "desc": "分类"
-    }, {
-        "name": "score",
-        "column": "score",
-        "data_type": "str",
-        "must": "N",
-        "desc": "分值"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 142,
-    "title": "新闻快讯",
-    "inputs": [{
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "src",
-        "data_type": "str",
-        "must": "N",
-        "default": "sina",
-        "desc": "新闻来源sina新浪财经"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 143,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "default": "sina",
+            "desc": "新闻来源sina新浪财经",
+            "must": "N",
+            "name": "src"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "news",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "datetime",
+            "data_type": "str",
+            "desc": "时间",
+            "must": "Y",
+            "name": "datetime"
+        },
+        {
+            "column": "content",
+            "data_type": "str",
+            "desc": "内容",
+            "must": "Y",
+            "name": "content"
+        },
+        {
+            "column": "title",
+            "data_type": "str",
+            "desc": "标题",
+            "must": "Y",
+            "name": "title"
+        },
+        {
+            "column": "channels",
+            "data_type": "str",
+            "desc": "分类",
+            "must": "N",
+            "name": "channels"
+        },
+        {
+            "column": "score",
+            "data_type": "str",
+            "desc": "分值",
+            "must": "N",
+            "name": "score"
+        }
+    ],
+    "parent_id": 142,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            142,
+            "另类数据"
+        ],
+        [
+            143,
+            "新闻快讯"
+        ]
+    ],
+    "title": "新闻快讯",
+    "validations": []
 }

@@ -1,118 +1,160 @@
 {
-    "desc": "获取CPI居民消费价格指数",
-    "name": "cn_cpi",
-    "id": 228,
-    "outputs": [{
-        "column": "MONTH",
-        "name": "month",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "月份YYYYMM"
-    }, {
-        "column": "NT_VAL",
-        "name": "nt_val",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "全国当月至"
-    }, {
-        "column": "NT_YOY",
-        "name": "nt_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "全国同比（%）"
-    }, {
-        "column": "NT_MOM",
-        "name": "nt_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "全国环比（%）"
-    }, {
-        "column": "NT_ACCU",
-        "name": "nt_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "全国累计值"
-    }, {
-        "column": "TOWN_VAL",
-        "name": "town_val",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "城市当值月"
-    }, {
-        "column": "TOWN_YOY",
-        "name": "town_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "城市同比（%）"
-    }, {
-        "column": "TOWN_MOM",
-        "name": "town_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "城市环比（%）"
-    }, {
-        "column": "TOWN_ACCU",
-        "name": "town_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "城市累计值"
-    }, {
-        "column": "CNT_VAL",
-        "name": "cnt_val",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "农村当月值"
-    }, {
-        "column": "CNT_YOY",
-        "name": "cnt_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "农村同比（%）"
-    }, {
-        "column": "CNT_MOM",
-        "name": "cnt_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "农村环比（%）"
-    }, {
-        "column": "CNT_ACCU",
-        "name": "cnt_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "农村累计值"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 226,
-    "title": "居民消费价格指数（CPI）",
-    "inputs": [{
-        "name": "m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "月份（YYYYMM，下同），支持多个月份同时输入，逗号分隔"
-    }, {
-        "name": "start_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始月份"
-    }, {
-        "name": "end_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束月份"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "获取CPI居民消费价格指数",
+    "id": 228,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "月份（YYYYMM，下同），支持多个月份同时输入，逗号分隔",
+            "must": "N",
+            "name": "m"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始月份",
+            "must": "N",
+            "name": "start_m"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束月份",
+            "must": "N",
+            "name": "end_m"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cn_cpi",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "MONTH",
+            "data_type": "str",
+            "desc": "月份YYYYMM",
+            "must": "Y",
+            "name": "month"
+        },
+        {
+            "column": "NT_VAL",
+            "data_type": "float",
+            "desc": "全国当月至",
+            "must": "Y",
+            "name": "nt_val"
+        },
+        {
+            "column": "NT_YOY",
+            "data_type": "float",
+            "desc": "全国同比（%）",
+            "must": "Y",
+            "name": "nt_yoy"
+        },
+        {
+            "column": "NT_MOM",
+            "data_type": "float",
+            "desc": "全国环比（%）",
+            "must": "Y",
+            "name": "nt_mom"
+        },
+        {
+            "column": "NT_ACCU",
+            "data_type": "float",
+            "desc": "全国累计值",
+            "must": "Y",
+            "name": "nt_accu"
+        },
+        {
+            "column": "TOWN_VAL",
+            "data_type": "float",
+            "desc": "城市当值月",
+            "must": "Y",
+            "name": "town_val"
+        },
+        {
+            "column": "TOWN_YOY",
+            "data_type": "float",
+            "desc": "城市同比（%）",
+            "must": "Y",
+            "name": "town_yoy"
+        },
+        {
+            "column": "TOWN_MOM",
+            "data_type": "float",
+            "desc": "城市环比（%）",
+            "must": "Y",
+            "name": "town_mom"
+        },
+        {
+            "column": "TOWN_ACCU",
+            "data_type": "float",
+            "desc": "城市累计值",
+            "must": "Y",
+            "name": "town_accu"
+        },
+        {
+            "column": "CNT_VAL",
+            "data_type": "float",
+            "desc": "农村当月值",
+            "must": "Y",
+            "name": "cnt_val"
+        },
+        {
+            "column": "CNT_YOY",
+            "data_type": "float",
+            "desc": "农村同比（%）",
+            "must": "Y",
+            "name": "cnt_yoy"
+        },
+        {
+            "column": "CNT_MOM",
+            "data_type": "float",
+            "desc": "农村环比（%）",
+            "must": "Y",
+            "name": "cnt_mom"
+        },
+        {
+            "column": "CNT_ACCU",
+            "data_type": "float",
+            "desc": "农村累计值",
+            "must": "Y",
+            "name": "cnt_accu"
+        }
+    ],
+    "parent_id": 226,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            226,
+            "价格指数"
+        ],
+        [
+            228,
+            "居民消费价格指数（CPI）"
+        ]
+    ],
+    "title": "居民消费价格指数（CPI）",
+    "validations": []
 }

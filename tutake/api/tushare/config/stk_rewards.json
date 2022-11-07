@@ -1,77 +1,108 @@
 {
-    "title": "管理层薪酬和持股",
-    "parent_id": 24,
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS股票代码"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "database": "tushare_basic_data",
-    "is_ready": 1,
-    "order_by": null,
-    "name": "stk_rewards",
-    "id": 194,
-    "desc": "管理层薪酬和持股",
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS股票代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "姓名"
-    }, {
-        "column": "TITLE",
-        "name": "title",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "职务"
-    }, {
-        "column": "REWARD",
-        "name": "reward",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "报酬"
-    }, {
-        "column": "HOLD_VOL",
-        "name": "hold_vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持股数"
-    }],
     "default_limit": "4000",
-    "if_exists": null
+    "desc": "管理层薪酬和持股",
+    "id": 194,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": 1,
+    "name": "stk_rewards",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "姓名",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "TITLE",
+            "data_type": "str",
+            "desc": "职务",
+            "must": "Y",
+            "name": "title"
+        },
+        {
+            "column": "REWARD",
+            "data_type": "float",
+            "desc": "报酬",
+            "must": "Y",
+            "name": "reward"
+        },
+        {
+            "column": "HOLD_VOL",
+            "data_type": "float",
+            "desc": "持股数",
+            "must": "Y",
+            "name": "hold_vol"
+        }
+    ],
+    "parent_id": 24,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            24,
+            "基础数据"
+        ],
+        [
+            194,
+            "管理层薪酬和持股"
+        ]
+    ],
+    "title": "管理层薪酬和持股",
+    "validations": []
 }

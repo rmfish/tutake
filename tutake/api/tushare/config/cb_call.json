@@ -1,96 +1,126 @@
 {
-    "desc": "可转债赎回信息",
-    "name": "cb_call",
-    "id": 269,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "转债代码"
-    }, {
-        "column": "CALL_TYPE",
-        "name": "call_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "赎回类型：到赎、强赎"
-    }, {
-        "column": "IS_CALL",
-        "name": "is_call",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "是否赎回：公告到期赎回、公告强赎、公告不强赎"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "CALL_DATE",
-        "name": "call_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "赎回日期"
-    }, {
-        "column": "CALL_PRICE",
-        "name": "call_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "赎回价格(含税，元/张)"
-    }, {
-        "column": "CALL_PRICE_TAX",
-        "name": "call_price_tax",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "赎回价格(扣税，元/张)"
-    }, {
-        "column": "CALL_VOL",
-        "name": "call_vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "赎回债券数量(张)"
-    }, {
-        "column": "CALL_AMOUNT",
-        "name": "call_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "赎回金额(万元)"
-    }, {
-        "column": "PAYMENT_DATE",
-        "name": "payment_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行权后款项到账日"
-    }, {
-        "column": "CALL_REG_DATE",
-        "name": "call_reg_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "赎回登记日"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 184,
-    "title": "可转债赎回信息",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "转债代码，支持多值输入"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "可转债赎回信息",
+    "id": 269,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "转债代码，支持多值输入",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cb_call",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "转债代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "CALL_TYPE",
+            "data_type": "str",
+            "desc": "赎回类型：到赎、强赎",
+            "must": "Y",
+            "name": "call_type"
+        },
+        {
+            "column": "IS_CALL",
+            "data_type": "str",
+            "desc": "是否赎回：公告到期赎回、公告强赎、公告不强赎",
+            "must": "Y",
+            "name": "is_call"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "CALL_DATE",
+            "data_type": "str",
+            "desc": "赎回日期",
+            "must": "Y",
+            "name": "call_date"
+        },
+        {
+            "column": "CALL_PRICE",
+            "data_type": "float",
+            "desc": "赎回价格(含税，元/张)",
+            "must": "Y",
+            "name": "call_price"
+        },
+        {
+            "column": "CALL_PRICE_TAX",
+            "data_type": "float",
+            "desc": "赎回价格(扣税，元/张)",
+            "must": "Y",
+            "name": "call_price_tax"
+        },
+        {
+            "column": "CALL_VOL",
+            "data_type": "float",
+            "desc": "赎回债券数量(张)",
+            "must": "Y",
+            "name": "call_vol"
+        },
+        {
+            "column": "CALL_AMOUNT",
+            "data_type": "float",
+            "desc": "赎回金额(万元)",
+            "must": "Y",
+            "name": "call_amount"
+        },
+        {
+            "column": "PAYMENT_DATE",
+            "data_type": "str",
+            "desc": "行权后款项到账日",
+            "must": "Y",
+            "name": "payment_date"
+        },
+        {
+            "column": "CALL_REG_DATE",
+            "data_type": "str",
+            "desc": "赎回登记日",
+            "must": "Y",
+            "name": "call_reg_date"
+        }
+    ],
+    "parent_id": 184,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            184,
+            "债券"
+        ],
+        [
+            269,
+            "可转债赎回信息"
+        ]
+    ],
+    "title": "可转债赎回信息",
+    "validations": []
 }

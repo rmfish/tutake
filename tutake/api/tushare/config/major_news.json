@@ -1,64 +1,89 @@
 {
-    "desc": "长篇新闻",
-    "name": "major_news",
-    "id": 195,
-    "outputs": [{
-        "column": "TITLE",
-        "name": "title",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标题"
-    }, {
-        "column": "CONTENT",
-        "name": "content",
-        "data_type": "str",
-        "must": "N",
-        "desc": "内容"
-    }, {
-        "column": "PUB_TIME",
-        "name": "pub_time",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "发布时间"
-    }, {
-        "column": "SRC_SITE",
-        "name": "src",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "来源网站"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 142,
-    "title": "新闻通讯（长篇）",
-    "inputs": [{
-        "name": "src",
-        "data_type": "str",
-        "must": "N",
-        "desc": "新闻来源"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "新闻发布开始时间"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "新闻发布结束时间"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "长篇新闻",
+    "id": 195,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "新闻来源",
+            "must": "N",
+            "name": "src"
+        },
+        {
+            "data_type": "str",
+            "desc": "新闻发布开始时间",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "新闻发布结束时间",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "major_news",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TITLE",
+            "data_type": "str",
+            "desc": "标题",
+            "must": "Y",
+            "name": "title"
+        },
+        {
+            "column": "CONTENT",
+            "data_type": "str",
+            "desc": "内容",
+            "must": "N",
+            "name": "content"
+        },
+        {
+            "column": "PUB_TIME",
+            "data_type": "str",
+            "desc": "发布时间",
+            "must": "Y",
+            "name": "pub_time"
+        },
+        {
+            "column": "SRC_SITE",
+            "data_type": "str",
+            "desc": "来源网站",
+            "must": "Y",
+            "name": "src"
+        }
+    ],
+    "parent_id": 142,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            142,
+            "另类数据"
+        ],
+        [
+            195,
+            "新闻通讯（长篇）"
+        ]
+    ],
+    "title": "新闻通讯（长篇）",
+    "validations": []
 }

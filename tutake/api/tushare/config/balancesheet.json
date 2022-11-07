@@ -1,1024 +1,1214 @@
 {
-    "desc": "",
-    "name": "balancesheet",
-    "id": 36,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS股票代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "F_ANN_DATE",
-        "name": "f_ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "实际公告日期"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期"
-    }, {
-        "column": "REPORT_TYPE",
-        "name": "report_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报表类型"
-    }, {
-        "column": "COMP_TYPE",
-        "name": "comp_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公司类型(1一般工商业2银行3保险4证券)"
-    }, {
-        "column": "END_TYPE",
-        "name": "end_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期类型"
-    }, {
-        "column": "TOTAL_SHARE",
-        "name": "total_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末总股本"
-    }, {
-        "column": "CAP_RESE",
-        "name": "cap_rese",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "资本公积金"
-    }, {
-        "column": "UNDISTR_PORFIT",
-        "name": "undistr_porfit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "未分配利润"
-    }, {
-        "column": "SURPLUS_RESE",
-        "name": "surplus_rese",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "盈余公积金"
-    }, {
-        "column": "SPECIAL_RESE",
-        "name": "special_rese",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "专项储备"
-    }, {
-        "column": "MONEY_CAP",
-        "name": "money_cap",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "货币资金"
-    }, {
-        "column": "TRAD_ASSET",
-        "name": "trad_asset",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "交易性金融资产"
-    }, {
-        "column": "NOTES_RECEIV",
-        "name": "notes_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收票据"
-    }, {
-        "column": "ACCOUNTS_RECEIV",
-        "name": "accounts_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收账款"
-    }, {
-        "column": "OTH_RECEIV",
-        "name": "oth_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他应收款"
-    }, {
-        "column": "PREPAYMENT",
-        "name": "prepayment",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预付款项"
-    }, {
-        "column": "DIV_RECEIV",
-        "name": "div_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收股利"
-    }, {
-        "column": "INT_RECEIV",
-        "name": "int_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收利息"
-    }, {
-        "column": "INVENTORIES",
-        "name": "inventories",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存货"
-    }, {
-        "column": "AMOR_EXP",
-        "name": "amor_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期待摊费用"
-    }, {
-        "column": "NCA_WITHIN_1Y",
-        "name": "nca_within_1y",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "一年内到期的非流动资产"
-    }, {
-        "column": "SETT_RSRV",
-        "name": "sett_rsrv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "结算备付金"
-    }, {
-        "column": "LOANTO_OTH_BANK_FI",
-        "name": "loanto_oth_bank_fi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "拆出资金"
-    }, {
-        "column": "PREMIUM_RECEIV",
-        "name": "premium_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收保费"
-    }, {
-        "column": "REINSUR_RECEIV",
-        "name": "reinsur_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保账款"
-    }, {
-        "column": "REINSUR_RES_RECEIV",
-        "name": "reinsur_res_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保合同准备金"
-    }, {
-        "column": "PUR_RESALE_FA",
-        "name": "pur_resale_fa",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "买入返售金融资产"
-    }, {
-        "column": "OTH_CUR_ASSETS",
-        "name": "oth_cur_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他流动资产"
-    }, {
-        "column": "TOTAL_CUR_ASSETS",
-        "name": "total_cur_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动资产合计"
-    }, {
-        "column": "FA_AVAIL_FOR_SALE",
-        "name": "fa_avail_for_sale",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "可供出售金融资产"
-    }, {
-        "column": "HTM_INVEST",
-        "name": "htm_invest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持有至到期投资"
-    }, {
-        "column": "LT_EQT_INVEST",
-        "name": "lt_eqt_invest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期股权投资"
-    }, {
-        "column": "INVEST_REAL_ESTATE",
-        "name": "invest_real_estate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "投资性房地产"
-    }, {
-        "column": "TIME_DEPOSITS",
-        "name": "time_deposits",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "定期存款"
-    }, {
-        "column": "OTH_ASSETS",
-        "name": "oth_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他资产"
-    }, {
-        "column": "LT_REC",
-        "name": "lt_rec",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期应收款"
-    }, {
-        "column": "FIX_ASSETS",
-        "name": "fix_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产"
-    }, {
-        "column": "CIP",
-        "name": "cip",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "在建工程"
-    }, {
-        "column": "CONST_MATERIALS",
-        "name": "const_materials",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "工程物资"
-    }, {
-        "column": "FIXED_ASSETS_DISP",
-        "name": "fixed_assets_disp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产清理"
-    }, {
-        "column": "PRODUC_BIO_ASSETS",
-        "name": "produc_bio_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "生产性生物资产"
-    }, {
-        "column": "OIL_AND_GAS_ASSETS",
-        "name": "oil_and_gas_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "油气资产"
-    }, {
-        "column": "INTAN_ASSETS",
-        "name": "intan_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "无形资产"
-    }, {
-        "column": "R_AND_D",
-        "name": "r_and_d",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "研发支出"
-    }, {
-        "column": "GOODWILL",
-        "name": "goodwill",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "商誉"
-    }, {
-        "column": "LT_AMOR_EXP",
-        "name": "lt_amor_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期待摊费用"
-    }, {
-        "column": "DEFER_TAX_ASSETS",
-        "name": "defer_tax_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "递延所得税资产"
-    }, {
-        "column": "DECR_IN_DISBUR",
-        "name": "decr_in_disbur",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "发放贷款及垫款"
-    }, {
-        "column": "OTH_NCA",
-        "name": "oth_nca",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他非流动资产"
-    }, {
-        "column": "TOTAL_NCA",
-        "name": "total_nca",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "非流动资产合计"
-    }, {
-        "column": "CASH_RESER_CB",
-        "name": "cash_reser_cb",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "现金及存放中央银行款项"
-    }, {
-        "column": "DEPOS_IN_OTH_BFI",
-        "name": "depos_in_oth_bfi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存放同业和其它金融机构款项"
-    }, {
-        "column": "PREC_METALS",
-        "name": "prec_metals",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "贵金属"
-    }, {
-        "column": "DERIV_ASSETS",
-        "name": "deriv_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "衍生金融资产"
-    }, {
-        "column": "RR_REINS_UNE_PREM",
-        "name": "rr_reins_une_prem",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保未到期责任准备金"
-    }, {
-        "column": "RR_REINS_OUTSTD_CLA",
-        "name": "rr_reins_outstd_cla",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保未决赔款准备金"
-    }, {
-        "column": "RR_REINS_LINS_LIAB",
-        "name": "rr_reins_lins_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保寿险责任准备金"
-    }, {
-        "column": "RR_REINS_LTHINS_LIAB",
-        "name": "rr_reins_lthins_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收分保长期健康险责任准备金"
-    }, {
-        "column": "REFUND_DEPOS",
-        "name": "refund_depos",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存出保证金"
-    }, {
-        "column": "PH_PLEDGE_LOANS",
-        "name": "ph_pledge_loans",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保户质押贷款"
-    }, {
-        "column": "REFUND_CAP_DEPOS",
-        "name": "refund_cap_depos",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存出资本保证金"
-    }, {
-        "column": "INDEP_ACCT_ASSETS",
-        "name": "indep_acct_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "独立账户资产"
-    }, {
-        "column": "CLIENT_DEPOS",
-        "name": "client_depos",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中：客户资金存款"
-    }, {
-        "column": "CLIENT_PROV",
-        "name": "client_prov",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中：客户备付金"
-    }, {
-        "column": "TRANSAC_SEAT_FEE",
-        "name": "transac_seat_fee",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中:交易席位费"
-    }, {
-        "column": "INVEST_AS_RECEIV",
-        "name": "invest_as_receiv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收款项类投资"
-    }, {
-        "column": "TOTAL_ASSETS",
-        "name": "total_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "资产总计"
-    }, {
-        "column": "LT_BORR",
-        "name": "lt_borr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期借款"
-    }, {
-        "column": "ST_BORR",
-        "name": "st_borr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "短期借款"
-    }, {
-        "column": "CB_BORR",
-        "name": "cb_borr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "向中央银行借款"
-    }, {
-        "column": "DEPOS_IB_DEPOSITS",
-        "name": "depos_ib_deposits",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "吸收存款及同业存放"
-    }, {
-        "column": "LOAN_OTH_BANK",
-        "name": "loan_oth_bank",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "拆入资金"
-    }, {
-        "column": "TRADING_FL",
-        "name": "trading_fl",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "交易性金融负债"
-    }, {
-        "column": "NOTES_PAYABLE",
-        "name": "notes_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付票据"
-    }, {
-        "column": "ACCT_PAYABLE",
-        "name": "acct_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付账款"
-    }, {
-        "column": "ADV_RECEIPTS",
-        "name": "adv_receipts",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预收款项"
-    }, {
-        "column": "SOLD_FOR_REPUR_FA",
-        "name": "sold_for_repur_fa",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "卖出回购金融资产款"
-    }, {
-        "column": "COMM_PAYABLE",
-        "name": "comm_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付手续费及佣金"
-    }, {
-        "column": "PAYROLL_PAYABLE",
-        "name": "payroll_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付职工薪酬"
-    }, {
-        "column": "TAXES_PAYABLE",
-        "name": "taxes_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应交税费"
-    }, {
-        "column": "INT_PAYABLE",
-        "name": "int_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付利息"
-    }, {
-        "column": "DIV_PAYABLE",
-        "name": "div_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付股利"
-    }, {
-        "column": "OTH_PAYABLE",
-        "name": "oth_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他应付款"
-    }, {
-        "column": "ACC_EXP",
-        "name": "acc_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预提费用"
-    }, {
-        "column": "DEFERRED_INC",
-        "name": "deferred_inc",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "递延收益"
-    }, {
-        "column": "ST_BONDS_PAYABLE",
-        "name": "st_bonds_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付短期债券"
-    }, {
-        "column": "PAYABLE_TO_REINSURER",
-        "name": "payable_to_reinsurer",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付分保账款"
-    }, {
-        "column": "RSRV_INSUR_CONT",
-        "name": "rsrv_insur_cont",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保险合同准备金"
-    }, {
-        "column": "ACTING_TRADING_SEC",
-        "name": "acting_trading_sec",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "代理买卖证券款"
-    }, {
-        "column": "ACTING_UW_SEC",
-        "name": "acting_uw_sec",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "代理承销证券款"
-    }, {
-        "column": "NON_CUR_LIAB_DUE_1Y",
-        "name": "non_cur_liab_due_1y",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "一年内到期的非流动负债"
-    }, {
-        "column": "OTH_CUR_LIAB",
-        "name": "oth_cur_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他流动负债"
-    }, {
-        "column": "TOTAL_CUR_LIAB",
-        "name": "total_cur_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动负债合计"
-    }, {
-        "column": "BOND_PAYABLE",
-        "name": "bond_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付债券"
-    }, {
-        "column": "LT_PAYABLE",
-        "name": "lt_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期应付款"
-    }, {
-        "column": "SPECIFIC_PAYABLES",
-        "name": "specific_payables",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "专项应付款"
-    }, {
-        "column": "ESTIMATED_LIAB",
-        "name": "estimated_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预计负债"
-    }, {
-        "column": "DEFER_TAX_LIAB",
-        "name": "defer_tax_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "递延所得税负债"
-    }, {
-        "column": "DEFER_INC_NON_CUR_LIAB",
-        "name": "defer_inc_non_cur_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "递延收益-非流动负债"
-    }, {
-        "column": "OTH_NCL",
-        "name": "oth_ncl",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他非流动负债"
-    }, {
-        "column": "TOTAL_NCL",
-        "name": "total_ncl",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "非流动负债合计"
-    }, {
-        "column": "DEPOS_OTH_BFI",
-        "name": "depos_oth_bfi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "同业和其它金融机构存放款项"
-    }, {
-        "column": "DERIV_LIAB",
-        "name": "deriv_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "衍生金融负债"
-    }, {
-        "column": "DEPOS",
-        "name": "depos",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "吸收存款"
-    }, {
-        "column": "AGENCY_BUS_LIAB",
-        "name": "agency_bus_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "代理业务负债"
-    }, {
-        "column": "OTH_LIAB",
-        "name": "oth_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他负债"
-    }, {
-        "column": "PREM_RECEIV_ADVA",
-        "name": "prem_receiv_adva",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预收保费"
-    }, {
-        "column": "DEPOS_RECEIVED",
-        "name": "depos_received",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存入保证金"
-    }, {
-        "column": "PH_INVEST",
-        "name": "ph_invest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保户储金及投资款"
-    }, {
-        "column": "RESER_UNE_PREM",
-        "name": "reser_une_prem",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "未到期责任准备金"
-    }, {
-        "column": "RESER_OUTSTD_CLAIMS",
-        "name": "reser_outstd_claims",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "未决赔款准备金"
-    }, {
-        "column": "RESER_LINS_LIAB",
-        "name": "reser_lins_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "寿险责任准备金"
-    }, {
-        "column": "RESER_LTHINS_LIAB",
-        "name": "reser_lthins_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期健康险责任准备金"
-    }, {
-        "column": "INDEPT_ACC_LIAB",
-        "name": "indept_acc_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "独立账户负债"
-    }, {
-        "column": "PLEDGE_BORR",
-        "name": "pledge_borr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中:质押借款"
-    }, {
-        "column": "INDEM_PAYABLE",
-        "name": "indem_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付赔付款"
-    }, {
-        "column": "POLICY_DIV_PAYABLE",
-        "name": "policy_div_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付保单红利"
-    }, {
-        "column": "TOTAL_LIAB",
-        "name": "total_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "负债合计"
-    }, {
-        "column": "TREASURY_SHARE",
-        "name": "treasury_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:库存股"
-    }, {
-        "column": "ORDIN_RISK_RESER",
-        "name": "ordin_risk_reser",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "一般风险准备"
-    }, {
-        "column": "FOREX_DIFFER",
-        "name": "forex_differ",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "外币报表折算差额"
-    }, {
-        "column": "INVEST_LOSS_UNCONF",
-        "name": "invest_loss_unconf",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "未确认的投资损失"
-    }, {
-        "column": "MINORITY_INT",
-        "name": "minority_int",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "少数股东权益"
-    }, {
-        "column": "TOTAL_HLDR_EQY_EXC_MIN_INT",
-        "name": "total_hldr_eqy_exc_min_int",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "股东权益合计(不含少数股东权益)"
-    }, {
-        "column": "TOTAL_HLDR_EQY_INC_MIN_INT",
-        "name": "total_hldr_eqy_inc_min_int",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "股东权益合计(含少数股东权益)"
-    }, {
-        "column": "TOTAL_LIAB_HLDR_EQY",
-        "name": "total_liab_hldr_eqy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "负债及股东权益总计"
-    }, {
-        "column": "LT_PAYROLL_PAYABLE",
-        "name": "lt_payroll_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期应付职工薪酬"
-    }, {
-        "column": "OTH_COMP_INCOME",
-        "name": "oth_comp_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他综合收益"
-    }, {
-        "column": "OTH_EQT_TOOLS",
-        "name": "oth_eqt_tools",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他权益工具"
-    }, {
-        "column": "OTH_EQT_TOOLS_P_SHR",
-        "name": "oth_eqt_tools_p_shr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他权益工具(优先股)"
-    }, {
-        "column": "LENDING_FUNDS",
-        "name": "lending_funds",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "融出资金"
-    }, {
-        "column": "ACC_RECEIVABLE",
-        "name": "acc_receivable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收款项"
-    }, {
-        "column": "ST_FIN_PAYABLE",
-        "name": "st_fin_payable",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付短期融资款"
-    }, {
-        "column": "PAYABLES",
-        "name": "payables",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付款项"
-    }, {
-        "column": "HFS_ASSETS",
-        "name": "hfs_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持有待售的资产"
-    }, {
-        "column": "HFS_SALES",
-        "name": "hfs_sales",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持有待售的负债"
-    }, {
-        "column": "COST_FIN_ASSETS",
-        "name": "cost_fin_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "以摊余成本计量的金融资产"
-    }, {
-        "column": "FAIR_VALUE_FIN_ASSETS",
-        "name": "fair_value_fin_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "以公允价值计量且其变动计入其他综合收益的金融资产"
-    }, {
-        "column": "CONTRACT_ASSETS",
-        "name": "contract_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "合同资产"
-    }, {
-        "column": "CONTRACT_LIAB",
-        "name": "contract_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "合同负债"
-    }, {
-        "column": "ACCOUNTS_RECEIV_BILL",
-        "name": "accounts_receiv_bill",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收票据及应收账款"
-    }, {
-        "column": "ACCOUNTS_PAY",
-        "name": "accounts_pay",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付票据及应付账款"
-    }, {
-        "column": "OTH_RCV_TOTAL",
-        "name": "oth_rcv_total",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他应收款(合计)（元）"
-    }, {
-        "column": "FIX_ASSETS_TOTAL",
-        "name": "fix_assets_total",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产(合计)(元)"
-    }, {
-        "column": "CIP_TOTAL",
-        "name": "cip_total",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "在建工程(合计)(元)"
-    }, {
-        "column": "OTH_PAY_TOTAL",
-        "name": "oth_pay_total",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他应付款(合计)(元)"
-    }, {
-        "column": "LONG_PAY_TOTAL",
-        "name": "long_pay_total",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "长期应付款(合计)(元)"
-    }, {
-        "column": "DEBT_INVEST",
-        "name": "debt_invest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "债权投资(元)"
-    }, {
-        "column": "OTH_DEBT_INVEST",
-        "name": "oth_debt_invest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他债权投资(元)"
-    }, {
-        "column": "OTH_EQ_INVEST",
-        "name": "oth_eq_invest",
-        "data_type": "float",
-        "must": "N",
-        "desc": "其他权益工具投资(元)"
-    }, {
-        "column": "OTH_ILLIQ_FIN_ASSETS",
-        "name": "oth_illiq_fin_assets",
-        "data_type": "float",
-        "must": "N",
-        "desc": "其他非流动金融资产(元)"
-    }, {
-        "column": "OTH_EQ_PPBOND",
-        "name": "oth_eq_ppbond",
-        "data_type": "float",
-        "must": "N",
-        "desc": "其他权益工具:永续债(元)"
-    }, {
-        "column": "RECEIV_FINANCING",
-        "name": "receiv_financing",
-        "data_type": "float",
-        "must": "N",
-        "desc": "应收款项融资"
-    }, {
-        "column": "USE_RIGHT_ASSETS",
-        "name": "use_right_assets",
-        "data_type": "float",
-        "must": "N",
-        "desc": "使用权资产"
-    }, {
-        "column": "LEASE_LIAB",
-        "name": "lease_liab",
-        "data_type": "float",
-        "must": "N",
-        "desc": "租赁负债"
-    }, {
-        "column": "UPDATE_FLAG",
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "更新标识"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 16,
-    "title": "资产负债表",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "f_ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "实际公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期结束日期"
-    }, {
-        "name": "period",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "report_type",
-        "data_type": "str",
-        "default": 1,
-        "must": "N",
-        "desc": "报告类型"
-    }, {
-        "name": "comp_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公司类型"
-    }, {
-        "name": "end_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期类型"
-    }, {
-        "name": "end_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期编号 1~4报告期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 36,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "实际公告日期",
+            "must": "N",
+            "name": "f_ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "default": 1,
+            "desc": "报告类型",
+            "must": "N",
+            "name": "report_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "公司类型",
+            "must": "N",
+            "name": "comp_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期类型",
+            "must": "N",
+            "name": "end_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期编号 1~4报告期",
+            "must": "N",
+            "name": "end_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "balancesheet",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "F_ANN_DATE",
+            "data_type": "str",
+            "desc": "实际公告日期",
+            "must": "Y",
+            "name": "f_ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "REPORT_TYPE",
+            "data_type": "str",
+            "desc": "报表类型",
+            "must": "Y",
+            "name": "report_type"
+        },
+        {
+            "column": "COMP_TYPE",
+            "data_type": "str",
+            "desc": "公司类型(1一般工商业2银行3保险4证券)",
+            "must": "Y",
+            "name": "comp_type"
+        },
+        {
+            "column": "END_TYPE",
+            "data_type": "str",
+            "desc": "报告期类型",
+            "must": "Y",
+            "name": "end_type"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "期末总股本",
+            "must": "Y",
+            "name": "total_share"
+        },
+        {
+            "column": "CAP_RESE",
+            "data_type": "float",
+            "desc": "资本公积金",
+            "must": "Y",
+            "name": "cap_rese"
+        },
+        {
+            "column": "UNDISTR_PORFIT",
+            "data_type": "float",
+            "desc": "未分配利润",
+            "must": "Y",
+            "name": "undistr_porfit"
+        },
+        {
+            "column": "SURPLUS_RESE",
+            "data_type": "float",
+            "desc": "盈余公积金",
+            "must": "Y",
+            "name": "surplus_rese"
+        },
+        {
+            "column": "SPECIAL_RESE",
+            "data_type": "float",
+            "desc": "专项储备",
+            "must": "Y",
+            "name": "special_rese"
+        },
+        {
+            "column": "MONEY_CAP",
+            "data_type": "float",
+            "desc": "货币资金",
+            "must": "Y",
+            "name": "money_cap"
+        },
+        {
+            "column": "TRAD_ASSET",
+            "data_type": "float",
+            "desc": "交易性金融资产",
+            "must": "Y",
+            "name": "trad_asset"
+        },
+        {
+            "column": "NOTES_RECEIV",
+            "data_type": "float",
+            "desc": "应收票据",
+            "must": "Y",
+            "name": "notes_receiv"
+        },
+        {
+            "column": "ACCOUNTS_RECEIV",
+            "data_type": "float",
+            "desc": "应收账款",
+            "must": "Y",
+            "name": "accounts_receiv"
+        },
+        {
+            "column": "OTH_RECEIV",
+            "data_type": "float",
+            "desc": "其他应收款",
+            "must": "Y",
+            "name": "oth_receiv"
+        },
+        {
+            "column": "PREPAYMENT",
+            "data_type": "float",
+            "desc": "预付款项",
+            "must": "Y",
+            "name": "prepayment"
+        },
+        {
+            "column": "DIV_RECEIV",
+            "data_type": "float",
+            "desc": "应收股利",
+            "must": "Y",
+            "name": "div_receiv"
+        },
+        {
+            "column": "INT_RECEIV",
+            "data_type": "float",
+            "desc": "应收利息",
+            "must": "Y",
+            "name": "int_receiv"
+        },
+        {
+            "column": "INVENTORIES",
+            "data_type": "float",
+            "desc": "存货",
+            "must": "Y",
+            "name": "inventories"
+        },
+        {
+            "column": "AMOR_EXP",
+            "data_type": "float",
+            "desc": "长期待摊费用",
+            "must": "Y",
+            "name": "amor_exp"
+        },
+        {
+            "column": "NCA_WITHIN_1Y",
+            "data_type": "float",
+            "desc": "一年内到期的非流动资产",
+            "must": "Y",
+            "name": "nca_within_1y"
+        },
+        {
+            "column": "SETT_RSRV",
+            "data_type": "float",
+            "desc": "结算备付金",
+            "must": "Y",
+            "name": "sett_rsrv"
+        },
+        {
+            "column": "LOANTO_OTH_BANK_FI",
+            "data_type": "float",
+            "desc": "拆出资金",
+            "must": "Y",
+            "name": "loanto_oth_bank_fi"
+        },
+        {
+            "column": "PREMIUM_RECEIV",
+            "data_type": "float",
+            "desc": "应收保费",
+            "must": "Y",
+            "name": "premium_receiv"
+        },
+        {
+            "column": "REINSUR_RECEIV",
+            "data_type": "float",
+            "desc": "应收分保账款",
+            "must": "Y",
+            "name": "reinsur_receiv"
+        },
+        {
+            "column": "REINSUR_RES_RECEIV",
+            "data_type": "float",
+            "desc": "应收分保合同准备金",
+            "must": "Y",
+            "name": "reinsur_res_receiv"
+        },
+        {
+            "column": "PUR_RESALE_FA",
+            "data_type": "float",
+            "desc": "买入返售金融资产",
+            "must": "Y",
+            "name": "pur_resale_fa"
+        },
+        {
+            "column": "OTH_CUR_ASSETS",
+            "data_type": "float",
+            "desc": "其他流动资产",
+            "must": "Y",
+            "name": "oth_cur_assets"
+        },
+        {
+            "column": "TOTAL_CUR_ASSETS",
+            "data_type": "float",
+            "desc": "流动资产合计",
+            "must": "Y",
+            "name": "total_cur_assets"
+        },
+        {
+            "column": "FA_AVAIL_FOR_SALE",
+            "data_type": "float",
+            "desc": "可供出售金融资产",
+            "must": "Y",
+            "name": "fa_avail_for_sale"
+        },
+        {
+            "column": "HTM_INVEST",
+            "data_type": "float",
+            "desc": "持有至到期投资",
+            "must": "Y",
+            "name": "htm_invest"
+        },
+        {
+            "column": "LT_EQT_INVEST",
+            "data_type": "float",
+            "desc": "长期股权投资",
+            "must": "Y",
+            "name": "lt_eqt_invest"
+        },
+        {
+            "column": "INVEST_REAL_ESTATE",
+            "data_type": "float",
+            "desc": "投资性房地产",
+            "must": "Y",
+            "name": "invest_real_estate"
+        },
+        {
+            "column": "TIME_DEPOSITS",
+            "data_type": "float",
+            "desc": "定期存款",
+            "must": "Y",
+            "name": "time_deposits"
+        },
+        {
+            "column": "OTH_ASSETS",
+            "data_type": "float",
+            "desc": "其他资产",
+            "must": "Y",
+            "name": "oth_assets"
+        },
+        {
+            "column": "LT_REC",
+            "data_type": "float",
+            "desc": "长期应收款",
+            "must": "Y",
+            "name": "lt_rec"
+        },
+        {
+            "column": "FIX_ASSETS",
+            "data_type": "float",
+            "desc": "固定资产",
+            "must": "Y",
+            "name": "fix_assets"
+        },
+        {
+            "column": "CIP",
+            "data_type": "float",
+            "desc": "在建工程",
+            "must": "Y",
+            "name": "cip"
+        },
+        {
+            "column": "CONST_MATERIALS",
+            "data_type": "float",
+            "desc": "工程物资",
+            "must": "Y",
+            "name": "const_materials"
+        },
+        {
+            "column": "FIXED_ASSETS_DISP",
+            "data_type": "float",
+            "desc": "固定资产清理",
+            "must": "Y",
+            "name": "fixed_assets_disp"
+        },
+        {
+            "column": "PRODUC_BIO_ASSETS",
+            "data_type": "float",
+            "desc": "生产性生物资产",
+            "must": "Y",
+            "name": "produc_bio_assets"
+        },
+        {
+            "column": "OIL_AND_GAS_ASSETS",
+            "data_type": "float",
+            "desc": "油气资产",
+            "must": "Y",
+            "name": "oil_and_gas_assets"
+        },
+        {
+            "column": "INTAN_ASSETS",
+            "data_type": "float",
+            "desc": "无形资产",
+            "must": "Y",
+            "name": "intan_assets"
+        },
+        {
+            "column": "R_AND_D",
+            "data_type": "float",
+            "desc": "研发支出",
+            "must": "Y",
+            "name": "r_and_d"
+        },
+        {
+            "column": "GOODWILL",
+            "data_type": "float",
+            "desc": "商誉",
+            "must": "Y",
+            "name": "goodwill"
+        },
+        {
+            "column": "LT_AMOR_EXP",
+            "data_type": "float",
+            "desc": "长期待摊费用",
+            "must": "Y",
+            "name": "lt_amor_exp"
+        },
+        {
+            "column": "DEFER_TAX_ASSETS",
+            "data_type": "float",
+            "desc": "递延所得税资产",
+            "must": "Y",
+            "name": "defer_tax_assets"
+        },
+        {
+            "column": "DECR_IN_DISBUR",
+            "data_type": "float",
+            "desc": "发放贷款及垫款",
+            "must": "Y",
+            "name": "decr_in_disbur"
+        },
+        {
+            "column": "OTH_NCA",
+            "data_type": "float",
+            "desc": "其他非流动资产",
+            "must": "Y",
+            "name": "oth_nca"
+        },
+        {
+            "column": "TOTAL_NCA",
+            "data_type": "float",
+            "desc": "非流动资产合计",
+            "must": "Y",
+            "name": "total_nca"
+        },
+        {
+            "column": "CASH_RESER_CB",
+            "data_type": "float",
+            "desc": "现金及存放中央银行款项",
+            "must": "Y",
+            "name": "cash_reser_cb"
+        },
+        {
+            "column": "DEPOS_IN_OTH_BFI",
+            "data_type": "float",
+            "desc": "存放同业和其它金融机构款项",
+            "must": "Y",
+            "name": "depos_in_oth_bfi"
+        },
+        {
+            "column": "PREC_METALS",
+            "data_type": "float",
+            "desc": "贵金属",
+            "must": "Y",
+            "name": "prec_metals"
+        },
+        {
+            "column": "DERIV_ASSETS",
+            "data_type": "float",
+            "desc": "衍生金融资产",
+            "must": "Y",
+            "name": "deriv_assets"
+        },
+        {
+            "column": "RR_REINS_UNE_PREM",
+            "data_type": "float",
+            "desc": "应收分保未到期责任准备金",
+            "must": "Y",
+            "name": "rr_reins_une_prem"
+        },
+        {
+            "column": "RR_REINS_OUTSTD_CLA",
+            "data_type": "float",
+            "desc": "应收分保未决赔款准备金",
+            "must": "Y",
+            "name": "rr_reins_outstd_cla"
+        },
+        {
+            "column": "RR_REINS_LINS_LIAB",
+            "data_type": "float",
+            "desc": "应收分保寿险责任准备金",
+            "must": "Y",
+            "name": "rr_reins_lins_liab"
+        },
+        {
+            "column": "RR_REINS_LTHINS_LIAB",
+            "data_type": "float",
+            "desc": "应收分保长期健康险责任准备金",
+            "must": "Y",
+            "name": "rr_reins_lthins_liab"
+        },
+        {
+            "column": "REFUND_DEPOS",
+            "data_type": "float",
+            "desc": "存出保证金",
+            "must": "Y",
+            "name": "refund_depos"
+        },
+        {
+            "column": "PH_PLEDGE_LOANS",
+            "data_type": "float",
+            "desc": "保户质押贷款",
+            "must": "Y",
+            "name": "ph_pledge_loans"
+        },
+        {
+            "column": "REFUND_CAP_DEPOS",
+            "data_type": "float",
+            "desc": "存出资本保证金",
+            "must": "Y",
+            "name": "refund_cap_depos"
+        },
+        {
+            "column": "INDEP_ACCT_ASSETS",
+            "data_type": "float",
+            "desc": "独立账户资产",
+            "must": "Y",
+            "name": "indep_acct_assets"
+        },
+        {
+            "column": "CLIENT_DEPOS",
+            "data_type": "float",
+            "desc": "其中：客户资金存款",
+            "must": "Y",
+            "name": "client_depos"
+        },
+        {
+            "column": "CLIENT_PROV",
+            "data_type": "float",
+            "desc": "其中：客户备付金",
+            "must": "Y",
+            "name": "client_prov"
+        },
+        {
+            "column": "TRANSAC_SEAT_FEE",
+            "data_type": "float",
+            "desc": "其中:交易席位费",
+            "must": "Y",
+            "name": "transac_seat_fee"
+        },
+        {
+            "column": "INVEST_AS_RECEIV",
+            "data_type": "float",
+            "desc": "应收款项类投资",
+            "must": "Y",
+            "name": "invest_as_receiv"
+        },
+        {
+            "column": "TOTAL_ASSETS",
+            "data_type": "float",
+            "desc": "资产总计",
+            "must": "Y",
+            "name": "total_assets"
+        },
+        {
+            "column": "LT_BORR",
+            "data_type": "float",
+            "desc": "长期借款",
+            "must": "Y",
+            "name": "lt_borr"
+        },
+        {
+            "column": "ST_BORR",
+            "data_type": "float",
+            "desc": "短期借款",
+            "must": "Y",
+            "name": "st_borr"
+        },
+        {
+            "column": "CB_BORR",
+            "data_type": "float",
+            "desc": "向中央银行借款",
+            "must": "Y",
+            "name": "cb_borr"
+        },
+        {
+            "column": "DEPOS_IB_DEPOSITS",
+            "data_type": "float",
+            "desc": "吸收存款及同业存放",
+            "must": "Y",
+            "name": "depos_ib_deposits"
+        },
+        {
+            "column": "LOAN_OTH_BANK",
+            "data_type": "float",
+            "desc": "拆入资金",
+            "must": "Y",
+            "name": "loan_oth_bank"
+        },
+        {
+            "column": "TRADING_FL",
+            "data_type": "float",
+            "desc": "交易性金融负债",
+            "must": "Y",
+            "name": "trading_fl"
+        },
+        {
+            "column": "NOTES_PAYABLE",
+            "data_type": "float",
+            "desc": "应付票据",
+            "must": "Y",
+            "name": "notes_payable"
+        },
+        {
+            "column": "ACCT_PAYABLE",
+            "data_type": "float",
+            "desc": "应付账款",
+            "must": "Y",
+            "name": "acct_payable"
+        },
+        {
+            "column": "ADV_RECEIPTS",
+            "data_type": "float",
+            "desc": "预收款项",
+            "must": "Y",
+            "name": "adv_receipts"
+        },
+        {
+            "column": "SOLD_FOR_REPUR_FA",
+            "data_type": "float",
+            "desc": "卖出回购金融资产款",
+            "must": "Y",
+            "name": "sold_for_repur_fa"
+        },
+        {
+            "column": "COMM_PAYABLE",
+            "data_type": "float",
+            "desc": "应付手续费及佣金",
+            "must": "Y",
+            "name": "comm_payable"
+        },
+        {
+            "column": "PAYROLL_PAYABLE",
+            "data_type": "float",
+            "desc": "应付职工薪酬",
+            "must": "Y",
+            "name": "payroll_payable"
+        },
+        {
+            "column": "TAXES_PAYABLE",
+            "data_type": "float",
+            "desc": "应交税费",
+            "must": "Y",
+            "name": "taxes_payable"
+        },
+        {
+            "column": "INT_PAYABLE",
+            "data_type": "float",
+            "desc": "应付利息",
+            "must": "Y",
+            "name": "int_payable"
+        },
+        {
+            "column": "DIV_PAYABLE",
+            "data_type": "float",
+            "desc": "应付股利",
+            "must": "Y",
+            "name": "div_payable"
+        },
+        {
+            "column": "OTH_PAYABLE",
+            "data_type": "float",
+            "desc": "其他应付款",
+            "must": "Y",
+            "name": "oth_payable"
+        },
+        {
+            "column": "ACC_EXP",
+            "data_type": "float",
+            "desc": "预提费用",
+            "must": "Y",
+            "name": "acc_exp"
+        },
+        {
+            "column": "DEFERRED_INC",
+            "data_type": "float",
+            "desc": "递延收益",
+            "must": "Y",
+            "name": "deferred_inc"
+        },
+        {
+            "column": "ST_BONDS_PAYABLE",
+            "data_type": "float",
+            "desc": "应付短期债券",
+            "must": "Y",
+            "name": "st_bonds_payable"
+        },
+        {
+            "column": "PAYABLE_TO_REINSURER",
+            "data_type": "float",
+            "desc": "应付分保账款",
+            "must": "Y",
+            "name": "payable_to_reinsurer"
+        },
+        {
+            "column": "RSRV_INSUR_CONT",
+            "data_type": "float",
+            "desc": "保险合同准备金",
+            "must": "Y",
+            "name": "rsrv_insur_cont"
+        },
+        {
+            "column": "ACTING_TRADING_SEC",
+            "data_type": "float",
+            "desc": "代理买卖证券款",
+            "must": "Y",
+            "name": "acting_trading_sec"
+        },
+        {
+            "column": "ACTING_UW_SEC",
+            "data_type": "float",
+            "desc": "代理承销证券款",
+            "must": "Y",
+            "name": "acting_uw_sec"
+        },
+        {
+            "column": "NON_CUR_LIAB_DUE_1Y",
+            "data_type": "float",
+            "desc": "一年内到期的非流动负债",
+            "must": "Y",
+            "name": "non_cur_liab_due_1y"
+        },
+        {
+            "column": "OTH_CUR_LIAB",
+            "data_type": "float",
+            "desc": "其他流动负债",
+            "must": "Y",
+            "name": "oth_cur_liab"
+        },
+        {
+            "column": "TOTAL_CUR_LIAB",
+            "data_type": "float",
+            "desc": "流动负债合计",
+            "must": "Y",
+            "name": "total_cur_liab"
+        },
+        {
+            "column": "BOND_PAYABLE",
+            "data_type": "float",
+            "desc": "应付债券",
+            "must": "Y",
+            "name": "bond_payable"
+        },
+        {
+            "column": "LT_PAYABLE",
+            "data_type": "float",
+            "desc": "长期应付款",
+            "must": "Y",
+            "name": "lt_payable"
+        },
+        {
+            "column": "SPECIFIC_PAYABLES",
+            "data_type": "float",
+            "desc": "专项应付款",
+            "must": "Y",
+            "name": "specific_payables"
+        },
+        {
+            "column": "ESTIMATED_LIAB",
+            "data_type": "float",
+            "desc": "预计负债",
+            "must": "Y",
+            "name": "estimated_liab"
+        },
+        {
+            "column": "DEFER_TAX_LIAB",
+            "data_type": "float",
+            "desc": "递延所得税负债",
+            "must": "Y",
+            "name": "defer_tax_liab"
+        },
+        {
+            "column": "DEFER_INC_NON_CUR_LIAB",
+            "data_type": "float",
+            "desc": "递延收益-非流动负债",
+            "must": "Y",
+            "name": "defer_inc_non_cur_liab"
+        },
+        {
+            "column": "OTH_NCL",
+            "data_type": "float",
+            "desc": "其他非流动负债",
+            "must": "Y",
+            "name": "oth_ncl"
+        },
+        {
+            "column": "TOTAL_NCL",
+            "data_type": "float",
+            "desc": "非流动负债合计",
+            "must": "Y",
+            "name": "total_ncl"
+        },
+        {
+            "column": "DEPOS_OTH_BFI",
+            "data_type": "float",
+            "desc": "同业和其它金融机构存放款项",
+            "must": "Y",
+            "name": "depos_oth_bfi"
+        },
+        {
+            "column": "DERIV_LIAB",
+            "data_type": "float",
+            "desc": "衍生金融负债",
+            "must": "Y",
+            "name": "deriv_liab"
+        },
+        {
+            "column": "DEPOS",
+            "data_type": "float",
+            "desc": "吸收存款",
+            "must": "Y",
+            "name": "depos"
+        },
+        {
+            "column": "AGENCY_BUS_LIAB",
+            "data_type": "float",
+            "desc": "代理业务负债",
+            "must": "Y",
+            "name": "agency_bus_liab"
+        },
+        {
+            "column": "OTH_LIAB",
+            "data_type": "float",
+            "desc": "其他负债",
+            "must": "Y",
+            "name": "oth_liab"
+        },
+        {
+            "column": "PREM_RECEIV_ADVA",
+            "data_type": "float",
+            "desc": "预收保费",
+            "must": "Y",
+            "name": "prem_receiv_adva"
+        },
+        {
+            "column": "DEPOS_RECEIVED",
+            "data_type": "float",
+            "desc": "存入保证金",
+            "must": "Y",
+            "name": "depos_received"
+        },
+        {
+            "column": "PH_INVEST",
+            "data_type": "float",
+            "desc": "保户储金及投资款",
+            "must": "Y",
+            "name": "ph_invest"
+        },
+        {
+            "column": "RESER_UNE_PREM",
+            "data_type": "float",
+            "desc": "未到期责任准备金",
+            "must": "Y",
+            "name": "reser_une_prem"
+        },
+        {
+            "column": "RESER_OUTSTD_CLAIMS",
+            "data_type": "float",
+            "desc": "未决赔款准备金",
+            "must": "Y",
+            "name": "reser_outstd_claims"
+        },
+        {
+            "column": "RESER_LINS_LIAB",
+            "data_type": "float",
+            "desc": "寿险责任准备金",
+            "must": "Y",
+            "name": "reser_lins_liab"
+        },
+        {
+            "column": "RESER_LTHINS_LIAB",
+            "data_type": "float",
+            "desc": "长期健康险责任准备金",
+            "must": "Y",
+            "name": "reser_lthins_liab"
+        },
+        {
+            "column": "INDEPT_ACC_LIAB",
+            "data_type": "float",
+            "desc": "独立账户负债",
+            "must": "Y",
+            "name": "indept_acc_liab"
+        },
+        {
+            "column": "PLEDGE_BORR",
+            "data_type": "float",
+            "desc": "其中:质押借款",
+            "must": "Y",
+            "name": "pledge_borr"
+        },
+        {
+            "column": "INDEM_PAYABLE",
+            "data_type": "float",
+            "desc": "应付赔付款",
+            "must": "Y",
+            "name": "indem_payable"
+        },
+        {
+            "column": "POLICY_DIV_PAYABLE",
+            "data_type": "float",
+            "desc": "应付保单红利",
+            "must": "Y",
+            "name": "policy_div_payable"
+        },
+        {
+            "column": "TOTAL_LIAB",
+            "data_type": "float",
+            "desc": "负债合计",
+            "must": "Y",
+            "name": "total_liab"
+        },
+        {
+            "column": "TREASURY_SHARE",
+            "data_type": "float",
+            "desc": "减:库存股",
+            "must": "Y",
+            "name": "treasury_share"
+        },
+        {
+            "column": "ORDIN_RISK_RESER",
+            "data_type": "float",
+            "desc": "一般风险准备",
+            "must": "Y",
+            "name": "ordin_risk_reser"
+        },
+        {
+            "column": "FOREX_DIFFER",
+            "data_type": "float",
+            "desc": "外币报表折算差额",
+            "must": "Y",
+            "name": "forex_differ"
+        },
+        {
+            "column": "INVEST_LOSS_UNCONF",
+            "data_type": "float",
+            "desc": "未确认的投资损失",
+            "must": "Y",
+            "name": "invest_loss_unconf"
+        },
+        {
+            "column": "MINORITY_INT",
+            "data_type": "float",
+            "desc": "少数股东权益",
+            "must": "Y",
+            "name": "minority_int"
+        },
+        {
+            "column": "TOTAL_HLDR_EQY_EXC_MIN_INT",
+            "data_type": "float",
+            "desc": "股东权益合计(不含少数股东权益)",
+            "must": "Y",
+            "name": "total_hldr_eqy_exc_min_int"
+        },
+        {
+            "column": "TOTAL_HLDR_EQY_INC_MIN_INT",
+            "data_type": "float",
+            "desc": "股东权益合计(含少数股东权益)",
+            "must": "Y",
+            "name": "total_hldr_eqy_inc_min_int"
+        },
+        {
+            "column": "TOTAL_LIAB_HLDR_EQY",
+            "data_type": "float",
+            "desc": "负债及股东权益总计",
+            "must": "Y",
+            "name": "total_liab_hldr_eqy"
+        },
+        {
+            "column": "LT_PAYROLL_PAYABLE",
+            "data_type": "float",
+            "desc": "长期应付职工薪酬",
+            "must": "Y",
+            "name": "lt_payroll_payable"
+        },
+        {
+            "column": "OTH_COMP_INCOME",
+            "data_type": "float",
+            "desc": "其他综合收益",
+            "must": "Y",
+            "name": "oth_comp_income"
+        },
+        {
+            "column": "OTH_EQT_TOOLS",
+            "data_type": "float",
+            "desc": "其他权益工具",
+            "must": "Y",
+            "name": "oth_eqt_tools"
+        },
+        {
+            "column": "OTH_EQT_TOOLS_P_SHR",
+            "data_type": "float",
+            "desc": "其他权益工具(优先股)",
+            "must": "Y",
+            "name": "oth_eqt_tools_p_shr"
+        },
+        {
+            "column": "LENDING_FUNDS",
+            "data_type": "float",
+            "desc": "融出资金",
+            "must": "Y",
+            "name": "lending_funds"
+        },
+        {
+            "column": "ACC_RECEIVABLE",
+            "data_type": "float",
+            "desc": "应收款项",
+            "must": "Y",
+            "name": "acc_receivable"
+        },
+        {
+            "column": "ST_FIN_PAYABLE",
+            "data_type": "float",
+            "desc": "应付短期融资款",
+            "must": "Y",
+            "name": "st_fin_payable"
+        },
+        {
+            "column": "PAYABLES",
+            "data_type": "float",
+            "desc": "应付款项",
+            "must": "Y",
+            "name": "payables"
+        },
+        {
+            "column": "HFS_ASSETS",
+            "data_type": "float",
+            "desc": "持有待售的资产",
+            "must": "Y",
+            "name": "hfs_assets"
+        },
+        {
+            "column": "HFS_SALES",
+            "data_type": "float",
+            "desc": "持有待售的负债",
+            "must": "Y",
+            "name": "hfs_sales"
+        },
+        {
+            "column": "COST_FIN_ASSETS",
+            "data_type": "float",
+            "desc": "以摊余成本计量的金融资产",
+            "must": "Y",
+            "name": "cost_fin_assets"
+        },
+        {
+            "column": "FAIR_VALUE_FIN_ASSETS",
+            "data_type": "float",
+            "desc": "以公允价值计量且其变动计入其他综合收益的金融资产",
+            "must": "Y",
+            "name": "fair_value_fin_assets"
+        },
+        {
+            "column": "CONTRACT_ASSETS",
+            "data_type": "float",
+            "desc": "合同资产",
+            "must": "Y",
+            "name": "contract_assets"
+        },
+        {
+            "column": "CONTRACT_LIAB",
+            "data_type": "float",
+            "desc": "合同负债",
+            "must": "Y",
+            "name": "contract_liab"
+        },
+        {
+            "column": "ACCOUNTS_RECEIV_BILL",
+            "data_type": "float",
+            "desc": "应收票据及应收账款",
+            "must": "Y",
+            "name": "accounts_receiv_bill"
+        },
+        {
+            "column": "ACCOUNTS_PAY",
+            "data_type": "float",
+            "desc": "应付票据及应付账款",
+            "must": "Y",
+            "name": "accounts_pay"
+        },
+        {
+            "column": "OTH_RCV_TOTAL",
+            "data_type": "float",
+            "desc": "其他应收款(合计)（元）",
+            "must": "Y",
+            "name": "oth_rcv_total"
+        },
+        {
+            "column": "FIX_ASSETS_TOTAL",
+            "data_type": "float",
+            "desc": "固定资产(合计)(元)",
+            "must": "Y",
+            "name": "fix_assets_total"
+        },
+        {
+            "column": "CIP_TOTAL",
+            "data_type": "float",
+            "desc": "在建工程(合计)(元)",
+            "must": "Y",
+            "name": "cip_total"
+        },
+        {
+            "column": "OTH_PAY_TOTAL",
+            "data_type": "float",
+            "desc": "其他应付款(合计)(元)",
+            "must": "Y",
+            "name": "oth_pay_total"
+        },
+        {
+            "column": "LONG_PAY_TOTAL",
+            "data_type": "float",
+            "desc": "长期应付款(合计)(元)",
+            "must": "Y",
+            "name": "long_pay_total"
+        },
+        {
+            "column": "DEBT_INVEST",
+            "data_type": "float",
+            "desc": "债权投资(元)",
+            "must": "Y",
+            "name": "debt_invest"
+        },
+        {
+            "column": "OTH_DEBT_INVEST",
+            "data_type": "float",
+            "desc": "其他债权投资(元)",
+            "must": "Y",
+            "name": "oth_debt_invest"
+        },
+        {
+            "column": "OTH_EQ_INVEST",
+            "data_type": "float",
+            "desc": "其他权益工具投资(元)",
+            "must": "N",
+            "name": "oth_eq_invest"
+        },
+        {
+            "column": "OTH_ILLIQ_FIN_ASSETS",
+            "data_type": "float",
+            "desc": "其他非流动金融资产(元)",
+            "must": "N",
+            "name": "oth_illiq_fin_assets"
+        },
+        {
+            "column": "OTH_EQ_PPBOND",
+            "data_type": "float",
+            "desc": "其他权益工具:永续债(元)",
+            "must": "N",
+            "name": "oth_eq_ppbond"
+        },
+        {
+            "column": "RECEIV_FINANCING",
+            "data_type": "float",
+            "desc": "应收款项融资",
+            "must": "N",
+            "name": "receiv_financing"
+        },
+        {
+            "column": "USE_RIGHT_ASSETS",
+            "data_type": "float",
+            "desc": "使用权资产",
+            "must": "N",
+            "name": "use_right_assets"
+        },
+        {
+            "column": "LEASE_LIAB",
+            "data_type": "float",
+            "desc": "租赁负债",
+            "must": "N",
+            "name": "lease_liab"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "更新标识",
+            "must": "Y",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 16,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            16,
+            "财务数据"
+        ],
+        [
+            36,
+            "资产负债表"
+        ]
+    ],
+    "title": "资产负债表",
+    "validations": []
 }

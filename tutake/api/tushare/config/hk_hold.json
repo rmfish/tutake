@@ -1,97 +1,132 @@
 {
-    "desc": "沪深股通持股明细",
-    "name": "hk_hold",
-    "id": 188,
-    "outputs": [{
-        "column": "CODE",
-        "name": "code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "原始代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票名称"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": null,
-        "must": "Y",
-        "desc": "持股数量"
-    }, {
-        "column": "RATIO",
-        "name": "ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持股占比"
-    }, {
-        "column": "NS_TYPE",
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "类型：SH沪股通SZ深港通"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 291,
-    "title": "沪深股通持股明细",
-    "inputs": [{
-        "name": "code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所代码"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS股票代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "SH沪股通SZ深股通"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "沪深股通持股明细",
+    "id": 188,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "N",
+            "name": "code"
+        },
+        {
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "SH沪股通SZ深股通",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "hk_hold",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "CODE",
+            "data_type": "str",
+            "desc": "原始代码",
+            "must": "Y",
+            "name": "code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "股票名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "VOL",
+            "data_type": null,
+            "desc": "持股数量",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "RATIO",
+            "data_type": "float",
+            "desc": "持股占比",
+            "must": "Y",
+            "name": "ratio"
+        },
+        {
+            "column": "NS_TYPE",
+            "data_type": "str",
+            "desc": "类型：SH沪股通SZ深港通",
+            "must": "Y",
+            "name": "exchange"
+        }
+    ],
+    "parent_id": 291,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            291,
+            "特色数据"
+        ],
+        [
+            188,
+            "沪深股通持股明细"
+        ]
+    ],
+    "title": "沪深股通持股明细",
+    "validations": []
 }

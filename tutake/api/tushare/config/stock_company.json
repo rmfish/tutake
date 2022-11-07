@@ -1,143 +1,185 @@
 {
-    "title": "上市公司基本信息",
-    "parent_id": 24,
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS股票代码"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所代码"
-    }, {
-        "name": "status",
-        "data_type": "str",
-        "must": "N",
-        "default": "L",
-        "desc": "状态"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "database": "tushare_basic_data",
-    "is_ready": 1,
-    "order_by": null,
-    "name": "stock_company",
-    "id": 112,
-    "desc": "",
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "column": "EXCHANGE",
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所代码SSE上交所 SZSE深交所"
-    }, {
-        "column": "CHAIRMAN",
-        "name": "chairman",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "法人代表"
-    }, {
-        "column": "MANAGER",
-        "name": "manager",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "总经理"
-    }, {
-        "column": "SECRETARY",
-        "name": "secretary",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "董秘"
-    }, {
-        "column": "REG_CAPITAL",
-        "name": "reg_capital",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "注册资本"
-    }, {
-        "column": "SETUP_DATE",
-        "name": "setup_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "注册日期"
-    }, {
-        "column": "PROVINCE",
-        "name": "province",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "所在省份"
-    }, {
-        "column": "CITY",
-        "name": "city",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "所在城市"
-    }, {
-        "column": "INTRODUCTION",
-        "name": "introduction",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公司介绍"
-    }, {
-        "column": "WEBSITE",
-        "name": "website",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公司主页"
-    }, {
-        "column": "EMAIL",
-        "name": "email",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "电子邮件"
-    }, {
-        "column": "OFFICE",
-        "name": "office",
-        "data_type": "str",
-        "must": "N",
-        "desc": "办公室"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "column": "BUSINESS_SCOPE",
-        "name": "business_scope",
-        "data_type": "str",
-        "must": "N",
-        "desc": "经营范围"
-    }, {
-        "column": "EMPLOYEES",
-        "name": "employees",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "员工人数"
-    }, {
-        "column": "MAIN_BUSINESS",
-        "name": "main_business",
-        "data_type": "str",
-        "must": "N",
-        "desc": "主要业务及产品"
-    }],
     "default_limit": "4500",
-    "if_exists": null
+    "desc": "",
+    "id": 112,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "default": "L",
+            "desc": "状态",
+            "must": "N",
+            "name": "status"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": 1,
+    "name": "stock_company",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "EXCHANGE",
+            "data_type": "str",
+            "desc": "交易所代码SSE上交所 SZSE深交所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "CHAIRMAN",
+            "data_type": "str",
+            "desc": "法人代表",
+            "must": "Y",
+            "name": "chairman"
+        },
+        {
+            "column": "MANAGER",
+            "data_type": "str",
+            "desc": "总经理",
+            "must": "Y",
+            "name": "manager"
+        },
+        {
+            "column": "SECRETARY",
+            "data_type": "str",
+            "desc": "董秘",
+            "must": "Y",
+            "name": "secretary"
+        },
+        {
+            "column": "REG_CAPITAL",
+            "data_type": "float",
+            "desc": "注册资本",
+            "must": "Y",
+            "name": "reg_capital"
+        },
+        {
+            "column": "SETUP_DATE",
+            "data_type": "str",
+            "desc": "注册日期",
+            "must": "Y",
+            "name": "setup_date"
+        },
+        {
+            "column": "PROVINCE",
+            "data_type": "str",
+            "desc": "所在省份",
+            "must": "Y",
+            "name": "province"
+        },
+        {
+            "column": "CITY",
+            "data_type": "str",
+            "desc": "所在城市",
+            "must": "Y",
+            "name": "city"
+        },
+        {
+            "column": "INTRODUCTION",
+            "data_type": "str",
+            "desc": "公司介绍",
+            "must": "N",
+            "name": "introduction"
+        },
+        {
+            "column": "WEBSITE",
+            "data_type": "str",
+            "desc": "公司主页",
+            "must": "Y",
+            "name": "website"
+        },
+        {
+            "column": "EMAIL",
+            "data_type": "str",
+            "desc": "电子邮件",
+            "must": "Y",
+            "name": "email"
+        },
+        {
+            "column": "OFFICE",
+            "data_type": "str",
+            "desc": "办公室",
+            "must": "N",
+            "name": "office"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "column": "BUSINESS_SCOPE",
+            "data_type": "str",
+            "desc": "经营范围",
+            "must": "N",
+            "name": "business_scope"
+        },
+        {
+            "column": "EMPLOYEES",
+            "data_type": "int",
+            "desc": "员工人数",
+            "must": "Y",
+            "name": "employees"
+        },
+        {
+            "column": "MAIN_BUSINESS",
+            "data_type": "str",
+            "desc": "主要业务及产品",
+            "must": "N",
+            "name": "main_business"
+        }
+    ],
+    "parent_id": 24,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            24,
+            "基础数据"
+        ],
+        [
+            112,
+            "上市公司基本信息"
+        ]
+    ],
+    "title": "上市公司基本信息",
+    "validations": []
 }

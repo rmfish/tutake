@@ -1,70 +1,100 @@
 {
-    "desc": "港股通每日成交统计",
-    "name": "ggt_daily",
-    "id": 196,
-    "outputs": [{
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "BUY_AMOUNT",
-        "name": "buy_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "买入成交金额（亿元）"
-    }, {
-        "column": "BUY_VOLUME",
-        "name": "buy_volume",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "买入成交笔数（万笔）"
-    }, {
-        "column": "SELL_AMOUNT",
-        "name": "sell_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "卖出成交金额（亿元）"
-    }, {
-        "column": "SELL_VOLUME",
-        "name": "sell_volume",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "卖出成交笔数（万笔）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 15,
-    "title": "港股通每日成交统计",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "港股通每日成交统计",
+    "id": 196,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "ggt_daily",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "BUY_AMOUNT",
+            "data_type": "float",
+            "desc": "买入成交金额（亿元）",
+            "must": "Y",
+            "name": "buy_amount"
+        },
+        {
+            "column": "BUY_VOLUME",
+            "data_type": "float",
+            "desc": "买入成交笔数（万笔）",
+            "must": "Y",
+            "name": "buy_volume"
+        },
+        {
+            "column": "SELL_AMOUNT",
+            "data_type": "float",
+            "desc": "卖出成交金额（亿元）",
+            "must": "Y",
+            "name": "sell_amount"
+        },
+        {
+            "column": "SELL_VOLUME",
+            "data_type": "float",
+            "desc": "卖出成交笔数（万笔）",
+            "must": "Y",
+            "name": "sell_volume"
+        }
+    ],
+    "parent_id": 15,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            15,
+            "行情数据"
+        ],
+        [
+            196,
+            "港股通每日成交统计"
+        ]
+    ],
+    "title": "港股通每日成交统计",
+    "validations": []
 }

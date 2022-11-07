@@ -1,645 +1,766 @@
 {
-    "desc": "A股利润表",
-    "name": "income",
-    "id": 33,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "F_ANN_DATE",
-        "name": "f_ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "实际公告日期"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期"
-    }, {
-        "column":
-            "REPORT_TYPE",
-        "name":
-            "report_type",
-        "data_type":
-            "str",
-        "must":
-            "Y",
-        "desc":
-            "报告类型 1合并报表 2单季合并 3调整单季合并表 4调整合并报表 5调整前合并报表 6母公司报表 7母公司单季表 8 母公司调整单季表 9母公司调整表 10母公司调整前报表 11调整前合并报表 12母公司调整前报表"
-    }, {
-        "column": "COMP_TYPE",
-        "name": "comp_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公司类型(1一般工商业2银行3保险4证券)"
-    }, {
-        "column": "END_TYPE",
-        "name": "end_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期类型"
-    }, {
-        "column": "BASIC_EPS",
-        "name": "basic_eps",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "基本每股收益"
-    }, {
-        "column": "DILUTED_EPS",
-        "name": "diluted_eps",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "稀释每股收益"
-    }, {
-        "column": "TOTAL_REVENUE",
-        "name": "total_revenue",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业总收入"
-    }, {
-        "column": "REVENUE",
-        "name": "revenue",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业收入"
-    }, {
-        "column": "INT_INCOME",
-        "name": "int_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "利息收入"
-    }, {
-        "column": "PREM_EARNED",
-        "name": "prem_earned",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "已赚保费"
-    }, {
-        "column": "COMM_INCOME",
-        "name": "comm_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "手续费及佣金收入"
-    }, {
-        "column": "N_COMMIS_INCOME",
-        "name": "n_commis_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "手续费及佣金净收入"
-    }, {
-        "column": "N_OTH_INCOME",
-        "name": "n_oth_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他经营净收益"
-    }, {
-        "column": "N_OTH_B_INCOME",
-        "name": "n_oth_b_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加:其他业务净收益"
-    }, {
-        "column": "PREM_INCOME",
-        "name": "prem_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保险业务收入"
-    }, {
-        "column": "OUT_PREM",
-        "name": "out_prem",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:分出保费"
-    }, {
-        "column": "UNE_PREM_RESER",
-        "name": "une_prem_reser",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取未到期责任准备金"
-    }, {
-        "column": "REINS_INCOME",
-        "name": "reins_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中:分保费收入"
-    }, {
-        "column": "N_SEC_TB_INCOME",
-        "name": "n_sec_tb_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "代理买卖证券业务净收入"
-    }, {
-        "column": "N_SEC_UW_INCOME",
-        "name": "n_sec_uw_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "证券承销业务净收入"
-    }, {
-        "column": "N_ASSET_MG_INCOME",
-        "name": "n_asset_mg_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "受托客户资产管理业务净收入"
-    }, {
-        "column": "OTH_B_INCOME",
-        "name": "oth_b_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他业务收入"
-    }, {
-        "column": "FV_VALUE_CHG_GAIN",
-        "name": "fv_value_chg_gain",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加:公允价值变动净收益"
-    }, {
-        "column": "INVEST_INCOME",
-        "name": "invest_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加:投资净收益"
-    }, {
-        "column": "ASS_INVEST_INCOME",
-        "name": "ass_invest_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中:对联营企业和合营企业的投资收益"
-    }, {
-        "column": "FOREX_GAIN",
-        "name": "forex_gain",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加:汇兑净收益"
-    }, {
-        "column": "TOTAL_COGS",
-        "name": "total_cogs",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业总成本"
-    }, {
-        "column": "OPER_COST",
-        "name": "oper_cost",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:营业成本"
-    }, {
-        "column": "INT_EXP",
-        "name": "int_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:利息支出"
-    }, {
-        "column": "COMM_EXP",
-        "name": "comm_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:手续费及佣金支出"
-    }, {
-        "column": "BIZ_TAX_SURCHG",
-        "name": "biz_tax_surchg",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:营业税金及附加"
-    }, {
-        "column": "SELL_EXP",
-        "name": "sell_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:销售费用"
-    }, {
-        "column": "ADMIN_EXP",
-        "name": "admin_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:管理费用"
-    }, {
-        "column": "FIN_EXP",
-        "name": "fin_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:财务费用"
-    }, {
-        "column": "ASSETS_IMPAIR_LOSS",
-        "name": "assets_impair_loss",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:资产减值损失"
-    }, {
-        "column": "PREM_REFUND",
-        "name": "prem_refund",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "退保金"
-    }, {
-        "column": "COMPENS_PAYOUT",
-        "name": "compens_payout",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "赔付总支出"
-    }, {
-        "column": "RESER_INSUR_LIAB",
-        "name": "reser_insur_liab",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取保险责任准备金"
-    }, {
-        "column": "DIV_PAYT",
-        "name": "div_payt",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保户红利支出"
-    }, {
-        "column": "REINS_EXP",
-        "name": "reins_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "分保费用"
-    }, {
-        "column": "OPER_EXP",
-        "name": "oper_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业支出"
-    }, {
-        "column": "COMPENS_PAYOUT_REFU",
-        "name": "compens_payout_refu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:摊回赔付支出"
-    }, {
-        "column": "INSUR_RESER_REFU",
-        "name": "insur_reser_refu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:摊回保险责任准备金"
-    }, {
-        "column": "REINS_COST_REFUND",
-        "name": "reins_cost_refund",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:摊回分保费用"
-    }, {
-        "column": "OTHER_BUS_COST",
-        "name": "other_bus_cost",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他业务成本"
-    }, {
-        "column": "OPERATE_PROFIT",
-        "name": "operate_profit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业利润"
-    }, {
-        "column": "NON_OPER_INCOME",
-        "name": "non_oper_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加:营业外收入"
-    }, {
-        "column": "NON_OPER_EXP",
-        "name": "non_oper_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "减:营业外支出"
-    }, {
-        "column": "NCA_DISPLOSS",
-        "name": "nca_disploss",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其中:减:非流动资产处置净损失"
-    }, {
-        "column": "TOTAL_PROFIT",
-        "name": "total_profit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "利润总额"
-    }, {
-        "column": "INCOME_TAX",
-        "name": "income_tax",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "所得税费用"
-    }, {
-        "column": "N_INCOME",
-        "name": "n_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净利润(含少数股东损益)"
-    }, {
-        "column": "N_INCOME_ATTR_P",
-        "name": "n_income_attr_p",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净利润(不含少数股东损益)"
-    }, {
-        "column": "MINORITY_GAIN",
-        "name": "minority_gain",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "少数股东损益"
-    }, {
-        "column": "OTH_COMPR_INCOME",
-        "name": "oth_compr_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他综合收益"
-    }, {
-        "column": "T_COMPR_INCOME",
-        "name": "t_compr_income",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "综合收益总额"
-    }, {
-        "column": "COMPR_INC_ATTR_P",
-        "name": "compr_inc_attr_p",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属于母公司(或股东)的综合收益总额"
-    }, {
-        "column": "COMPR_INC_ATTR_M_S",
-        "name": "compr_inc_attr_m_s",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属于少数股东的综合收益总额"
-    }, {
-        "column": "EBIT",
-        "name": "ebit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "息税前利润"
-    }, {
-        "column": "EBITDA",
-        "name": "ebitda",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "息税折旧摊销前利润"
-    }, {
-        "column": "INSURANCE_EXP",
-        "name": "insurance_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保险业务支出"
-    }, {
-        "column": "UNDIST_PROFIT",
-        "name": "undist_profit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "年初未分配利润"
-    }, {
-        "column": "DISTABLE_PROFIT",
-        "name": "distable_profit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "可分配利润"
-    }, {
-        "column": "RD_EXP",
-        "name": "rd_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "研发费用"
-    }, {
-        "column": "FIN_EXP_INT_EXP",
-        "name": "fin_exp_int_exp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "财务费用:利息费用"
-    }, {
-        "column": "FIN_EXP_INT_INC",
-        "name": "fin_exp_int_inc",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "财务费用:利息收入"
-    }, {
-        "column": "TRANSFER_SURPLUS_RESE",
-        "name": "transfer_surplus_rese",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "盈余公积转入"
-    }, {
-        "column": "TRANSFER_HOUSING_IMPREST",
-        "name": "transfer_housing_imprest",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "住房周转金转入"
-    }, {
-        "column": "TRANSFER_OTH",
-        "name": "transfer_oth",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他转入"
-    }, {
-        "column": "ADJ_LOSSGAIN",
-        "name": "adj_lossgain",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "调整以前年度损益"
-    }, {
-        "column": "WITHDRA_LEGAL_SURPLUS",
-        "name": "withdra_legal_surplus",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取法定盈余公积"
-    }, {
-        "column": "WITHDRA_LEGAL_PUBFUND",
-        "name": "withdra_legal_pubfund",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取法定公益金"
-    }, {
-        "column": "WITHDRA_BIZ_DEVFUND",
-        "name": "withdra_biz_devfund",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取企业发展基金"
-    }, {
-        "column": "WITHDRA_RESE_FUND",
-        "name": "withdra_rese_fund",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取储备基金"
-    }, {
-        "column": "WITHDRA_OTH_ERSU",
-        "name": "withdra_oth_ersu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "提取任意盈余公积金"
-    }, {
-        "column": "WORKERS_WELFARE",
-        "name": "workers_welfare",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "职工奖金福利"
-    }, {
-        "column": "DISTR_PROFIT_SHRHDER",
-        "name": "distr_profit_shrhder",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "可供股东分配的利润"
-    }, {
-        "column": "PRFSHARE_PAYABLE_DVD",
-        "name": "prfshare_payable_dvd",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付优先股股利"
-    }, {
-        "column": "COMSHARE_PAYABLE_DVD",
-        "name": "comshare_payable_dvd",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应付普通股股利"
-    }, {
-        "column": "CAPIT_COMSTOCK_DIV",
-        "name": "capit_comstock_div",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "转作股本的普通股股利"
-    }, {
-        "column": "NET_AFTER_NR_LP_CORRECT",
-        "name": "net_after_nr_lp_correct",
-        "data_type": "float",
-        "must": "N",
-        "desc": "扣除非经常性损益后的净利润（更正前）"
-    }, {
-        "column": "OTH_INCOME",
-        "name": "oth_income",
-        "data_type": "float",
-        "must": "N",
-        "desc": "其他收益"
-    }, {
-        "column": "ASSET_DISP_INCOME",
-        "name": "asset_disp_income",
-        "data_type": "float",
-        "must": "N",
-        "desc": "资产处置收益"
-    }, {
-        "column": "CONTINUED_NET_PROFIT",
-        "name": "continued_net_profit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持续经营净利润"
-    }, {
-        "column": "END_NET_PROFIT",
-        "name": "end_net_profit",
-        "data_type": "float",
-        "must": "N",
-        "desc": "终止经营净利润"
-    }, {
-        "column": "CREDIT_IMPA_LOSS",
-        "name": "credit_impa_loss",
-        "data_type": "float",
-        "must": "N",
-        "desc": "信用减值损失"
-    }, {
-        "column": "NET_EXPO_HEDGING_BENEFITS",
-        "name": "net_expo_hedging_benefits",
-        "data_type": "float",
-        "must": "N",
-        "desc": "净敞口套期收益"
-    }, {
-        "column": "OTH_IMPAIR_LOSS_ASSETS",
-        "name": "oth_impair_loss_assets",
-        "data_type": "float",
-        "must": "N",
-        "desc": "其他资产减值损失"
-    }, {
-        "column": "TOTAL_OPCOST",
-        "name": "total_opcost",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业总成本2"
-    }, {
-        "column": "AMODCOST_FIN_ASSETS",
-        "name": "amodcost_fin_assets",
-        "data_type": "float",
-        "must": "N",
-        "desc": "以摊余成本计量的金融资产终止确认收益"
-    }, {
-        "column": "UPDATE_FLAG",
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "更新标识"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 16,
-    "title": "利润表",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "f_ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "实际公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期结束日期"
-    }, {
-        "name": "period",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "report_type",
-        "data_type": "str",
-        "default": 1,
-        "must": "N",
-        "desc": "报告类型"
-    }, {
-        "name": "comp_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公司类型"
-    }, {
-        "name": "end_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期编码，1~4表示季度"
-    }, {
-        "name": "is_calc",
-        "data_type": "int",
-        "must": "N",
-        "desc": "是否计算报表"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "A股利润表",
+    "id": 33,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "实际公告日期",
+            "must": "N",
+            "name": "f_ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "default": 1,
+            "desc": "报告类型",
+            "must": "N",
+            "name": "report_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "公司类型",
+            "must": "N",
+            "name": "comp_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期编码，1~4表示季度",
+            "must": "N",
+            "name": "end_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "是否计算报表",
+            "must": "N",
+            "name": "is_calc"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "income",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "F_ANN_DATE",
+            "data_type": "str",
+            "desc": "实际公告日期",
+            "must": "Y",
+            "name": "f_ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "REPORT_TYPE",
+            "data_type": "str",
+            "desc": "报告类型 1合并报表 2单季合并 3调整单季合并表 4调整合并报表 5调整前合并报表 6母公司报表 7母公司单季表 8 母公司调整单季表 9母公司调整表 10母公司调整前报表 11调整前合并报表 12母公司调整前报表",
+            "must": "Y",
+            "name": "report_type"
+        },
+        {
+            "column": "COMP_TYPE",
+            "data_type": "str",
+            "desc": "公司类型(1一般工商业2银行3保险4证券)",
+            "must": "Y",
+            "name": "comp_type"
+        },
+        {
+            "column": "END_TYPE",
+            "data_type": "str",
+            "desc": "报告期类型",
+            "must": "Y",
+            "name": "end_type"
+        },
+        {
+            "column": "BASIC_EPS",
+            "data_type": "float",
+            "desc": "基本每股收益",
+            "must": "Y",
+            "name": "basic_eps"
+        },
+        {
+            "column": "DILUTED_EPS",
+            "data_type": "float",
+            "desc": "稀释每股收益",
+            "must": "Y",
+            "name": "diluted_eps"
+        },
+        {
+            "column": "TOTAL_REVENUE",
+            "data_type": "float",
+            "desc": "营业总收入",
+            "must": "Y",
+            "name": "total_revenue"
+        },
+        {
+            "column": "REVENUE",
+            "data_type": "float",
+            "desc": "营业收入",
+            "must": "Y",
+            "name": "revenue"
+        },
+        {
+            "column": "INT_INCOME",
+            "data_type": "float",
+            "desc": "利息收入",
+            "must": "Y",
+            "name": "int_income"
+        },
+        {
+            "column": "PREM_EARNED",
+            "data_type": "float",
+            "desc": "已赚保费",
+            "must": "Y",
+            "name": "prem_earned"
+        },
+        {
+            "column": "COMM_INCOME",
+            "data_type": "float",
+            "desc": "手续费及佣金收入",
+            "must": "Y",
+            "name": "comm_income"
+        },
+        {
+            "column": "N_COMMIS_INCOME",
+            "data_type": "float",
+            "desc": "手续费及佣金净收入",
+            "must": "Y",
+            "name": "n_commis_income"
+        },
+        {
+            "column": "N_OTH_INCOME",
+            "data_type": "float",
+            "desc": "其他经营净收益",
+            "must": "Y",
+            "name": "n_oth_income"
+        },
+        {
+            "column": "N_OTH_B_INCOME",
+            "data_type": "float",
+            "desc": "加:其他业务净收益",
+            "must": "Y",
+            "name": "n_oth_b_income"
+        },
+        {
+            "column": "PREM_INCOME",
+            "data_type": "float",
+            "desc": "保险业务收入",
+            "must": "Y",
+            "name": "prem_income"
+        },
+        {
+            "column": "OUT_PREM",
+            "data_type": "float",
+            "desc": "减:分出保费",
+            "must": "Y",
+            "name": "out_prem"
+        },
+        {
+            "column": "UNE_PREM_RESER",
+            "data_type": "float",
+            "desc": "提取未到期责任准备金",
+            "must": "Y",
+            "name": "une_prem_reser"
+        },
+        {
+            "column": "REINS_INCOME",
+            "data_type": "float",
+            "desc": "其中:分保费收入",
+            "must": "Y",
+            "name": "reins_income"
+        },
+        {
+            "column": "N_SEC_TB_INCOME",
+            "data_type": "float",
+            "desc": "代理买卖证券业务净收入",
+            "must": "Y",
+            "name": "n_sec_tb_income"
+        },
+        {
+            "column": "N_SEC_UW_INCOME",
+            "data_type": "float",
+            "desc": "证券承销业务净收入",
+            "must": "Y",
+            "name": "n_sec_uw_income"
+        },
+        {
+            "column": "N_ASSET_MG_INCOME",
+            "data_type": "float",
+            "desc": "受托客户资产管理业务净收入",
+            "must": "Y",
+            "name": "n_asset_mg_income"
+        },
+        {
+            "column": "OTH_B_INCOME",
+            "data_type": "float",
+            "desc": "其他业务收入",
+            "must": "Y",
+            "name": "oth_b_income"
+        },
+        {
+            "column": "FV_VALUE_CHG_GAIN",
+            "data_type": "float",
+            "desc": "加:公允价值变动净收益",
+            "must": "Y",
+            "name": "fv_value_chg_gain"
+        },
+        {
+            "column": "INVEST_INCOME",
+            "data_type": "float",
+            "desc": "加:投资净收益",
+            "must": "Y",
+            "name": "invest_income"
+        },
+        {
+            "column": "ASS_INVEST_INCOME",
+            "data_type": "float",
+            "desc": "其中:对联营企业和合营企业的投资收益",
+            "must": "Y",
+            "name": "ass_invest_income"
+        },
+        {
+            "column": "FOREX_GAIN",
+            "data_type": "float",
+            "desc": "加:汇兑净收益",
+            "must": "Y",
+            "name": "forex_gain"
+        },
+        {
+            "column": "TOTAL_COGS",
+            "data_type": "float",
+            "desc": "营业总成本",
+            "must": "Y",
+            "name": "total_cogs"
+        },
+        {
+            "column": "OPER_COST",
+            "data_type": "float",
+            "desc": "减:营业成本",
+            "must": "Y",
+            "name": "oper_cost"
+        },
+        {
+            "column": "INT_EXP",
+            "data_type": "float",
+            "desc": "减:利息支出",
+            "must": "Y",
+            "name": "int_exp"
+        },
+        {
+            "column": "COMM_EXP",
+            "data_type": "float",
+            "desc": "减:手续费及佣金支出",
+            "must": "Y",
+            "name": "comm_exp"
+        },
+        {
+            "column": "BIZ_TAX_SURCHG",
+            "data_type": "float",
+            "desc": "减:营业税金及附加",
+            "must": "Y",
+            "name": "biz_tax_surchg"
+        },
+        {
+            "column": "SELL_EXP",
+            "data_type": "float",
+            "desc": "减:销售费用",
+            "must": "Y",
+            "name": "sell_exp"
+        },
+        {
+            "column": "ADMIN_EXP",
+            "data_type": "float",
+            "desc": "减:管理费用",
+            "must": "Y",
+            "name": "admin_exp"
+        },
+        {
+            "column": "FIN_EXP",
+            "data_type": "float",
+            "desc": "减:财务费用",
+            "must": "Y",
+            "name": "fin_exp"
+        },
+        {
+            "column": "ASSETS_IMPAIR_LOSS",
+            "data_type": "float",
+            "desc": "减:资产减值损失",
+            "must": "Y",
+            "name": "assets_impair_loss"
+        },
+        {
+            "column": "PREM_REFUND",
+            "data_type": "float",
+            "desc": "退保金",
+            "must": "Y",
+            "name": "prem_refund"
+        },
+        {
+            "column": "COMPENS_PAYOUT",
+            "data_type": "float",
+            "desc": "赔付总支出",
+            "must": "Y",
+            "name": "compens_payout"
+        },
+        {
+            "column": "RESER_INSUR_LIAB",
+            "data_type": "float",
+            "desc": "提取保险责任准备金",
+            "must": "Y",
+            "name": "reser_insur_liab"
+        },
+        {
+            "column": "DIV_PAYT",
+            "data_type": "float",
+            "desc": "保户红利支出",
+            "must": "Y",
+            "name": "div_payt"
+        },
+        {
+            "column": "REINS_EXP",
+            "data_type": "float",
+            "desc": "分保费用",
+            "must": "Y",
+            "name": "reins_exp"
+        },
+        {
+            "column": "OPER_EXP",
+            "data_type": "float",
+            "desc": "营业支出",
+            "must": "Y",
+            "name": "oper_exp"
+        },
+        {
+            "column": "COMPENS_PAYOUT_REFU",
+            "data_type": "float",
+            "desc": "减:摊回赔付支出",
+            "must": "Y",
+            "name": "compens_payout_refu"
+        },
+        {
+            "column": "INSUR_RESER_REFU",
+            "data_type": "float",
+            "desc": "减:摊回保险责任准备金",
+            "must": "Y",
+            "name": "insur_reser_refu"
+        },
+        {
+            "column": "REINS_COST_REFUND",
+            "data_type": "float",
+            "desc": "减:摊回分保费用",
+            "must": "Y",
+            "name": "reins_cost_refund"
+        },
+        {
+            "column": "OTHER_BUS_COST",
+            "data_type": "float",
+            "desc": "其他业务成本",
+            "must": "Y",
+            "name": "other_bus_cost"
+        },
+        {
+            "column": "OPERATE_PROFIT",
+            "data_type": "float",
+            "desc": "营业利润",
+            "must": "Y",
+            "name": "operate_profit"
+        },
+        {
+            "column": "NON_OPER_INCOME",
+            "data_type": "float",
+            "desc": "加:营业外收入",
+            "must": "Y",
+            "name": "non_oper_income"
+        },
+        {
+            "column": "NON_OPER_EXP",
+            "data_type": "float",
+            "desc": "减:营业外支出",
+            "must": "Y",
+            "name": "non_oper_exp"
+        },
+        {
+            "column": "NCA_DISPLOSS",
+            "data_type": "float",
+            "desc": "其中:减:非流动资产处置净损失",
+            "must": "Y",
+            "name": "nca_disploss"
+        },
+        {
+            "column": "TOTAL_PROFIT",
+            "data_type": "float",
+            "desc": "利润总额",
+            "must": "Y",
+            "name": "total_profit"
+        },
+        {
+            "column": "INCOME_TAX",
+            "data_type": "float",
+            "desc": "所得税费用",
+            "must": "Y",
+            "name": "income_tax"
+        },
+        {
+            "column": "N_INCOME",
+            "data_type": "float",
+            "desc": "净利润(含少数股东损益)",
+            "must": "Y",
+            "name": "n_income"
+        },
+        {
+            "column": "N_INCOME_ATTR_P",
+            "data_type": "float",
+            "desc": "净利润(不含少数股东损益)",
+            "must": "Y",
+            "name": "n_income_attr_p"
+        },
+        {
+            "column": "MINORITY_GAIN",
+            "data_type": "float",
+            "desc": "少数股东损益",
+            "must": "Y",
+            "name": "minority_gain"
+        },
+        {
+            "column": "OTH_COMPR_INCOME",
+            "data_type": "float",
+            "desc": "其他综合收益",
+            "must": "Y",
+            "name": "oth_compr_income"
+        },
+        {
+            "column": "T_COMPR_INCOME",
+            "data_type": "float",
+            "desc": "综合收益总额",
+            "must": "Y",
+            "name": "t_compr_income"
+        },
+        {
+            "column": "COMPR_INC_ATTR_P",
+            "data_type": "float",
+            "desc": "归属于母公司(或股东)的综合收益总额",
+            "must": "Y",
+            "name": "compr_inc_attr_p"
+        },
+        {
+            "column": "COMPR_INC_ATTR_M_S",
+            "data_type": "float",
+            "desc": "归属于少数股东的综合收益总额",
+            "must": "Y",
+            "name": "compr_inc_attr_m_s"
+        },
+        {
+            "column": "EBIT",
+            "data_type": "float",
+            "desc": "息税前利润",
+            "must": "Y",
+            "name": "ebit"
+        },
+        {
+            "column": "EBITDA",
+            "data_type": "float",
+            "desc": "息税折旧摊销前利润",
+            "must": "Y",
+            "name": "ebitda"
+        },
+        {
+            "column": "INSURANCE_EXP",
+            "data_type": "float",
+            "desc": "保险业务支出",
+            "must": "Y",
+            "name": "insurance_exp"
+        },
+        {
+            "column": "UNDIST_PROFIT",
+            "data_type": "float",
+            "desc": "年初未分配利润",
+            "must": "Y",
+            "name": "undist_profit"
+        },
+        {
+            "column": "DISTABLE_PROFIT",
+            "data_type": "float",
+            "desc": "可分配利润",
+            "must": "Y",
+            "name": "distable_profit"
+        },
+        {
+            "column": "RD_EXP",
+            "data_type": "float",
+            "desc": "研发费用",
+            "must": "Y",
+            "name": "rd_exp"
+        },
+        {
+            "column": "FIN_EXP_INT_EXP",
+            "data_type": "float",
+            "desc": "财务费用:利息费用",
+            "must": "Y",
+            "name": "fin_exp_int_exp"
+        },
+        {
+            "column": "FIN_EXP_INT_INC",
+            "data_type": "float",
+            "desc": "财务费用:利息收入",
+            "must": "Y",
+            "name": "fin_exp_int_inc"
+        },
+        {
+            "column": "TRANSFER_SURPLUS_RESE",
+            "data_type": "float",
+            "desc": "盈余公积转入",
+            "must": "Y",
+            "name": "transfer_surplus_rese"
+        },
+        {
+            "column": "TRANSFER_HOUSING_IMPREST",
+            "data_type": "float",
+            "desc": "住房周转金转入",
+            "must": "Y",
+            "name": "transfer_housing_imprest"
+        },
+        {
+            "column": "TRANSFER_OTH",
+            "data_type": "float",
+            "desc": "其他转入",
+            "must": "Y",
+            "name": "transfer_oth"
+        },
+        {
+            "column": "ADJ_LOSSGAIN",
+            "data_type": "float",
+            "desc": "调整以前年度损益",
+            "must": "Y",
+            "name": "adj_lossgain"
+        },
+        {
+            "column": "WITHDRA_LEGAL_SURPLUS",
+            "data_type": "float",
+            "desc": "提取法定盈余公积",
+            "must": "Y",
+            "name": "withdra_legal_surplus"
+        },
+        {
+            "column": "WITHDRA_LEGAL_PUBFUND",
+            "data_type": "float",
+            "desc": "提取法定公益金",
+            "must": "Y",
+            "name": "withdra_legal_pubfund"
+        },
+        {
+            "column": "WITHDRA_BIZ_DEVFUND",
+            "data_type": "float",
+            "desc": "提取企业发展基金",
+            "must": "Y",
+            "name": "withdra_biz_devfund"
+        },
+        {
+            "column": "WITHDRA_RESE_FUND",
+            "data_type": "float",
+            "desc": "提取储备基金",
+            "must": "Y",
+            "name": "withdra_rese_fund"
+        },
+        {
+            "column": "WITHDRA_OTH_ERSU",
+            "data_type": "float",
+            "desc": "提取任意盈余公积金",
+            "must": "Y",
+            "name": "withdra_oth_ersu"
+        },
+        {
+            "column": "WORKERS_WELFARE",
+            "data_type": "float",
+            "desc": "职工奖金福利",
+            "must": "Y",
+            "name": "workers_welfare"
+        },
+        {
+            "column": "DISTR_PROFIT_SHRHDER",
+            "data_type": "float",
+            "desc": "可供股东分配的利润",
+            "must": "Y",
+            "name": "distr_profit_shrhder"
+        },
+        {
+            "column": "PRFSHARE_PAYABLE_DVD",
+            "data_type": "float",
+            "desc": "应付优先股股利",
+            "must": "Y",
+            "name": "prfshare_payable_dvd"
+        },
+        {
+            "column": "COMSHARE_PAYABLE_DVD",
+            "data_type": "float",
+            "desc": "应付普通股股利",
+            "must": "Y",
+            "name": "comshare_payable_dvd"
+        },
+        {
+            "column": "CAPIT_COMSTOCK_DIV",
+            "data_type": "float",
+            "desc": "转作股本的普通股股利",
+            "must": "Y",
+            "name": "capit_comstock_div"
+        },
+        {
+            "column": "NET_AFTER_NR_LP_CORRECT",
+            "data_type": "float",
+            "desc": "扣除非经常性损益后的净利润（更正前）",
+            "must": "N",
+            "name": "net_after_nr_lp_correct"
+        },
+        {
+            "column": "OTH_INCOME",
+            "data_type": "float",
+            "desc": "其他收益",
+            "must": "N",
+            "name": "oth_income"
+        },
+        {
+            "column": "ASSET_DISP_INCOME",
+            "data_type": "float",
+            "desc": "资产处置收益",
+            "must": "N",
+            "name": "asset_disp_income"
+        },
+        {
+            "column": "CONTINUED_NET_PROFIT",
+            "data_type": "float",
+            "desc": "持续经营净利润",
+            "must": "Y",
+            "name": "continued_net_profit"
+        },
+        {
+            "column": "END_NET_PROFIT",
+            "data_type": "float",
+            "desc": "终止经营净利润",
+            "must": "N",
+            "name": "end_net_profit"
+        },
+        {
+            "column": "CREDIT_IMPA_LOSS",
+            "data_type": "float",
+            "desc": "信用减值损失",
+            "must": "N",
+            "name": "credit_impa_loss"
+        },
+        {
+            "column": "NET_EXPO_HEDGING_BENEFITS",
+            "data_type": "float",
+            "desc": "净敞口套期收益",
+            "must": "N",
+            "name": "net_expo_hedging_benefits"
+        },
+        {
+            "column": "OTH_IMPAIR_LOSS_ASSETS",
+            "data_type": "float",
+            "desc": "其他资产减值损失",
+            "must": "N",
+            "name": "oth_impair_loss_assets"
+        },
+        {
+            "column": "TOTAL_OPCOST",
+            "data_type": "float",
+            "desc": "营业总成本2",
+            "must": "N",
+            "name": "total_opcost"
+        },
+        {
+            "column": "AMODCOST_FIN_ASSETS",
+            "data_type": "float",
+            "desc": "以摊余成本计量的金融资产终止确认收益",
+            "must": "N",
+            "name": "amodcost_fin_assets"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "更新标识",
+            "must": "Y",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 16,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            16,
+            "财务数据"
+        ],
+        [
+            33,
+            "利润表"
+        ]
+    ],
+    "title": "利润表",
+    "validations": []
 }

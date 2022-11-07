@@ -1,84 +1,116 @@
 {
-    "desc": "",
-    "name": "bo_cinema",
-    "id": 116,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "C_NAME",
-        "name": "c_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "影院名称"
-    }, {
-        "column": "AUD_COUNT",
-        "name": "aud_count",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "观众人数"
-    }, {
-        "column": "ATT_RATIO",
-        "name": "att_ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "上座率"
-    }, {
-        "column": "DAY_AMOUNT",
-        "name": "day_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日票房"
-    }, {
-        "column": "DAY_SHOWCOUNT",
-        "name": "day_showcount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日场次"
-    }, {
-        "column": "AVG_PRICE",
-        "name": "avg_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "场均票价（元）"
-    }, {
-        "column": "P_PC",
-        "name": "p_pc",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "场均人次"
-    }, {
-        "column": "RANK",
-        "name": "rank",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "排名"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 83,
-    "title": "影院日度票房",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 116,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "bo_cinema",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "C_NAME",
+            "data_type": "str",
+            "desc": "影院名称",
+            "must": "Y",
+            "name": "c_name"
+        },
+        {
+            "column": "AUD_COUNT",
+            "data_type": "int",
+            "desc": "观众人数",
+            "must": "Y",
+            "name": "aud_count"
+        },
+        {
+            "column": "ATT_RATIO",
+            "data_type": "float",
+            "desc": "上座率",
+            "must": "Y",
+            "name": "att_ratio"
+        },
+        {
+            "column": "DAY_AMOUNT",
+            "data_type": "float",
+            "desc": "当日票房",
+            "must": "Y",
+            "name": "day_amount"
+        },
+        {
+            "column": "DAY_SHOWCOUNT",
+            "data_type": "float",
+            "desc": "当日场次",
+            "must": "Y",
+            "name": "day_showcount"
+        },
+        {
+            "column": "AVG_PRICE",
+            "data_type": "float",
+            "desc": "场均票价（元）",
+            "must": "Y",
+            "name": "avg_price"
+        },
+        {
+            "column": "P_PC",
+            "data_type": "float",
+            "desc": "场均人次",
+            "must": "Y",
+            "name": "p_pc"
+        },
+        {
+            "column": "RANK",
+            "data_type": "int",
+            "desc": "排名",
+            "must": "Y",
+            "name": "rank"
+        }
+    ],
+    "parent_id": 83,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            82,
+            "行业经济"
+        ],
+        [
+            83,
+            "TMT行业"
+        ],
+        [
+            116,
+            "影院日度票房"
+        ]
+    ],
+    "title": "影院日度票房",
+    "validations": []
 }

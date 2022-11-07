@@ -1,152 +1,192 @@
 {
-    "desc": "期货主要品种交易周报",
-    "name": "fut_weekly_detail",
-    "id": 216,
-    "outputs": [{
-        "column": "EXCHANGE",
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所代码"
-    }, {
-        "column": "PRD",
-        "name": "prd",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "期货品种代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "品种名称"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "成交量（手）"
-    }, {
-        "column": "VOL_YOY",
-        "name": "vol_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "同比增减（%）"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交金额（亿元）"
-    }, {
-        "column": "AMOUT_YOY",
-        "name": "amout_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "同比增减（%）"
-    }, {
-        "column": "CUMVOL",
-        "name": "cumvol",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "年累计成交总量（手）"
-    }, {
-        "column": "CUMVOL_YOY",
-        "name": "cumvol_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "同比增减（%）"
-    }, {
-        "column": "CUMAMT",
-        "name": "cumamt",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "年累计成交金额（亿元）"
-    }, {
-        "column": "CUMAMT_YOY",
-        "name": "cumamt_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "同比增减（%）"
-    }, {
-        "column": "OPEN_INTEREST",
-        "name": "open_interest",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "持仓量（手）"
-    }, {
-        "column": "INTEREST_WOW",
-        "name": "interest_wow",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "环比增减（%）"
-    }, {
-        "column": "MC_CLOSE",
-        "name": "mc_close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "本周主力合约收盘价"
-    }, {
-        "column": "CLOSE_WOW",
-        "name": "close_wow",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "环比涨跌（%）"
-    }, {
-        "column": "WEEK",
-        "name": "week",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "周期"
-    }, {
-        "column": "WEEK_DATE",
-        "name": "week_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "周日期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 134,
-    "title": "期货主要品种交易周报",
-    "inputs": [{
-        "name": "week",
-        "data_type": "str",
-        "must": "N",
-        "desc": "周期"
-    }, {
-        "name": "prd",
-        "data_type": "str",
-        "must": "N",
-        "desc": "期货品种"
-    }, {
-        "name": "start_week",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始周期"
-    }, {
-        "name": "end_week",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束周期"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "期货主要品种交易周报",
+    "id": 216,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "周期",
+            "must": "N",
+            "name": "week"
+        },
+        {
+            "data_type": "str",
+            "desc": "期货品种",
+            "must": "N",
+            "name": "prd"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始周期",
+            "must": "N",
+            "name": "start_week"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束周期",
+            "must": "N",
+            "name": "end_week"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "fut_weekly_detail",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "EXCHANGE",
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "PRD",
+            "data_type": "str",
+            "desc": "期货品种代码",
+            "must": "Y",
+            "name": "prd"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "品种名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "VOL",
+            "data_type": "int",
+            "desc": "成交量（手）",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "VOL_YOY",
+            "data_type": "float",
+            "desc": "同比增减（%）",
+            "must": "Y",
+            "name": "vol_yoy"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交金额（亿元）",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "AMOUT_YOY",
+            "data_type": "float",
+            "desc": "同比增减（%）",
+            "must": "Y",
+            "name": "amout_yoy"
+        },
+        {
+            "column": "CUMVOL",
+            "data_type": "int",
+            "desc": "年累计成交总量（手）",
+            "must": "Y",
+            "name": "cumvol"
+        },
+        {
+            "column": "CUMVOL_YOY",
+            "data_type": "float",
+            "desc": "同比增减（%）",
+            "must": "Y",
+            "name": "cumvol_yoy"
+        },
+        {
+            "column": "CUMAMT",
+            "data_type": "float",
+            "desc": "年累计成交金额（亿元）",
+            "must": "Y",
+            "name": "cumamt"
+        },
+        {
+            "column": "CUMAMT_YOY",
+            "data_type": "float",
+            "desc": "同比增减（%）",
+            "must": "Y",
+            "name": "cumamt_yoy"
+        },
+        {
+            "column": "OPEN_INTEREST",
+            "data_type": "int",
+            "desc": "持仓量（手）",
+            "must": "Y",
+            "name": "open_interest"
+        },
+        {
+            "column": "INTEREST_WOW",
+            "data_type": "float",
+            "desc": "环比增减（%）",
+            "must": "Y",
+            "name": "interest_wow"
+        },
+        {
+            "column": "MC_CLOSE",
+            "data_type": "float",
+            "desc": "本周主力合约收盘价",
+            "must": "Y",
+            "name": "mc_close"
+        },
+        {
+            "column": "CLOSE_WOW",
+            "data_type": "float",
+            "desc": "环比涨跌（%）",
+            "must": "Y",
+            "name": "close_wow"
+        },
+        {
+            "column": "WEEK",
+            "data_type": "str",
+            "desc": "周期",
+            "must": "Y",
+            "name": "week"
+        },
+        {
+            "column": "WEEK_DATE",
+            "data_type": "str",
+            "desc": "周日期",
+            "must": "Y",
+            "name": "week_date"
+        }
+    ],
+    "parent_id": 134,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            134,
+            "期货"
+        ],
+        [
+            216,
+            "期货主要品种交易周报"
+        ]
+    ],
+    "title": "期货主要品种交易周报",
+    "validations": []
 }

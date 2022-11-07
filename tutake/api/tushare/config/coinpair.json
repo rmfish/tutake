@@ -1,60 +1,84 @@
 {
-    "desc": "",
-    "name": "coinpair",
-    "id": 51,
-    "outputs": [{
-        "name": "trade_date",
-        "column": "date",
-        "data_type": "str",
-        "must": "Y",
-        "primary_key": true,
-        "desc": "日期"
-    }, {
-        "name": "exchange",
-        "column": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所"
-    }, {
-        "name": "exchange_pair",
-        "column": "src_pair",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "交易所原始交易对名称"
-    }, {
-        "name": "ts_pair",
-        "column": "normal_pair",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "Tushare标准名称"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 3,
-    "title": "交易所交易对",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 51,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "coinpair",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "date",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "trade_date",
+            "primary_key": true
+        },
+        {
+            "column": "exchange",
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "src_pair",
+            "data_type": "str",
+            "desc": "交易所原始交易对名称",
+            "must": "Y",
+            "name": "exchange_pair"
+        },
+        {
+            "column": "normal_pair",
+            "data_type": "str",
+            "desc": "Tushare标准名称",
+            "must": "Y",
+            "name": "ts_pair"
+        }
+    ],
+    "parent_id": 3,
+    "path": [
+        [
+            41,
+            "另类数据"
+        ],
+        [
+            3,
+            "基础数据"
+        ],
+        [
+            51,
+            "交易所交易对"
+        ]
+    ],
+    "title": "交易所交易对",
+    "validations": []
 }

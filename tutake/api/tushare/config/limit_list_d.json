@@ -1,174 +1,222 @@
 {
-    "desc": "",
-    "name": "limit_list_d",
-    "id": 298,
-    "outputs": [{
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "column": "INDUSTRY",
-        "name": "industry",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "所属行业"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票名称"
-    }, {
-        "column": "CLOSE",
-        "name": "close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘价"
-    }, {
-        "column": "PCT_CHG",
-        "name": "pct_chg",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌幅"
-    }, {
-        "column": "SWING",
-        "name": "swing",
-        "data_type": "float",
-        "must": "N",
-        "desc": "振幅"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交额"
-    }, {
-        "column": "LIMIT_AMOUNT",
-        "name": "limit_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "板上成交金额"
-    }, {
-        "column": "FLOAT_MV",
-        "name": "float_mv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流通市值"
-    }, {
-        "column": "TOTAL_MV",
-        "name": "total_mv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总市值"
-    }, {
-        "column": "TURNOVER_RATIO",
-        "name": "turnover_ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "换手率"
-    }, {
-        "column": "FD_AMOUNT",
-        "name": "fd_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "封单金额"
-    }, {
-        "column": "FIRST_TIME",
-        "name": "first_time",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "首次封板时间"
-    }, {
-        "column": "LAST_TIME",
-        "name": "last_time",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最后封板时间"
-    }, {
-        "column": "OPEN_TIMES",
-        "name": "open_times",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "炸板次数"
-    }, {
-        "column": "UP_STAT",
-        "name": "up_stat",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "涨停统计"
-    }, {
-        "column": "LIMIT_TIMES",
-        "name": "limit_times",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "连板数"
-    }, {
-        "column": "LIMIT",
-        "name": "limit",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "D跌停U涨停Z炸板"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 291,
-    "title": "涨跌停和炸板数据",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "limit_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "涨跌停类型U涨停D跌停Z炸板"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所（SH上交所SZ深交所BJ北交所）"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "test",
-        "data_type": "float",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 298,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "涨跌停类型U涨停D跌停Z炸板",
+            "must": "N",
+            "name": "limit_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所（SH上交所SZ深交所BJ北交所）",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "float",
+            "desc": "",
+            "must": "N",
+            "name": "test"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "limit_list_d",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "INDUSTRY",
+            "data_type": "str",
+            "desc": "所属行业",
+            "must": "Y",
+            "name": "industry"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "股票名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘价",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "PCT_CHG",
+            "data_type": "float",
+            "desc": "涨跌幅",
+            "must": "Y",
+            "name": "pct_chg"
+        },
+        {
+            "column": "SWING",
+            "data_type": "float",
+            "desc": "振幅",
+            "must": "N",
+            "name": "swing"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交额",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "LIMIT_AMOUNT",
+            "data_type": "float",
+            "desc": "板上成交金额",
+            "must": "Y",
+            "name": "limit_amount"
+        },
+        {
+            "column": "FLOAT_MV",
+            "data_type": "float",
+            "desc": "流通市值",
+            "must": "Y",
+            "name": "float_mv"
+        },
+        {
+            "column": "TOTAL_MV",
+            "data_type": "float",
+            "desc": "总市值",
+            "must": "Y",
+            "name": "total_mv"
+        },
+        {
+            "column": "TURNOVER_RATIO",
+            "data_type": "float",
+            "desc": "换手率",
+            "must": "Y",
+            "name": "turnover_ratio"
+        },
+        {
+            "column": "FD_AMOUNT",
+            "data_type": "float",
+            "desc": "封单金额",
+            "must": "Y",
+            "name": "fd_amount"
+        },
+        {
+            "column": "FIRST_TIME",
+            "data_type": "str",
+            "desc": "首次封板时间",
+            "must": "Y",
+            "name": "first_time"
+        },
+        {
+            "column": "LAST_TIME",
+            "data_type": "str",
+            "desc": "最后封板时间",
+            "must": "Y",
+            "name": "last_time"
+        },
+        {
+            "column": "OPEN_TIMES",
+            "data_type": "int",
+            "desc": "炸板次数",
+            "must": "Y",
+            "name": "open_times"
+        },
+        {
+            "column": "UP_STAT",
+            "data_type": "str",
+            "desc": "涨停统计",
+            "must": "Y",
+            "name": "up_stat"
+        },
+        {
+            "column": "LIMIT_TIMES",
+            "data_type": "int",
+            "desc": "连板数",
+            "must": "Y",
+            "name": "limit_times"
+        },
+        {
+            "column": "LIMIT",
+            "data_type": "str",
+            "desc": "D跌停U涨停Z炸板",
+            "must": "Y",
+            "name": "limit"
+        }
+    ],
+    "parent_id": 291,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            291,
+            "特色数据"
+        ],
+        [
+            298,
+            "涨跌停和炸板数据"
+        ]
+    ],
+    "title": "涨跌停和炸板数据",
+    "validations": []
 }

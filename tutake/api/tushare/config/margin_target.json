@@ -1,77 +1,108 @@
 {
-    "desc": "",
-    "name": "margin_target",
-    "id": 286,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标的代码"
-    }, {
-        "column": "MG_TYPE",
-        "name": "mg_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标的类型：B买入标的 S卖出标的"
-    }, {
-        "column": "IS_NEW",
-        "name": "is_new",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最新标记：Y是 N否"
-    }, {
-        "column": "IN_DATE",
-        "name": "in_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "纳入日期"
-    }, {
-        "column": "OUT_DATE",
-        "name": "out_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "剔除日期"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公布日期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "融资融券标的",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "is_new",
-        "data_type": "str",
-        "default": "Y",
-        "must": "N",
-        "desc": "是否最新"
-    }, {
-        "name": "mg_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "标的类型：B买入标的 S卖出标的"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 286,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "default": "Y",
+            "desc": "是否最新",
+            "must": "N",
+            "name": "is_new"
+        },
+        {
+            "data_type": "str",
+            "desc": "标的类型：B买入标的 S卖出标的",
+            "must": "N",
+            "name": "mg_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "margin_target",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "标的代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "MG_TYPE",
+            "data_type": "str",
+            "desc": "标的类型：B买入标的 S卖出标的",
+            "must": "Y",
+            "name": "mg_type"
+        },
+        {
+            "column": "IS_NEW",
+            "data_type": "str",
+            "desc": "最新标记：Y是 N否",
+            "must": "Y",
+            "name": "is_new"
+        },
+        {
+            "column": "IN_DATE",
+            "data_type": "str",
+            "desc": "纳入日期",
+            "must": "Y",
+            "name": "in_date"
+        },
+        {
+            "column": "OUT_DATE",
+            "data_type": "str",
+            "desc": "剔除日期",
+            "must": "Y",
+            "name": "out_date"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公布日期",
+            "must": "Y",
+            "name": "ann_date"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            286,
+            "融资融券标的"
+        ]
+    ],
+    "title": "融资融券标的",
+    "validations": []
 }

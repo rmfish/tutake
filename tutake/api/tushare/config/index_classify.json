@@ -1,88 +1,117 @@
 {
-    "desc": "申万行业分类",
-    "name": "index_classify",
-    "id": 181,
-    "outputs": [{
-        "column": "INDEX_CODE",
-        "name": "index_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "指数代码"
-    }, {
-        "column": "INDUSTRY_NAME",
-        "name": "industry_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行业名称"
-    }, {
-        "column": "LEVEL",
-        "name": "level",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行业名称"
-    }, {
-        "column": "INDUSTRY_CODE",
-        "name": "industry_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行业代码"
-    }, {
-        "column": "IS_PUB",
-        "name": "is_pub",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "是否发布指数"
-    }, {
-        "column": "PARENT_CODE",
-        "name": "parent_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "父级代码"
-    }, {
-        "column": "SRC",
-        "name": "src",
-        "data_type": "str",
-        "must": "N",
-        "desc": "行业分类（SW申万）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 93,
-    "title": "申万行业分类",
-    "inputs": [{
-        "name": "index_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "指数代码"
-    }, {
-        "name": "level",
-        "data_type": "str",
-        "must": "N",
-        "desc": "行业分级（L1/L2/L3）"
-    }, {
-        "name": "src",
-        "data_type": "str",
-        "must": "N",
-        "default": "SW2014",
-        "desc": "指数来源（SW申万）"
-    }, {
-        "name": "parent_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "父级代码"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "申万行业分类",
+    "id": 181,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "指数代码",
+            "must": "N",
+            "name": "index_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "行业分级（L1/L2/L3）",
+            "must": "N",
+            "name": "level"
+        },
+        {
+            "data_type": "str",
+            "default": "SW2014",
+            "desc": "指数来源（SW申万）",
+            "must": "N",
+            "name": "src"
+        },
+        {
+            "data_type": "str",
+            "desc": "父级代码",
+            "must": "N",
+            "name": "parent_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "index_classify",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "INDEX_CODE",
+            "data_type": "str",
+            "desc": "指数代码",
+            "must": "Y",
+            "name": "index_code"
+        },
+        {
+            "column": "INDUSTRY_NAME",
+            "data_type": "str",
+            "desc": "行业名称",
+            "must": "Y",
+            "name": "industry_name"
+        },
+        {
+            "column": "LEVEL",
+            "data_type": "str",
+            "desc": "行业名称",
+            "must": "Y",
+            "name": "level"
+        },
+        {
+            "column": "INDUSTRY_CODE",
+            "data_type": "str",
+            "desc": "行业代码",
+            "must": "Y",
+            "name": "industry_code"
+        },
+        {
+            "column": "IS_PUB",
+            "data_type": "str",
+            "desc": "是否发布指数",
+            "must": "Y",
+            "name": "is_pub"
+        },
+        {
+            "column": "PARENT_CODE",
+            "data_type": "str",
+            "desc": "父级代码",
+            "must": "Y",
+            "name": "parent_code"
+        },
+        {
+            "column": "SRC",
+            "data_type": "str",
+            "desc": "行业分类（SW申万）",
+            "must": "N",
+            "name": "src"
+        }
+    ],
+    "parent_id": 93,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            93,
+            "指数"
+        ],
+        [
+            181,
+            "申万行业分类"
+        ]
+    ],
+    "title": "申万行业分类",
+    "validations": []
 }

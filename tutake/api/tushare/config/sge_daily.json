@@ -1,129 +1,165 @@
 {
-    "desc": "黄金日行情",
-    "name": "sge_daily",
-    "id": 285,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "现货合约代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日"
-    }, {
-        "column": "CLOSE",
-        "name": "close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘点位"
-    }, {
-        "column": "OPEN",
-        "name": "open",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "开盘点位"
-    }, {
-        "column": "HIGH",
-        "name": "high",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最高点位"
-    }, {
-        "column": "LOW",
-        "name": "low",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最低点位"
-    }, {
-        "column": "PRICE_AVG",
-        "name": "price_avg",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "昨日收盘点"
-    }, {
-        "column": "CHANGE",
-        "name": "change",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌点位"
-    }, {
-        "column": "PCT_CHANGE",
-        "name": "pct_change",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌幅"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交量"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交金额"
-    }, {
-        "column": "OI",
-        "name": "oi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持仓量"
-    }, {
-        "column": "SETTLE_VOL",
-        "name": "settle_vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "交收量"
-    }, {
-        "column": "SETTLE_DIRE",
-        "name": "settle_dire",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "持仓方向"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 283,
-    "title": "上海黄金现货日行情",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "合约代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "黄金日行情",
+    "id": 285,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "合约代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "sge_daily",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "现货合约代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘点位",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "OPEN",
+            "data_type": "float",
+            "desc": "开盘点位",
+            "must": "Y",
+            "name": "open"
+        },
+        {
+            "column": "HIGH",
+            "data_type": "float",
+            "desc": "最高点位",
+            "must": "Y",
+            "name": "high"
+        },
+        {
+            "column": "LOW",
+            "data_type": "float",
+            "desc": "最低点位",
+            "must": "Y",
+            "name": "low"
+        },
+        {
+            "column": "PRICE_AVG",
+            "data_type": "float",
+            "desc": "昨日收盘点",
+            "must": "Y",
+            "name": "price_avg"
+        },
+        {
+            "column": "CHANGE",
+            "data_type": "float",
+            "desc": "涨跌点位",
+            "must": "Y",
+            "name": "change"
+        },
+        {
+            "column": "PCT_CHANGE",
+            "data_type": "float",
+            "desc": "涨跌幅",
+            "must": "Y",
+            "name": "pct_change"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "成交量",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交金额",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "OI",
+            "data_type": "float",
+            "desc": "持仓量",
+            "must": "Y",
+            "name": "oi"
+        },
+        {
+            "column": "SETTLE_VOL",
+            "data_type": "float",
+            "desc": "交收量",
+            "must": "Y",
+            "name": "settle_vol"
+        },
+        {
+            "column": "SETTLE_DIRE",
+            "data_type": "str",
+            "desc": "持仓方向",
+            "must": "Y",
+            "name": "settle_dire"
+        }
+    ],
+    "parent_id": 283,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            283,
+            "现货"
+        ],
+        [
+            285,
+            "上海黄金现货日行情"
+        ]
+    ],
+    "title": "上海黄金现货日行情",
+    "validations": []
 }

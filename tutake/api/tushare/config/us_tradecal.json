@@ -1,64 +1,89 @@
 {
-    "desc": "交易日历",
-    "name": "us_tradecal",
-    "id": 253,
-    "outputs": [{
-        "column": "CAL_DATE",
-        "name": "cal_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日历日期"
-    }, {
-        "column": "IS_OPEN",
-        "name": "is_open",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "是否交易 '0'休市 '1'交易"
-    }, {
-        "column": "PRETRADE_DATE",
-        "name": "pretrade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "上一个交易日"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 251,
-    "title": "美股交易日历",
-    "inputs": [{
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "is_open",
-        "data_type": "str",
-        "must": "N",
-        "desc": "是否交易 '0'休市 '1'交易"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "",
-        "default": "NYSE"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "交易日历",
+    "id": 253,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "是否交易 '0'休市 '1'交易",
+            "must": "N",
+            "name": "is_open"
+        },
+        {
+            "data_type": "str",
+            "default": "NYSE",
+            "desc": "",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "us_tradecal",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "CAL_DATE",
+            "data_type": "str",
+            "desc": "日历日期",
+            "must": "Y",
+            "name": "cal_date"
+        },
+        {
+            "column": "IS_OPEN",
+            "data_type": "int",
+            "desc": "是否交易 '0'休市 '1'交易",
+            "must": "Y",
+            "name": "is_open"
+        },
+        {
+            "column": "PRETRADE_DATE",
+            "data_type": "str",
+            "desc": "上一个交易日",
+            "must": "Y",
+            "name": "pretrade_date"
+        }
+    ],
+    "parent_id": 251,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            251,
+            "美股"
+        ],
+        [
+            253,
+            "美股交易日历"
+        ]
+    ],
+    "title": "美股交易日历",
+    "validations": []
 }

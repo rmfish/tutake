@@ -1,89 +1,122 @@
 {
-    "desc": "",
-    "name": "stk_account_old",
-    "id": 165,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "统计周期"
-    }, {
-        "column": "NEW_SH",
-        "name": "new_sh",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "本周新增（上海，户）"
-    }, {
-        "column": "NEW_SZ",
-        "name": "new_sz",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "本周新增（深圳，户）"
-    }, {
-        "column": "ACTIVE_SH",
-        "name": "active_sh",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末有效账户（上海，万户）"
-    }, {
-        "column": "ACTIVE_SZ",
-        "name": "active_sz",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末有效账户（深圳，万户）"
-    }, {
-        "column": "TOTAL_SH",
-        "name": "total_sh",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末账户数（上海，万户）"
-    }, {
-        "column": "TOTAL_SZ",
-        "name": "total_sz",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末账户数（深圳，万户）"
-    }, {
-        "column": "TRADE_SH",
-        "name": "trade_sh",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "参与交易账户数（上海，万户）"
-    }, {
-        "column": "TRADE_SZ",
-        "name": "trade_sz",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "参与交易账户数（深圳，万户）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "股票开户数据（旧）",
-    "inputs": [{
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 165,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "stk_account_old",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "统计周期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "NEW_SH",
+            "data_type": "int",
+            "desc": "本周新增（上海，户）",
+            "must": "Y",
+            "name": "new_sh"
+        },
+        {
+            "column": "NEW_SZ",
+            "data_type": "int",
+            "desc": "本周新增（深圳，户）",
+            "must": "Y",
+            "name": "new_sz"
+        },
+        {
+            "column": "ACTIVE_SH",
+            "data_type": "float",
+            "desc": "期末有效账户（上海，万户）",
+            "must": "Y",
+            "name": "active_sh"
+        },
+        {
+            "column": "ACTIVE_SZ",
+            "data_type": "float",
+            "desc": "期末有效账户（深圳，万户）",
+            "must": "Y",
+            "name": "active_sz"
+        },
+        {
+            "column": "TOTAL_SH",
+            "data_type": "float",
+            "desc": "期末账户数（上海，万户）",
+            "must": "Y",
+            "name": "total_sh"
+        },
+        {
+            "column": "TOTAL_SZ",
+            "data_type": "float",
+            "desc": "期末账户数（深圳，万户）",
+            "must": "Y",
+            "name": "total_sz"
+        },
+        {
+            "column": "TRADE_SH",
+            "data_type": "float",
+            "desc": "参与交易账户数（上海，万户）",
+            "must": "Y",
+            "name": "trade_sh"
+        },
+        {
+            "column": "TRADE_SZ",
+            "data_type": "float",
+            "desc": "参与交易账户数（深圳，万户）",
+            "must": "Y",
+            "name": "trade_sz"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            165,
+            "股票开户数据（旧）"
+        ]
+    ],
+    "title": "股票开户数据（旧）",
+    "validations": []
 }

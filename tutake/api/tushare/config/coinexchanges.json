@@ -1,125 +1,160 @@
 {
-    "desc": "",
-    "name": "coinexchanges",
-    "id": 66,
-    "outputs": [{
-        "name": "exchange",
-        "column": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所代码"
-    }, {
-        "name": "name",
-        "column": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所名称"
-    }, {
-        "name": "pairs",
-        "column": "pairs",
-        "must": "Y",
-        "data_type": "int",
-        "desc": "交易对数量"
-    }, {
-        "name": "area_code",
-        "column": "area_code",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "所在地区代码"
-    }, {
-        "name": "area",
-        "column": "area",
-        "msut": "Y",
-        "data_type": "str",
-        "desc": "所在地区"
-    }, {
-        "name": "coin_trade",
-        "column": "coin_trade",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "支持现货交易"
-    }, {
-        "name": "fut_trade",
-        "column": "fut_trade",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "支持期货交易"
-    }, {
-        "name": "oct_trade",
-        "column": "oct_trade",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "支持场外交易"
-    }, {
-        "name": "deep_share",
-        "column": "deep_share",
-        "must": "N",
-        "data_type": "str",
-        "desc": "支持共享交易深度"
-    }, {
-        "name": "mineable",
-        "column": "mineable",
-        "must": "N",
-        "data_type": "str",
-        "desc": "支持挖矿交易"
-    }, {
-        "name": "desc",
-        "column": "desc",
-        "must": "N",
-        "data_type": "str",
-        "desc": "交易所简介"
-    }, {
-        "name": "website",
-        "column": "website",
-        "must": "N",
-        "data_type": "str",
-        "desc": "交易所官网"
-    }, {
-        "name": "twitter",
-        "column": "twitter",
-        "must": "N",
-        "data_type": "str",
-        "desc": "交易所twitter"
-    }, {
-        "name": "facebook",
-        "column": "facebook",
-        "must": "N",
-        "data_type": "str",
-        "desc": "交易所facebook"
-    }, {
-        "name": "weibo",
-        "column": "weibo",
-        "must": "N",
-        "data_type": "str",
-        "desc": "交易所weibo"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 3,
-    "title": "全球数字货币交易所",
-    "inputs": [{
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所"
-    }, {
-        "name": "area_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "地区"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 66,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "desc": "地区",
+            "must": "N",
+            "name": "area_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "coinexchanges",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "exchange",
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "name",
+            "data_type": "str",
+            "desc": "交易所名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "pairs",
+            "data_type": "int",
+            "desc": "交易对数量",
+            "must": "Y",
+            "name": "pairs"
+        },
+        {
+            "column": "area_code",
+            "data_type": "str",
+            "desc": "所在地区代码",
+            "must": "Y",
+            "name": "area_code"
+        },
+        {
+            "column": "area",
+            "data_type": "str",
+            "desc": "所在地区",
+            "msut": "Y",
+            "name": "area"
+        },
+        {
+            "column": "coin_trade",
+            "data_type": "str",
+            "desc": "支持现货交易",
+            "must": "Y",
+            "name": "coin_trade"
+        },
+        {
+            "column": "fut_trade",
+            "data_type": "str",
+            "desc": "支持期货交易",
+            "must": "Y",
+            "name": "fut_trade"
+        },
+        {
+            "column": "oct_trade",
+            "data_type": "str",
+            "desc": "支持场外交易",
+            "must": "Y",
+            "name": "oct_trade"
+        },
+        {
+            "column": "deep_share",
+            "data_type": "str",
+            "desc": "支持共享交易深度",
+            "must": "N",
+            "name": "deep_share"
+        },
+        {
+            "column": "mineable",
+            "data_type": "str",
+            "desc": "支持挖矿交易",
+            "must": "N",
+            "name": "mineable"
+        },
+        {
+            "column": "desc",
+            "data_type": "str",
+            "desc": "交易所简介",
+            "must": "N",
+            "name": "desc"
+        },
+        {
+            "column": "website",
+            "data_type": "str",
+            "desc": "交易所官网",
+            "must": "N",
+            "name": "website"
+        },
+        {
+            "column": "twitter",
+            "data_type": "str",
+            "desc": "交易所twitter",
+            "must": "N",
+            "name": "twitter"
+        },
+        {
+            "column": "facebook",
+            "data_type": "str",
+            "desc": "交易所facebook",
+            "must": "N",
+            "name": "facebook"
+        },
+        {
+            "column": "weibo",
+            "data_type": "str",
+            "desc": "交易所weibo",
+            "must": "N",
+            "name": "weibo"
+        }
+    ],
+    "parent_id": 3,
+    "path": [
+        [
+            41,
+            "另类数据"
+        ],
+        [
+            3,
+            "基础数据"
+        ],
+        [
+            66,
+            "全球数字货币交易所"
+        ]
+    ],
+    "title": "全球数字货币交易所",
+    "validations": []
 }

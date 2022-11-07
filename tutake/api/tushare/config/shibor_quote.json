@@ -1,153 +1,201 @@
 {
-    "desc": "Shibor报价数据",
-    "name": "shibor_quote",
-    "id": 150,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "BANK",
-        "name": "bank",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报价银行"
-    }, {
-        "column": "ON_B",
-        "name": "on_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "隔夜_Bid"
-    }, {
-        "column": "ON_A",
-        "name": "on_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "隔夜_Ask"
-    }, {
-        "column": "1W_B",
-        "name": "1w_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1周_Bid"
-    }, {
-        "column": "1W_A",
-        "name": "1w_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1周_Ask"
-    }, {
-        "column": "2W_B",
-        "name": "2w_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "2周_Bid"
-    }, {
-        "column": "2W_A",
-        "name": "2w_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "2周_Ask"
-    }, {
-        "column": "1M_B",
-        "name": "1m_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1月_Bid"
-    }, {
-        "column": "1M_A",
-        "name": "1m_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1月_Ask"
-    }, {
-        "column": "3M_B",
-        "name": "3m_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "3月_Bid"
-    }, {
-        "column": "3M_A",
-        "name": "3m_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "3月_Ask"
-    }, {
-        "column": "6M_B",
-        "name": "6m_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "6月_Bid"
-    }, {
-        "column": "6M_A",
-        "name": "6m_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "6月_Ask"
-    }, {
-        "column": "9M_B",
-        "name": "9m_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "9月_Bid"
-    }, {
-        "column": "9M_A",
-        "name": "9m_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "9月_Ask"
-    }, {
-        "column": "1Y_B",
-        "name": "1y_b",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1年_Bid"
-    }, {
-        "column": "1Y_A",
-        "name": "1y_a",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1年_Ask"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 148,
-    "title": "Shibor报价数据",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "bank",
-        "data_type": "str",
-        "must": "N",
-        "desc": "银行名称"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "Shibor报价数据",
+    "id": 150,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "银行名称",
+            "must": "N",
+            "name": "bank"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "shibor_quote",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "BANK",
+            "data_type": "str",
+            "desc": "报价银行",
+            "must": "Y",
+            "name": "bank"
+        },
+        {
+            "column": "ON_B",
+            "data_type": "float",
+            "desc": "隔夜_Bid",
+            "must": "Y",
+            "name": "on_b"
+        },
+        {
+            "column": "ON_A",
+            "data_type": "float",
+            "desc": "隔夜_Ask",
+            "must": "Y",
+            "name": "on_a"
+        },
+        {
+            "column": "1W_B",
+            "data_type": "float",
+            "desc": "1周_Bid",
+            "must": "Y",
+            "name": "1w_b"
+        },
+        {
+            "column": "1W_A",
+            "data_type": "float",
+            "desc": "1周_Ask",
+            "must": "Y",
+            "name": "1w_a"
+        },
+        {
+            "column": "2W_B",
+            "data_type": "float",
+            "desc": "2周_Bid",
+            "must": "Y",
+            "name": "2w_b"
+        },
+        {
+            "column": "2W_A",
+            "data_type": "float",
+            "desc": "2周_Ask",
+            "must": "Y",
+            "name": "2w_a"
+        },
+        {
+            "column": "1M_B",
+            "data_type": "float",
+            "desc": "1月_Bid",
+            "must": "Y",
+            "name": "1m_b"
+        },
+        {
+            "column": "1M_A",
+            "data_type": "float",
+            "desc": "1月_Ask",
+            "must": "Y",
+            "name": "1m_a"
+        },
+        {
+            "column": "3M_B",
+            "data_type": "float",
+            "desc": "3月_Bid",
+            "must": "Y",
+            "name": "3m_b"
+        },
+        {
+            "column": "3M_A",
+            "data_type": "float",
+            "desc": "3月_Ask",
+            "must": "Y",
+            "name": "3m_a"
+        },
+        {
+            "column": "6M_B",
+            "data_type": "float",
+            "desc": "6月_Bid",
+            "must": "Y",
+            "name": "6m_b"
+        },
+        {
+            "column": "6M_A",
+            "data_type": "float",
+            "desc": "6月_Ask",
+            "must": "Y",
+            "name": "6m_a"
+        },
+        {
+            "column": "9M_B",
+            "data_type": "float",
+            "desc": "9月_Bid",
+            "must": "Y",
+            "name": "9m_b"
+        },
+        {
+            "column": "9M_A",
+            "data_type": "float",
+            "desc": "9月_Ask",
+            "must": "Y",
+            "name": "9m_a"
+        },
+        {
+            "column": "1Y_B",
+            "data_type": "float",
+            "desc": "1年_Bid",
+            "must": "Y",
+            "name": "1y_b"
+        },
+        {
+            "column": "1Y_A",
+            "data_type": "float",
+            "desc": "1年_Ask",
+            "must": "Y",
+            "name": "1y_a"
+        }
+    ],
+    "parent_id": 148,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            148,
+            "利率数据"
+        ],
+        [
+            150,
+            "Shibor报价数据"
+        ]
+    ],
+    "title": "Shibor报价数据",
+    "validations": []
 }

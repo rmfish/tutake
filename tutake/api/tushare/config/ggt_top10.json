@@ -1,161 +1,209 @@
 {
-    "desc": "",
-    "name": "ggt_top10",
-    "id": 49,
-    "outputs": [{
-        "name": "trade_date",
-        "column": "TRADE_DATE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "name": "ts_code",
-        "column": "CODE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "name",
-        "column": "NAME",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票名称"
-    }, {
-        "name": "close",
-        "column": "CLOSE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘价"
-    }, {
-        "name": "p_change",
-        "column": "CHANGE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌幅"
-    }, {
-        "name": "rank",
-        "column": "RANK",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "资金排名"
-    }, {
-        "name": "market_type",
-        "column": "MARKETTYPE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "市场类型 2：港股通（沪） 4：港股通（深）"
-    }, {
-        "name": "amount",
-        "column": "GGTCJL",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "累计成交金额"
-    }, {
-        "name": "net_amount",
-        "column": "GGTJME",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净买入金额"
-    }, {
-        "name": "sh_amount",
-        "column": "GGTHCJJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "沪市成交金额"
-    }, {
-        "name": "sh_net_amount",
-        "column": "GGTHJME",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "沪市净买入金额"
-    }, {
-        "name": "sh_buy",
-        "column": "GGTHMRJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "沪市买入金额"
-    }, {
-        "name": "sh_sell",
-        "column": "GGTHMCJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "沪市卖出金额"
-    }, {
-        "name": "sz_amount",
-        "column": "GGTSCJJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "深市成交金额"
-    }, {
-        "name": "sz_net_amount",
-        "column": "GGTSJME",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "深市净买入金额"
-    }, {
-        "name": "sz_buy",
-        "column": "GGTSMRJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "深市买入金额"
-    }, {
-        "name": "sz_sell",
-        "column": "GGTSMCJE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "深市卖出金额"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 15,
-    "title": "港股通十大成交股",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "market_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "市场类型 2：港股通（沪） 4：港股通（深）"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [{
-        "trigger": [{
-            "name": "trade_date",
-            "operator": "=",
-            "type": "builtin",
-            "value": "None"
-        }],
-        "validator": "required",
-        "name": "ts_code"
-    }],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 49,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "市场类型 2：港股通（沪） 4：港股通（深）",
+            "must": "N",
+            "name": "market_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "ggt_top10",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "CODE",
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "股票名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘价",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "CHANGE",
+            "data_type": "float",
+            "desc": "涨跌幅",
+            "must": "Y",
+            "name": "p_change"
+        },
+        {
+            "column": "RANK",
+            "data_type": "str",
+            "desc": "资金排名",
+            "must": "Y",
+            "name": "rank"
+        },
+        {
+            "column": "MARKETTYPE",
+            "data_type": "str",
+            "desc": "市场类型 2：港股通（沪） 4：港股通（深）",
+            "must": "Y",
+            "name": "market_type"
+        },
+        {
+            "column": "GGTCJL",
+            "data_type": "float",
+            "desc": "累计成交金额",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "GGTJME",
+            "data_type": "float",
+            "desc": "净买入金额",
+            "must": "Y",
+            "name": "net_amount"
+        },
+        {
+            "column": "GGTHCJJE",
+            "data_type": "float",
+            "desc": "沪市成交金额",
+            "must": "Y",
+            "name": "sh_amount"
+        },
+        {
+            "column": "GGTHJME",
+            "data_type": "float",
+            "desc": "沪市净买入金额",
+            "must": "Y",
+            "name": "sh_net_amount"
+        },
+        {
+            "column": "GGTHMRJE",
+            "data_type": "float",
+            "desc": "沪市买入金额",
+            "must": "Y",
+            "name": "sh_buy"
+        },
+        {
+            "column": "GGTHMCJE",
+            "data_type": "float",
+            "desc": "沪市卖出金额",
+            "must": "Y",
+            "name": "sh_sell"
+        },
+        {
+            "column": "GGTSCJJE",
+            "data_type": "float",
+            "desc": "深市成交金额",
+            "must": "Y",
+            "name": "sz_amount"
+        },
+        {
+            "column": "GGTSJME",
+            "data_type": "float",
+            "desc": "深市净买入金额",
+            "must": "Y",
+            "name": "sz_net_amount"
+        },
+        {
+            "column": "GGTSMRJE",
+            "data_type": "float",
+            "desc": "深市买入金额",
+            "must": "Y",
+            "name": "sz_buy"
+        },
+        {
+            "column": "GGTSMCJE",
+            "data_type": "float",
+            "desc": "深市卖出金额",
+            "must": "Y",
+            "name": "sz_sell"
+        }
+    ],
+    "parent_id": 15,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            15,
+            "行情数据"
+        ],
+        [
+            49,
+            "港股通十大成交股"
+        ]
+    ],
+    "title": "港股通十大成交股",
+    "validations": [
+        {
+            "name": "ts_code",
+            "trigger": [
+                {
+                    "name": "trade_date",
+                    "operator": "=",
+                    "type": "builtin",
+                    "value": "None"
+                }
+            ],
+            "validator": "required"
+        }
+    ]
 }

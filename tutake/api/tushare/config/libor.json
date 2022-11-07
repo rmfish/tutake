@@ -1,100 +1,139 @@
 {
-    "desc": "Libor拆借利率",
-    "name": "libor",
-    "id": 152,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "CURRENCY",
-        "name": "curr_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "货币"
-    }, {
-        "column": "ON",
-        "name": "on",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "隔夜"
-    }, {
-        "column": "1W",
-        "name": "1w",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1周"
-    }, {
-        "column": "1M",
-        "name": "1m",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1个月"
-    }, {
-        "column": "2M",
-        "name": "2m",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "2个月"
-    }, {
-        "column": "3M",
-        "name": "3m",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "3个月"
-    }, {
-        "column": "6M",
-        "name": "6m",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "6个月"
-    }, {
-        "column": "12M",
-        "name": "12m",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "12个月"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 148,
-    "title": "Libor利率",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "curr_type",
-        "data_type": "str",
-        "must": "N",
-        "default": "USD",
-        "desc": "货币代码"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "Libor拆借利率",
+    "id": 152,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "default": "USD",
+            "desc": "货币代码",
+            "must": "N",
+            "name": "curr_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "libor",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "CURRENCY",
+            "data_type": "str",
+            "desc": "货币",
+            "must": "Y",
+            "name": "curr_type"
+        },
+        {
+            "column": "ON",
+            "data_type": "float",
+            "desc": "隔夜",
+            "must": "Y",
+            "name": "on"
+        },
+        {
+            "column": "1W",
+            "data_type": "float",
+            "desc": "1周",
+            "must": "Y",
+            "name": "1w"
+        },
+        {
+            "column": "1M",
+            "data_type": "float",
+            "desc": "1个月",
+            "must": "Y",
+            "name": "1m"
+        },
+        {
+            "column": "2M",
+            "data_type": "float",
+            "desc": "2个月",
+            "must": "Y",
+            "name": "2m"
+        },
+        {
+            "column": "3M",
+            "data_type": "float",
+            "desc": "3个月",
+            "must": "Y",
+            "name": "3m"
+        },
+        {
+            "column": "6M",
+            "data_type": "float",
+            "desc": "6个月",
+            "must": "Y",
+            "name": "6m"
+        },
+        {
+            "column": "12M",
+            "data_type": "float",
+            "desc": "12个月",
+            "must": "Y",
+            "name": "12m"
+        }
+    ],
+    "parent_id": 148,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            148,
+            "利率数据"
+        ],
+        [
+            152,
+            "Libor利率"
+        ]
+    ],
+    "title": "Libor利率",
+    "validations": []
 }

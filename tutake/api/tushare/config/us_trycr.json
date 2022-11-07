@@ -1,81 +1,117 @@
 {
-    "desc": "获取美国国债实际收益率曲线利率数据",
-    "name": "us_trycr",
-    "id": 220,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "Y5",
-        "name": "y5",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "5年期"
-    }, {
-        "column": "Y7",
-        "name": "y7",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "7年期"
-    }, {
-        "column": "Y10",
-        "name": "y10",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "10年期"
-    }, {
-        "column": "Y20",
-        "name": "y20",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "20年期"
-    }, {
-        "column": "Y30",
-        "name": "y30",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "30年期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 218,
-    "title": "国债实际收益率曲线利率",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "fields",
-        "data_type": "str",
-        "must": "N",
-        "desc": "指定字段"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "获取美国国债实际收益率曲线利率数据",
+    "id": 220,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "指定字段",
+            "must": "N",
+            "name": "fields"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "us_trycr",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "Y5",
+            "data_type": "float",
+            "desc": "5年期",
+            "must": "Y",
+            "name": "y5"
+        },
+        {
+            "column": "Y7",
+            "data_type": "float",
+            "desc": "7年期",
+            "must": "Y",
+            "name": "y7"
+        },
+        {
+            "column": "Y10",
+            "data_type": "float",
+            "desc": "10年期",
+            "must": "Y",
+            "name": "y10"
+        },
+        {
+            "column": "Y20",
+            "data_type": "float",
+            "desc": "20年期",
+            "must": "Y",
+            "name": "y20"
+        },
+        {
+            "column": "Y30",
+            "data_type": "float",
+            "desc": "30年期",
+            "must": "Y",
+            "name": "y30"
+        }
+    ],
+    "parent_id": 218,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            217,
+            "国际宏观"
+        ],
+        [
+            218,
+            "美国利率"
+        ],
+        [
+            220,
+            "国债实际收益率曲线利率"
+        ]
+    ],
+    "title": "国债实际收益率曲线利率",
+    "validations": []
 }

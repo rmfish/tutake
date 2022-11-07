@@ -1,94 +1,132 @@
 {
-    "desc": "GDP数据",
-    "name": "cn_gdp",
-    "id": 227,
-    "outputs": [{
-        "column": "QUARTER",
-        "name": "quarter",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "季度"
-    }, {
-        "column": "GDP",
-        "name": "gdp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "GDP累计值（亿元）"
-    }, {
-        "column": "GDP_YOY",
-        "name": "gdp_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当季同比增速（%）"
-    }, {
-        "column": "PI",
-        "name": "pi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第一产业累计值（亿元）"
-    }, {
-        "column": "PI_YOY",
-        "name": "pi_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第一产业同比增速（%）"
-    }, {
-        "column": "SI",
-        "name": "si",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第二产业累计值（亿元）"
-    }, {
-        "column": "SI_YOY",
-        "name": "si_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第二产业同比增速（%）"
-    }, {
-        "column": "TI",
-        "name": "ti",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第三产业累计值（亿元）"
-    }, {
-        "column": "TI_YOY",
-        "name": "ti_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "第三产业同比增速（%）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 225,
-    "title": "国内生产总值（GDP）",
-    "inputs": [{
-        "name": "q",
-        "data_type": "str",
-        "must": "N",
-        "desc": "季度"
-    }, {
-        "name": "start_q",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始季度"
-    }, {
-        "name": "end_q",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束季度"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "GDP数据",
+    "id": 227,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "季度",
+            "must": "N",
+            "name": "q"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始季度",
+            "must": "N",
+            "name": "start_q"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束季度",
+            "must": "N",
+            "name": "end_q"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cn_gdp",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "QUARTER",
+            "data_type": "str",
+            "desc": "季度",
+            "must": "Y",
+            "name": "quarter"
+        },
+        {
+            "column": "GDP",
+            "data_type": "float",
+            "desc": "GDP累计值（亿元）",
+            "must": "Y",
+            "name": "gdp"
+        },
+        {
+            "column": "GDP_YOY",
+            "data_type": "float",
+            "desc": "当季同比增速（%）",
+            "must": "Y",
+            "name": "gdp_yoy"
+        },
+        {
+            "column": "PI",
+            "data_type": "float",
+            "desc": "第一产业累计值（亿元）",
+            "must": "Y",
+            "name": "pi"
+        },
+        {
+            "column": "PI_YOY",
+            "data_type": "float",
+            "desc": "第一产业同比增速（%）",
+            "must": "Y",
+            "name": "pi_yoy"
+        },
+        {
+            "column": "SI",
+            "data_type": "float",
+            "desc": "第二产业累计值（亿元）",
+            "must": "Y",
+            "name": "si"
+        },
+        {
+            "column": "SI_YOY",
+            "data_type": "float",
+            "desc": "第二产业同比增速（%）",
+            "must": "Y",
+            "name": "si_yoy"
+        },
+        {
+            "column": "TI",
+            "data_type": "float",
+            "desc": "第三产业累计值（亿元）",
+            "must": "Y",
+            "name": "ti"
+        },
+        {
+            "column": "TI_YOY",
+            "data_type": "float",
+            "desc": "第三产业同比增速（%）",
+            "must": "Y",
+            "name": "ti_yoy"
+        }
+    ],
+    "parent_id": 225,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            225,
+            "国民经济"
+        ],
+        [
+            227,
+            "国内生产总值（GDP）"
+        ]
+    ],
+    "title": "国内生产总值（GDP）",
+    "validations": []
 }

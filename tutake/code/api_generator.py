@@ -6,7 +6,8 @@ import pendulum
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.tushare_api import get_api, get_api_path, get_ready_api, get_all_leaf_api
+from tutake.code.tushare_api import TushareJsonApi
+# from tutake.code.tushare_api import get_api, get_api_path, get_ready_api, get_all_leaf_api
 from tutake.utils.file_utils import file_dir, realpath
 
 logger = logging.getLogger("api.generate")
@@ -33,6 +34,7 @@ class CodeGenerator(object):
         env.globals['now'] = pendulum.now().format("YYYY/MM/DD")
         self.env = env
         self.output_dir = output_dir
+        self.api_loader = TushareJsonApi()
 
     def render_code(self, file_name: str, code: str, overwrite: bool = True, file_suffix: str = 'py'):
         file_path = "{}/{}.{}".format(self.output_dir, file_name, file_suffix)
@@ -60,10 +62,10 @@ class CodeGenerator(object):
     def generate_api_code(self, api_id):
         api_tmpl = self.env.get_template('tushare_api.tmpl')
         api_ext_tmpl = self.env.get_template('tushare_api_ext.tmpl')
-        api_config = self._load_api_config(get_api(api_id))
+        api_config = self._load_api_config(self.api_loader.get_api(api_id))
         if api_config.get('name'):
             print("Render code {} {}.py".format(api_id, api_config.get('name')))
-            api_config['path'] = '-'.join(tups[1] for tups in get_api_path(api_id))
+            api_config['path'] = '-'.join(tups[1] for tups in api_config['path'])
             api_config['table_name'] = "tushare_{}".format(api_config.get("name"))
             if not api_config.get('if_exists'):
                 api_config['if_exists'] = 'append'
@@ -107,7 +109,7 @@ class CodeGenerator(object):
                              False, file_suffix='json')
 
     def generate_config(self):
-        leaf_apis = get_all_leaf_api()
+        leaf_apis = self.api_loader.get_all_leaf_api()
         self._generate_config_code(leaf_apis)
 
     def generate_order_by(self, api):
@@ -139,7 +141,7 @@ if __name__ == '__main__':
 
     # generator.generate_config()
 
-    apis = get_ready_api()
+    apis = generator.api_loader.get_ready_api()
     for i in apis:
         api_params.append(generator.generate_api_code(i['id']))
 

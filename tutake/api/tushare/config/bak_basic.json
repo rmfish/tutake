@@ -1,179 +1,227 @@
 {
-    "title": "备用列表",
-    "parent_id": 24,
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "database": "",
-    "is_ready": 1,
-    "order_by": null,
-    "name": "bak_basic",
-    "id": 262,
-    "desc": "备用基础信息",
-    "outputs": [{
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS股票代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票名称"
-    }, {
-        "column": "INDUSTRY",
-        "name": "industry",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行业"
-    }, {
-        "column": "AREA",
-        "name": "area",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "地域"
-    }, {
-        "column": "PE",
-        "name": "pe",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "市盈率（动）"
-    }, {
-        "column": "FLOAT_SHARE",
-        "name": "float_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流通股本（万）"
-    }, {
-        "column": "TOTAL_SHARE",
-        "name": "total_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总股本（万）"
-    }, {
-        "column": "TOTAL_ASSETS",
-        "name": "total_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产（万）"
-    }, {
-        "column": "LIQUID_ASSETS",
-        "name": "liquid_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动资产（万）"
-    }, {
-        "column": "FIXED_ASSETS",
-        "name": "fixed_assets",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产（万）"
-    }, {
-        "column": "RESERVED",
-        "name": "reserved",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "公积金"
-    }, {
-        "column": "RESERVED_PERSHARE",
-        "name": "reserved_pershare",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股公积金"
-    }, {
-        "column": "EPS",
-        "name": "eps",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股收益"
-    }, {
-        "column": "BVPS",
-        "name": "bvps",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股净资产"
-    }, {
-        "column": "PB",
-        "name": "pb",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "市净率"
-    }, {
-        "column": "LIST_DATE",
-        "name": "list_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "上市日期"
-    }, {
-        "column": "UNDP",
-        "name": "undp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "未分配利润"
-    }, {
-        "column": "PER_UNDP",
-        "name": "per_undp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股未分配利润"
-    }, {
-        "column": "REV_YOY",
-        "name": "rev_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收入同比（%）"
-    }, {
-        "column": "PROFIT_YOY",
-        "name": "profit_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "利润同比（%）"
-    }, {
-        "column": "GPR",
-        "name": "gpr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "毛利率（%）"
-    }, {
-        "column": "NPR",
-        "name": "npr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净利润率（%）"
-    }, {
-        "column": "HOLDER_NUM",
-        "name": "holder_num",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "股东人数"
-    }],
     "default_limit": "5000",
-    "if_exists": null
+    "desc": "备用基础信息",
+    "id": 262,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": 1,
+    "name": "bak_basic",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "股票名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "INDUSTRY",
+            "data_type": "str",
+            "desc": "行业",
+            "must": "Y",
+            "name": "industry"
+        },
+        {
+            "column": "AREA",
+            "data_type": "str",
+            "desc": "地域",
+            "must": "Y",
+            "name": "area"
+        },
+        {
+            "column": "PE",
+            "data_type": "float",
+            "desc": "市盈率（动）",
+            "must": "Y",
+            "name": "pe"
+        },
+        {
+            "column": "FLOAT_SHARE",
+            "data_type": "float",
+            "desc": "流通股本（万）",
+            "must": "Y",
+            "name": "float_share"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "总股本（万）",
+            "must": "Y",
+            "name": "total_share"
+        },
+        {
+            "column": "TOTAL_ASSETS",
+            "data_type": "float",
+            "desc": "总资产（万）",
+            "must": "Y",
+            "name": "total_assets"
+        },
+        {
+            "column": "LIQUID_ASSETS",
+            "data_type": "float",
+            "desc": "流动资产（万）",
+            "must": "Y",
+            "name": "liquid_assets"
+        },
+        {
+            "column": "FIXED_ASSETS",
+            "data_type": "float",
+            "desc": "固定资产（万）",
+            "must": "Y",
+            "name": "fixed_assets"
+        },
+        {
+            "column": "RESERVED",
+            "data_type": "float",
+            "desc": "公积金",
+            "must": "Y",
+            "name": "reserved"
+        },
+        {
+            "column": "RESERVED_PERSHARE",
+            "data_type": "float",
+            "desc": "每股公积金",
+            "must": "Y",
+            "name": "reserved_pershare"
+        },
+        {
+            "column": "EPS",
+            "data_type": "float",
+            "desc": "每股收益",
+            "must": "Y",
+            "name": "eps"
+        },
+        {
+            "column": "BVPS",
+            "data_type": "float",
+            "desc": "每股净资产",
+            "must": "Y",
+            "name": "bvps"
+        },
+        {
+            "column": "PB",
+            "data_type": "float",
+            "desc": "市净率",
+            "must": "Y",
+            "name": "pb"
+        },
+        {
+            "column": "LIST_DATE",
+            "data_type": "str",
+            "desc": "上市日期",
+            "must": "Y",
+            "name": "list_date"
+        },
+        {
+            "column": "UNDP",
+            "data_type": "float",
+            "desc": "未分配利润",
+            "must": "Y",
+            "name": "undp"
+        },
+        {
+            "column": "PER_UNDP",
+            "data_type": "float",
+            "desc": "每股未分配利润",
+            "must": "Y",
+            "name": "per_undp"
+        },
+        {
+            "column": "REV_YOY",
+            "data_type": "float",
+            "desc": "收入同比（%）",
+            "must": "Y",
+            "name": "rev_yoy"
+        },
+        {
+            "column": "PROFIT_YOY",
+            "data_type": "float",
+            "desc": "利润同比（%）",
+            "must": "Y",
+            "name": "profit_yoy"
+        },
+        {
+            "column": "GPR",
+            "data_type": "float",
+            "desc": "毛利率（%）",
+            "must": "Y",
+            "name": "gpr"
+        },
+        {
+            "column": "NPR",
+            "data_type": "float",
+            "desc": "净利润率（%）",
+            "must": "Y",
+            "name": "npr"
+        },
+        {
+            "column": "HOLDER_NUM",
+            "data_type": "int",
+            "desc": "股东人数",
+            "must": "Y",
+            "name": "holder_num"
+        }
+    ],
+    "parent_id": 24,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            24,
+            "基础数据"
+        ],
+        [
+            262,
+            "备用列表"
+        ]
+    ],
+    "title": "备用列表",
+    "validations": []
 }

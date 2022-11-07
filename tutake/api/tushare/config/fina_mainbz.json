@@ -1,109 +1,146 @@
 {
-    "desc": "",
-    "name": "fina_mainbz",
-    "id": 81,
-    "outputs": [{
-        "name": "ts_code",
-        "column": "TS_CODE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "name": "end_date",
-        "column": "END_DATE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期"
-    }, {
-        "name": "bz_item",
-        "column": "BZ_ITEM",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "主营业务项目"
-    }, {
-        "column": "BZ_CODE",
-        "name": "bz_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "项目代码"
-    }, {
-        "name": "bz_sales",
-        "column": "BZ_SALES",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "主营业务收入(元)"
-    }, {
-        "name": "bz_profit",
-        "column": "BZ_PROFIT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "主营业务利润(元)"
-    }, {
-        "name": "bz_cost",
-        "column": "BZ_COST",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "主营业务成本(元)"
-    }, {
-        "name": "curr_type",
-        "column": "CURR_TYPE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "货币代码"
-    }, {
-        "name": "update_flag",
-        "column": "UPDATE_FLAG",
-        "data_type": "str",
-        "must": "N",
-        "desc": "是否更新"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 16,
-    "title": "主营业务构成",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "period",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "类型：P按产品 D按地区"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期结束日期"
-    }, {
-        "name": "is_publish",
-        "data_type": "str",
-        "must": "N",
-        "default": "Y"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 81,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "desc": "类型：P按产品 D按地区",
+            "must": "N",
+            "name": "type"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "default": "Y",
+            "must": "N",
+            "name": "is_publish"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "fina_mainbz",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "BZ_ITEM",
+            "data_type": "str",
+            "desc": "主营业务项目",
+            "must": "Y",
+            "name": "bz_item"
+        },
+        {
+            "column": "BZ_CODE",
+            "data_type": "str",
+            "desc": "项目代码",
+            "must": "N",
+            "name": "bz_code"
+        },
+        {
+            "column": "BZ_SALES",
+            "data_type": "float",
+            "desc": "主营业务收入(元)",
+            "must": "Y",
+            "name": "bz_sales"
+        },
+        {
+            "column": "BZ_PROFIT",
+            "data_type": "float",
+            "desc": "主营业务利润(元)",
+            "must": "Y",
+            "name": "bz_profit"
+        },
+        {
+            "column": "BZ_COST",
+            "data_type": "float",
+            "desc": "主营业务成本(元)",
+            "must": "Y",
+            "name": "bz_cost"
+        },
+        {
+            "column": "CURR_TYPE",
+            "data_type": "str",
+            "desc": "货币代码",
+            "must": "Y",
+            "name": "curr_type"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "是否更新",
+            "must": "N",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 16,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            16,
+            "财务数据"
+        ],
+        [
+            81,
+            "主营业务构成"
+        ]
+    ],
+    "title": "主营业务构成",
+    "validations": []
 }

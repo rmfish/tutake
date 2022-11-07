@@ -1,201 +1,249 @@
 {
-    "desc": "公募基金列表",
-    "name": "fund_basic",
-    "id": 19,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "primary_key": true,
-        "desc": "基金代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "简称"
-    }, {
-        "column": "MANAGEMENT",
-        "name": "management",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "管理人"
-    }, {
-        "column": "CUSTODIAN",
-        "name": "custodian",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "托管人"
-    }, {
-        "column": "FUND_TYPE",
-        "name": "fund_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "投资类型"
-    }, {
-        "column": "FOUND_DATE",
-        "name": "found_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "成立日期"
-    }, {
-        "column": "DUE_DATE",
-        "name": "due_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "到期日期"
-    }, {
-        "column": "LIST_DATE",
-        "name": "list_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "上市时间"
-    }, {
-        "column": "ISSUE_DATE",
-        "name": "issue_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "发行日期"
-    }, {
-        "column": "DELIST_DATE",
-        "name": "delist_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "退市日期"
-    }, {
-        "column": "ISSUE_AMOUNT",
-        "name": "issue_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "发行份额(亿份)"
-    }, {
-        "column": "M_FEE",
-        "name": "m_fee",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "管理费"
-    }, {
-        "column": "C_FEE",
-        "name": "c_fee",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "托管费"
-    }, {
-        "column": "DURATION_YEAR",
-        "name": "duration_year",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "存续期"
-    }, {
-        "column": "P_VALUE",
-        "name": "p_value",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "面值"
-    }, {
-        "column": "MIN_AMOUNT",
-        "name": "min_amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "起点金额(万元)"
-    }, {
-        "column": "EXP_RETURN",
-        "name": "exp_return",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预期收益率"
-    }, {
-        "column": "BENCHMARK",
-        "name": "benchmark",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "业绩比较基准"
-    }, {
-        "column": "STATUS",
-        "name": "status",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "存续状态D摘牌 I发行 L已上市"
-    }, {
-        "column": "INVEST_TYPE",
-        "name": "invest_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "投资风格"
-    }, {
-        "column": "TYPE",
-        "name": "type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "基金类型"
-    }, {
-        "column": "TRUSTEE",
-        "name": "trustee",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "受托人"
-    }, {
-        "column": "PURC_STARTDATE",
-        "name": "purc_startdate",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日常申购起始日"
-    }, {
-        "column": "REDM_STARTDATE",
-        "name": "redm_startdate",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日常赎回起始日"
-    }, {
-        "column": "MARKET",
-        "name": "market",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "E场内O场外"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 18,
-    "title": "基金列表",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS基金代码"
-    }, {
-        "name": "market",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易市场"
-    }, {
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "N",
-        "desc": "更新标志"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "status",
-        "data_type": "str",
-        "must": "N",
-        "desc": "存续状态"
-    }, {
-        "name": "name",
-        "data_type": "str",
-        "must": "N",
-        "desc": ""
-    }],
-    "validations": [],
     "default_limit": 15000,
-    "order_by": null
+    "desc": "公募基金列表",
+    "id": 19,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS基金代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易市场",
+            "must": "N",
+            "name": "market"
+        },
+        {
+            "data_type": "str",
+            "desc": "更新标志",
+            "must": "N",
+            "name": "update_flag"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "str",
+            "desc": "存续状态",
+            "must": "N",
+            "name": "status"
+        },
+        {
+            "data_type": "str",
+            "desc": "",
+            "must": "N",
+            "name": "name"
+        }
+    ],
+    "is_ready": 1,
+    "name": "fund_basic",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "基金代码",
+            "must": "Y",
+            "name": "ts_code",
+            "primary_key": true
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "简称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "MANAGEMENT",
+            "data_type": "str",
+            "desc": "管理人",
+            "must": "Y",
+            "name": "management"
+        },
+        {
+            "column": "CUSTODIAN",
+            "data_type": "str",
+            "desc": "托管人",
+            "must": "Y",
+            "name": "custodian"
+        },
+        {
+            "column": "FUND_TYPE",
+            "data_type": "str",
+            "desc": "投资类型",
+            "must": "Y",
+            "name": "fund_type"
+        },
+        {
+            "column": "FOUND_DATE",
+            "data_type": "str",
+            "desc": "成立日期",
+            "must": "Y",
+            "name": "found_date"
+        },
+        {
+            "column": "DUE_DATE",
+            "data_type": "str",
+            "desc": "到期日期",
+            "must": "Y",
+            "name": "due_date"
+        },
+        {
+            "column": "LIST_DATE",
+            "data_type": "str",
+            "desc": "上市时间",
+            "must": "Y",
+            "name": "list_date"
+        },
+        {
+            "column": "ISSUE_DATE",
+            "data_type": "str",
+            "desc": "发行日期",
+            "must": "Y",
+            "name": "issue_date"
+        },
+        {
+            "column": "DELIST_DATE",
+            "data_type": "str",
+            "desc": "退市日期",
+            "must": "Y",
+            "name": "delist_date"
+        },
+        {
+            "column": "ISSUE_AMOUNT",
+            "data_type": "float",
+            "desc": "发行份额(亿份)",
+            "must": "Y",
+            "name": "issue_amount"
+        },
+        {
+            "column": "M_FEE",
+            "data_type": "float",
+            "desc": "管理费",
+            "must": "Y",
+            "name": "m_fee"
+        },
+        {
+            "column": "C_FEE",
+            "data_type": "float",
+            "desc": "托管费",
+            "must": "Y",
+            "name": "c_fee"
+        },
+        {
+            "column": "DURATION_YEAR",
+            "data_type": "float",
+            "desc": "存续期",
+            "must": "Y",
+            "name": "duration_year"
+        },
+        {
+            "column": "P_VALUE",
+            "data_type": "float",
+            "desc": "面值",
+            "must": "Y",
+            "name": "p_value"
+        },
+        {
+            "column": "MIN_AMOUNT",
+            "data_type": "float",
+            "desc": "起点金额(万元)",
+            "must": "Y",
+            "name": "min_amount"
+        },
+        {
+            "column": "EXP_RETURN",
+            "data_type": "float",
+            "desc": "预期收益率",
+            "must": "Y",
+            "name": "exp_return"
+        },
+        {
+            "column": "BENCHMARK",
+            "data_type": "str",
+            "desc": "业绩比较基准",
+            "must": "Y",
+            "name": "benchmark"
+        },
+        {
+            "column": "STATUS",
+            "data_type": "str",
+            "desc": "存续状态D摘牌 I发行 L已上市",
+            "must": "Y",
+            "name": "status"
+        },
+        {
+            "column": "INVEST_TYPE",
+            "data_type": "str",
+            "desc": "投资风格",
+            "must": "Y",
+            "name": "invest_type"
+        },
+        {
+            "column": "TYPE",
+            "data_type": "str",
+            "desc": "基金类型",
+            "must": "Y",
+            "name": "type"
+        },
+        {
+            "column": "TRUSTEE",
+            "data_type": "str",
+            "desc": "受托人",
+            "must": "Y",
+            "name": "trustee"
+        },
+        {
+            "column": "PURC_STARTDATE",
+            "data_type": "str",
+            "desc": "日常申购起始日",
+            "must": "Y",
+            "name": "purc_startdate"
+        },
+        {
+            "column": "REDM_STARTDATE",
+            "data_type": "str",
+            "desc": "日常赎回起始日",
+            "must": "Y",
+            "name": "redm_startdate"
+        },
+        {
+            "column": "MARKET",
+            "data_type": "str",
+            "desc": "E场内O场外",
+            "must": "Y",
+            "name": "market"
+        }
+    ],
+    "parent_id": 18,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            18,
+            "公募基金"
+        ],
+        [
+            19,
+            "基金列表"
+        ]
+    ],
+    "title": "基金列表",
+    "validations": []
 }

@@ -1,117 +1,156 @@
 {
-    "desc": "大宗交易",
-    "name": "block_trade",
-    "id": 161,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日历"
-    }, {
-        "column": "PRICE",
-        "name": "price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交价"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交量（万股）"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交金额"
-    }, {
-        "column": "BUYER",
-        "name": "buyer",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "买方营业部"
-    }, {
-        "column": "SELLER",
-        "name": "seller",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "卖房营业部"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "大宗交易",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [{
-        "name": "ts_code",
-        "validator": "required",
-        "options": null,
-        "trigger": {
-            "link":
-                "and",
-            "exp": [{
-                "name": "trade_date",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }, {
-                "name": "ann_date",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }, {
-                "name": "start_date",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }, {
-                "name": "end_date",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }]
-        },
-        "message": "代码和日期至少输入一个参数"
-    }],
     "default_limit": null,
-    "order_by": null
+    "desc": "大宗交易",
+    "id": 161,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "block_trade",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日历",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "PRICE",
+            "data_type": "float",
+            "desc": "成交价",
+            "must": "Y",
+            "name": "price"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "成交量（万股）",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交金额",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "BUYER",
+            "data_type": "str",
+            "desc": "买方营业部",
+            "must": "Y",
+            "name": "buyer"
+        },
+        {
+            "column": "SELLER",
+            "data_type": "str",
+            "desc": "卖房营业部",
+            "must": "Y",
+            "name": "seller"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            161,
+            "大宗交易"
+        ]
+    ],
+    "title": "大宗交易",
+    "validations": [
+        {
+            "message": "代码和日期至少输入一个参数",
+            "name": "ts_code",
+            "options": null,
+            "trigger": {
+                "exp": [
+                    {
+                        "name": "trade_date",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    },
+                    {
+                        "name": "ann_date",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    },
+                    {
+                        "name": "start_date",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    },
+                    {
+                        "name": "end_date",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    }
+                ],
+                "link": "and"
+            },
+            "validator": "required"
+        }
+    ]
 }

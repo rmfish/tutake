@@ -1,88 +1,117 @@
 {
-    "desc": "美股基础信息",
-    "name": "us_basic",
-    "id": 252,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "美股代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "中文名称"
-    }, {
-        "column": "ENNAME",
-        "name": "enname",
-        "data_type": "str",
-        "must": "N",
-        "desc": "英文名称"
-    }, {
-        "column": "CLASSIFY",
-        "name": "classify",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "分类ADR/GDR/EQ"
-    }, {
-        "column": "LIST_STATUS",
-        "name": "list_status",
-        "data_type": "str",
-        "must": "N",
-        "desc": "上市状态L上市D退市P暂停上市"
-    }, {
-        "column": "LIST_DATE",
-        "name": "list_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "上市日期"
-    }, {
-        "column": "DELIST_DATE",
-        "name": "delist_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "退市日期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 251,
-    "title": "美股列表",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码（e.g. AAPL）"
-    }, {
-        "name": "classify",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票分类"
-    }, {
-        "name": "classify",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票分类（ADR/GDR/EQ）"
-    }, {
-        "name": "list_stauts",
-        "data_type": "str",
-        "must": "N",
-        "desc": "上市状态",
-        "default": "L"
-    }, {
-        "name": "offset",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始行数"
-    }, {
-        "name": "limit",
-        "data_type": "str",
-        "must": "N",
-        "desc": "每页最大行数"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "美股基础信息",
+    "id": 252,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码（e.g. AAPL）",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "股票分类",
+            "must": "N",
+            "name": "classify"
+        },
+        {
+            "data_type": "str",
+            "desc": "股票分类（ADR/GDR/EQ）",
+            "must": "N",
+            "name": "classify"
+        },
+        {
+            "data_type": "str",
+            "default": "L",
+            "desc": "上市状态",
+            "must": "N",
+            "name": "list_stauts"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始行数",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "str",
+            "desc": "每页最大行数",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "us_basic",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "美股代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "中文名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "ENNAME",
+            "data_type": "str",
+            "desc": "英文名称",
+            "must": "N",
+            "name": "enname"
+        },
+        {
+            "column": "CLASSIFY",
+            "data_type": "str",
+            "desc": "分类ADR/GDR/EQ",
+            "must": "Y",
+            "name": "classify"
+        },
+        {
+            "column": "LIST_STATUS",
+            "data_type": "str",
+            "desc": "上市状态L上市D退市P暂停上市",
+            "must": "N",
+            "name": "list_status"
+        },
+        {
+            "column": "LIST_DATE",
+            "data_type": "str",
+            "desc": "上市日期",
+            "must": "Y",
+            "name": "list_date"
+        },
+        {
+            "column": "DELIST_DATE",
+            "data_type": "str",
+            "desc": "退市日期",
+            "must": "Y",
+            "name": "delist_date"
+        }
+    ],
+    "parent_id": 251,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            251,
+            "美股"
+        ],
+        [
+            252,
+            "美股列表"
+        ]
+    ],
+    "title": "美股列表",
+    "validations": []
 }

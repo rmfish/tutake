@@ -1,72 +1,98 @@
 {
-    "desc": "",
-    "name": "cb_price_chg",
-    "id": 246,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "转债代码"
-    }, {
-        "column": "BOND_SHORT_NAME",
-        "name": "bond_short_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "转债简称"
-    }, {
-        "column": "PUBLISH_DATE",
-        "name": "publish_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "CHANGE_DATE",
-        "name": "change_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "变动日期"
-    }, {
-        "column": "CONVERT_PRICE_INITIAL",
-        "name": "convert_price_initial",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "初始转股价格"
-    }, {
-        "column": "CONVERTPRICE_BEF",
-        "name": "convertprice_bef",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "修正前转股价格"
-    }, {
-        "column": "CONVERTPRICE_AFT",
-        "name": "convertprice_aft",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "修正后转股价格"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 184,
-    "title": "可转债转股价变动",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "转债代码，支持多值输入"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 246,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "转债代码，支持多值输入",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cb_price_chg",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "转债代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "BOND_SHORT_NAME",
+            "data_type": "str",
+            "desc": "转债简称",
+            "must": "Y",
+            "name": "bond_short_name"
+        },
+        {
+            "column": "PUBLISH_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "publish_date"
+        },
+        {
+            "column": "CHANGE_DATE",
+            "data_type": "str",
+            "desc": "变动日期",
+            "must": "Y",
+            "name": "change_date"
+        },
+        {
+            "column": "CONVERT_PRICE_INITIAL",
+            "data_type": "float",
+            "desc": "初始转股价格",
+            "must": "Y",
+            "name": "convert_price_initial"
+        },
+        {
+            "column": "CONVERTPRICE_BEF",
+            "data_type": "float",
+            "desc": "修正前转股价格",
+            "must": "Y",
+            "name": "convertprice_bef"
+        },
+        {
+            "column": "CONVERTPRICE_AFT",
+            "data_type": "float",
+            "desc": "修正后转股价格",
+            "must": "Y",
+            "name": "convertprice_aft"
+        }
+    ],
+    "parent_id": 184,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            184,
+            "债券"
+        ],
+        [
+            246,
+            "可转债转股价变动"
+        ]
+    ],
+    "title": "可转债转股价变动",
+    "validations": []
 }

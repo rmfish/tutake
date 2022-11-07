@@ -1,100 +1,131 @@
 {
-    "desc": "",
-    "name": "fund_manager",
-    "id": 208,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "基金代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "基金经理姓名"
-    }, {
-        "column": "GENDER",
-        "name": "gender",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "性别"
-    }, {
-        "column": "BIRTH_YEAR",
-        "name": "birth_year",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "出生年份"
-    }, {
-        "column": "EDU",
-        "name": "edu",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "学历"
-    }, {
-        "column": "NATIONALITY",
-        "name": "nationality",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "国籍"
-    }, {
-        "column": "BEGIN_DATE",
-        "name": "begin_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "任职日期"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "历任日期"
-    }, {
-        "column": "RESUME",
-        "name": "resume",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "简历"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 18,
-    "title": "基金经理",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "基金代码"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "name",
-        "data_type": "str",
-        "must": "N",
-        "desc": "基金经理姓名"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "开始行数"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "每页行数"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 208,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "基金代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "基金经理姓名",
+            "must": "N",
+            "name": "name"
+        },
+        {
+            "data_type": "int",
+            "desc": "开始行数",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "int",
+            "desc": "每页行数",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "fund_manager",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "基金代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "基金经理姓名",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "GENDER",
+            "data_type": "str",
+            "desc": "性别",
+            "must": "Y",
+            "name": "gender"
+        },
+        {
+            "column": "BIRTH_YEAR",
+            "data_type": "str",
+            "desc": "出生年份",
+            "must": "Y",
+            "name": "birth_year"
+        },
+        {
+            "column": "EDU",
+            "data_type": "str",
+            "desc": "学历",
+            "must": "Y",
+            "name": "edu"
+        },
+        {
+            "column": "NATIONALITY",
+            "data_type": "str",
+            "desc": "国籍",
+            "must": "Y",
+            "name": "nationality"
+        },
+        {
+            "column": "BEGIN_DATE",
+            "data_type": "str",
+            "desc": "任职日期",
+            "must": "Y",
+            "name": "begin_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "历任日期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "RESUME",
+            "data_type": "str",
+            "desc": "简历",
+            "must": "Y",
+            "name": "resume"
+        }
+    ],
+    "parent_id": 18,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            18,
+            "公募基金"
+        ],
+        [
+            208,
+            "基金经理"
+        ]
+    ],
+    "title": "基金经理",
+    "validations": []
 }

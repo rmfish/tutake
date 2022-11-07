@@ -1,83 +1,115 @@
 {
-    "desc": "",
-    "name": "pledge_stat",
-    "id": 110,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "截至日期"
-    }, {
-        "column": "PLEDGE_COUNT",
-        "name": "pledge_count",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "质押次数"
-    }, {
-        "column": "UNREST_PLEDGE",
-        "name": "unrest_pledge",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "无限售股质押数量（万）"
-    }, {
-        "column": "REST_PLEDGE",
-        "name": "rest_pledge",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "限售股份质押数量（万）"
-    }, {
-        "column": "TOTAL_SHARE",
-        "name": "total_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总股本"
-    }, {
-        "column": "PLEDGE_RATIO",
-        "name": "pledge_ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "质押比例"
-    }, {
-        "column": "UPDATE_FLAG",
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "N",
-        "desc": "更新标识"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "股权质押统计数据",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "截止日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 110,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "截止日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "pledge_stat",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "截至日期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "PLEDGE_COUNT",
+            "data_type": "int",
+            "desc": "质押次数",
+            "must": "Y",
+            "name": "pledge_count"
+        },
+        {
+            "column": "UNREST_PLEDGE",
+            "data_type": "float",
+            "desc": "无限售股质押数量（万）",
+            "must": "Y",
+            "name": "unrest_pledge"
+        },
+        {
+            "column": "REST_PLEDGE",
+            "data_type": "float",
+            "desc": "限售股份质押数量（万）",
+            "must": "Y",
+            "name": "rest_pledge"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "总股本",
+            "must": "Y",
+            "name": "total_share"
+        },
+        {
+            "column": "PLEDGE_RATIO",
+            "data_type": "float",
+            "desc": "质押比例",
+            "must": "Y",
+            "name": "pledge_ratio"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "更新标识",
+            "must": "N",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            110,
+            "股权质押统计数据"
+        ]
+    ],
+    "title": "股权质押统计数据",
+    "validations": []
 }

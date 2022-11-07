@@ -1,48 +1,70 @@
 {
-    "desc": "新闻联播文字稿",
-    "name": "cctv_news",
-    "id": 154,
-    "outputs": [{
-        "name": "date",
-        "column": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "name": "title",
-        "column": "title",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标题"
-    }, {
-        "name": "content",
-        "column": "content",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "内容"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 142,
-    "title": "新闻联播文字稿",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "开始时间"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "新闻联播文字稿",
+    "id": 154,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "开始时间",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cctv_news",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "date",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "title",
+            "data_type": "str",
+            "desc": "标题",
+            "must": "Y",
+            "name": "title"
+        },
+        {
+            "column": "content",
+            "data_type": "str",
+            "desc": "内容",
+            "must": "Y",
+            "name": "content"
+        }
+    ],
+    "parent_id": 142,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            142,
+            "另类数据"
+        ],
+        [
+            154,
+            "新闻联播文字稿"
+        ]
+    ],
+    "title": "新闻联播文字稿",
+    "validations": []
 }

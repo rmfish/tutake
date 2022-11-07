@@ -1,118 +1,160 @@
 {
-    "desc": "温州民间借贷利率",
-    "name": "wz_index",
-    "id": 173,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "COMP_RATE",
-        "name": "comp_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州民间融资综合利率指数"
-    }, {
-        "column": "CENTER_RATE",
-        "name": "center_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "民间借贷服务中心利率"
-    }, {
-        "column": "MICRO_RATE",
-        "name": "micro_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "小额贷款公司放款利率"
-    }, {
-        "column": "CM_RATE",
-        "name": "cm_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "民间资本管理公司融资价格"
-    }, {
-        "column": "SDB_RATE",
-        "name": "sdb_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "社会直接借贷利率"
-    }, {
-        "column": "OM_RATE",
-        "name": "om_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "其他市场主体利率"
-    }, {
-        "column": "AA_RATE",
-        "name": "aa_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "农村互助会互助金费率"
-    }, {
-        "column": "M1_RATE",
-        "name": "m1_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州地区民间借贷分期限利率（一月期）"
-    }, {
-        "column": "M3_RATE",
-        "name": "m3_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州地区民间借贷分期限利率（三月期）"
-    }, {
-        "column": "M6_RATE",
-        "name": "m6_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州地区民间借贷分期限利率（六月期）"
-    }, {
-        "column": "M12_RATE",
-        "name": "m12_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州地区民间借贷分期限利率（一年期）"
-    }, {
-        "column": "LONG_RATE",
-        "name": "long_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "温州地区民间借贷分期限利率（长期）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 148,
-    "title": "温州民间借贷利率",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "温州民间借贷利率",
+    "id": 173,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "wz_index",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "COMP_RATE",
+            "data_type": "float",
+            "desc": "温州民间融资综合利率指数",
+            "must": "Y",
+            "name": "comp_rate"
+        },
+        {
+            "column": "CENTER_RATE",
+            "data_type": "float",
+            "desc": "民间借贷服务中心利率",
+            "must": "Y",
+            "name": "center_rate"
+        },
+        {
+            "column": "MICRO_RATE",
+            "data_type": "float",
+            "desc": "小额贷款公司放款利率",
+            "must": "Y",
+            "name": "micro_rate"
+        },
+        {
+            "column": "CM_RATE",
+            "data_type": "float",
+            "desc": "民间资本管理公司融资价格",
+            "must": "Y",
+            "name": "cm_rate"
+        },
+        {
+            "column": "SDB_RATE",
+            "data_type": "float",
+            "desc": "社会直接借贷利率",
+            "must": "Y",
+            "name": "sdb_rate"
+        },
+        {
+            "column": "OM_RATE",
+            "data_type": "float",
+            "desc": "其他市场主体利率",
+            "must": "Y",
+            "name": "om_rate"
+        },
+        {
+            "column": "AA_RATE",
+            "data_type": "float",
+            "desc": "农村互助会互助金费率",
+            "must": "Y",
+            "name": "aa_rate"
+        },
+        {
+            "column": "M1_RATE",
+            "data_type": "float",
+            "desc": "温州地区民间借贷分期限利率（一月期）",
+            "must": "Y",
+            "name": "m1_rate"
+        },
+        {
+            "column": "M3_RATE",
+            "data_type": "float",
+            "desc": "温州地区民间借贷分期限利率（三月期）",
+            "must": "Y",
+            "name": "m3_rate"
+        },
+        {
+            "column": "M6_RATE",
+            "data_type": "float",
+            "desc": "温州地区民间借贷分期限利率（六月期）",
+            "must": "Y",
+            "name": "m6_rate"
+        },
+        {
+            "column": "M12_RATE",
+            "data_type": "float",
+            "desc": "温州地区民间借贷分期限利率（一年期）",
+            "must": "Y",
+            "name": "m12_rate"
+        },
+        {
+            "column": "LONG_RATE",
+            "data_type": "float",
+            "desc": "温州地区民间借贷分期限利率（长期）",
+            "must": "Y",
+            "name": "long_rate"
+        }
+    ],
+    "parent_id": 148,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            148,
+            "利率数据"
+        ],
+        [
+            173,
+            "温州民间借贷利率"
+        ]
+    ],
+    "title": "温州民间借贷利率",
+    "validations": []
 }

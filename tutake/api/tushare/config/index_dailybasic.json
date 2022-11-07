@@ -1,131 +1,169 @@
 {
-    "desc": "大盘指数每日指标",
-    "name": "index_dailybasic",
-    "id": 128,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TOTAL_MV",
-        "name": "total_mv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日总市值"
-    }, {
-        "column": "FLOAT_MV",
-        "name": "float_mv",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日流通市值"
-    }, {
-        "column": "TOTAL_SHARE",
-        "name": "total_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日总股本"
-    }, {
-        "column": "FLOAT_SHARE",
-        "name": "float_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日流通股本"
-    }, {
-        "column": "FREE_SHARE",
-        "name": "free_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "当日自由流通股本"
-    }, {
-        "column": "TURNOVER_RATE",
-        "name": "turnover_rate",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "换手率"
-    }, {
-        "column": "TURNOVER_RATE_F",
-        "name": "turnover_rate_f",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "换手率(自由流通股本)"
-    }, {
-        "column": "PE",
-        "name": "pe",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "市盈率"
-    }, {
-        "column": "PE_TTM",
-        "name": "pe_ttm",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "市盈率TTM"
-    }, {
-        "column": "PB",
-        "name": "pb",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "市净率"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 93,
-    "title": "大盘指数每日指标",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS指数代码"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [{
-        "name": "trade_date",
-        "validator": "required",
-        "options": null,
-        "trigger": {
-            "link": "and",
-            "exp": [{
-                "name": "ts_code",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }]
-        },
-        "message": "trade_date,ts_code参数至少输入一个"
-    }],
     "default_limit": null,
-    "order_by": null
+    "desc": "大盘指数每日指标",
+    "id": 128,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "TS指数代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "index_dailybasic",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TOTAL_MV",
+            "data_type": "float",
+            "desc": "当日总市值",
+            "must": "Y",
+            "name": "total_mv"
+        },
+        {
+            "column": "FLOAT_MV",
+            "data_type": "float",
+            "desc": "当日流通市值",
+            "must": "Y",
+            "name": "float_mv"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "当日总股本",
+            "must": "Y",
+            "name": "total_share"
+        },
+        {
+            "column": "FLOAT_SHARE",
+            "data_type": "float",
+            "desc": "当日流通股本",
+            "must": "Y",
+            "name": "float_share"
+        },
+        {
+            "column": "FREE_SHARE",
+            "data_type": "float",
+            "desc": "当日自由流通股本",
+            "must": "Y",
+            "name": "free_share"
+        },
+        {
+            "column": "TURNOVER_RATE",
+            "data_type": "float",
+            "desc": "换手率",
+            "must": "Y",
+            "name": "turnover_rate"
+        },
+        {
+            "column": "TURNOVER_RATE_F",
+            "data_type": "float",
+            "desc": "换手率(自由流通股本)",
+            "must": "Y",
+            "name": "turnover_rate_f"
+        },
+        {
+            "column": "PE",
+            "data_type": "float",
+            "desc": "市盈率",
+            "must": "Y",
+            "name": "pe"
+        },
+        {
+            "column": "PE_TTM",
+            "data_type": "float",
+            "desc": "市盈率TTM",
+            "must": "Y",
+            "name": "pe_ttm"
+        },
+        {
+            "column": "PB",
+            "data_type": "float",
+            "desc": "市净率",
+            "must": "Y",
+            "name": "pb"
+        }
+    ],
+    "parent_id": 93,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            93,
+            "指数"
+        ],
+        [
+            128,
+            "大盘指数每日指标"
+        ]
+    ],
+    "title": "大盘指数每日指标",
+    "validations": [
+        {
+            "message": "trade_date,ts_code参数至少输入一个",
+            "name": "trade_date",
+            "options": null,
+            "trigger": {
+                "exp": [
+                    {
+                        "name": "ts_code",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    }
+                ],
+                "link": "and"
+            },
+            "validator": "required"
+        }
+    ]
 }

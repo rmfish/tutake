@@ -1,83 +1,111 @@
 {
-    "desc": "",
-    "name": "coincap",
-    "id": 57,
-    "outputs": [{
-        "name": "trade_date",
-        "column": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "name": "coin",
-        "column": "symbol",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "货币代码"
-    }, {
-        "name": "name",
-        "column": "name",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "货币名称"
-    }, {
-        "name": "marketcap",
-        "column": "marketcap",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "市值（美元）"
-    }, {
-        "name": "price",
-        "column": "price",
-        "msut": "Y",
-        "data_type": "float",
-        "desc": "当前时间价格（美元）"
-    }, {
-        "name": "vol24",
-        "column": "vol24",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "24小时成交额（美元）"
-    }, {
-        "name": "supply",
-        "column": "supply",
-        "must": "N",
-        "data_type": "float",
-        "desc": "流通总量"
-    }, {
-        "name": "create_time",
-        "column": "create_time",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "数据采集时间"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 52,
-    "title": "数字货币每日市值",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "name": "coin",
-        "data_type": "str",
-        "must": "N",
-        "desc": "coin代码"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 57,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "coin代码",
+            "must": "N",
+            "name": "coin"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "coincap",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "trade_date",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "symbol",
+            "data_type": "str",
+            "desc": "货币代码",
+            "must": "Y",
+            "name": "coin"
+        },
+        {
+            "column": "name",
+            "data_type": "str",
+            "desc": "货币名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "marketcap",
+            "data_type": "str",
+            "desc": "市值（美元）",
+            "must": "Y",
+            "name": "marketcap"
+        },
+        {
+            "column": "price",
+            "data_type": "float",
+            "desc": "当前时间价格（美元）",
+            "msut": "Y",
+            "name": "price"
+        },
+        {
+            "column": "vol24",
+            "data_type": "float",
+            "desc": "24小时成交额（美元）",
+            "must": "Y",
+            "name": "vol24"
+        },
+        {
+            "column": "supply",
+            "data_type": "float",
+            "desc": "流通总量",
+            "must": "N",
+            "name": "supply"
+        },
+        {
+            "column": "create_time",
+            "data_type": "str",
+            "desc": "数据采集时间",
+            "must": "Y",
+            "name": "create_time"
+        }
+    ],
+    "parent_id": 52,
+    "path": [
+        [
+            41,
+            "另类数据"
+        ],
+        [
+            52,
+            "行情数据"
+        ],
+        [
+            57,
+            "数字货币每日市值"
+        ]
+    ],
+    "title": "数字货币每日市值",
+    "validations": []
 }

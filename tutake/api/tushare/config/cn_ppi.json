@@ -1,226 +1,286 @@
 {
-    "desc": "",
-    "name": "cn_ppi",
-    "id": 245,
-    "outputs": [{
-        "column": "MONTH",
-        "name": "month",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "月份YYYYMM"
-    }, {
-        "column": "PPI_YOY",
-        "name": "ppi_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：全部工业品：当月同比"
-    }, {
-        "column": "PPI_MP_YOY",
-        "name": "ppi_mp_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：当月同比"
-    }, {
-        "column": "PPI_MP_QM_YOY",
-        "name": "ppi_mp_qm_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：采掘业：当月同比"
-    }, {
-        "column": "PPI_MP_RM_YOY",
-        "name": "ppi_mp_rm_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：原料业：当月同比"
-    }, {
-        "column": "PPI_MP_P_YOY",
-        "name": "ppi_mp_p_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：加工业：当月同比"
-    }, {
-        "column": "PPI_CG_YOY",
-        "name": "ppi_cg_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：当月同比"
-    }, {
-        "column": "PPI_CG_F_YOY",
-        "name": "ppi_cg_f_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：食品类：当月同比"
-    }, {
-        "column": "PPI_CG_C_YOY",
-        "name": "ppi_cg_c_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：衣着类：当月同比"
-    }, {
-        "column": "PPI_CG_ADU_YOY",
-        "name": "ppi_cg_adu_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：一般日用品类：当月同比"
-    }, {
-        "column": "PPI_CG_DCG_YOY",
-        "name": "ppi_cg_dcg_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：耐用消费品类：当月同比"
-    }, {
-        "column": "PPI_MOM",
-        "name": "ppi_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：全部工业品：环比"
-    }, {
-        "column": "PPI_MP_MOM",
-        "name": "ppi_mp_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：环比"
-    }, {
-        "column": "PPI_MP_QM_MOM",
-        "name": "ppi_mp_qm_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：采掘业：环比"
-    }, {
-        "column": "PPI_MP_RM_MOM",
-        "name": "ppi_mp_rm_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：原料业：环比"
-    }, {
-        "column": "PPI_MP_P_MOM",
-        "name": "ppi_mp_p_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：加工业：环比"
-    }, {
-        "column": "PPI_CG_MOM",
-        "name": "ppi_cg_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：环比"
-    }, {
-        "column": "PPI_CG_F_MOM",
-        "name": "ppi_cg_f_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：食品类：环比"
-    }, {
-        "column": "PPI_CG_C_MOM",
-        "name": "ppi_cg_c_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：衣着类：环比"
-    }, {
-        "column": "PPI_CG_ADU_MOM",
-        "name": "ppi_cg_adu_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：一般日用品类：环比"
-    }, {
-        "column": "PPI_CG_DCG_MOM",
-        "name": "ppi_cg_dcg_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：耐用消费品类：环比"
-    }, {
-        "column": "PPI_ACCU",
-        "name": "ppi_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：全部工业品：累计同比"
-    }, {
-        "column": "PPI_MP_ACCU",
-        "name": "ppi_mp_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：累计同比"
-    }, {
-        "column": "PPI_MP_QM_ACCU",
-        "name": "ppi_mp_qm_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：采掘业：累计同比"
-    }, {
-        "column": "PPI_MP_RM_ACCU",
-        "name": "ppi_mp_rm_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：原料业：累计同比"
-    }, {
-        "column": "PPI_MP_P_ACCU",
-        "name": "ppi_mp_p_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生产资料：加工业：累计同比"
-    }, {
-        "column": "PPI_CG_ACCU",
-        "name": "ppi_cg_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：累计同比"
-    }, {
-        "column": "PPI_CG_F_ACCU",
-        "name": "ppi_cg_f_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：食品类：累计同比"
-    }, {
-        "column": "PPI_CG_C_ACCU",
-        "name": "ppi_cg_c_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：衣着类：累计同比"
-    }, {
-        "column": "PPI_CG_ADU_ACCU",
-        "name": "ppi_cg_adu_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：一般日用品类：累计同比"
-    }, {
-        "column": "PPI_CG_DCG_ACCU",
-        "name": "ppi_cg_dcg_accu",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "PPI：生活资料：耐用消费品类：累计同比"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 226,
-    "title": "工业生产者出厂价格指数（PPI）",
-    "inputs": [{
-        "name": "m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "月份（YYYYMM，下同），支持多个月份同时输入，逗号分隔"
-    }, {
-        "name": "start_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始月份"
-    }, {
-        "name": "end_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束月份"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 245,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "月份（YYYYMM，下同），支持多个月份同时输入，逗号分隔",
+            "must": "N",
+            "name": "m"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始月份",
+            "must": "N",
+            "name": "start_m"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束月份",
+            "must": "N",
+            "name": "end_m"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cn_ppi",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "MONTH",
+            "data_type": "str",
+            "desc": "月份YYYYMM",
+            "must": "Y",
+            "name": "month"
+        },
+        {
+            "column": "PPI_YOY",
+            "data_type": "float",
+            "desc": "PPI：全部工业品：当月同比",
+            "must": "Y",
+            "name": "ppi_yoy"
+        },
+        {
+            "column": "PPI_MP_YOY",
+            "data_type": "float",
+            "desc": "PPI：生产资料：当月同比",
+            "must": "Y",
+            "name": "ppi_mp_yoy"
+        },
+        {
+            "column": "PPI_MP_QM_YOY",
+            "data_type": "float",
+            "desc": "PPI：生产资料：采掘业：当月同比",
+            "must": "Y",
+            "name": "ppi_mp_qm_yoy"
+        },
+        {
+            "column": "PPI_MP_RM_YOY",
+            "data_type": "float",
+            "desc": "PPI：生产资料：原料业：当月同比",
+            "must": "Y",
+            "name": "ppi_mp_rm_yoy"
+        },
+        {
+            "column": "PPI_MP_P_YOY",
+            "data_type": "float",
+            "desc": "PPI：生产资料：加工业：当月同比",
+            "must": "Y",
+            "name": "ppi_mp_p_yoy"
+        },
+        {
+            "column": "PPI_CG_YOY",
+            "data_type": "float",
+            "desc": "PPI：生活资料：当月同比",
+            "must": "Y",
+            "name": "ppi_cg_yoy"
+        },
+        {
+            "column": "PPI_CG_F_YOY",
+            "data_type": "float",
+            "desc": "PPI：生活资料：食品类：当月同比",
+            "must": "Y",
+            "name": "ppi_cg_f_yoy"
+        },
+        {
+            "column": "PPI_CG_C_YOY",
+            "data_type": "float",
+            "desc": "PPI：生活资料：衣着类：当月同比",
+            "must": "Y",
+            "name": "ppi_cg_c_yoy"
+        },
+        {
+            "column": "PPI_CG_ADU_YOY",
+            "data_type": "float",
+            "desc": "PPI：生活资料：一般日用品类：当月同比",
+            "must": "Y",
+            "name": "ppi_cg_adu_yoy"
+        },
+        {
+            "column": "PPI_CG_DCG_YOY",
+            "data_type": "float",
+            "desc": "PPI：生活资料：耐用消费品类：当月同比",
+            "must": "Y",
+            "name": "ppi_cg_dcg_yoy"
+        },
+        {
+            "column": "PPI_MOM",
+            "data_type": "float",
+            "desc": "PPI：全部工业品：环比",
+            "must": "Y",
+            "name": "ppi_mom"
+        },
+        {
+            "column": "PPI_MP_MOM",
+            "data_type": "float",
+            "desc": "PPI：生产资料：环比",
+            "must": "Y",
+            "name": "ppi_mp_mom"
+        },
+        {
+            "column": "PPI_MP_QM_MOM",
+            "data_type": "float",
+            "desc": "PPI：生产资料：采掘业：环比",
+            "must": "Y",
+            "name": "ppi_mp_qm_mom"
+        },
+        {
+            "column": "PPI_MP_RM_MOM",
+            "data_type": "float",
+            "desc": "PPI：生产资料：原料业：环比",
+            "must": "Y",
+            "name": "ppi_mp_rm_mom"
+        },
+        {
+            "column": "PPI_MP_P_MOM",
+            "data_type": "float",
+            "desc": "PPI：生产资料：加工业：环比",
+            "must": "Y",
+            "name": "ppi_mp_p_mom"
+        },
+        {
+            "column": "PPI_CG_MOM",
+            "data_type": "float",
+            "desc": "PPI：生活资料：环比",
+            "must": "Y",
+            "name": "ppi_cg_mom"
+        },
+        {
+            "column": "PPI_CG_F_MOM",
+            "data_type": "float",
+            "desc": "PPI：生活资料：食品类：环比",
+            "must": "Y",
+            "name": "ppi_cg_f_mom"
+        },
+        {
+            "column": "PPI_CG_C_MOM",
+            "data_type": "float",
+            "desc": "PPI：生活资料：衣着类：环比",
+            "must": "Y",
+            "name": "ppi_cg_c_mom"
+        },
+        {
+            "column": "PPI_CG_ADU_MOM",
+            "data_type": "float",
+            "desc": "PPI：生活资料：一般日用品类：环比",
+            "must": "Y",
+            "name": "ppi_cg_adu_mom"
+        },
+        {
+            "column": "PPI_CG_DCG_MOM",
+            "data_type": "float",
+            "desc": "PPI：生活资料：耐用消费品类：环比",
+            "must": "Y",
+            "name": "ppi_cg_dcg_mom"
+        },
+        {
+            "column": "PPI_ACCU",
+            "data_type": "float",
+            "desc": "PPI：全部工业品：累计同比",
+            "must": "Y",
+            "name": "ppi_accu"
+        },
+        {
+            "column": "PPI_MP_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生产资料：累计同比",
+            "must": "Y",
+            "name": "ppi_mp_accu"
+        },
+        {
+            "column": "PPI_MP_QM_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生产资料：采掘业：累计同比",
+            "must": "Y",
+            "name": "ppi_mp_qm_accu"
+        },
+        {
+            "column": "PPI_MP_RM_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生产资料：原料业：累计同比",
+            "must": "Y",
+            "name": "ppi_mp_rm_accu"
+        },
+        {
+            "column": "PPI_MP_P_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生产资料：加工业：累计同比",
+            "must": "Y",
+            "name": "ppi_mp_p_accu"
+        },
+        {
+            "column": "PPI_CG_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生活资料：累计同比",
+            "must": "Y",
+            "name": "ppi_cg_accu"
+        },
+        {
+            "column": "PPI_CG_F_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生活资料：食品类：累计同比",
+            "must": "Y",
+            "name": "ppi_cg_f_accu"
+        },
+        {
+            "column": "PPI_CG_C_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生活资料：衣着类：累计同比",
+            "must": "Y",
+            "name": "ppi_cg_c_accu"
+        },
+        {
+            "column": "PPI_CG_ADU_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生活资料：一般日用品类：累计同比",
+            "must": "Y",
+            "name": "ppi_cg_adu_accu"
+        },
+        {
+            "column": "PPI_CG_DCG_ACCU",
+            "data_type": "float",
+            "desc": "PPI：生活资料：耐用消费品类：累计同比",
+            "must": "Y",
+            "name": "ppi_cg_dcg_accu"
+        }
+    ],
+    "parent_id": 226,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            226,
+            "价格指数"
+        ],
+        [
+            245,
+            "工业生产者出厂价格指数（PPI）"
+        ]
+    ],
+    "title": "工业生产者出厂价格指数（PPI）",
+    "validations": []
 }

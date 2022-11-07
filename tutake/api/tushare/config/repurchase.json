@@ -1,111 +1,148 @@
 {
-    "desc": "股票回购数据",
-    "name": "repurchase",
-    "id": 124,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "END_DATE",
-        "name": "end_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "截止日期"
-    }, {
-        "column": "PROC",
-        "name": "proc",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "进度"
-    }, {
-        "column": "EXP_DATE",
-        "name": "exp_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "过期日期"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "回购数量"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "回购金额"
-    }, {
-        "column": "HIGH_LIMIT",
-        "name": "high_limit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "回购最高价"
-    }, {
-        "column": "LOW_LIMIT",
-        "name": "low_limit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "回购最低价"
-    }, {
-        "column": "REPO_GOAL",
-        "name": "repo_goal",
-        "data_type": "str",
-        "must": "N",
-        "desc": "回购目的"
-    }, {
-        "column": "UPDATE_FLAG",
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "N",
-        "desc": "更新标识"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "股票回购",
-    "inputs": [{
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告结束日期"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS代码"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "股票回购数据",
+    "id": 124,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "repurchase",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "截止日期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "PROC",
+            "data_type": "str",
+            "desc": "进度",
+            "must": "Y",
+            "name": "proc"
+        },
+        {
+            "column": "EXP_DATE",
+            "data_type": "str",
+            "desc": "过期日期",
+            "must": "Y",
+            "name": "exp_date"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "回购数量",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "回购金额",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "HIGH_LIMIT",
+            "data_type": "float",
+            "desc": "回购最高价",
+            "must": "Y",
+            "name": "high_limit"
+        },
+        {
+            "column": "LOW_LIMIT",
+            "data_type": "float",
+            "desc": "回购最低价",
+            "must": "Y",
+            "name": "low_limit"
+        },
+        {
+            "column": "REPO_GOAL",
+            "data_type": "str",
+            "desc": "回购目的",
+            "must": "N",
+            "name": "repo_goal"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "更新标识",
+            "must": "N",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            124,
+            "股票回购"
+        ]
+    ],
+    "title": "股票回购",
+    "validations": []
 }

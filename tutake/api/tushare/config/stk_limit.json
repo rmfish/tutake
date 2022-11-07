@@ -1,75 +1,106 @@
 {
-    "desc": "每日涨跌停价格",
-    "name": "stk_limit",
-    "id": 183,
-    "outputs": [{
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS股票代码"
-    }, {
-        "column": "PRE_CLOSE",
-        "name": "pre_close",
-        "data_type": "float",
-        "must": "N",
-        "desc": "昨日收盘价"
-    }, {
-        "column": "UP_LIMIT",
-        "name": "up_limit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨停价"
-    }, {
-        "column": "DOWN_LIMIT",
-        "name": "down_limit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "跌停价"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 15,
-    "title": "每日涨跌停价格",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "开始行数"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "每页最大条数"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "每日涨跌停价格",
+    "id": 183,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "开始行数",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "int",
+            "desc": "每页最大条数",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "stk_limit",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "PRE_CLOSE",
+            "data_type": "float",
+            "desc": "昨日收盘价",
+            "must": "N",
+            "name": "pre_close"
+        },
+        {
+            "column": "UP_LIMIT",
+            "data_type": "float",
+            "desc": "涨停价",
+            "must": "Y",
+            "name": "up_limit"
+        },
+        {
+            "column": "DOWN_LIMIT",
+            "data_type": "float",
+            "desc": "跌停价",
+            "must": "Y",
+            "name": "down_limit"
+        }
+    ],
+    "parent_id": 15,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            15,
+            "行情数据"
+        ],
+        [
+            183,
+            "每日涨跌停价格"
+        ]
+    ],
+    "title": "每日涨跌停价格",
+    "validations": []
 }

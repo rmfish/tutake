@@ -1,111 +1,148 @@
 {
-    "title": "日线行情",
-    "parent_id": 15,
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "offset",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始行数"
-    }, {
-        "name": "limit",
-        "data_type": "str",
-        "must": "N",
-        "desc": "最大行数"
-    }],
-    "validations": [],
     "database": null,
-    "is_ready": 1,
-    "order_by": null,
-    "name": "daily",
-    "id": 27,
-    "desc": "日线行情",
-    "outputs": [{
-        "name": "ts_code",
-        "column": "TS_CODE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "trade_date",
-        "column": "TRADE_DATE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "name": "open",
-        "column": "OPEN",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "开盘价"
-    }, {
-        "name": "high",
-        "column": "HIGH",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "最高价"
-    }, {
-        "name": "low",
-        "column": "LOW",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "最低价"
-    }, {
-        "name": "close",
-        "column": "CLOSE",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "收盘价"
-    }, {
-        "name": "pre_close",
-        "column": "PRE_CLOSE",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "昨收价"
-    }, {
-        "name": "change",
-        "column": "CHANGE",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "涨跌额"
-    }, {
-        "name": "pct_chg",
-        "column": "PCT_CHANGE",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "涨跌幅"
-    }, {
-        "name": "vol",
-        "column": "VOL",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "成交量"
-    }, {
-        "name": "amount",
-        "column": "AMOUNT",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "成交额"
-    }],
     "default_limit": "6000",
-    "if_exists": null
+    "desc": "日线行情",
+    "id": 27,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始行数",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "str",
+            "desc": "最大行数",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": 1,
+    "name": "daily",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "OPEN",
+            "data_type": "float",
+            "desc": "开盘价",
+            "must": "Y",
+            "name": "open"
+        },
+        {
+            "column": "HIGH",
+            "data_type": "float",
+            "desc": "最高价",
+            "must": "Y",
+            "name": "high"
+        },
+        {
+            "column": "LOW",
+            "data_type": "float",
+            "desc": "最低价",
+            "must": "Y",
+            "name": "low"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘价",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "PRE_CLOSE",
+            "data_type": "float",
+            "desc": "昨收价",
+            "must": "Y",
+            "name": "pre_close"
+        },
+        {
+            "column": "CHANGE",
+            "data_type": "float",
+            "desc": "涨跌额",
+            "must": "Y",
+            "name": "change"
+        },
+        {
+            "column": "PCT_CHANGE",
+            "data_type": "float",
+            "desc": "涨跌幅",
+            "must": "Y",
+            "name": "pct_chg"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "成交量",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交额",
+            "must": "Y",
+            "name": "amount"
+        }
+    ],
+    "parent_id": 15,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            15,
+            "行情数据"
+        ],
+        [
+            27,
+            "日线行情"
+        ]
+    ],
+    "title": "日线行情",
+    "validations": []
 }

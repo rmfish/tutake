@@ -1,81 +1,109 @@
 {
-    "desc": "",
-    "name": "bond_blk",
-    "id": 271,
-    "outputs": [{
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "债券代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "债券名称"
-    }, {
-        "column": "PRICE",
-        "name": "price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交价（元）"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "累计成交数量（万股/万份/万张/万手）"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "累计成交金额（万元）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 184,
-    "title": "大宗交易",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "债券代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "offset",
-        "data_type": "str",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "str",
-        "must": "N",
-        "desc": ""
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 271,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "债券代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "str",
+            "desc": "",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "bond_blk",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "债券代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "债券名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "PRICE",
+            "data_type": "float",
+            "desc": "成交价（元）",
+            "must": "Y",
+            "name": "price"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "累计成交数量（万股/万份/万张/万手）",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "累计成交金额（万元）",
+            "must": "Y",
+            "name": "amount"
+        }
+    ],
+    "parent_id": 184,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            184,
+            "债券"
+        ],
+        [
+            271,
+            "大宗交易"
+        ]
+    ],
+    "title": "大宗交易",
+    "validations": []
 }

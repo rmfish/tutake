@@ -1,1057 +1,1252 @@
 {
-    "desc": "",
-    "name": "fina_indicator",
-    "id": 79,
-    "outputs": [{
-        "name": "ts_code",
-        "column": "TS_CODE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "name": "ann_date",
-        "column": "ANN_DATE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "name": "end_date",
-        "column": "END_DATE",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告期"
-    }, {
-        "name": "eps",
-        "column": "EPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "基本每股收益"
-    }, {
-        "name": "dt_eps",
-        "column": "DT_EPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "稀释每股收益"
-    }, {
-        "name": "total_revenue_ps",
-        "column": "TOTAL_REVENUE_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股营业总收入"
-    }, {
-        "name": "revenue_ps",
-        "column": "REVENUE_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股营业收入"
-    }, {
-        "name": "capital_rese_ps",
-        "column": "CAPITAL_RESE_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股资本公积"
-    }, {
-        "name": "surplus_rese_ps",
-        "column": "SURPLUS_RESE_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股盈余公积"
-    }, {
-        "name": "undist_profit_ps",
-        "column": "UNDIST_PROFIT_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股未分配利润"
-    }, {
-        "name": "extra_item",
-        "column": "EXTRA_ITEM",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "非经常性损益"
-    }, {
-        "name": "profit_dedt",
-        "column": "PROFIT_DEDT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "扣除非经常性损益后的净利润"
-    }, {
-        "name": "gross_margin",
-        "column": "GROSS_MARGIN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "毛利"
-    }, {
-        "name": "current_ratio",
-        "column": "CURRENT_RATIO",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动比率"
-    }, {
-        "name": "quick_ratio",
-        "column": "QUICK_RATIO",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "速动比率"
-    }, {
-        "name": "cash_ratio",
-        "column": "CASH_RATIO",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "保守速动比率"
-    }, {
-        "name": "invturn_days",
-        "column": "INVTURN_DAYS",
-        "data_type": "float",
-        "must": "N",
-        "desc": "存货周转天数"
-    }, {
-        "name": "arturn_days",
-        "column": "ARTURN_DAYS",
-        "data_type": "float",
-        "must": "N",
-        "desc": "应收账款周转天数"
-    }, {
-        "name": "inv_turn",
-        "column": "INV_TURN",
-        "data_type": "float",
-        "must": "N",
-        "desc": "存货周转率"
-    }, {
-        "name": "ar_turn",
-        "column": "AR_TURN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "应收账款周转率"
-    }, {
-        "name": "ca_turn",
-        "column": "CA_TURN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动资产周转率"
-    }, {
-        "name": "fa_turn",
-        "column": "FA_TURN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产周转率"
-    }, {
-        "name": "assets_turn",
-        "column": "ASSETS_TURN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产周转率"
-    }, {
-        "name": "op_income",
-        "column": "OP_INCOME",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "经营活动净收益"
-    }, {
-        "name": "valuechange_income",
-        "column": "VALUECHANGE_INCOME",
-        "data_type": "float",
-        "must": "N",
-        "desc": "价值变动净收益"
-    }, {
-        "name": "interst_income",
-        "column": "INTERST_INCOME",
-        "data_type": "float",
-        "must": "N",
-        "desc": "利息费用"
-    }, {
-        "name": "daa",
-        "column": "DAA",
-        "data_type": "float",
-        "must": "N",
-        "desc": "折旧与摊销"
-    }, {
-        "name": "ebit",
-        "column": "EBIT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "息税前利润"
-    }, {
-        "name": "ebitda",
-        "column": "EBITDA",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "息税折旧摊销前利润"
-    }, {
-        "name": "fcff",
-        "column": "FCFF",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "企业自由现金流量"
-    }, {
-        "name": "fcfe",
-        "column": "FCFE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "股权自由现金流量"
-    }, {
-        "name": "current_exint",
-        "column": "CURRENT_EXINT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "无息流动负债"
-    }, {
-        "name": "noncurrent_exint",
-        "column": "NONCURRENT_EXINT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "无息非流动负债"
-    }, {
-        "name": "interestdebt",
-        "column": "INTERESTDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "带息债务"
-    }, {
-        "name": "netdebt",
-        "column": "NETDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净债务"
-    }, {
-        "name": "tangible_asset",
-        "column": "TANGIBLE_ASSET",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "有形资产"
-    }, {
-        "name": "working_capital",
-        "column": "WORKING_CAPITAL",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营运资金"
-    }, {
-        "name": "networking_capital",
-        "column": "NETWORKING_CAPITAL",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营运流动资本"
-    }, {
-        "name": "invest_capital",
-        "column": "INVEST_CAPITAL",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "全部投入资本"
-    }, {
-        "name": "retained_earnings",
-        "column": "RETAINED_EARNINGS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "留存收益"
-    }, {
-        "name": "diluted2_eps",
-        "column": "DILUTED2_EPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "期末摊薄每股收益"
-    }, {
-        "name": "bps",
-        "column": "BPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股净资产"
-    }, {
-        "name": "ocfps",
-        "column": "OCFPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股经营活动产生的现金流量净额"
-    }, {
-        "name": "retainedps",
-        "column": "RETAINEDPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股留存收益"
-    }, {
-        "name": "cfps",
-        "column": "CFPS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股现金流量净额"
-    }, {
-        "name": "ebit_ps",
-        "column": "EBIT_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股息税前利润"
-    }, {
-        "name": "fcff_ps",
-        "column": "FCFF_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股企业自由现金流量"
-    }, {
-        "name": "fcfe_ps",
-        "column": "FCFE_PS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股股东自由现金流量"
-    }, {
-        "name": "netprofit_margin",
-        "column": "NETPROFIT_MARGIN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售净利率"
-    }, {
-        "name": "grossprofit_margin",
-        "column": "GROSSPROFIT_MARGIN",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售毛利率"
-    }, {
-        "name": "cogs_of_sales",
-        "column": "COGS_OF_SALES",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售成本率"
-    }, {
-        "name": "expense_of_sales",
-        "column": "EXPENSE_OF_SALES",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售期间费用率"
-    }, {
-        "name": "profit_to_gr",
-        "column": "PROFIT_TO_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净利润/营业总收入"
-    }, {
-        "name": "saleexp_to_gr",
-        "column": "SALEEXP_TO_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售费用/营业总收入"
-    }, {
-        "name": "adminexp_of_gr",
-        "column": "ADMINEXP_OF_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "管理费用/营业总收入"
-    }, {
-        "name": "finaexp_of_gr",
-        "column": "FINAEXP_OF_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "财务费用/营业总收入"
-    }, {
-        "name": "impai_ttm",
-        "column": "IMPAI_TTM",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "资产减值损失/营业总收入"
-    }, {
-        "name": "gc_of_gr",
-        "column": "GC_OF_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业总成本/营业总收入"
-    }, {
-        "name": "op_of_gr",
-        "column": "OP_OF_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业利润/营业总收入"
-    }, {
-        "name": "ebit_of_gr",
-        "column": "EBIT_OF_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "息税前利润/营业总收入"
-    }, {
-        "name": "roe",
-        "column": "ROE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产收益率"
-    }, {
-        "name": "roe_waa",
-        "column": "ROE_WAA",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加权平均净资产收益率"
-    }, {
-        "name": "roe_dt",
-        "column": "ROE_DT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产收益率(扣除非经常损益)"
-    }, {
-        "name": "roa",
-        "column": "ROA",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产报酬率"
-    }, {
-        "name": "npta",
-        "column": "NPTA",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产净利润"
-    }, {
-        "name": "roic",
-        "column": "ROIC",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "投入资本回报率"
-    }, {
-        "name": "roe_yearly",
-        "column": "ROE_YEARLY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "年化净资产收益率"
-    }, {
-        "name": "roa2_yearly",
-        "column": "ROA2_YEARLY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "年化总资产报酬率"
-    }, {
-        "name": "roe_avg",
-        "column": "ROE_AVG",
-        "data_type": "float",
-        "must": "N",
-        "desc": "平均净资产收益率(增发条件)"
-    }, {
-        "name": "opincome_of_ebt",
-        "column": "OPINCOME_OF_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动净收益/利润总额"
-    }, {
-        "name": "investincome_of_ebt",
-        "column": "INVESTINCOME_OF_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "价值变动净收益/利润总额"
-    }, {
-        "name": "n_op_profit_of_ebt",
-        "column": "N_OP_PROFIT_OF_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业外收支净额/利润总额"
-    }, {
-        "name": "tax_to_ebt",
-        "column": "TAX_TO_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "所得税/利润总额"
-    }, {
-        "name": "dtprofit_to_profit",
-        "column": "DTPROFIT_TO_PROFIT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "扣除非经常损益后的净利润/净利润"
-    }, {
-        "name": "salescash_to_or",
-        "column": "SALESCASH_TO_OR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "销售商品提供劳务收到的现金/营业收入"
-    }, {
-        "name": "ocf_to_or",
-        "column": "OCF_TO_OR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额/营业收入"
-    }, {
-        "name": "ocf_to_opincome",
-        "column": "OCF_TO_OPINCOME",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额/经营活动净收益"
-    }, {
-        "name": "capitalized_to_da",
-        "column": "CAPITALIZED_TO_DA",
-        "data_type": "float",
-        "must": "N",
-        "desc": "资本支出/折旧和摊销"
-    }, {
-        "name": "debt_to_assets",
-        "column": "DEBT_TO_ASSETS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "资产负债率"
-    }, {
-        "name": "assets_to_eqt",
-        "column": "ASSETS_TO_EQT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "权益乘数"
-    }, {
-        "name": "dp_assets_to_eqt",
-        "column": "DP_ASSETS_TO_EQT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "权益乘数(杜邦分析)"
-    }, {
-        "name": "ca_to_assets",
-        "column": "CA_TO_ASSETS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动资产/总资产"
-    }, {
-        "name": "nca_to_assets",
-        "column": "NCA_TO_ASSETS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "非流动资产/总资产"
-    }, {
-        "name": "tbassets_to_totalassets",
-        "column": "TBASSETS_TO_TOTALASSETS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "有形资产/总资产"
-    }, {
-        "name": "int_to_talcap",
-        "column": "INT_TO_TALCAP",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "带息债务/全部投入资本"
-    }, {
-        "name": "eqt_to_talcapital",
-        "column": "EQT_TO_TALCAPITAL",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属于母公司的股东权益/全部投入资本"
-    }, {
-        "name": "currentdebt_to_debt",
-        "column": "CURRENTDEBT_TO_DEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "流动负债/负债合计"
-    }, {
-        "name": "longdeb_to_debt",
-        "column": "LONGDEB_TO_DEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "非流动负债/负债合计"
-    }, {
-        "name": "ocf_to_shortdebt",
-        "column": "OCF_TO_SHORTDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "经营活动产生的现金流量净额/流动负债"
-    }, {
-        "name": "debt_to_eqt",
-        "column": "DEBT_TO_EQT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "产权比率"
-    }, {
-        "name": "eqt_to_debt",
-        "column": "EQT_TO_DEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属于母公司的股东权益/负债合计"
-    }, {
-        "name": "eqt_to_interestdebt",
-        "column": "EQT_TO_INTERESTDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属于母公司的股东权益/带息债务"
-    }, {
-        "name": "tangibleasset_to_debt",
-        "column": "TANGIBLEASSET_TO_DEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "有形资产/负债合计"
-    }, {
-        "name": "tangasset_to_intdebt",
-        "column": "TANGASSET_TO_INTDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "有形资产/带息债务"
-    }, {
-        "name": "tangibleasset_to_netdebt",
-        "column": "TANGIBLEASSET_TO_NETDEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "有形资产/净债务"
-    }, {
-        "name": "ocf_to_debt",
-        "column": "OCF_TO_DEBT",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "经营活动产生的现金流量净额/负债合计"
-    }, {
-        "name": "ocf_to_interestdebt",
-        "column": "OCF_TO_INTERESTDEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额/带息债务"
-    }, {
-        "name": "ocf_to_netdebt",
-        "column": "OCF_TO_NETDEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额/净债务"
-    }, {
-        "name": "ebit_to_interest",
-        "column": "EBIT_TO_INTEREST",
-        "data_type": "float",
-        "must": "N",
-        "desc": "已获利息倍数(EBIT/利息费用)"
-    }, {
-        "name": "longdebt_to_workingcapital",
-        "column": "LONGDEBT_TO_WORKINGCAPITAL",
-        "data_type": "float",
-        "must": "N",
-        "desc": "长期债务与营运资金比率"
-    }, {
-        "name": "ebitda_to_debt",
-        "column": "EBITDA_TO_DEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "息税折旧摊销前利润/负债合计"
-    }, {
-        "name": "turn_days",
-        "column": "TURN_DAYS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业周期"
-    }, {
-        "name": "roa_yearly",
-        "column": "ROA_YEARLY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "年化总资产净利率"
-    }, {
-        "name": "roa_dp",
-        "column": "ROA_DP",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产净利率(杜邦分析)"
-    }, {
-        "name": "fixed_assets",
-        "column": "FIXED_ASSETS",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "固定资产合计"
-    }, {
-        "name": "profit_prefin_exp",
-        "column": "PROFIT_PREFIN_EXP",
-        "data_type": "float",
-        "must": "N",
-        "desc": "扣除财务费用前营业利润"
-    }, {
-        "name": "non_op_profit",
-        "column": "NON_OP_PROFIT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "非营业利润"
-    }, {
-        "name": "op_to_ebt",
-        "column": "OP_TO_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业利润／利润总额"
-    }, {
-        "name": "nop_to_ebt",
-        "column": "NOP_TO_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "非营业利润／利润总额"
-    }, {
-        "name": "ocf_to_profit",
-        "column": "OCF_TO_PROFIT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额／营业利润"
-    }, {
-        "name": "cash_to_liqdebt",
-        "column": "CASH_TO_LIQDEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "货币资金／流动负债"
-    }, {
-        "name": "cash_to_liqdebt_withinterest",
-        "column": "CASH_TO_LIQDEBT_WITHINTEREST",
-        "data_type": "float",
-        "must": "N",
-        "desc": "货币资金／带息流动负债"
-    }, {
-        "name": "op_to_liqdebt",
-        "column": "OP_TO_LIQDEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业利润／流动负债"
-    }, {
-        "name": "op_to_debt",
-        "column": "OP_TO_DEBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业利润／负债合计"
-    }, {
-        "name": "roic_yearly",
-        "column": "ROIC_YEARLY",
-        "data_type": "float",
-        "must": "N",
-        "desc": "年化投入资本回报率"
-    }, {
-        "name": "total_fa_trun",
-        "column": "TOTAL_FA_TRUN",
-        "data_type": "float",
-        "must": "N",
-        "desc": "固定资产合计周转率"
-    }, {
-        "name": "profit_to_op",
-        "column": "PROFIT_TO_OP",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "利润总额／营业收入"
-    }, {
-        "name": "q_opincome",
-        "column": "Q_OPINCOME",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动单季度净收益"
-    }, {
-        "name": "q_investincome",
-        "column": "Q_INVESTINCOME",
-        "data_type": "float",
-        "must": "N",
-        "desc": "价值变动单季度净收益"
-    }, {
-        "name": "q_dtprofit",
-        "column": "Q_DTPROFIT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "扣除非经常损益后的单季度净利润"
-    }, {
-        "name": "q_eps",
-        "column": "Q_EPS",
-        "data_type": "float",
-        "must": "N",
-        "desc": "每股收益(单季度)"
-    }, {
-        "name": "q_netprofit_margin",
-        "column": "Q_NETPROFIT_MARGIN",
-        "data_type": "float",
-        "must": "N",
-        "desc": "销售净利率(单季度)"
-    }, {
-        "name": "q_gsprofit_margin",
-        "column": "Q_GSPROFIT_MARGIN",
-        "data_type": "float",
-        "must": "N",
-        "desc": "销售毛利率(单季度)"
-    }, {
-        "name": "q_exp_to_sales",
-        "column": "Q_EXP_TO_SALES",
-        "data_type": "float",
-        "must": "N",
-        "desc": "销售期间费用率(单季度)"
-    }, {
-        "name": "q_profit_to_gr",
-        "column": "Q_PROFIT_TO_GR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "净利润／营业总收入(单季度)"
-    }, {
-        "name": "q_saleexp_to_gr",
-        "column": "Q_SALEEXP_TO_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "销售费用／营业总收入 (单季度)"
-    }, {
-        "name": "q_adminexp_to_gr",
-        "column": "Q_ADMINEXP_TO_GR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "管理费用／营业总收入 (单季度)"
-    }, {
-        "name": "q_finaexp_to_gr",
-        "column": "Q_FINAEXP_TO_GR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "财务费用／营业总收入 (单季度)"
-    }, {
-        "name": "q_impair_to_gr_ttm",
-        "column": "Q_IMPAIR_TO_GR_TTM",
-        "data_type": "float",
-        "must": "N",
-        "desc": "资产减值损失／营业总收入(单季度)"
-    }, {
-        "name": "q_gc_to_gr",
-        "column": "Q_GC_TO_GR",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业总成本／营业总收入 (单季度)"
-    }, {
-        "name": "q_op_to_gr",
-        "column": "Q_OP_TO_GR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业利润／营业总收入(单季度)"
-    }, {
-        "name": "q_roe",
-        "column": "Q_ROE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产收益率(单季度)"
-    }, {
-        "name": "q_dt_roe",
-        "column": "Q_DT_ROE",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产单季度收益率(扣除非经常损益)"
-    }, {
-        "name": "q_npta",
-        "column": "Q_NPTA",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "总资产净利润(单季度)"
-    }, {
-        "name": "q_opincome_to_ebt",
-        "column": "Q_OPINCOME_TO_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动净收益／利润总额(单季度)"
-    }, {
-        "name": "q_investincome_to_ebt",
-        "column": "Q_INVESTINCOME_TO_EBT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "价值变动净收益／利润总额(单季度)"
-    }, {
-        "name": "q_dtprofit_to_profit",
-        "column": "Q_DTPROFIT_TO_PROFIT",
-        "data_type": "float",
-        "must": "N",
-        "desc": "扣除非经常损益后的净利润／净利润(单季度)"
-    }, {
-        "name": "q_salescash_to_or",
-        "column": "Q_SALESCASH_TO_OR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "销售商品提供劳务收到的现金／营业收入(单季度)"
-    }, {
-        "name": "q_ocf_to_sales",
-        "column": "Q_OCF_TO_SALES",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "经营活动产生的现金流量净额／营业收入(单季度)"
-    }, {
-        "name": "q_ocf_to_or",
-        "column": "Q_OCF_TO_OR",
-        "data_type": "float",
-        "must": "N",
-        "desc": "经营活动产生的现金流量净额／经营活动净收益(单季度)"
-    }, {
-        "name": "basic_eps_yoy",
-        "column": "BASIC_EPS_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "基本每股收益同比增长率(%)"
-    }, {
-        "name": "dt_eps_yoy",
-        "column": "DT_EPS_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "稀释每股收益同比增长率(%)"
-    }, {
-        "name": "cfps_yoy",
-        "column": "CFPS_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股经营活动产生的现金流量净额同比增长率(%)"
-    }, {
-        "name": "op_yoy",
-        "column": "OP_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业利润同比增长率(%)"
-    }, {
-        "name": "ebt_yoy",
-        "column": "EBT_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "利润总额同比增长率(%)"
-    }, {
-        "name": "netprofit_yoy",
-        "column": "NETPROFIT_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属母公司股东的净利润同比增长率(%)"
-    }, {
-        "name": "dt_netprofit_yoy",
-        "column": "DT_NETPROFIT_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属母公司股东的净利润-扣除非经常损益同比增长率(%)"
-    }, {
-        "name": "ocf_yoy",
-        "column": "OCF_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "经营活动产生的现金流量净额同比增长率(%)"
-    }, {
-        "name": "roe_yoy",
-        "column": "ROE_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产收益率(摊薄)同比增长率(%)"
-    }, {
-        "name": "bps_yoy",
-        "column": "BPS_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "每股净资产相对年初增长率(%)"
-    }, {
-        "name": "assets_yoy",
-        "column": "ASSETS_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "资产总计相对年初增长率(%)"
-    }, {
-        "name": "eqt_yoy",
-        "column": "EQT_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "归属母公司的股东权益相对年初增长率(%)"
-    }, {
-        "name": "tr_yoy",
-        "column": "TR_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业总收入同比增长率(%)"
-    }, {
-        "name": "or_yoy",
-        "column": "OR_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业收入同比增长率(%)"
-    }, {
-        "name": "q_gr_yoy",
-        "column": "Q_GR_YOY",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业总收入同比增长率(%)(单季度)"
-    }, {
-        "name": "q_gr_qoq",
-        "column": "Q_GR_QOQ",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业总收入环比增长率(%)(单季度)"
-    }, {
-        "name": "q_sales_yoy",
-        "column": "Q_SALES_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业收入同比增长率(%)(单季度)"
-    }, {
-        "name": "q_sales_qoq",
-        "column": "Q_SALES_QOQ",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业收入环比增长率(%)(单季度)"
-    }, {
-        "name": "q_op_yoy",
-        "column": "Q_OP_YOY",
-        "data_type": "float",
-        "must": "N",
-        "desc": "营业利润同比增长率(%)(单季度)"
-    }, {
-        "name": "q_op_qoq",
-        "column": "Q_OP_QOQ",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "营业利润环比增长率(%)(单季度)"
-    }, {
-        "name": "q_profit_yoy",
-        "column": "Q_PROFIT_YOY",
-        "data_type": "float",
-        "must": "N",
-        "desc": "净利润同比增长率(%)(单季度)"
-    }, {
-        "name": "q_profit_qoq",
-        "column": "Q_PROFIT_QOQ",
-        "data_type": "float",
-        "must": "N",
-        "desc": "净利润环比增长率(%)(单季度)"
-    }, {
-        "name": "q_netprofit_yoy",
-        "column": "Q_NETPROFIT_YOY",
-        "data_type": "float",
-        "must": "N",
-        "desc": "归属母公司股东的净利润同比增长率(%)(单季度)"
-    }, {
-        "name": "q_netprofit_qoq",
-        "column": "Q_NETPROFIT_QOQ",
-        "data_type": "float",
-        "must": "N",
-        "desc": "归属母公司股东的净利润环比增长率(%)(单季度)"
-    }, {
-        "name": "equity_yoy",
-        "column": "EQUITY_YOY",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "净资产同比增长率"
-    }, {
-        "name": "rd_exp",
-        "column": "RD_EXP",
-        "data_type": "float",
-        "must": "N",
-        "desc": "研发费用"
-    }, {
-        "column": "UPDATE_FLAG",
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "N",
-        "desc": "更新标识"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 16,
-    "title": "财务指标数据",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期结束日期"
-    }, {
-        "name": "period",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "update_flag",
-        "data_type": "str",
-        "must": "N",
-        "desc": "更新标志"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 79,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "desc": "更新标志",
+            "must": "N",
+            "name": "update_flag"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "fina_indicator",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "EPS",
+            "data_type": "float",
+            "desc": "基本每股收益",
+            "must": "Y",
+            "name": "eps"
+        },
+        {
+            "column": "DT_EPS",
+            "data_type": "float",
+            "desc": "稀释每股收益",
+            "must": "Y",
+            "name": "dt_eps"
+        },
+        {
+            "column": "TOTAL_REVENUE_PS",
+            "data_type": "float",
+            "desc": "每股营业总收入",
+            "must": "Y",
+            "name": "total_revenue_ps"
+        },
+        {
+            "column": "REVENUE_PS",
+            "data_type": "float",
+            "desc": "每股营业收入",
+            "must": "Y",
+            "name": "revenue_ps"
+        },
+        {
+            "column": "CAPITAL_RESE_PS",
+            "data_type": "float",
+            "desc": "每股资本公积",
+            "must": "Y",
+            "name": "capital_rese_ps"
+        },
+        {
+            "column": "SURPLUS_RESE_PS",
+            "data_type": "float",
+            "desc": "每股盈余公积",
+            "must": "Y",
+            "name": "surplus_rese_ps"
+        },
+        {
+            "column": "UNDIST_PROFIT_PS",
+            "data_type": "float",
+            "desc": "每股未分配利润",
+            "must": "Y",
+            "name": "undist_profit_ps"
+        },
+        {
+            "column": "EXTRA_ITEM",
+            "data_type": "float",
+            "desc": "非经常性损益",
+            "must": "Y",
+            "name": "extra_item"
+        },
+        {
+            "column": "PROFIT_DEDT",
+            "data_type": "float",
+            "desc": "扣除非经常性损益后的净利润",
+            "must": "Y",
+            "name": "profit_dedt"
+        },
+        {
+            "column": "GROSS_MARGIN",
+            "data_type": "float",
+            "desc": "毛利",
+            "must": "Y",
+            "name": "gross_margin"
+        },
+        {
+            "column": "CURRENT_RATIO",
+            "data_type": "float",
+            "desc": "流动比率",
+            "must": "Y",
+            "name": "current_ratio"
+        },
+        {
+            "column": "QUICK_RATIO",
+            "data_type": "float",
+            "desc": "速动比率",
+            "must": "Y",
+            "name": "quick_ratio"
+        },
+        {
+            "column": "CASH_RATIO",
+            "data_type": "float",
+            "desc": "保守速动比率",
+            "must": "Y",
+            "name": "cash_ratio"
+        },
+        {
+            "column": "INVTURN_DAYS",
+            "data_type": "float",
+            "desc": "存货周转天数",
+            "must": "N",
+            "name": "invturn_days"
+        },
+        {
+            "column": "ARTURN_DAYS",
+            "data_type": "float",
+            "desc": "应收账款周转天数",
+            "must": "N",
+            "name": "arturn_days"
+        },
+        {
+            "column": "INV_TURN",
+            "data_type": "float",
+            "desc": "存货周转率",
+            "must": "N",
+            "name": "inv_turn"
+        },
+        {
+            "column": "AR_TURN",
+            "data_type": "float",
+            "desc": "应收账款周转率",
+            "must": "Y",
+            "name": "ar_turn"
+        },
+        {
+            "column": "CA_TURN",
+            "data_type": "float",
+            "desc": "流动资产周转率",
+            "must": "Y",
+            "name": "ca_turn"
+        },
+        {
+            "column": "FA_TURN",
+            "data_type": "float",
+            "desc": "固定资产周转率",
+            "must": "Y",
+            "name": "fa_turn"
+        },
+        {
+            "column": "ASSETS_TURN",
+            "data_type": "float",
+            "desc": "总资产周转率",
+            "must": "Y",
+            "name": "assets_turn"
+        },
+        {
+            "column": "OP_INCOME",
+            "data_type": "float",
+            "desc": "经营活动净收益",
+            "must": "Y",
+            "name": "op_income"
+        },
+        {
+            "column": "VALUECHANGE_INCOME",
+            "data_type": "float",
+            "desc": "价值变动净收益",
+            "must": "N",
+            "name": "valuechange_income"
+        },
+        {
+            "column": "INTERST_INCOME",
+            "data_type": "float",
+            "desc": "利息费用",
+            "must": "N",
+            "name": "interst_income"
+        },
+        {
+            "column": "DAA",
+            "data_type": "float",
+            "desc": "折旧与摊销",
+            "must": "N",
+            "name": "daa"
+        },
+        {
+            "column": "EBIT",
+            "data_type": "float",
+            "desc": "息税前利润",
+            "must": "Y",
+            "name": "ebit"
+        },
+        {
+            "column": "EBITDA",
+            "data_type": "float",
+            "desc": "息税折旧摊销前利润",
+            "must": "Y",
+            "name": "ebitda"
+        },
+        {
+            "column": "FCFF",
+            "data_type": "float",
+            "desc": "企业自由现金流量",
+            "must": "Y",
+            "name": "fcff"
+        },
+        {
+            "column": "FCFE",
+            "data_type": "float",
+            "desc": "股权自由现金流量",
+            "must": "Y",
+            "name": "fcfe"
+        },
+        {
+            "column": "CURRENT_EXINT",
+            "data_type": "float",
+            "desc": "无息流动负债",
+            "must": "Y",
+            "name": "current_exint"
+        },
+        {
+            "column": "NONCURRENT_EXINT",
+            "data_type": "float",
+            "desc": "无息非流动负债",
+            "must": "Y",
+            "name": "noncurrent_exint"
+        },
+        {
+            "column": "INTERESTDEBT",
+            "data_type": "float",
+            "desc": "带息债务",
+            "must": "Y",
+            "name": "interestdebt"
+        },
+        {
+            "column": "NETDEBT",
+            "data_type": "float",
+            "desc": "净债务",
+            "must": "Y",
+            "name": "netdebt"
+        },
+        {
+            "column": "TANGIBLE_ASSET",
+            "data_type": "float",
+            "desc": "有形资产",
+            "must": "Y",
+            "name": "tangible_asset"
+        },
+        {
+            "column": "WORKING_CAPITAL",
+            "data_type": "float",
+            "desc": "营运资金",
+            "must": "Y",
+            "name": "working_capital"
+        },
+        {
+            "column": "NETWORKING_CAPITAL",
+            "data_type": "float",
+            "desc": "营运流动资本",
+            "must": "Y",
+            "name": "networking_capital"
+        },
+        {
+            "column": "INVEST_CAPITAL",
+            "data_type": "float",
+            "desc": "全部投入资本",
+            "must": "Y",
+            "name": "invest_capital"
+        },
+        {
+            "column": "RETAINED_EARNINGS",
+            "data_type": "float",
+            "desc": "留存收益",
+            "must": "Y",
+            "name": "retained_earnings"
+        },
+        {
+            "column": "DILUTED2_EPS",
+            "data_type": "float",
+            "desc": "期末摊薄每股收益",
+            "must": "Y",
+            "name": "diluted2_eps"
+        },
+        {
+            "column": "BPS",
+            "data_type": "float",
+            "desc": "每股净资产",
+            "must": "Y",
+            "name": "bps"
+        },
+        {
+            "column": "OCFPS",
+            "data_type": "float",
+            "desc": "每股经营活动产生的现金流量净额",
+            "must": "Y",
+            "name": "ocfps"
+        },
+        {
+            "column": "RETAINEDPS",
+            "data_type": "float",
+            "desc": "每股留存收益",
+            "must": "Y",
+            "name": "retainedps"
+        },
+        {
+            "column": "CFPS",
+            "data_type": "float",
+            "desc": "每股现金流量净额",
+            "must": "Y",
+            "name": "cfps"
+        },
+        {
+            "column": "EBIT_PS",
+            "data_type": "float",
+            "desc": "每股息税前利润",
+            "must": "Y",
+            "name": "ebit_ps"
+        },
+        {
+            "column": "FCFF_PS",
+            "data_type": "float",
+            "desc": "每股企业自由现金流量",
+            "must": "Y",
+            "name": "fcff_ps"
+        },
+        {
+            "column": "FCFE_PS",
+            "data_type": "float",
+            "desc": "每股股东自由现金流量",
+            "must": "Y",
+            "name": "fcfe_ps"
+        },
+        {
+            "column": "NETPROFIT_MARGIN",
+            "data_type": "float",
+            "desc": "销售净利率",
+            "must": "Y",
+            "name": "netprofit_margin"
+        },
+        {
+            "column": "GROSSPROFIT_MARGIN",
+            "data_type": "float",
+            "desc": "销售毛利率",
+            "must": "Y",
+            "name": "grossprofit_margin"
+        },
+        {
+            "column": "COGS_OF_SALES",
+            "data_type": "float",
+            "desc": "销售成本率",
+            "must": "Y",
+            "name": "cogs_of_sales"
+        },
+        {
+            "column": "EXPENSE_OF_SALES",
+            "data_type": "float",
+            "desc": "销售期间费用率",
+            "must": "Y",
+            "name": "expense_of_sales"
+        },
+        {
+            "column": "PROFIT_TO_GR",
+            "data_type": "float",
+            "desc": "净利润/营业总收入",
+            "must": "Y",
+            "name": "profit_to_gr"
+        },
+        {
+            "column": "SALEEXP_TO_GR",
+            "data_type": "float",
+            "desc": "销售费用/营业总收入",
+            "must": "Y",
+            "name": "saleexp_to_gr"
+        },
+        {
+            "column": "ADMINEXP_OF_GR",
+            "data_type": "float",
+            "desc": "管理费用/营业总收入",
+            "must": "Y",
+            "name": "adminexp_of_gr"
+        },
+        {
+            "column": "FINAEXP_OF_GR",
+            "data_type": "float",
+            "desc": "财务费用/营业总收入",
+            "must": "Y",
+            "name": "finaexp_of_gr"
+        },
+        {
+            "column": "IMPAI_TTM",
+            "data_type": "float",
+            "desc": "资产减值损失/营业总收入",
+            "must": "Y",
+            "name": "impai_ttm"
+        },
+        {
+            "column": "GC_OF_GR",
+            "data_type": "float",
+            "desc": "营业总成本/营业总收入",
+            "must": "Y",
+            "name": "gc_of_gr"
+        },
+        {
+            "column": "OP_OF_GR",
+            "data_type": "float",
+            "desc": "营业利润/营业总收入",
+            "must": "Y",
+            "name": "op_of_gr"
+        },
+        {
+            "column": "EBIT_OF_GR",
+            "data_type": "float",
+            "desc": "息税前利润/营业总收入",
+            "must": "Y",
+            "name": "ebit_of_gr"
+        },
+        {
+            "column": "ROE",
+            "data_type": "float",
+            "desc": "净资产收益率",
+            "must": "Y",
+            "name": "roe"
+        },
+        {
+            "column": "ROE_WAA",
+            "data_type": "float",
+            "desc": "加权平均净资产收益率",
+            "must": "Y",
+            "name": "roe_waa"
+        },
+        {
+            "column": "ROE_DT",
+            "data_type": "float",
+            "desc": "净资产收益率(扣除非经常损益)",
+            "must": "Y",
+            "name": "roe_dt"
+        },
+        {
+            "column": "ROA",
+            "data_type": "float",
+            "desc": "总资产报酬率",
+            "must": "Y",
+            "name": "roa"
+        },
+        {
+            "column": "NPTA",
+            "data_type": "float",
+            "desc": "总资产净利润",
+            "must": "Y",
+            "name": "npta"
+        },
+        {
+            "column": "ROIC",
+            "data_type": "float",
+            "desc": "投入资本回报率",
+            "must": "Y",
+            "name": "roic"
+        },
+        {
+            "column": "ROE_YEARLY",
+            "data_type": "float",
+            "desc": "年化净资产收益率",
+            "must": "Y",
+            "name": "roe_yearly"
+        },
+        {
+            "column": "ROA2_YEARLY",
+            "data_type": "float",
+            "desc": "年化总资产报酬率",
+            "must": "Y",
+            "name": "roa2_yearly"
+        },
+        {
+            "column": "ROE_AVG",
+            "data_type": "float",
+            "desc": "平均净资产收益率(增发条件)",
+            "must": "N",
+            "name": "roe_avg"
+        },
+        {
+            "column": "OPINCOME_OF_EBT",
+            "data_type": "float",
+            "desc": "经营活动净收益/利润总额",
+            "must": "N",
+            "name": "opincome_of_ebt"
+        },
+        {
+            "column": "INVESTINCOME_OF_EBT",
+            "data_type": "float",
+            "desc": "价值变动净收益/利润总额",
+            "must": "N",
+            "name": "investincome_of_ebt"
+        },
+        {
+            "column": "N_OP_PROFIT_OF_EBT",
+            "data_type": "float",
+            "desc": "营业外收支净额/利润总额",
+            "must": "N",
+            "name": "n_op_profit_of_ebt"
+        },
+        {
+            "column": "TAX_TO_EBT",
+            "data_type": "float",
+            "desc": "所得税/利润总额",
+            "must": "N",
+            "name": "tax_to_ebt"
+        },
+        {
+            "column": "DTPROFIT_TO_PROFIT",
+            "data_type": "float",
+            "desc": "扣除非经常损益后的净利润/净利润",
+            "must": "N",
+            "name": "dtprofit_to_profit"
+        },
+        {
+            "column": "SALESCASH_TO_OR",
+            "data_type": "float",
+            "desc": "销售商品提供劳务收到的现金/营业收入",
+            "must": "N",
+            "name": "salescash_to_or"
+        },
+        {
+            "column": "OCF_TO_OR",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/营业收入",
+            "must": "N",
+            "name": "ocf_to_or"
+        },
+        {
+            "column": "OCF_TO_OPINCOME",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/经营活动净收益",
+            "must": "N",
+            "name": "ocf_to_opincome"
+        },
+        {
+            "column": "CAPITALIZED_TO_DA",
+            "data_type": "float",
+            "desc": "资本支出/折旧和摊销",
+            "must": "N",
+            "name": "capitalized_to_da"
+        },
+        {
+            "column": "DEBT_TO_ASSETS",
+            "data_type": "float",
+            "desc": "资产负债率",
+            "must": "Y",
+            "name": "debt_to_assets"
+        },
+        {
+            "column": "ASSETS_TO_EQT",
+            "data_type": "float",
+            "desc": "权益乘数",
+            "must": "Y",
+            "name": "assets_to_eqt"
+        },
+        {
+            "column": "DP_ASSETS_TO_EQT",
+            "data_type": "float",
+            "desc": "权益乘数(杜邦分析)",
+            "must": "Y",
+            "name": "dp_assets_to_eqt"
+        },
+        {
+            "column": "CA_TO_ASSETS",
+            "data_type": "float",
+            "desc": "流动资产/总资产",
+            "must": "Y",
+            "name": "ca_to_assets"
+        },
+        {
+            "column": "NCA_TO_ASSETS",
+            "data_type": "float",
+            "desc": "非流动资产/总资产",
+            "must": "Y",
+            "name": "nca_to_assets"
+        },
+        {
+            "column": "TBASSETS_TO_TOTALASSETS",
+            "data_type": "float",
+            "desc": "有形资产/总资产",
+            "must": "Y",
+            "name": "tbassets_to_totalassets"
+        },
+        {
+            "column": "INT_TO_TALCAP",
+            "data_type": "float",
+            "desc": "带息债务/全部投入资本",
+            "must": "Y",
+            "name": "int_to_talcap"
+        },
+        {
+            "column": "EQT_TO_TALCAPITAL",
+            "data_type": "float",
+            "desc": "归属于母公司的股东权益/全部投入资本",
+            "must": "Y",
+            "name": "eqt_to_talcapital"
+        },
+        {
+            "column": "CURRENTDEBT_TO_DEBT",
+            "data_type": "float",
+            "desc": "流动负债/负债合计",
+            "must": "Y",
+            "name": "currentdebt_to_debt"
+        },
+        {
+            "column": "LONGDEB_TO_DEBT",
+            "data_type": "float",
+            "desc": "非流动负债/负债合计",
+            "must": "Y",
+            "name": "longdeb_to_debt"
+        },
+        {
+            "column": "OCF_TO_SHORTDEBT",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/流动负债",
+            "must": "Y",
+            "name": "ocf_to_shortdebt"
+        },
+        {
+            "column": "DEBT_TO_EQT",
+            "data_type": "float",
+            "desc": "产权比率",
+            "must": "Y",
+            "name": "debt_to_eqt"
+        },
+        {
+            "column": "EQT_TO_DEBT",
+            "data_type": "float",
+            "desc": "归属于母公司的股东权益/负债合计",
+            "must": "Y",
+            "name": "eqt_to_debt"
+        },
+        {
+            "column": "EQT_TO_INTERESTDEBT",
+            "data_type": "float",
+            "desc": "归属于母公司的股东权益/带息债务",
+            "must": "Y",
+            "name": "eqt_to_interestdebt"
+        },
+        {
+            "column": "TANGIBLEASSET_TO_DEBT",
+            "data_type": "float",
+            "desc": "有形资产/负债合计",
+            "must": "Y",
+            "name": "tangibleasset_to_debt"
+        },
+        {
+            "column": "TANGASSET_TO_INTDEBT",
+            "data_type": "float",
+            "desc": "有形资产/带息债务",
+            "must": "Y",
+            "name": "tangasset_to_intdebt"
+        },
+        {
+            "column": "TANGIBLEASSET_TO_NETDEBT",
+            "data_type": "float",
+            "desc": "有形资产/净债务",
+            "must": "Y",
+            "name": "tangibleasset_to_netdebt"
+        },
+        {
+            "column": "OCF_TO_DEBT",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/负债合计",
+            "must": "Y",
+            "name": "ocf_to_debt"
+        },
+        {
+            "column": "OCF_TO_INTERESTDEBT",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/带息债务",
+            "must": "N",
+            "name": "ocf_to_interestdebt"
+        },
+        {
+            "column": "OCF_TO_NETDEBT",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额/净债务",
+            "must": "N",
+            "name": "ocf_to_netdebt"
+        },
+        {
+            "column": "EBIT_TO_INTEREST",
+            "data_type": "float",
+            "desc": "已获利息倍数(EBIT/利息费用)",
+            "must": "N",
+            "name": "ebit_to_interest"
+        },
+        {
+            "column": "LONGDEBT_TO_WORKINGCAPITAL",
+            "data_type": "float",
+            "desc": "长期债务与营运资金比率",
+            "must": "N",
+            "name": "longdebt_to_workingcapital"
+        },
+        {
+            "column": "EBITDA_TO_DEBT",
+            "data_type": "float",
+            "desc": "息税折旧摊销前利润/负债合计",
+            "must": "N",
+            "name": "ebitda_to_debt"
+        },
+        {
+            "column": "TURN_DAYS",
+            "data_type": "float",
+            "desc": "营业周期",
+            "must": "Y",
+            "name": "turn_days"
+        },
+        {
+            "column": "ROA_YEARLY",
+            "data_type": "float",
+            "desc": "年化总资产净利率",
+            "must": "Y",
+            "name": "roa_yearly"
+        },
+        {
+            "column": "ROA_DP",
+            "data_type": "float",
+            "desc": "总资产净利率(杜邦分析)",
+            "must": "Y",
+            "name": "roa_dp"
+        },
+        {
+            "column": "FIXED_ASSETS",
+            "data_type": "float",
+            "desc": "固定资产合计",
+            "must": "Y",
+            "name": "fixed_assets"
+        },
+        {
+            "column": "PROFIT_PREFIN_EXP",
+            "data_type": "float",
+            "desc": "扣除财务费用前营业利润",
+            "must": "N",
+            "name": "profit_prefin_exp"
+        },
+        {
+            "column": "NON_OP_PROFIT",
+            "data_type": "float",
+            "desc": "非营业利润",
+            "must": "N",
+            "name": "non_op_profit"
+        },
+        {
+            "column": "OP_TO_EBT",
+            "data_type": "float",
+            "desc": "营业利润／利润总额",
+            "must": "N",
+            "name": "op_to_ebt"
+        },
+        {
+            "column": "NOP_TO_EBT",
+            "data_type": "float",
+            "desc": "非营业利润／利润总额",
+            "must": "N",
+            "name": "nop_to_ebt"
+        },
+        {
+            "column": "OCF_TO_PROFIT",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额／营业利润",
+            "must": "N",
+            "name": "ocf_to_profit"
+        },
+        {
+            "column": "CASH_TO_LIQDEBT",
+            "data_type": "float",
+            "desc": "货币资金／流动负债",
+            "must": "N",
+            "name": "cash_to_liqdebt"
+        },
+        {
+            "column": "CASH_TO_LIQDEBT_WITHINTEREST",
+            "data_type": "float",
+            "desc": "货币资金／带息流动负债",
+            "must": "N",
+            "name": "cash_to_liqdebt_withinterest"
+        },
+        {
+            "column": "OP_TO_LIQDEBT",
+            "data_type": "float",
+            "desc": "营业利润／流动负债",
+            "must": "N",
+            "name": "op_to_liqdebt"
+        },
+        {
+            "column": "OP_TO_DEBT",
+            "data_type": "float",
+            "desc": "营业利润／负债合计",
+            "must": "N",
+            "name": "op_to_debt"
+        },
+        {
+            "column": "ROIC_YEARLY",
+            "data_type": "float",
+            "desc": "年化投入资本回报率",
+            "must": "N",
+            "name": "roic_yearly"
+        },
+        {
+            "column": "TOTAL_FA_TRUN",
+            "data_type": "float",
+            "desc": "固定资产合计周转率",
+            "must": "N",
+            "name": "total_fa_trun"
+        },
+        {
+            "column": "PROFIT_TO_OP",
+            "data_type": "float",
+            "desc": "利润总额／营业收入",
+            "must": "Y",
+            "name": "profit_to_op"
+        },
+        {
+            "column": "Q_OPINCOME",
+            "data_type": "float",
+            "desc": "经营活动单季度净收益",
+            "must": "N",
+            "name": "q_opincome"
+        },
+        {
+            "column": "Q_INVESTINCOME",
+            "data_type": "float",
+            "desc": "价值变动单季度净收益",
+            "must": "N",
+            "name": "q_investincome"
+        },
+        {
+            "column": "Q_DTPROFIT",
+            "data_type": "float",
+            "desc": "扣除非经常损益后的单季度净利润",
+            "must": "N",
+            "name": "q_dtprofit"
+        },
+        {
+            "column": "Q_EPS",
+            "data_type": "float",
+            "desc": "每股收益(单季度)",
+            "must": "N",
+            "name": "q_eps"
+        },
+        {
+            "column": "Q_NETPROFIT_MARGIN",
+            "data_type": "float",
+            "desc": "销售净利率(单季度)",
+            "must": "N",
+            "name": "q_netprofit_margin"
+        },
+        {
+            "column": "Q_GSPROFIT_MARGIN",
+            "data_type": "float",
+            "desc": "销售毛利率(单季度)",
+            "must": "N",
+            "name": "q_gsprofit_margin"
+        },
+        {
+            "column": "Q_EXP_TO_SALES",
+            "data_type": "float",
+            "desc": "销售期间费用率(单季度)",
+            "must": "N",
+            "name": "q_exp_to_sales"
+        },
+        {
+            "column": "Q_PROFIT_TO_GR",
+            "data_type": "float",
+            "desc": "净利润／营业总收入(单季度)",
+            "must": "N",
+            "name": "q_profit_to_gr"
+        },
+        {
+            "column": "Q_SALEEXP_TO_GR",
+            "data_type": "float",
+            "desc": "销售费用／营业总收入 (单季度)",
+            "must": "Y",
+            "name": "q_saleexp_to_gr"
+        },
+        {
+            "column": "Q_ADMINEXP_TO_GR",
+            "data_type": "float",
+            "desc": "管理费用／营业总收入 (单季度)",
+            "must": "N",
+            "name": "q_adminexp_to_gr"
+        },
+        {
+            "column": "Q_FINAEXP_TO_GR",
+            "data_type": "float",
+            "desc": "财务费用／营业总收入 (单季度)",
+            "must": "N",
+            "name": "q_finaexp_to_gr"
+        },
+        {
+            "column": "Q_IMPAIR_TO_GR_TTM",
+            "data_type": "float",
+            "desc": "资产减值损失／营业总收入(单季度)",
+            "must": "N",
+            "name": "q_impair_to_gr_ttm"
+        },
+        {
+            "column": "Q_GC_TO_GR",
+            "data_type": "float",
+            "desc": "营业总成本／营业总收入 (单季度)",
+            "must": "Y",
+            "name": "q_gc_to_gr"
+        },
+        {
+            "column": "Q_OP_TO_GR",
+            "data_type": "float",
+            "desc": "营业利润／营业总收入(单季度)",
+            "must": "N",
+            "name": "q_op_to_gr"
+        },
+        {
+            "column": "Q_ROE",
+            "data_type": "float",
+            "desc": "净资产收益率(单季度)",
+            "must": "Y",
+            "name": "q_roe"
+        },
+        {
+            "column": "Q_DT_ROE",
+            "data_type": "float",
+            "desc": "净资产单季度收益率(扣除非经常损益)",
+            "must": "Y",
+            "name": "q_dt_roe"
+        },
+        {
+            "column": "Q_NPTA",
+            "data_type": "float",
+            "desc": "总资产净利润(单季度)",
+            "must": "Y",
+            "name": "q_npta"
+        },
+        {
+            "column": "Q_OPINCOME_TO_EBT",
+            "data_type": "float",
+            "desc": "经营活动净收益／利润总额(单季度)",
+            "must": "N",
+            "name": "q_opincome_to_ebt"
+        },
+        {
+            "column": "Q_INVESTINCOME_TO_EBT",
+            "data_type": "float",
+            "desc": "价值变动净收益／利润总额(单季度)",
+            "must": "N",
+            "name": "q_investincome_to_ebt"
+        },
+        {
+            "column": "Q_DTPROFIT_TO_PROFIT",
+            "data_type": "float",
+            "desc": "扣除非经常损益后的净利润／净利润(单季度)",
+            "must": "N",
+            "name": "q_dtprofit_to_profit"
+        },
+        {
+            "column": "Q_SALESCASH_TO_OR",
+            "data_type": "float",
+            "desc": "销售商品提供劳务收到的现金／营业收入(单季度)",
+            "must": "N",
+            "name": "q_salescash_to_or"
+        },
+        {
+            "column": "Q_OCF_TO_SALES",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额／营业收入(单季度)",
+            "must": "Y",
+            "name": "q_ocf_to_sales"
+        },
+        {
+            "column": "Q_OCF_TO_OR",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额／经营活动净收益(单季度)",
+            "must": "N",
+            "name": "q_ocf_to_or"
+        },
+        {
+            "column": "BASIC_EPS_YOY",
+            "data_type": "float",
+            "desc": "基本每股收益同比增长率(%)",
+            "must": "Y",
+            "name": "basic_eps_yoy"
+        },
+        {
+            "column": "DT_EPS_YOY",
+            "data_type": "float",
+            "desc": "稀释每股收益同比增长率(%)",
+            "must": "Y",
+            "name": "dt_eps_yoy"
+        },
+        {
+            "column": "CFPS_YOY",
+            "data_type": "float",
+            "desc": "每股经营活动产生的现金流量净额同比增长率(%)",
+            "must": "Y",
+            "name": "cfps_yoy"
+        },
+        {
+            "column": "OP_YOY",
+            "data_type": "float",
+            "desc": "营业利润同比增长率(%)",
+            "must": "Y",
+            "name": "op_yoy"
+        },
+        {
+            "column": "EBT_YOY",
+            "data_type": "float",
+            "desc": "利润总额同比增长率(%)",
+            "must": "Y",
+            "name": "ebt_yoy"
+        },
+        {
+            "column": "NETPROFIT_YOY",
+            "data_type": "float",
+            "desc": "归属母公司股东的净利润同比增长率(%)",
+            "must": "Y",
+            "name": "netprofit_yoy"
+        },
+        {
+            "column": "DT_NETPROFIT_YOY",
+            "data_type": "float",
+            "desc": "归属母公司股东的净利润-扣除非经常损益同比增长率(%)",
+            "must": "Y",
+            "name": "dt_netprofit_yoy"
+        },
+        {
+            "column": "OCF_YOY",
+            "data_type": "float",
+            "desc": "经营活动产生的现金流量净额同比增长率(%)",
+            "must": "Y",
+            "name": "ocf_yoy"
+        },
+        {
+            "column": "ROE_YOY",
+            "data_type": "float",
+            "desc": "净资产收益率(摊薄)同比增长率(%)",
+            "must": "Y",
+            "name": "roe_yoy"
+        },
+        {
+            "column": "BPS_YOY",
+            "data_type": "float",
+            "desc": "每股净资产相对年初增长率(%)",
+            "must": "Y",
+            "name": "bps_yoy"
+        },
+        {
+            "column": "ASSETS_YOY",
+            "data_type": "float",
+            "desc": "资产总计相对年初增长率(%)",
+            "must": "Y",
+            "name": "assets_yoy"
+        },
+        {
+            "column": "EQT_YOY",
+            "data_type": "float",
+            "desc": "归属母公司的股东权益相对年初增长率(%)",
+            "must": "Y",
+            "name": "eqt_yoy"
+        },
+        {
+            "column": "TR_YOY",
+            "data_type": "float",
+            "desc": "营业总收入同比增长率(%)",
+            "must": "Y",
+            "name": "tr_yoy"
+        },
+        {
+            "column": "OR_YOY",
+            "data_type": "float",
+            "desc": "营业收入同比增长率(%)",
+            "must": "Y",
+            "name": "or_yoy"
+        },
+        {
+            "column": "Q_GR_YOY",
+            "data_type": "float",
+            "desc": "营业总收入同比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_gr_yoy"
+        },
+        {
+            "column": "Q_GR_QOQ",
+            "data_type": "float",
+            "desc": "营业总收入环比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_gr_qoq"
+        },
+        {
+            "column": "Q_SALES_YOY",
+            "data_type": "float",
+            "desc": "营业收入同比增长率(%)(单季度)",
+            "must": "Y",
+            "name": "q_sales_yoy"
+        },
+        {
+            "column": "Q_SALES_QOQ",
+            "data_type": "float",
+            "desc": "营业收入环比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_sales_qoq"
+        },
+        {
+            "column": "Q_OP_YOY",
+            "data_type": "float",
+            "desc": "营业利润同比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_op_yoy"
+        },
+        {
+            "column": "Q_OP_QOQ",
+            "data_type": "float",
+            "desc": "营业利润环比增长率(%)(单季度)",
+            "must": "Y",
+            "name": "q_op_qoq"
+        },
+        {
+            "column": "Q_PROFIT_YOY",
+            "data_type": "float",
+            "desc": "净利润同比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_profit_yoy"
+        },
+        {
+            "column": "Q_PROFIT_QOQ",
+            "data_type": "float",
+            "desc": "净利润环比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_profit_qoq"
+        },
+        {
+            "column": "Q_NETPROFIT_YOY",
+            "data_type": "float",
+            "desc": "归属母公司股东的净利润同比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_netprofit_yoy"
+        },
+        {
+            "column": "Q_NETPROFIT_QOQ",
+            "data_type": "float",
+            "desc": "归属母公司股东的净利润环比增长率(%)(单季度)",
+            "must": "N",
+            "name": "q_netprofit_qoq"
+        },
+        {
+            "column": "EQUITY_YOY",
+            "data_type": "float",
+            "desc": "净资产同比增长率",
+            "must": "Y",
+            "name": "equity_yoy"
+        },
+        {
+            "column": "RD_EXP",
+            "data_type": "float",
+            "desc": "研发费用",
+            "must": "N",
+            "name": "rd_exp"
+        },
+        {
+            "column": "UPDATE_FLAG",
+            "data_type": "str",
+            "desc": "更新标识",
+            "must": "N",
+            "name": "update_flag"
+        }
+    ],
+    "parent_id": 16,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            16,
+            "财务数据"
+        ],
+        [
+            79,
+            "财务指标数据"
+        ]
+    ],
+    "title": "财务指标数据",
+    "validations": []
 }

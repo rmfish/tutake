@@ -1,183 +1,232 @@
 {
-    "desc": "获取卖方盈利预测数据",
-    "name": "report_rc",
-    "id": 292,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股票名称"
-    }, {
-        "column": "REPORT_DATE",
-        "name": "report_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "研报日期"
-    }, {
-        "column": "REPORT_TITLE",
-        "name": "report_title",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告标题"
-    }, {
-        "column": "REPORT_TYPE",
-        "name": "report_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告类型"
-    }, {
-        "column": "CLASSIFY",
-        "name": "classify",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报告分类"
-    }, {
-        "column": "ORG_NAME",
-        "name": "org_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "机构名称"
-    }, {
-        "column": "AUTHOR_NAME",
-        "name": "author_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "作者"
-    }, {
-        "column": "QUARTER",
-        "name": "quarter",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "预测报告期"
-    }, {
-        "column": "OP_RT",
-        "name": "op_rt",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测营业收入（万元）"
-    }, {
-        "column": "OP_PR",
-        "name": "op_pr",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测营业利润（万元）"
-    }, {
-        "column": "TP",
-        "name": "tp",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测利润总额（万元）"
-    }, {
-        "column": "NP",
-        "name": "np",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测净利润（万元）"
-    }, {
-        "column": "EPS",
-        "name": "eps",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测每股收益（元）"
-    }, {
-        "column": "PE",
-        "name": "pe",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测市盈率（元）"
-    }, {
-        "column": "RD",
-        "name": "rd",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测股息率（元）"
-    }, {
-        "column": "ROE",
-        "name": "roe",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测净资产收益率（元）"
-    }, {
-        "column": "EV_EBITDA",
-        "name": "ev_ebitda",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测EV/EBITDA"
-    }, {
-        "column": "RATING",
-        "name": "rating",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "卖方评级"
-    }, {
-        "column": "MAX_PRICE",
-        "name": "max_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测最高目标价"
-    }, {
-        "column": "MIN_PRICE",
-        "name": "min_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "预测最低目标价"
-    }, {
-        "column": "IMP_DG",
-        "name": "imp_dg",
-        "data_type": "str",
-        "must": "N",
-        "desc": "机构关注度"
-    }, {
-        "column": "CREATE_TIME",
-        "name": "create_time",
-        "data_type": "datetime",
-        "must": "N",
-        "desc": "TS数据更新时间"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 291,
-    "title": "券商盈利预测数据",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股票代码"
-    }, {
-        "name": "report_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "获取卖方盈利预测数据",
+    "id": 292,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告日期",
+            "must": "N",
+            "name": "report_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "report_rc",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "股票名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "REPORT_DATE",
+            "data_type": "str",
+            "desc": "研报日期",
+            "must": "Y",
+            "name": "report_date"
+        },
+        {
+            "column": "REPORT_TITLE",
+            "data_type": "str",
+            "desc": "报告标题",
+            "must": "Y",
+            "name": "report_title"
+        },
+        {
+            "column": "REPORT_TYPE",
+            "data_type": "str",
+            "desc": "报告类型",
+            "must": "Y",
+            "name": "report_type"
+        },
+        {
+            "column": "CLASSIFY",
+            "data_type": "str",
+            "desc": "报告分类",
+            "must": "Y",
+            "name": "classify"
+        },
+        {
+            "column": "ORG_NAME",
+            "data_type": "str",
+            "desc": "机构名称",
+            "must": "Y",
+            "name": "org_name"
+        },
+        {
+            "column": "AUTHOR_NAME",
+            "data_type": "str",
+            "desc": "作者",
+            "must": "Y",
+            "name": "author_name"
+        },
+        {
+            "column": "QUARTER",
+            "data_type": "str",
+            "desc": "预测报告期",
+            "must": "Y",
+            "name": "quarter"
+        },
+        {
+            "column": "OP_RT",
+            "data_type": "float",
+            "desc": "预测营业收入（万元）",
+            "must": "Y",
+            "name": "op_rt"
+        },
+        {
+            "column": "OP_PR",
+            "data_type": "float",
+            "desc": "预测营业利润（万元）",
+            "must": "Y",
+            "name": "op_pr"
+        },
+        {
+            "column": "TP",
+            "data_type": "float",
+            "desc": "预测利润总额（万元）",
+            "must": "Y",
+            "name": "tp"
+        },
+        {
+            "column": "NP",
+            "data_type": "float",
+            "desc": "预测净利润（万元）",
+            "must": "Y",
+            "name": "np"
+        },
+        {
+            "column": "EPS",
+            "data_type": "float",
+            "desc": "预测每股收益（元）",
+            "must": "Y",
+            "name": "eps"
+        },
+        {
+            "column": "PE",
+            "data_type": "float",
+            "desc": "预测市盈率（元）",
+            "must": "Y",
+            "name": "pe"
+        },
+        {
+            "column": "RD",
+            "data_type": "float",
+            "desc": "预测股息率（元）",
+            "must": "Y",
+            "name": "rd"
+        },
+        {
+            "column": "ROE",
+            "data_type": "float",
+            "desc": "预测净资产收益率（元）",
+            "must": "Y",
+            "name": "roe"
+        },
+        {
+            "column": "EV_EBITDA",
+            "data_type": "float",
+            "desc": "预测EV/EBITDA",
+            "must": "Y",
+            "name": "ev_ebitda"
+        },
+        {
+            "column": "RATING",
+            "data_type": "str",
+            "desc": "卖方评级",
+            "must": "Y",
+            "name": "rating"
+        },
+        {
+            "column": "MAX_PRICE",
+            "data_type": "float",
+            "desc": "预测最高目标价",
+            "must": "Y",
+            "name": "max_price"
+        },
+        {
+            "column": "MIN_PRICE",
+            "data_type": "float",
+            "desc": "预测最低目标价",
+            "must": "Y",
+            "name": "min_price"
+        },
+        {
+            "column": "IMP_DG",
+            "data_type": "str",
+            "desc": "机构关注度",
+            "must": "N",
+            "name": "imp_dg"
+        },
+        {
+            "column": "CREATE_TIME",
+            "data_type": "datetime",
+            "desc": "TS数据更新时间",
+            "must": "N",
+            "name": "create_time"
+        }
+    ],
+    "parent_id": 291,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            291,
+            "特色数据"
+        ],
+        [
+            292,
+            "券商盈利预测数据"
+        ]
+    ],
+    "title": "券商盈利预测数据",
+    "validations": []
 }

@@ -1,86 +1,119 @@
 {
-    "desc": "",
-    "name": "top10_holders",
-    "id": 61,
-    "outputs": [{
-        "name": "ts_code",
-        "column": "TS_CODE",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "TS股票代码"
-    }, {
-        "name": "ann_date",
-        "column": "ANN_DATE",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "公告日期"
-    }, {
-        "name": "end_date",
-        "column": "END_DATE",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "报告期"
-    }, {
-        "name": "holder_name",
-        "column": "HOLDER_NAME",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "股东名称"
-    }, {
-        "name": "hold_amount",
-        "column": "HOLD_AMOUNT",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "持有数量"
-    }, {
-        "name": "hold_ratio",
-        "column": "HOLD_RATIO",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "持有比例"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "前十大股东",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS代码"
-    }, {
-        "name": "period",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "报告期结束日期"
-    }, {
-        "name": "offset",
-        "data_type": "str",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "str",
-        "must": "N",
-        "desc": ""
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 61,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "str",
+            "desc": "",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "top10_holders",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "HOLDER_NAME",
+            "data_type": "str",
+            "desc": "股东名称",
+            "must": "Y",
+            "name": "holder_name"
+        },
+        {
+            "column": "HOLD_AMOUNT",
+            "data_type": "float",
+            "desc": "持有数量",
+            "must": "Y",
+            "name": "hold_amount"
+        },
+        {
+            "column": "HOLD_RATIO",
+            "data_type": "float",
+            "desc": "持有比例",
+            "must": "Y",
+            "name": "hold_ratio"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            61,
+            "前十大股东"
+        ]
+    ],
+    "title": "前十大股东",
+    "validations": []
 }

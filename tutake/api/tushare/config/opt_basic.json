@@ -1,148 +1,187 @@
 {
-    "desc": "期权合约信息",
-    "name": "opt_basic",
-    "id": 158,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "EXCHANGE",
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易市场"
-    }, {
-        "column": "OPT_FULL_NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "合约名称"
-    }, {
-        "column": "PER_UNIT",
-        "name": "per_unit",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "合约单位"
-    }, {
-        "column": "OPT_CODE",
-        "name": "opt_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "标准合约代码"
-    }, {
-        "column": "OPT_TYPE",
-        "name": "opt_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "合约类型"
-    }, {
-        "column": "CALL_PUT",
-        "name": "call_put",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "期权类型"
-    }, {
-        "column": "EXERCISE_TYPE",
-        "name": "exercise_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "行权方式"
-    }, {
-        "column": "EXERCISE_PRICE",
-        "name": "exercise_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "行权价格"
-    }, {
-        "column": "S_MONTH",
-        "name": "s_month",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "结算月"
-    }, {
-        "column": "MATURITY_DATE",
-        "name": "maturity_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "到期日"
-    }, {
-        "column": "LIST_PRICE",
-        "name": "list_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "挂牌基准价"
-    }, {
-        "column": "LIST_DATE",
-        "name": "list_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "开始交易日期"
-    }, {
-        "column": "DELIST_DATE",
-        "name": "delist_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最后交易日期"
-    }, {
-        "column": "LAST_EDATE",
-        "name": "last_edate",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最后行权日期"
-    }, {
-        "column": "LAST_DDATE",
-        "name": "last_ddate",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最后交割日期"
-    }, {
-        "column": "QUOTE_UNIT",
-        "name": "quote_unit",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "报价单位"
-    }, {
-        "column": "MIN_PRICE_CHG",
-        "name": "min_price_chg",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "最小价格波幅"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 157,
-    "title": "期权合约信息",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TSCODE"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所代码"
-    }, {
-        "name": "call_put",
-        "data_type": "str",
-        "must": "N",
-        "desc": "期权类型"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": ""
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "期权合约信息",
+    "id": 158,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TSCODE",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "desc": "期权类型",
+            "must": "N",
+            "name": "call_put"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "int",
+            "desc": "",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "opt_basic",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "EXCHANGE",
+            "data_type": "str",
+            "desc": "交易市场",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "OPT_FULL_NAME",
+            "data_type": "str",
+            "desc": "合约名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "PER_UNIT",
+            "data_type": "float",
+            "desc": "合约单位",
+            "must": "Y",
+            "name": "per_unit"
+        },
+        {
+            "column": "OPT_CODE",
+            "data_type": "str",
+            "desc": "标准合约代码",
+            "must": "Y",
+            "name": "opt_code"
+        },
+        {
+            "column": "OPT_TYPE",
+            "data_type": "str",
+            "desc": "合约类型",
+            "must": "Y",
+            "name": "opt_type"
+        },
+        {
+            "column": "CALL_PUT",
+            "data_type": "str",
+            "desc": "期权类型",
+            "must": "Y",
+            "name": "call_put"
+        },
+        {
+            "column": "EXERCISE_TYPE",
+            "data_type": "str",
+            "desc": "行权方式",
+            "must": "Y",
+            "name": "exercise_type"
+        },
+        {
+            "column": "EXERCISE_PRICE",
+            "data_type": "float",
+            "desc": "行权价格",
+            "must": "Y",
+            "name": "exercise_price"
+        },
+        {
+            "column": "S_MONTH",
+            "data_type": "str",
+            "desc": "结算月",
+            "must": "Y",
+            "name": "s_month"
+        },
+        {
+            "column": "MATURITY_DATE",
+            "data_type": "str",
+            "desc": "到期日",
+            "must": "Y",
+            "name": "maturity_date"
+        },
+        {
+            "column": "LIST_PRICE",
+            "data_type": "float",
+            "desc": "挂牌基准价",
+            "must": "Y",
+            "name": "list_price"
+        },
+        {
+            "column": "LIST_DATE",
+            "data_type": "str",
+            "desc": "开始交易日期",
+            "must": "Y",
+            "name": "list_date"
+        },
+        {
+            "column": "DELIST_DATE",
+            "data_type": "str",
+            "desc": "最后交易日期",
+            "must": "Y",
+            "name": "delist_date"
+        },
+        {
+            "column": "LAST_EDATE",
+            "data_type": "str",
+            "desc": "最后行权日期",
+            "must": "Y",
+            "name": "last_edate"
+        },
+        {
+            "column": "LAST_DDATE",
+            "data_type": "str",
+            "desc": "最后交割日期",
+            "must": "Y",
+            "name": "last_ddate"
+        },
+        {
+            "column": "QUOTE_UNIT",
+            "data_type": "str",
+            "desc": "报价单位",
+            "must": "Y",
+            "name": "quote_unit"
+        },
+        {
+            "column": "MIN_PRICE_CHG",
+            "data_type": "str",
+            "desc": "最小价格波幅",
+            "must": "Y",
+            "name": "min_price_chg"
+        }
+    ],
+    "parent_id": 157,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            157,
+            "期权"
+        ],
+        [
+            158,
+            "期权合约信息"
+        ]
+    ],
+    "title": "期权合约信息",
+    "validations": []
 }

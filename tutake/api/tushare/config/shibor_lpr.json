@@ -1,58 +1,90 @@
 {
-    "desc": "LPR贷款基础利率",
-    "name": "shibor_lpr",
-    "id": 151,
-    "outputs": [{
-        "column": "DATE",
-        "name": "date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "日期"
-    }, {
-        "column": "1Y",
-        "name": "1y",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "1年贷款利率"
-    }, {
-        "column": "5Y",
-        "name": "5y",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "5年贷款利率"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 148,
-    "title": "LPR贷款基础利率",
-    "inputs": [{
-        "name": "date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "LPR贷款基础利率",
+    "id": 151,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "日期",
+            "must": "N",
+            "name": "date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "shibor_lpr",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "DATE",
+            "data_type": "str",
+            "desc": "日期",
+            "must": "Y",
+            "name": "date"
+        },
+        {
+            "column": "1Y",
+            "data_type": "float",
+            "desc": "1年贷款利率",
+            "must": "Y",
+            "name": "1y"
+        },
+        {
+            "column": "5Y",
+            "data_type": "float",
+            "desc": "5年贷款利率",
+            "must": "Y",
+            "name": "5y"
+        }
+    ],
+    "parent_id": 148,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            148,
+            "利率数据"
+        ],
+        [
+            151,
+            "LPR贷款基础利率"
+        ]
+    ],
+    "title": "LPR贷款基础利率",
+    "validations": []
 }

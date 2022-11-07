@@ -1,100 +1,143 @@
 {
-    "desc": "获取货币供应量月度数据",
-    "name": "cn_m",
-    "id": 242,
-    "outputs": [{
-        "column": "MONTH",
-        "name": "month",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "月份YYYYMM"
-    }, {
-        "column": "M0",
-        "name": "m0",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M0（亿元）"
-    }, {
-        "column": "M0_YOY",
-        "name": "m0_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M0同比（%）"
-    }, {
-        "column": "M0_MOM",
-        "name": "m0_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M0环比（%）"
-    }, {
-        "column": "M1",
-        "name": "m1",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M1（亿元）"
-    }, {
-        "column": "M1_YOY",
-        "name": "m1_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M1同比（%）"
-    }, {
-        "column": "M1_MOM",
-        "name": "m1_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M1环比（%）"
-    }, {
-        "column": "M2",
-        "name": "m2",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M2（亿元）"
-    }, {
-        "column": "M2_YOY",
-        "name": "m2_yoy",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M2同比（%）"
-    }, {
-        "column": "M2_MOM",
-        "name": "m2_mom",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "M2环比（%）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 241,
-    "title": "货币供应量（月）",
-    "inputs": [{
-        "name": "m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "月度（202001表示，2020年1月）"
-    }, {
-        "name": "start_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始月度"
-    }, {
-        "name": "end_m",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束月度"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "获取货币供应量月度数据",
+    "id": 242,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "月度（202001表示，2020年1月）",
+            "must": "N",
+            "name": "m"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始月度",
+            "must": "N",
+            "name": "start_m"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束月度",
+            "must": "N",
+            "name": "end_m"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "cn_m",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "MONTH",
+            "data_type": "str",
+            "desc": "月份YYYYMM",
+            "must": "Y",
+            "name": "month"
+        },
+        {
+            "column": "M0",
+            "data_type": "float",
+            "desc": "M0（亿元）",
+            "must": "Y",
+            "name": "m0"
+        },
+        {
+            "column": "M0_YOY",
+            "data_type": "float",
+            "desc": "M0同比（%）",
+            "must": "Y",
+            "name": "m0_yoy"
+        },
+        {
+            "column": "M0_MOM",
+            "data_type": "float",
+            "desc": "M0环比（%）",
+            "must": "Y",
+            "name": "m0_mom"
+        },
+        {
+            "column": "M1",
+            "data_type": "float",
+            "desc": "M1（亿元）",
+            "must": "Y",
+            "name": "m1"
+        },
+        {
+            "column": "M1_YOY",
+            "data_type": "float",
+            "desc": "M1同比（%）",
+            "must": "Y",
+            "name": "m1_yoy"
+        },
+        {
+            "column": "M1_MOM",
+            "data_type": "float",
+            "desc": "M1环比（%）",
+            "must": "Y",
+            "name": "m1_mom"
+        },
+        {
+            "column": "M2",
+            "data_type": "float",
+            "desc": "M2（亿元）",
+            "must": "Y",
+            "name": "m2"
+        },
+        {
+            "column": "M2_YOY",
+            "data_type": "float",
+            "desc": "M2同比（%）",
+            "must": "Y",
+            "name": "m2_yoy"
+        },
+        {
+            "column": "M2_MOM",
+            "data_type": "float",
+            "desc": "M2环比（%）",
+            "must": "Y",
+            "name": "m2_mom"
+        }
+    ],
+    "parent_id": 241,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            240,
+            "金融"
+        ],
+        [
+            241,
+            "货币供应量"
+        ],
+        [
+            242,
+            "货币供应量（月）"
+        ]
+    ],
+    "title": "货币供应量（月）",
+    "validations": []
 }

@@ -1,106 +1,138 @@
 {
-    "desc": "",
-    "name": "coinlist",
-    "id": 54,
-    "outputs": [{
-        "name": "coin",
-        "column": "coin",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "货币代码"
-    }, {
-        "name": "en_name",
-        "column": "en_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "英文名称"
-    }, {
-        "name": "cn_name",
-        "column": "cn_name",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "中文名称"
-    }, {
-        "name": "issue_date",
-        "column": "issue_date",
-        "must": "Y",
-        "data_type": "str",
-        "desc": "发行日期"
-    }, {
-        "name": "issue_price",
-        "column": "issue_price",
-        "msut": "Y",
-        "data_type": "float",
-        "desc": "发行价格（美元）"
-    }, {
-        "name": "amount",
-        "column": "amount",
-        "must": "Y",
-        "data_type": "float",
-        "desc": "发行总量"
-    }, {
-        "name": "supply",
-        "column": "supply",
-        "must": "N",
-        "data_type": "float",
-        "desc": "流通总量"
-    }, {
-        "name": "algo",
-        "column": "algo",
-        "must": "N",
-        "data_type": "str",
-        "desc": "算法原理"
-    }, {
-        "name": "area",
-        "column": "country",
-        "must": "N",
-        "data_type": "str",
-        "desc": "发行地区"
-    }, {
-        "name": "desc",
-        "column": "desc",
-        "must": "N",
-        "data_type": "str",
-        "desc": "描述"
-    }, {
-        "name": "labels",
-        "column": "labels",
-        "must": "N",
-        "data_type": "str",
-        "desc": "标签分类"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 3,
-    "title": "全球数字货币列表",
-    "inputs": [{
-        "name": "issue_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "发行日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 54,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "发行日期",
+            "must": "N",
+            "name": "issue_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "coinlist",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "coin",
+            "data_type": "str",
+            "desc": "货币代码",
+            "must": "Y",
+            "name": "coin"
+        },
+        {
+            "column": "en_name",
+            "data_type": "str",
+            "desc": "英文名称",
+            "must": "Y",
+            "name": "en_name"
+        },
+        {
+            "column": "cn_name",
+            "data_type": "str",
+            "desc": "中文名称",
+            "must": "Y",
+            "name": "cn_name"
+        },
+        {
+            "column": "issue_date",
+            "data_type": "str",
+            "desc": "发行日期",
+            "must": "Y",
+            "name": "issue_date"
+        },
+        {
+            "column": "issue_price",
+            "data_type": "float",
+            "desc": "发行价格（美元）",
+            "msut": "Y",
+            "name": "issue_price"
+        },
+        {
+            "column": "amount",
+            "data_type": "float",
+            "desc": "发行总量",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "supply",
+            "data_type": "float",
+            "desc": "流通总量",
+            "must": "N",
+            "name": "supply"
+        },
+        {
+            "column": "algo",
+            "data_type": "str",
+            "desc": "算法原理",
+            "must": "N",
+            "name": "algo"
+        },
+        {
+            "column": "country",
+            "data_type": "str",
+            "desc": "发行地区",
+            "must": "N",
+            "name": "area"
+        },
+        {
+            "column": "desc",
+            "data_type": "str",
+            "desc": "描述",
+            "must": "N",
+            "name": "desc"
+        },
+        {
+            "column": "labels",
+            "data_type": "str",
+            "desc": "标签分类",
+            "must": "N",
+            "name": "labels"
+        }
+    ],
+    "parent_id": 3,
+    "path": [
+        [
+            41,
+            "另类数据"
+        ],
+        [
+            3,
+            "基础数据"
+        ],
+        [
+            54,
+            "全球数字货币列表"
+        ]
+    ],
+    "title": "全球数字货币列表",
+    "validations": []
 }

@@ -1,78 +1,105 @@
 {
-    "desc": "",
-    "name": "coinfees",
-    "id": 64,
-    "outputs": [{
-        "name": "exchange",
-        "column": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所"
-    }, {
-        "name": "level",
-        "column": "level",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易级别和类型"
-    }, {
-        "name": "maker_fee",
-        "column": "maker_fee",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "挂单费率"
-    }, {
-        "name": "taker_fee",
-        "column": "taker_fee",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "吃单费率"
-    }, {
-        "name": "asset_type",
-        "column": "asset_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "资产类别 coin币交易 future期货交易"
-    }, {
-        "name": "start_date",
-        "column": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "费率开始执行日期"
-    }, {
-        "name": "end_date",
-        "column": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "本次费率失效日期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 52,
-    "title": "交易所交易费率",
-    "inputs": [{
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所"
-    }, {
-        "name": "asset_type",
-        "data_type": "str",
-        "default": "coin",
-        "must": "N",
-        "desc": "交易类别coin币交易 future期货交易"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "",
+    "id": 64,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "default": "coin",
+            "desc": "交易类别coin币交易 future期货交易",
+            "must": "N",
+            "name": "asset_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "coinfees",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "exchange",
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "level",
+            "data_type": "str",
+            "desc": "交易级别和类型",
+            "must": "Y",
+            "name": "level"
+        },
+        {
+            "column": "maker_fee",
+            "data_type": "float",
+            "desc": "挂单费率",
+            "must": "Y",
+            "name": "maker_fee"
+        },
+        {
+            "column": "taker_fee",
+            "data_type": "float",
+            "desc": "吃单费率",
+            "must": "Y",
+            "name": "taker_fee"
+        },
+        {
+            "column": "asset_type",
+            "data_type": "str",
+            "desc": "资产类别 coin币交易 future期货交易",
+            "must": "Y",
+            "name": "asset_type"
+        },
+        {
+            "column": "start_date",
+            "data_type": "str",
+            "desc": "费率开始执行日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "column": "end_date",
+            "data_type": "str",
+            "desc": "本次费率失效日期",
+            "must": "N",
+            "name": "end_date"
+        }
+    ],
+    "parent_id": 52,
+    "path": [
+        [
+            41,
+            "另类数据"
+        ],
+        [
+            52,
+            "行情数据"
+        ],
+        [
+            64,
+            "交易所交易费率"
+        ]
+    ],
+    "title": "交易所交易费率",
+    "validations": []
 }

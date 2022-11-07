@@ -1,117 +1,151 @@
 {
-    "desc": "获取债券回购日行情",
-    "name": "repo_daily",
-    "id": 256,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "REPO_MATURITY",
-        "name": "repo_maturity",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "期限品种"
-    }, {
-        "column": "PRE_CLOSE",
-        "name": "pre_close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "前收盘(%)"
-    }, {
-        "column": "OPEN",
-        "name": "open",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "开盘价(%)"
-    }, {
-        "column": "HIGH",
-        "name": "high",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最高价(%)"
-    }, {
-        "column": "LOW",
-        "name": "low",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最低价(%)"
-    }, {
-        "column": "CLOSE",
-        "name": "close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘价(%)"
-    }, {
-        "column": "WEIGHT",
-        "name": "weight",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加权价(%)"
-    }, {
-        "column": "WEIGHT_R",
-        "name": "weight_r",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "加权价(利率债)(%)"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交金额(万元)"
-    }, {
-        "column": "NUM",
-        "name": "num",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "成交笔数(笔)"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 184,
-    "title": "债券回购日行情",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期(YYYYMMDD格式，下同)"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "获取债券回购日行情",
+    "id": 256,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期(YYYYMMDD格式，下同)",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "repo_daily",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "REPO_MATURITY",
+            "data_type": "str",
+            "desc": "期限品种",
+            "must": "Y",
+            "name": "repo_maturity"
+        },
+        {
+            "column": "PRE_CLOSE",
+            "data_type": "float",
+            "desc": "前收盘(%)",
+            "must": "Y",
+            "name": "pre_close"
+        },
+        {
+            "column": "OPEN",
+            "data_type": "float",
+            "desc": "开盘价(%)",
+            "must": "Y",
+            "name": "open"
+        },
+        {
+            "column": "HIGH",
+            "data_type": "float",
+            "desc": "最高价(%)",
+            "must": "Y",
+            "name": "high"
+        },
+        {
+            "column": "LOW",
+            "data_type": "float",
+            "desc": "最低价(%)",
+            "must": "Y",
+            "name": "low"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘价(%)",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "WEIGHT",
+            "data_type": "float",
+            "desc": "加权价(%)",
+            "must": "Y",
+            "name": "weight"
+        },
+        {
+            "column": "WEIGHT_R",
+            "data_type": "float",
+            "desc": "加权价(利率债)(%)",
+            "must": "Y",
+            "name": "weight_r"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交金额(万元)",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "NUM",
+            "data_type": "int",
+            "desc": "成交笔数(笔)",
+            "must": "Y",
+            "name": "num"
+        }
+    ],
+    "parent_id": 184,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            184,
+            "债券"
+        ],
+        [
+            256,
+            "债券回购日行情"
+        ]
+    ],
+    "title": "债券回购日行情",
+    "validations": []
 }

@@ -1,166 +1,209 @@
 {
-    "desc": "期货日线行情",
-    "name": "fut_daily",
-    "id": 138,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易代码"
-    }, {
-        "column": "PRE_CLOSE",
-        "name": "pre_close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "昨收盘价"
-    }, {
-        "column": "PRE_SETTLE",
-        "name": "pre_settle",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "昨结算价"
-    }, {
-        "column": "OPEN",
-        "name": "open",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "开盘价"
-    }, {
-        "column": "HIGH",
-        "name": "high",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最高价"
-    }, {
-        "column": "LOW",
-        "name": "low",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最低价"
-    }, {
-        "column": "CLOSE",
-        "name": "close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘价"
-    }, {
-        "column": "SETTLE",
-        "name": "settle",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "结算价"
-    }, {
-        "column": "CHANGE1",
-        "name": "change1",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌1,收盘价-昨结算价"
-    }, {
-        "column": "CHANGE2",
-        "name": "change2",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌2,结算价-昨结算价"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交量(手)"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交金额(万元)"
-    }, {
-        "column": "OI",
-        "name": "oi",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持仓量(手)"
-    }, {
-        "column": "OI_CHG",
-        "name": "oi_chg",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持仓量变化"
-    }, {
-        "column": "DELV_SETTLE",
-        "name": "delv_settle",
-        "data_type": "float",
-        "must": "N",
-        "desc": "交割结算价"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 134,
-    "title": "期货日线行情",
-    "inputs": [{
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "合约代码"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易所代码"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [{
-        "name": "trade_date",
-        "validator": "required",
-        "options": null,
-        "trigger": {
-            "link":
-                "and",
-            "exp": [{
-                "name": "ts_code",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }, {
-                "name": "exchange",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }]
-        },
-        "message": "trade_date,ts_code参数不能都为空"
-    }],
     "default_limit": null,
-    "order_by": null
+    "desc": "期货日线行情",
+    "id": 138,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "合约代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "fut_daily",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易代码",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "PRE_CLOSE",
+            "data_type": "float",
+            "desc": "昨收盘价",
+            "must": "Y",
+            "name": "pre_close"
+        },
+        {
+            "column": "PRE_SETTLE",
+            "data_type": "float",
+            "desc": "昨结算价",
+            "must": "Y",
+            "name": "pre_settle"
+        },
+        {
+            "column": "OPEN",
+            "data_type": "float",
+            "desc": "开盘价",
+            "must": "Y",
+            "name": "open"
+        },
+        {
+            "column": "HIGH",
+            "data_type": "float",
+            "desc": "最高价",
+            "must": "Y",
+            "name": "high"
+        },
+        {
+            "column": "LOW",
+            "data_type": "float",
+            "desc": "最低价",
+            "must": "Y",
+            "name": "low"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘价",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "SETTLE",
+            "data_type": "float",
+            "desc": "结算价",
+            "must": "Y",
+            "name": "settle"
+        },
+        {
+            "column": "CHANGE1",
+            "data_type": "float",
+            "desc": "涨跌1,收盘价-昨结算价",
+            "must": "Y",
+            "name": "change1"
+        },
+        {
+            "column": "CHANGE2",
+            "data_type": "float",
+            "desc": "涨跌2,结算价-昨结算价",
+            "must": "Y",
+            "name": "change2"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "成交量(手)",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交金额(万元)",
+            "must": "Y",
+            "name": "amount"
+        },
+        {
+            "column": "OI",
+            "data_type": "float",
+            "desc": "持仓量(手)",
+            "must": "Y",
+            "name": "oi"
+        },
+        {
+            "column": "OI_CHG",
+            "data_type": "float",
+            "desc": "持仓量变化",
+            "must": "Y",
+            "name": "oi_chg"
+        },
+        {
+            "column": "DELV_SETTLE",
+            "data_type": "float",
+            "desc": "交割结算价",
+            "must": "N",
+            "name": "delv_settle"
+        }
+    ],
+    "parent_id": 134,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            134,
+            "期货"
+        ],
+        [
+            138,
+            "期货日线行情"
+        ]
+    ],
+    "title": "期货日线行情",
+    "validations": [
+        {
+            "message": "trade_date,ts_code参数不能都为空",
+            "name": "trade_date",
+            "options": null,
+            "trigger": {
+                "exp": [
+                    {
+                        "name": "ts_code",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    },
+                    {
+                        "name": "exchange",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    }
+                ],
+                "link": "and"
+            },
+            "validator": "required"
+        }
+    ]
 }

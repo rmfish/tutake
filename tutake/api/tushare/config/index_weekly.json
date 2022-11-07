@@ -1,125 +1,162 @@
 {
-    "desc": "指数周线行情",
-    "name": "index_weekly",
-    "id": 171,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS指数代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日"
-    }, {
-        "column": "CLOSE",
-        "name": "close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "收盘点位"
-    }, {
-        "column": "OPEN",
-        "name": "open",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "开盘点位"
-    }, {
-        "column": "HIGH",
-        "name": "high",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最高点位"
-    }, {
-        "column": "LOW",
-        "name": "low",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "最低点位"
-    }, {
-        "column": "PRE_CLOSE",
-        "name": "pre_close",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "昨日收盘点"
-    }, {
-        "column": "CHANGE",
-        "name": "change",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌点位"
-    }, {
-        "column": "PCT_CHANGE",
-        "name": "pct_chg",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "涨跌幅"
-    }, {
-        "column": "VOL",
-        "name": "vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交量"
-    }, {
-        "column": "AMOUNT",
-        "name": "amount",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "成交额"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 93,
-    "title": "指数周线行情",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [{
-        "name": "ts_code",
-        "validator": "required",
-        "options": null,
-        "trigger": {
-            "link": "and",
-            "exp": [{
-                "name": "trade_date",
-                "operator": "=",
-                "type": "builtin",
-                "value": "None"
-            }]
-        },
-        "message": "ts_code,trade_date至少输入一个参数"
-    }],
     "default_limit": null,
-    "order_by": null
+    "desc": "指数周线行情",
+    "id": 171,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "index_weekly",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS指数代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "CLOSE",
+            "data_type": "float",
+            "desc": "收盘点位",
+            "must": "Y",
+            "name": "close"
+        },
+        {
+            "column": "OPEN",
+            "data_type": "float",
+            "desc": "开盘点位",
+            "must": "Y",
+            "name": "open"
+        },
+        {
+            "column": "HIGH",
+            "data_type": "float",
+            "desc": "最高点位",
+            "must": "Y",
+            "name": "high"
+        },
+        {
+            "column": "LOW",
+            "data_type": "float",
+            "desc": "最低点位",
+            "must": "Y",
+            "name": "low"
+        },
+        {
+            "column": "PRE_CLOSE",
+            "data_type": "float",
+            "desc": "昨日收盘点",
+            "must": "Y",
+            "name": "pre_close"
+        },
+        {
+            "column": "CHANGE",
+            "data_type": "float",
+            "desc": "涨跌点位",
+            "must": "Y",
+            "name": "change"
+        },
+        {
+            "column": "PCT_CHANGE",
+            "data_type": "float",
+            "desc": "涨跌幅",
+            "must": "Y",
+            "name": "pct_chg"
+        },
+        {
+            "column": "VOL",
+            "data_type": "float",
+            "desc": "成交量",
+            "must": "Y",
+            "name": "vol"
+        },
+        {
+            "column": "AMOUNT",
+            "data_type": "float",
+            "desc": "成交额",
+            "must": "Y",
+            "name": "amount"
+        }
+    ],
+    "parent_id": 93,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            93,
+            "指数"
+        ],
+        [
+            171,
+            "指数周线行情"
+        ]
+    ],
+    "title": "指数周线行情",
+    "validations": [
+        {
+            "message": "ts_code,trade_date至少输入一个参数",
+            "name": "ts_code",
+            "options": null,
+            "trigger": {
+                "exp": [
+                    {
+                        "name": "trade_date",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    }
+                ],
+                "link": "and"
+            },
+            "validator": "required"
+        }
+    ]
 }

@@ -1,76 +1,103 @@
 {
-    "desc": "同花顺",
-    "name": "ths_index",
-    "id": 259,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "代码"
-    }, {
-        "column": "NAME",
-        "name": "name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "名称"
-    }, {
-        "column": "COUNT",
-        "name": "count",
-        "data_type": "int",
-        "must": "Y",
-        "desc": "成分个数"
-    }, {
-        "column": "EXCHANGE",
-        "name": "exchange",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易所"
-    }, {
-        "column": "LIST_DATE",
-        "name": "list_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "上市日期"
-    }, {
-        "column": "TYPE",
-        "name": "type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "N概念指数S特色指数"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 93,
-    "title": "同花顺概念和行业列表",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "指数代码"
-    }, {
-        "name": "exchange",
-        "data_type": "str",
-        "must": "N",
-        "desc": "市场类型A-a股票 HK-港股 US-美股"
-    }, {
-        "name": "type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "指数类型 N-板块指数 S-同花顺特色指数"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "同花顺",
+    "id": 259,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "指数代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "市场类型A-a股票 HK-港股 US-美股",
+            "must": "N",
+            "name": "exchange"
+        },
+        {
+            "data_type": "str",
+            "desc": "指数类型 N-板块指数 S-同花顺特色指数",
+            "must": "N",
+            "name": "type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "ths_index",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "NAME",
+            "data_type": "str",
+            "desc": "名称",
+            "must": "Y",
+            "name": "name"
+        },
+        {
+            "column": "COUNT",
+            "data_type": "int",
+            "desc": "成分个数",
+            "must": "Y",
+            "name": "count"
+        },
+        {
+            "column": "EXCHANGE",
+            "data_type": "str",
+            "desc": "交易所",
+            "must": "Y",
+            "name": "exchange"
+        },
+        {
+            "column": "LIST_DATE",
+            "data_type": "str",
+            "desc": "上市日期",
+            "must": "Y",
+            "name": "list_date"
+        },
+        {
+            "column": "TYPE",
+            "data_type": "str",
+            "desc": "N概念指数S特色指数",
+            "must": "Y",
+            "name": "type"
+        }
+    ],
+    "parent_id": 93,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            93,
+            "指数"
+        ],
+        [
+            259,
+            "同花顺概念和行业列表"
+        ]
+    ],
+    "title": "同花顺概念和行业列表",
+    "validations": []
 }

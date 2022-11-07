@@ -1,133 +1,174 @@
 {
-    "desc": "股东增减持",
-    "name": "stk_holdertrade",
-    "id": 175,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "TS代码"
-    }, {
-        "column": "ANN_DATE",
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "公告日期"
-    }, {
-        "column": "HOLDER_NAME",
-        "name": "holder_name",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股东名称"
-    }, {
-        "column": "HOLDER_TYPE",
-        "name": "holder_type",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "股东类型G高管P个人C公司"
-    }, {
-        "column": "IN_DE",
-        "name": "in_de",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "类型IN增持DE减持"
-    }, {
-        "column": "CHANGE_VOL",
-        "name": "change_vol",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "变动数量"
-    }, {
-        "column": "CHANGE_RATIO",
-        "name": "change_ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "占流通比例（%）"
-    }, {
-        "column": "AFTER_SHARE",
-        "name": "after_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "变动后持股"
-    }, {
-        "column": "AFTER_RATIO",
-        "name": "after_ratio",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "变动后占流通比例（%）"
-    }, {
-        "column": "AVG_PRICE",
-        "name": "avg_price",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "平均价格"
-    }, {
-        "column": "TOTAL_SHARE",
-        "name": "total_share",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "持股总数"
-    }, {
-        "column": "BEGIN_DATE",
-        "name": "begin_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "增减持开始日期"
-    }, {
-        "column": "CLOSE_DATE",
-        "name": "close_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "增减持结束日期"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 17,
-    "title": "股东增减持",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS股票代码"
-    }, {
-        "name": "ann_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "公告结束日期"
-    }, {
-        "name": "trade_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易类型IN增持DE减持"
-    }, {
-        "name": "holder_type",
-        "data_type": "str",
-        "must": "N",
-        "desc": "股东类型G高管C公司P个人"
-    }, {
-        "name": "limit",
-        "data_type": "int",
-        "must": "N",
-        "desc": "单次返回数据长度"
-    }, {
-        "name": "offset",
-        "data_type": "int",
-        "must": "N",
-        "desc": "请求数据的开始位移量"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "股东增减持",
+    "id": 175,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易类型IN增持DE减持",
+            "must": "N",
+            "name": "trade_type"
+        },
+        {
+            "data_type": "str",
+            "desc": "股东类型G高管C公司P个人",
+            "must": "N",
+            "name": "holder_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "stk_holdertrade",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "HOLDER_NAME",
+            "data_type": "str",
+            "desc": "股东名称",
+            "must": "Y",
+            "name": "holder_name"
+        },
+        {
+            "column": "HOLDER_TYPE",
+            "data_type": "str",
+            "desc": "股东类型G高管P个人C公司",
+            "must": "Y",
+            "name": "holder_type"
+        },
+        {
+            "column": "IN_DE",
+            "data_type": "str",
+            "desc": "类型IN增持DE减持",
+            "must": "Y",
+            "name": "in_de"
+        },
+        {
+            "column": "CHANGE_VOL",
+            "data_type": "float",
+            "desc": "变动数量",
+            "must": "Y",
+            "name": "change_vol"
+        },
+        {
+            "column": "CHANGE_RATIO",
+            "data_type": "float",
+            "desc": "占流通比例（%）",
+            "must": "Y",
+            "name": "change_ratio"
+        },
+        {
+            "column": "AFTER_SHARE",
+            "data_type": "float",
+            "desc": "变动后持股",
+            "must": "Y",
+            "name": "after_share"
+        },
+        {
+            "column": "AFTER_RATIO",
+            "data_type": "float",
+            "desc": "变动后占流通比例（%）",
+            "must": "Y",
+            "name": "after_ratio"
+        },
+        {
+            "column": "AVG_PRICE",
+            "data_type": "float",
+            "desc": "平均价格",
+            "must": "Y",
+            "name": "avg_price"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "持股总数",
+            "must": "Y",
+            "name": "total_share"
+        },
+        {
+            "column": "BEGIN_DATE",
+            "data_type": "str",
+            "desc": "增减持开始日期",
+            "must": "N",
+            "name": "begin_date"
+        },
+        {
+            "column": "CLOSE_DATE",
+            "data_type": "str",
+            "desc": "增减持结束日期",
+            "must": "N",
+            "name": "close_date"
+        }
+    ],
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            175,
+            "股东增减持"
+        ]
+    ],
+    "title": "股东增减持",
+    "validations": []
 }

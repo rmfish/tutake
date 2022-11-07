@@ -1,69 +1,95 @@
 {
-    "desc": "基金复权因子",
-    "name": "fund_adj",
-    "id": 199,
-    "outputs": [{
-        "column": "TS_CODE",
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "ts基金代码"
-    }, {
-        "column": "TRADE_DATE",
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "Y",
-        "desc": "交易日期"
-    }, {
-        "column": "ADJ_FACTOR",
-        "name": "adj_factor",
-        "data_type": "float",
-        "must": "Y",
-        "desc": "复权因子"
-    }, {
-        "column": "DISCOUNT_RATE",
-        "name": "discount_rate",
-        "data_type": "float",
-        "must": "N",
-        "desc": "贴水率（%）"
-    }],
     "database": null,
-    "is_ready": null,
-    "if_exists": null,
-    "parent_id": 18,
-    "title": "复权因子",
-    "inputs": [{
-        "name": "ts_code",
-        "data_type": "str",
-        "must": "N",
-        "desc": "TS基金代码"
-    }, {
-        "name": "trade_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "交易日期"
-    }, {
-        "name": "start_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始日期"
-    }, {
-        "name": "end_date",
-        "data_type": "str",
-        "must": "N",
-        "desc": "结束日期"
-    }, {
-        "name": "offset",
-        "data_type": "str",
-        "must": "N",
-        "desc": "开始行数"
-    }, {
-        "name": "limit",
-        "data_type": "str",
-        "must": "N",
-        "desc": "最大行数"
-    }],
-    "validations": [],
     "default_limit": null,
-    "order_by": null
+    "desc": "基金复权因子",
+    "id": 199,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS基金代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始行数",
+            "must": "N",
+            "name": "offset"
+        },
+        {
+            "data_type": "str",
+            "desc": "最大行数",
+            "must": "N",
+            "name": "limit"
+        }
+    ],
+    "is_ready": null,
+    "name": "fund_adj",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "ts基金代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "ADJ_FACTOR",
+            "data_type": "float",
+            "desc": "复权因子",
+            "must": "Y",
+            "name": "adj_factor"
+        },
+        {
+            "column": "DISCOUNT_RATE",
+            "data_type": "float",
+            "desc": "贴水率（%）",
+            "must": "N",
+            "name": "discount_rate"
+        }
+    ],
+    "parent_id": 18,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            18,
+            "公募基金"
+        ],
+        [
+            199,
+            "复权因子"
+        ]
+    ],
+    "title": "复权因子",
+    "validations": []
 }
