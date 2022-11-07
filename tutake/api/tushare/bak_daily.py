@@ -18,10 +18,10 @@ from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.bak_daily_ext import *
 from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import config
+from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (config['database']['driver_url'], 'tushare_bak_daily.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_bak_daily.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()

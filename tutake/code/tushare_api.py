@@ -8,9 +8,9 @@ from sqlalchemy import create_engine, MetaData, Integer, String, Column
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.utils.config import config
+from tutake.utils.config import tutake_config
 
-engine = create_engine("%s/%s" % (config['api']['driver_url'], 'tushare_meta.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_meta_sqlite_driver_url(), 'tushare_meta.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 

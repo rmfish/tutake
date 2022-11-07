@@ -1,16 +1,6 @@
 from importlib import import_module
 
-
-class Singleton(object):
-
-    def __init__(self, cls):
-        self._cls = cls
-        self._instance = {}
-
-    def __call__(self):
-        if self._cls not in self._instance:
-            self._instance[self._cls] = self._cls()
-        return self._instance[self._cls]
+from tutake.utils.singleton import Singleton
 
 
 @Singleton
@@ -95,8 +85,3 @@ class DAO(object):
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
             return clazz()
-
-
-if __name__ == '__main__':
-    dao1 = DAO()
-    print(dao1.stock_basic.count())

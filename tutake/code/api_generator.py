@@ -6,7 +6,7 @@ import pendulum
 import jinja2
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.tushare_api import get_api, get_api_path, get_api_children, get_ready_api, get_all_leaf_api
+from tutake.code.tushare_api import get_api, get_api_path, get_ready_api, get_all_leaf_api
 from tutake.utils.file_utils import file_dir, realpath
 
 logger = logging.getLogger("api.generate")
@@ -129,6 +129,7 @@ class CodeGenerator(object):
 
 
 if __name__ == '__main__':
+    logger.setLevel(logging.DEBUG)
     current_dir = file_dir(__file__)
     tmpl_dir = "{}/tmpl".format(current_dir)
     api_dir = realpath("{}/../api/tushare".format(current_dir))
