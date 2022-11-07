@@ -5,6 +5,7 @@ def prepare_ext(self, process_type: ProcessType):
     """
     同步历史数据准备工作
     """
+    self.delete_all()
 
 
 def tushare_parameters_ext(self, process_type: ProcessType):
@@ -12,7 +13,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return []
+    return [{"market": "E"}, {"market": "O"}]
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

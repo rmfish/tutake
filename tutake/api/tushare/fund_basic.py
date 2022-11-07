@@ -147,8 +147,8 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if "15000" != "":
+            default_limit = int("15000")
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
@@ -237,7 +237,7 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
             }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = "15000"
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):

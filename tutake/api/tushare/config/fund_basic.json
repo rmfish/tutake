@@ -196,6 +196,6 @@
         "desc": ""
     }],
     "validations": [],
-    "default_limit": null,
+    "default_limit": 15000,
     "order_by": null
 }
