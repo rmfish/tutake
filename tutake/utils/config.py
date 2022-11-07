@@ -77,8 +77,8 @@ class DotConfig(dict):
 TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUSHARE_TOKEN_KEY = "tushare.token"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
-TUSHARE_API_META_DIR_KEY = "tushare.meta.driver_url"
-TUSHARE_DIR_KEY = "tutake.dir"
+TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"
+# TUSHARE_DIR_KEY = "tutake.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 
 
@@ -94,13 +94,13 @@ class TutakeConfig(object):
         :return:
         """
         data_driver_url = self.get_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
-        meta_driver_url = self.get_config(TUSHARE_API_META_DIR_KEY)
-        self.set_tutake_dir(self.get_config(TUSHARE_DIR_KEY))
+        meta_driver_url = self.get_config(TUSHARE_META_DRIVER_URL_KEY)
+        # self.set_tutake_dir(self.get_config(TUSHARE_DIR_KEY))
 
-        if data_driver_url:
-            self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, data_driver_url)
-        if meta_driver_url:
-            self.set_config(TUSHARE_API_META_DIR_KEY, meta_driver_url)
+        if not data_driver_url:
+            self.set_tutake_data_dir()
+        if not meta_driver_url:
+            self.set_tutake_meta_dir()
 
         if self.get_config(TUSHARE_TOKEN_KEY) is None:
             self.set_config(TUSHARE_TOKEN_KEY, DEFAULT_TUSHARE_TOKEN)
@@ -139,19 +139,45 @@ class TutakeConfig(object):
     def set_config(self, key, val) -> True:
         return self.__config.set(key, val)
 
-    def set_tutake_dir(self, tutake_dir: str = None):
-        def _get_default_driver_url(path, dir):
-            if path is None:
-                path = "%s/.tutake" % Path.home()
-            driver_url = 'sqlite:///%s/%s' % (path, dir)
-            return driver_url
+    def set_tutake_data_dir(self, dir: None):
+        if dir is None:
+            db_name = 'tushare_stock_basic.db'
+            dir = "%s/data" % (project_root())
+            if os.path.exists("%s/%s" % (dir, db_name)):
+                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(project_root(), 'data'))
+            else:
+                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY,
+                                self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'data'))
+        else:
+            self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(dir))
 
-        tutake_driver_url = _get_default_driver_url(tutake_dir, 'data')
-        logger.info("Set config %s %s" % (TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url))
-        self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url)
-        tutake_driver_url = _get_default_driver_url(tutake_dir, 'meta')
-        logger.info("Set config %s %s" % (TUSHARE_API_META_DIR_KEY, tutake_driver_url))
-        self.set_config(TUSHARE_API_META_DIR_KEY, tutake_driver_url)
+    def set_tutake_meta_dir(self, dir: None):
+        if dir is None:
+            db_name = 'tushare_meta.db'
+            dir = "%s/meta" % (project_root())
+            if os.path.exists("%s/%s" % (dir, db_name)):
+                self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(project_root(), 'meta'))
+            else:
+                self.set_config(TUSHARE_META_DRIVER_URL_KEY,
+                                self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'meta'))
+        else:
+            self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(dir))
+
+    # def set_tutake_dir(self, tutake_dir: str = None):
+    #     tutake_driver_url = self._get_default_driver_url(tutake_dir, 'data')
+    #     logger.info("Set config %s %s" % (TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url))
+    #     self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url)
+    #     tutake_driver_url = self._get_default_driver_url(tutake_dir, 'meta')
+    #     logger.info("Set config %s %s" % (TUSHARE_META_DRIVER_URL_KEY, tutake_driver_url))
+    #     self.set_config(TUSHARE_META_DRIVER_URL_KEY, tutake_driver_url)
+
+    def _get_default_driver_url(self, path, dir):
+        if path is None:
+            path = "%s/.tutake" % Path.home()
+        if dir:
+            path = "%s/%s" % (path, dir)
+        os.makedirs(path)
+        return 'sqlite:///%s' % (path)
 
     @staticmethod
     def __set(config: DotConfig, k, v):
@@ -161,7 +187,7 @@ class TutakeConfig(object):
         return self.require_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
 
     def get_meta_sqlite_driver_url(self):
-        return self.require_config(TUSHARE_API_META_DIR_KEY)
+        return self.require_config(TUSHARE_META_DRIVER_URL_KEY)
 
     def set_tushare_token(self, tushare_token):
         self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
@@ -170,7 +196,7 @@ class TutakeConfig(object):
         return self.require_config(TUSHARE_TOKEN_KEY)
 
     def get_process_thread_cnt(self):
-        return self.require_config(TUTAKE_PROCESS_THREAD_CNT_KEY)
+        return self.get_config(TUTAKE_PROCESS_THREAD_CNT_KEY, 4)
 
 
 tutake_config = TutakeConfig(project_root())
