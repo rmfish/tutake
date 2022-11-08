@@ -6,15 +6,13 @@ Tushare bak_daily接口
 
 @author: rmfish
 """
-from concurrent.futures import ThreadPoolExecutor
-
 import pandas as pd
 import logging
-from sqlalchemy import Integer, String, Float, Column, create_engine, text
+from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.tushare.base_dao import BaseDao, ProcessException, ProcessPercent
+from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.bak_daily_ext import *
 from tutake.api.tushare.process import ProcessType, DataProcess
@@ -77,10 +75,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareBakDaily, 'tushare_bak_daily')
-        TuShareBase.__init__(self)
-        self.dao = DAO()
-        self.query_fields = [
+        query_fields = [
             n for n in [
                 'ts_code',
                 'trade_date',
@@ -90,12 +85,17 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
                 'limit',
             ] if n not in ['limit', 'offset']
         ]
-        self.entity_fields = [
+        entity_fields = [
             "ts_code", "trade_date", "name", "pct_change", "close", "change", "open", "high", "low", "pre_close",
             "vol_ratio", "turn_over", "swing", "vol", "amount", "selling", "buying", "total_share", "float_share", "pe",
             "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
             "interval_3", "interval_6"
         ]
+        BaseDao.__init__(self, engine, session_factory, TushareBakDaily, 'tushare_bak_daily', query_fields,
+                         entity_fields)
+        TuShareBase.__init__(self)
+        DataProcess.__init__(self, "bak_daily")
+        self.dao = DAO()
 
     def bak_daily(self, fields='', **kwargs):
         """
@@ -108,7 +108,6 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
         | offset(str):   开始行数
         | limit(str):   最大行数
         
-
         :return: DataFrame
          ts_code(str)  股票代码
          trade_date(str)  交易日期
@@ -143,104 +142,23 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
          interval_6(float)  近6月涨幅
         
         """
-        params = {
-            key: kwargs[key]
-            for key in kwargs.keys()
-            if key in self.query_fields and key is not None and kwargs[key] != ''
-        }
-        query = session_factory().query(TushareBakDaily).filter_by(**params)
-        if fields != '':
-            entities = (
-                getattr(TushareBakDaily, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
-            query = query.with_entities(*entities)
-        query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
-        if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
-            input_limit = int(kwargs.get('limit'))
-            query = query.limit(input_limit)
-        if self.default_limit() != "":
-            default_limit = int(self.default_limit())
-            if default_limit < input_limit:
-                query = query.limit(default_limit)
-        if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
-            query = query.offset(int(kwargs.get('offset')))
-        df = pd.read_sql(query.statement, query.session.bind)
-        return df.drop(['id'], axis=1, errors='ignore')
-
-    def default_limit(self) -> str:
-        return ""
-
-    def prepare(self, process_type: ProcessType):
-        """
-        同步历史数据准备工作
-        """
-
-    def tushare_parameters(self, process_type: ProcessType):
-        """
-        同步历史数据调用的参数
-        :return: list(dict)
-        """
-        return [{}]
-
-    def param_loop_process(self, process_type: ProcessType, **params):
-        """
-        每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
-        """
-        return params
+        return super().query(fields, **kwargs)
 
     def process(self, process_type: ProcessType):
         """
         同步历史数据
         :return:
         """
-        self.prepare(process_type)
-        params = self.tushare_parameters(process_type)
-        logger.debug("Process tushare params is {}".format(params))
-        if params:
-            percent = ProcessPercent(len(params))
+        return super()._process(process_type, self.fetch_and_append)
 
-            def action(param):
-                new_param = self.param_loop_process(process_type, **param)
-                if new_param is None:
-                    logger.debug("[{}] Skip exec param: {}".format(percent.format(), param))
-                    return
-                try:
-                    cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.info("[{}] Fetch and append {} data, cnt is {} . param is {}".format(
-                        percent.format(), "bak_daily", cnt, param))
-                except Exception as err:
-                    if isinstance(err.args[0], str) and (err.args[0].startswith("抱歉，您没有访问该接口的权限")
-                                                         or err.args[0].startswith("抱歉，您每天最多访问该接口")):
-                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
-                        raise Exception("Exit with tushare api flow limit. {}", err.args[0])
-                    else:
-                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
-                        return ProcessException(param=new_param, cause=err)
-
-            with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
-                repeat_params = []
-                for result in pool.map(action, params):
-                    percent.finish()
-                    if isinstance(result, ProcessException):
-                        repeat_params.append(result.param)
-                    elif isinstance(result, Exception):
-                        return
-                # 过程中出现错误的，需要补偿执行
-                cnt = len(repeat_params)
-                if cnt > 0:
-                    percent = ProcessPercent(cnt)
-                    logger.warning("Failed process with exception.Cnt {}  All params is {}".format(cnt, repeat_params))
-                    for p in repeat_params:
-                        action(p)
-                        percent.finish()
-
-    def fetch_and_append(self, process_type: ProcessType, **kwargs):
+    def fetch_and_append(self, **kwargs):
         """
         获取tushare数据并append到数据库中
         :return: 数量行数
         """
+        init_args = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
         if len(kwargs.keys()) == 0:
-            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
+            kwargs = init_args
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = self.default_limit()
@@ -250,16 +168,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {
-            key: kwargs[key] for key in kwargs.keys() & list([
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'offset',
-                'limit',
-            ])
-        }
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
         @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
@@ -278,6 +187,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(BakDaily, 'default_limit', default_limit_ext)
+setattr(BakDaily, 'default_order_by', default_order_by_ext)
 setattr(BakDaily, 'prepare', prepare_ext)
 setattr(BakDaily, 'tushare_parameters', tushare_parameters_ext)
 setattr(BakDaily, 'param_loop_process', param_loop_process_ext)

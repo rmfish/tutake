@@ -1,6 +1,10 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_order_by_ext(self) -> str:
+    return "start_date desc,ts_code"
+
+
 def default_limit_ext(self):
     return '10000'
 

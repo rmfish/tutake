@@ -8,6 +8,10 @@ import pendulum
 """
 
 
+def default_order_by_ext(self) -> str:
+    return "trade_date desc"
+
+
 def default_limit_ext(self):
     return '300'
 

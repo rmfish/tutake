@@ -1,7 +1,13 @@
 from tutake.api.tushare.process import ProcessType
 
+
+def default_order_by_ext(self) -> str:
+    return "ts_code"
+
+
 def default_limit_ext(self):
     return '8000'
+
 
 def prepare_ext(self, process_type: ProcessType):
     """

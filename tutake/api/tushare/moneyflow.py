@@ -6,15 +6,13 @@ Tushare moneyflow接口
 
 @author: rmfish
 """
-from concurrent.futures import ThreadPoolExecutor
-
 import pandas as pd
 import logging
-from sqlalchemy import Integer, String, Float, Column, create_engine, text
+from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.tushare.base_dao import BaseDao, ProcessException, ProcessPercent
+from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.moneyflow_ext import *
 from tutake.api.tushare.process import ProcessType, DataProcess
@@ -67,10 +65,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareMoneyflow, 'tushare_moneyflow')
-        TuShareBase.__init__(self)
-        self.dao = DAO()
-        self.query_fields = [
+        query_fields = [
             n for n in [
                 'ts_code',
                 'trade_date',
@@ -80,12 +75,17 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
                 'offset',
             ] if n not in ['limit', 'offset']
         ]
-        self.entity_fields = [
+        entity_fields = [
             "ts_code", "trade_date", "buy_sm_vol", "buy_sm_amount", "sell_sm_vol", "sell_sm_amount", "buy_md_vol",
             "buy_md_amount", "sell_md_vol", "sell_md_amount", "buy_lg_vol", "buy_lg_amount", "sell_lg_vol",
             "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
             "net_mf_amount", "trade_count"
         ]
+        BaseDao.__init__(self, engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
+                         entity_fields)
+        TuShareBase.__init__(self)
+        DataProcess.__init__(self, "moneyflow")
+        self.dao = DAO()
 
     def moneyflow(self, fields='', **kwargs):
         """
@@ -98,7 +98,6 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
-
         :return: DataFrame
          ts_code(str)  TS代码
          trade_date(str)  交易日期
@@ -123,104 +122,23 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
          trade_count(int)  交易笔数
         
         """
-        params = {
-            key: kwargs[key]
-            for key in kwargs.keys()
-            if key in self.query_fields and key is not None and kwargs[key] != ''
-        }
-        query = session_factory().query(TushareMoneyflow).filter_by(**params)
-        if fields != '':
-            entities = (
-                getattr(TushareMoneyflow, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
-            query = query.with_entities(*entities)
-        query = query.order_by(text("trade_date desc,ts_code"))
-        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
-        if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
-            input_limit = int(kwargs.get('limit'))
-            query = query.limit(input_limit)
-        if self.default_limit() != "":
-            default_limit = int(self.default_limit())
-            if default_limit < input_limit:
-                query = query.limit(default_limit)
-        if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
-            query = query.offset(int(kwargs.get('offset')))
-        df = pd.read_sql(query.statement, query.session.bind)
-        return df.drop(['id'], axis=1, errors='ignore')
-
-    def default_limit(self) -> str:
-        return ""
-
-    def prepare(self, process_type: ProcessType):
-        """
-        同步历史数据准备工作
-        """
-
-    def tushare_parameters(self, process_type: ProcessType):
-        """
-        同步历史数据调用的参数
-        :return: list(dict)
-        """
-        return [{}]
-
-    def param_loop_process(self, process_type: ProcessType, **params):
-        """
-        每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
-        """
-        return params
+        return super().query(fields, **kwargs)
 
     def process(self, process_type: ProcessType):
         """
         同步历史数据
         :return:
         """
-        self.prepare(process_type)
-        params = self.tushare_parameters(process_type)
-        logger.debug("Process tushare params is {}".format(params))
-        if params:
-            percent = ProcessPercent(len(params))
+        return super()._process(process_type, self.fetch_and_append)
 
-            def action(param):
-                new_param = self.param_loop_process(process_type, **param)
-                if new_param is None:
-                    logger.debug("[{}] Skip exec param: {}".format(percent.format(), param))
-                    return
-                try:
-                    cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.info("[{}] Fetch and append {} data, cnt is {} . param is {}".format(
-                        percent.format(), "moneyflow", cnt, param))
-                except Exception as err:
-                    if isinstance(err.args[0], str) and (err.args[0].startswith("抱歉，您没有访问该接口的权限")
-                                                         or err.args[0].startswith("抱歉，您每天最多访问该接口")):
-                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
-                        raise Exception("Exit with tushare api flow limit. {}", err.args[0])
-                    else:
-                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
-                        return ProcessException(param=new_param, cause=err)
-
-            with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
-                repeat_params = []
-                for result in pool.map(action, params):
-                    percent.finish()
-                    if isinstance(result, ProcessException):
-                        repeat_params.append(result.param)
-                    elif isinstance(result, Exception):
-                        return
-                # 过程中出现错误的，需要补偿执行
-                cnt = len(repeat_params)
-                if cnt > 0:
-                    percent = ProcessPercent(cnt)
-                    logger.warning("Failed process with exception.Cnt {}  All params is {}".format(cnt, repeat_params))
-                    for p in repeat_params:
-                        action(p)
-                        percent.finish()
-
-    def fetch_and_append(self, process_type: ProcessType, **kwargs):
+    def fetch_and_append(self, **kwargs):
         """
         获取tushare数据并append到数据库中
         :return: 数量行数
         """
+        init_args = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         if len(kwargs.keys()) == 0:
-            kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+            kwargs = init_args
         # 初始化offset和limit
         if not kwargs.get("limit"):
             kwargs['limit'] = self.default_limit()
@@ -230,16 +148,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {
-            key: kwargs[key] for key in kwargs.keys() & list([
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ])
-        }
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
         @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
@@ -258,6 +167,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(Moneyflow, 'default_limit', default_limit_ext)
+setattr(Moneyflow, 'default_order_by', default_order_by_ext)
 setattr(Moneyflow, 'prepare', prepare_ext)
 setattr(Moneyflow, 'tushare_parameters', tushare_parameters_ext)
 setattr(Moneyflow, 'param_loop_process', param_loop_process_ext)

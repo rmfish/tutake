@@ -1,6 +1,10 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_order_by_ext(self) -> str:
+    return "in_date"
+
+
 def default_limit_ext(self):
     return ''
 

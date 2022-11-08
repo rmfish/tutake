@@ -1,6 +1,10 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_order_by_ext(self) -> str:
+    return "trade_date desc,ts_code"
+
+
 def default_limit_ext(self):
     return '6000'
 
@@ -30,7 +34,7 @@ def param_loop_process_ext(self, process_type: ProcessType, **params):
         min_date = self.min("trade_date", "ts_code = '%s'" % params['ts_code'])
         if min_date is None:
             params['end_date'] = ""
-        elif params.get('list_date') and params.get('list_date') == min_date:
+        elif params.get('list_date') == min_date:
             # 如果时间相等不用执行
             return None
         else:

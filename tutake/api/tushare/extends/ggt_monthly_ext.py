@@ -3,6 +3,10 @@ import pendulum
 from tutake.api.tushare.process import ProcessType
 
 
+def default_order_by_ext(self) -> str:
+    return "month desc"
+
+
 def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
