@@ -129,6 +129,10 @@ class DAO(object):
             fina_indicator_vip_module = import_module("tutake.api.tushare.fina_indicator_vip")
             clazz = getattr(fina_indicator_vip_module, "FinaIndicatorVip")
             return clazz()
+        if name == 'index_daily':
+            index_daily_module = import_module("tutake.api.tushare.index_daily")
+            clazz = getattr(index_daily_module, "IndexDaily")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")

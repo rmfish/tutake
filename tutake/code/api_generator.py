@@ -22,7 +22,9 @@ def get_sql_type(type):
         return 'Float'
     elif type == 'number':
         return 'Float'
-    raise Exception('Unsupport type'.format(type))
+    elif type == 'datetime':
+        return 'String'
+    raise Exception('Unsupport type {}'.format(type))
 
 
 class CodeGenerator(object):
@@ -151,7 +153,7 @@ if __name__ == '__main__':
 
     api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
                  'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
-                 'fina_indicator_vip']
+                 'fina_indicator_vip','index_daily']
     for n in api_names:
         api = generator.api_loader.get_api_by_name(n)
         if api:
