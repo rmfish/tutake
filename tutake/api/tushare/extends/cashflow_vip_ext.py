@@ -1,7 +1,7 @@
 """
-资产负债表
-接口：balancesheet，可以通过数据工具调试和查看数据。
-描述：获取上市公司资产负债表
+现金流量表
+接口：cashflow，可以通过数据工具调试和查看数据。
+描述：获取上市公司现金流量表
 """
 import pendulum
 
@@ -19,7 +19,7 @@ def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
     """
-    return "7000"
+    return "6400"
 
 
 def prepare_ext(self, process_type: ProcessType):
