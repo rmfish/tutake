@@ -149,7 +149,7 @@ if __name__ == '__main__':
     #     for i in apis:
     #         api_params.append(generator.generate_api_code(i['id']))
 
-    api = generator.api_loader.get_api_by_name('hsgt_top10')
+    api = generator.api_loader.get_api_by_name('ggt_top10')
     if api:
         api_params.append(generator.generate_api_code(api['id']))
 

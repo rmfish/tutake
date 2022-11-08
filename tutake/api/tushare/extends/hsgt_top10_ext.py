@@ -1,11 +1,12 @@
-from tutake.api.tushare.process import ProcessType
+"""
+沪深股通十大成交股
+接口：hsgt_top10
+描述：获取沪股通、深股通每日前十大成交详细数据，每天18~20点之间完成当日更新
+"""
 import pendulum
 
-"""
-接口：moneyflow_hsgt，可以通过数据工具调试和查看数据。
-描述：获取沪股通、深股通、港股通每日资金流向数据，每次最多返回300条记录，总量不限制。每天18~20点之间完成当日更新
-积分要求：2000积分起，5000积分每分钟可提取500次
-"""
+from tutake.api.tushare.process import ProcessType
+
 
 def prepare_ext(self, process_type: ProcessType):
     """
@@ -34,13 +35,13 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     else:
         max_date = self.max("trade_date")
         if max_date is not None:
-            start_date = pendulum.parse(max_date)
+            start_date = pendulum.parse(max_date).add(days=1)
         else:
-            start_date = start_record_date.add(days=-1)
-        while start_date < pendulum.now():
-            start_date = start_date.add(days=1)
+            start_date = start_record_date
+        while start_date.diff(pendulum.now(), False).in_hours() > 0:
             end_date = start_date.add(days=300)
             params.append({"start_date": start_date.format(str_format), "end_date": end_date.format(str_format)})
+            start_date = start_date.add(days=1)
     return params
 
 

@@ -169,15 +169,14 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
             init_offset = offset
 
         kwargs = {key: kwargs[key] for key in kwargs.keys() & list([{% for input in inputs %}'{{input.name}}', {% endfor %}])}
-        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.{{name}} with args: {}".format(kwargs))
-            res = pro.{{name}}(**kwargs, fields=self.entity_fields)
+            res = self.tushare_api().{{name}}(**kwargs, fields=self.entity_fields)
             res.to_sql('{{table_name}}', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
-        pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:

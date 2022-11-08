@@ -17,7 +17,7 @@ class DAO(object):
 
     def instance_from_name(self, name):
 
-        if name == 'hsgt_top10':
-            hsgt_top10_module = import_module("tutake.api.tushare.hsgt_top10")
-            clazz = getattr(hsgt_top10_module, "HsgtTop10")
+        if name == 'ggt_top10':
+            ggt_top10_module = import_module("tutake.api.tushare.ggt_top10")
+            clazz = getattr(ggt_top10_module, "GgtTop10")
             return clazz()
