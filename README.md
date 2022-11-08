@@ -2,7 +2,7 @@
 
 Take data from Tushare, respect Tushare!
 
-自动生成代码，将Tushare的数据同步到本地，并同时保留Tushare的API进行本地数据的读取
+自动生成代码，将Tushare的数据同步到本地(支持同步历史数据和增量更新)，并同时保留Tushare的API进行本地数据的读取
 
 ## 背景
 
@@ -92,6 +92,10 @@ if __name__ == '__main__':
 
 ### StepN 执行其他接口
 其他的接口也类似，可以在api代码中逐一执行尝试，有代码的接口基本都已经测试过，有问题可以随时反馈，其他接口陆续增加，也欢迎大家参与接口的调试和配置
+具体可以查看接口列表:
+
+<a href="tutake/api/tushare">tutake/api/tushare</a>
+
 
 ## 只作为客户端使用
 
