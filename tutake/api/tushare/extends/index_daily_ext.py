@@ -1,3 +1,4 @@
+from tutake.api.tushare.index_basic import IndexBasic, TushareIndexBasic
 from tutake.api.tushare.process import ProcessType
 import pendulum
 
@@ -27,7 +28,9 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return self.dao.index_basic.column_data(['ts_code', 'list_date'])
+    return self.dao.index_basic.column_data(['ts_code', 'list_date'],
+                                            TushareIndexBasic.market.not_in(['MSCI', 'CNI']),
+                                            TushareIndexBasic.list_date.is_not(None))
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

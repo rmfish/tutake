@@ -133,6 +133,10 @@ class DAO(object):
             index_daily_module = import_module("tutake.api.tushare.index_daily")
             clazz = getattr(index_daily_module, "IndexDaily")
             return clazz()
+        if name == 'index_dailybasic':
+            index_dailybasic_module = import_module("tutake.api.tushare.index_dailybasic")
+            clazz = getattr(index_dailybasic_module, "IndexDailybasic")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")

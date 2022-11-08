@@ -32,8 +32,11 @@ class BaseDao(object):
         query = session.query(self.entities).filter_by(params)
         return query.commit()
 
-    def column_data(self, columns: [], **params):
-        result = self.session_factory().query(self.entities).options(load_only(*columns)).all()
+    def column_data(self, columns: [], *criteria):
+        if criteria:
+            result = self.session_factory().query(self.entities).filter(*criteria).options(load_only(*columns)).all()
+        else:
+            result = self.session_factory().query(self.entities).options(load_only(*columns)).all()
         vals = list({key: i.__dict__[key] for key in columns} for i in result)
         return vals
 
