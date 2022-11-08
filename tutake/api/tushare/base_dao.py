@@ -1,11 +1,8 @@
 import logging
-from abc import abstractmethod
 
 import pandas as pd
 from sqlalchemy import text
 from sqlalchemy.orm import load_only
-
-from tutake.utils.decorator import sleep
 
 logger = logging.getLogger('dao.base')
 
@@ -85,7 +82,7 @@ class BaseDao(object):
         ordr_by = self.default_order_by()
         if ordr_by:
             query = query.order_by(text(ordr_by))
-        limit = 10000  # 默认10000条 避免导致数据库压力过大
+        limit = 20000  # 默认20000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             if input_limit < limit:

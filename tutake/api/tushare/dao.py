@@ -125,6 +125,10 @@ class DAO(object):
             dividend_module = import_module("tutake.api.tushare.dividend")
             clazz = getattr(dividend_module, "Dividend")
             return clazz()
+        if name == 'fina_indicator_vip':
+            fina_indicator_vip_module = import_module("tutake.api.tushare.fina_indicator_vip")
+            clazz = getattr(fina_indicator_vip_module, "FinaIndicatorVip")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")

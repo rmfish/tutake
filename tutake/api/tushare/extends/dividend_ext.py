@@ -12,7 +12,7 @@ def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
     """
-    return ''
+    return '10000'
 
 
 def prepare_ext(self, process_type: ProcessType):
