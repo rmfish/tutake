@@ -2,7 +2,7 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare income_vip接口
-数据接口-沪深股票-财务数据-利润表  https://tushare.pro/document/2?doc_id=33
+数据接口-沪深股票-财务数据-利润表  https://tushare.pro/document/2?doc_id=3300
 
 @author: rmfish
 """
