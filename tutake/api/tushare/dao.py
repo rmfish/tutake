@@ -121,6 +121,10 @@ class DAO(object):
             express_vip_module = import_module("tutake.api.tushare.express_vip")
             clazz = getattr(express_vip_module, "ExpressVip")
             return clazz()
+        if name == 'dividend':
+            dividend_module = import_module("tutake.api.tushare.dividend")
+            clazz = getattr(dividend_module, "Dividend")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
