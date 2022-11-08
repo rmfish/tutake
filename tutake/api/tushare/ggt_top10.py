@@ -130,14 +130,17 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
+        if self.default_limit() != "":
+            default_limit = int(self.default_limit())
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
         df = pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')
+
+    def default_limit(self) -> str:
+        return ""
 
     def prepare(self, process_type: ProcessType):
         """
@@ -220,7 +223,7 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
             }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -255,6 +258,7 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
+setattr(GgtTop10, 'default_limit', default_limit_ext)
 setattr(GgtTop10, 'prepare', prepare_ext)
 setattr(GgtTop10, 'tushare_parameters', tushare_parameters_ext)
 setattr(GgtTop10, 'param_loop_process', param_loop_process_ext)
@@ -264,6 +268,6 @@ if __name__ == '__main__':
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.INFO)
     api = GgtTop10()
-    # api.process(ProcessType.HISTORY)    # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
+    api.process(ProcessType.HISTORY)    # 同步历史数据
+    # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.ggt_top10())    # 数据查询接口

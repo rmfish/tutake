@@ -118,14 +118,17 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "300" != "":
-            default_limit = int("300")
+        if self.default_limit() != "":
+            default_limit = int(self.default_limit())
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
         df = pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')
+
+    def default_limit(self) -> str:
+        return ""
 
     def prepare(self, process_type: ProcessType):
         """
@@ -208,7 +211,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
             }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = "300"
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -227,15 +230,14 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
             ])
         }
 
-        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.hsgt_top10 with args: {}".format(kwargs))
-            res = pro.hsgt_top10(**kwargs, fields=self.entity_fields)
+            res = self.tushare_api().hsgt_top10(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_hsgt_top10', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
-        pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
@@ -244,6 +246,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
+setattr(HsgtTop10, 'default_limit', default_limit_ext)
 setattr(HsgtTop10, 'prepare', prepare_ext)
 setattr(HsgtTop10, 'tushare_parameters', tushare_parameters_ext)
 setattr(HsgtTop10, 'param_loop_process', param_loop_process_ext)
@@ -253,6 +256,6 @@ if __name__ == '__main__':
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.INFO)
     api = HsgtTop10()
-    # api.process(ProcessType.HISTORY)    # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
+    api.process(ProcessType.HISTORY)    # 同步历史数据
+    # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.hsgt_top10())    # 数据查询接口

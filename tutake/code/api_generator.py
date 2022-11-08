@@ -139,9 +139,9 @@ if __name__ == '__main__':
     generator = CodeGenerator(tmpl_dir, api_dir)
     api_params = []
 
-    # apis = generator.api_loader.get_ready_api()
-    # for i in apis:
-    #     api_params.append(generator.generate_api_code(i['id']))
+    apis = generator.api_loader.get_ready_api()
+    for i in apis:
+        api_params.append(generator.generate_api_code(i['id']))
 
     # parent_id = [15, 24]
     # for api_id in parent_id:
@@ -149,12 +149,14 @@ if __name__ == '__main__':
     #     for i in apis:
     #         api_params.append(generator.generate_api_code(i['id']))
 
-    api = generator.api_loader.get_api_by_name('ggt_top10')
-    if api:
-        api_params.append(generator.generate_api_code(api['id']))
+    api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10']
+    for n in api_names:
+        api = generator.api_loader.get_api_by_name(n)
+        if api:
+            api_params.append(generator.generate_api_code(api['id']))
 
-    # api_ids = [94]
-    # for i in api_ids:
-    #     api_params.append(generator.generate_api_code(i))
+    api_ids = [94]
+    for i in api_ids:
+        api_params.append(generator.generate_api_code(i))
 
     generator.generate_dao_code(api_params)

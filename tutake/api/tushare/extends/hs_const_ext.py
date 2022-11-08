@@ -1,6 +1,10 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_limit_ext(self):
+    return ''
+
+
 def prepare_ext(self, process_type: ProcessType):
     """
     同步历史数据准备工作
@@ -14,7 +18,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return [{"hs_type":"SH"},{"hs_type":"SZ"}]
+    return [{"hs_type": "SH"}, {"hs_type": "SZ"}]
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

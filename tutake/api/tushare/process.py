@@ -9,6 +9,13 @@ class ProcessType(Enum):
 
 class DataProcess(metaclass=ABCMeta):
     @abstractmethod
+    def default_limit(self) -> str: pass
+
+    """
+    每次取数的limit
+    """
+
+    @abstractmethod
     def prepare(self, process_type: ProcessType): pass
 
     """

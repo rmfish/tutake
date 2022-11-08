@@ -1,6 +1,10 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_limit_ext(self):
+    return '10000'
+
+
 def prepare_ext(self, process_type: ProcessType):
     """
     同步历史数据准备工作

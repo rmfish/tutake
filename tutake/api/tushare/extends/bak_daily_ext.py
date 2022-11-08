@@ -1,12 +1,15 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_limit_ext(self):
+    return '5000'
+
+
 def prepare_ext(self, process_type: ProcessType):
     """
     同步历史数据准备工作
     :return:
     """
-    
 
 
 def tushare_parameters_ext(self, process_type: ProcessType):

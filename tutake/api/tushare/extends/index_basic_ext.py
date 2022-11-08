@@ -1,5 +1,7 @@
 from tutake.api.tushare.process import ProcessType
 
+def default_limit_ext(self):
+    return '8000'
 
 def prepare_ext(self, process_type: ProcessType):
     """

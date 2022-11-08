@@ -137,14 +137,17 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "5000" != "":
-            default_limit = int("5000")
+        if self.default_limit() != "":
+            default_limit = int(self.default_limit())
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
         df = pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')
+
+    def default_limit(self) -> str:
+        return ""
 
     def prepare(self, process_type: ProcessType):
         """
@@ -219,7 +222,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
             kwargs = {"trade_date": "", "ts_code": "", "limit": "", "offset": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = "5000"
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -233,15 +236,14 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
             'offset',
         ])}
 
-        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))
-            res = pro.bak_basic(**kwargs, fields=self.entity_fields)
+            res = self.tushare_api().bak_basic(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_bak_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
-        pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
@@ -250,6 +252,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
+setattr(BakBasic, 'default_limit', default_limit_ext)
 setattr(BakBasic, 'prepare', prepare_ext)
 setattr(BakBasic, 'tushare_parameters', tushare_parameters_ext)
 setattr(BakBasic, 'param_loop_process', param_loop_process_ext)

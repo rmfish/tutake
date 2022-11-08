@@ -75,14 +75,17 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "{{default_limit}}" != "":
-            default_limit = int("{{default_limit}}")
+        if self.default_limit() != "":
+            default_limit = int(self.default_limit())
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
         df =  pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')
+
+    def default_limit(self) -> str:
+        return ""
 
     def prepare(self, process_type: ProcessType):
         """
@@ -161,7 +164,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
             }
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = "{{default_limit}}"
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -184,7 +187,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
             offset += df.shape[0]
         return offset - init_offset
 
-
+setattr({{title_name}}, 'default_limit', default_limit_ext)
 setattr({{title_name}}, 'prepare', prepare_ext)
 setattr({{title_name}}, 'tushare_parameters', tushare_parameters_ext)
 setattr({{title_name}}, 'param_loop_process', param_loop_process_ext)

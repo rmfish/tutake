@@ -114,14 +114,17 @@ class Daily(BaseDao, TuShareBase, DataProcess):
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             query = query.limit(input_limit)
-        if "6000" != "":
-            default_limit = int("6000")
+        if self.default_limit() != "":
+            default_limit = int(self.default_limit())
             if default_limit < input_limit:
                 query = query.limit(default_limit)
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
             query = query.offset(int(kwargs.get('offset')))
         df = pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')
+
+    def default_limit(self) -> str:
+        return ""
 
     def prepare(self, process_type: ProcessType):
         """
@@ -196,7 +199,7 @@ class Daily(BaseDao, TuShareBase, DataProcess):
             kwargs = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = "6000"
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
@@ -214,15 +217,14 @@ class Daily(BaseDao, TuShareBase, DataProcess):
             ])
         }
 
-        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
+        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             logger.debug("Invoke pro.daily with args: {}".format(kwargs))
-            res = pro.daily(**kwargs, fields=self.entity_fields)
+            res = self.tushare_api().daily(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
-        pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
@@ -231,6 +233,7 @@ class Daily(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
+setattr(Daily, 'default_limit', default_limit_ext)
 setattr(Daily, 'prepare', prepare_ext)
 setattr(Daily, 'tushare_parameters', tushare_parameters_ext)
 setattr(Daily, 'param_loop_process', param_loop_process_ext)

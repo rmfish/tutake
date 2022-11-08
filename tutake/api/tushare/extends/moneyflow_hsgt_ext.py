@@ -7,6 +7,11 @@ import pendulum
 积分要求：2000积分起，5000积分每分钟可提取500次
 """
 
+
+def default_limit_ext(self):
+    return '300'
+
+
 def prepare_ext(self, process_type: ProcessType):
     """
     同步历史数据准备工作
@@ -21,6 +26,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     params = []
     str_format = "YYYYMMDD"
     start_record_date = pendulum.parse('20141117')  # 最早的数据记录
+    day_period = 300
     if ProcessType.HISTORY == process_type:
         min_date = self.min("trade_date", condition="trade_date is not null")
         if min_date is not None:
@@ -28,8 +34,8 @@ def tushare_parameters_ext(self, process_type: ProcessType):
         else:
             start_date = pendulum.now()
         while start_date > start_record_date:
-            end_date = start_date.add(days=-1)
-            start_date = end_date.add(days=-300)
+            end_date = start_date.add(days=-day_period)
+            start_date = end_date.add(days=-day_period)
             params.append({"start_date": start_date.format(str_format), "end_date": end_date.format(str_format)})
     else:
         max_date = self.max("trade_date")
@@ -37,10 +43,10 @@ def tushare_parameters_ext(self, process_type: ProcessType):
             start_date = pendulum.parse(max_date)
         else:
             start_date = start_record_date.add(days=-1)
-        while start_date < pendulum.now():
-            start_date = start_date.add(days=1)
-            end_date = start_date.add(days=300)
+        while start_date.diff(pendulum.now(), False).in_hours() > 0:
+            end_date = start_date.add(days=day_period)
             params.append({"start_date": start_date.format(str_format), "end_date": end_date.format(str_format)})
+            start_date = start_date.add(days=day_period)
     return params
 
 
