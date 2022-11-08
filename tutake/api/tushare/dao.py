@@ -145,6 +145,22 @@ class DAO(object):
             index_member_module = import_module("tutake.api.tushare.index_member")
             clazz = getattr(index_member_module, "IndexMember")
             return clazz()
+        if name == 'ths_index':
+            ths_index_module = import_module("tutake.api.tushare.ths_index")
+            clazz = getattr(ths_index_module, "ThsIndex")
+            return clazz()
+        if name == 'ths_daily':
+            ths_daily_module = import_module("tutake.api.tushare.ths_daily")
+            clazz = getattr(ths_daily_module, "ThsDaily")
+            return clazz()
+        if name == 'ths_member':
+            ths_member_module = import_module("tutake.api.tushare.ths_member")
+            clazz = getattr(ths_member_module, "ThsMember")
+            return clazz()
+        if name == 'index_global':
+            index_global_module = import_module("tutake.api.tushare.index_global")
+            clazz = getattr(index_global_module, "IndexGlobal")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
