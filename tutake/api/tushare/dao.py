@@ -113,6 +113,10 @@ class DAO(object):
             cashflow_vip_module = import_module("tutake.api.tushare.cashflow_vip")
             clazz = getattr(cashflow_vip_module, "CashflowVip")
             return clazz()
+        if name == 'forecast_vip':
+            forecast_vip_module = import_module("tutake.api.tushare.forecast_vip")
+            clazz = getattr(forecast_vip_module, "ForecastVip")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")

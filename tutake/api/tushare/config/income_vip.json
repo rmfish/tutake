@@ -2,7 +2,7 @@
     "database": null,
     "default_limit": null,
     "desc": "A股利润表",
-    "id": 33,
+    "id": 3300,
     "if_exists": null,
     "inputs": [
         {

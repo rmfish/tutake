@@ -1,0 +1,192 @@
+{
+    "database": null,
+    "default_limit": null,
+    "desc": "",
+    "id": 4500,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "股票代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "N",
+            "name": "ann_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "公告结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "N",
+            "name": "period"
+        },
+        {
+            "data_type": "str",
+            "desc": "预告类型",
+            "must": "N",
+            "name": "type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "forecast_vip",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "TS股票代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "ANN_DATE",
+            "data_type": "str",
+            "desc": "公告日期",
+            "must": "Y",
+            "name": "ann_date"
+        },
+        {
+            "column": "END_DATE",
+            "data_type": "str",
+            "desc": "报告期",
+            "must": "Y",
+            "name": "end_date"
+        },
+        {
+            "column": "TYPE",
+            "data_type": "str",
+            "desc": "业绩预告类型",
+            "must": "Y",
+            "name": "type"
+        },
+        {
+            "column": "P_CHANGE_MIN",
+            "data_type": "float",
+            "desc": "预告净利润变动幅度下限（%）",
+            "must": "Y",
+            "name": "p_change_min"
+        },
+        {
+            "column": "P_CHANGE_MAX",
+            "data_type": "float",
+            "desc": "预告净利润变动幅度上限（%）",
+            "must": "Y",
+            "name": "p_change_max"
+        },
+        {
+            "column": "NET_PROFIT_MIN",
+            "data_type": "float",
+            "desc": "预告净利润下限（万元）",
+            "must": "Y",
+            "name": "net_profit_min"
+        },
+        {
+            "column": "NET_PROFIT_MAX",
+            "data_type": "float",
+            "desc": "预告净利润上限（万元）",
+            "must": "Y",
+            "name": "net_profit_max"
+        },
+        {
+            "column": "LAST_PARENT_NET",
+            "data_type": "float",
+            "desc": "上年同期归属母公司净利润",
+            "must": "Y",
+            "name": "last_parent_net"
+        },
+        {
+            "column": "NOTICE_TIMES",
+            "data_type": "int",
+            "desc": "公布次数",
+            "must": "N",
+            "name": "notice_times"
+        },
+        {
+            "column": "FIRST_ANN_DATE",
+            "data_type": "str",
+            "desc": "首次公告日",
+            "must": "Y",
+            "name": "first_ann_date"
+        },
+        {
+            "column": "SUMMARY",
+            "data_type": "str",
+            "desc": "业绩预告摘要",
+            "must": "Y",
+            "name": "summary"
+        },
+        {
+            "column": "CHANGE_REASON",
+            "data_type": "str",
+            "desc": "业绩变动原因",
+            "must": "Y",
+            "name": "change_reason"
+        }
+    ],
+    "parent_id": 16,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            16,
+            "财务数据"
+        ],
+        [
+            45,
+            "业绩预告"
+        ]
+    ],
+    "title": "业绩预告",
+    "validations": [
+        {
+            "message": "ann_date和ts_code至少输入一个参数",
+            "name": "ann_date",
+            "options": null,
+            "trigger": {
+                "exp": [
+                    {
+                        "name": "ts_code",
+                        "operator": "=",
+                        "type": "builtin",
+                        "value": "None"
+                    }
+                ],
+                "link": "and"
+            },
+            "validator": "required"
+        }
+    ]
+}
