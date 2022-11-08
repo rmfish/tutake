@@ -149,7 +149,7 @@ if __name__ == '__main__':
     #     for i in apis:
     #         api_params.append(generator.generate_api_code(i['id']))
 
-    api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip']
+    api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip','balancesheet_vip']
     for n in api_names:
         api = generator.api_loader.get_api_by_name(n)
         if api:

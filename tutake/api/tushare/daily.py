@@ -153,6 +153,6 @@ if __name__ == '__main__':
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.INFO)
     api = Daily()
-    # api.process(ProcessType.HISTORY)    # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
+    api.process(ProcessType.HISTORY)    # 同步历史数据
+    # api.process(ProcessType.INCREASE)  # 同步增量数据
     print(api.daily())    # 数据查询接口

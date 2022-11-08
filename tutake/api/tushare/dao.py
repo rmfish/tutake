@@ -105,6 +105,10 @@ class DAO(object):
             income_vip_module = import_module("tutake.api.tushare.income_vip")
             clazz = getattr(income_vip_module, "IncomeVip")
             return clazz()
+        if name == 'balancesheet_vip':
+            balancesheet_vip_module = import_module("tutake.api.tushare.balancesheet_vip")
+            clazz = getattr(balancesheet_vip_module, "BalancesheetVip")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
