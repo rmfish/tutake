@@ -97,6 +97,10 @@ class DAO(object):
             hsgt_top10_module = import_module("tutake.api.tushare.hsgt_top10")
             clazz = getattr(hsgt_top10_module, "HsgtTop10")
             return clazz()
+        if name == 'ggt_monthly':
+            ggt_monthly_module = import_module("tutake.api.tushare.ggt_monthly")
+            clazz = getattr(ggt_monthly_module, "GgtMonthly")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
