@@ -101,6 +101,10 @@ class DAO(object):
             ggt_monthly_module = import_module("tutake.api.tushare.ggt_monthly")
             clazz = getattr(ggt_monthly_module, "GgtMonthly")
             return clazz()
+        if name == 'income_vip':
+            income_vip_module = import_module("tutake.api.tushare.income_vip")
+            clazz = getattr(income_vip_module, "IncomeVip")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")

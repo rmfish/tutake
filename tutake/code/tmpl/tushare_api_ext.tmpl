@@ -1,6 +1,12 @@
 from tutake.api.tushare.process import ProcessType
 
 
+def default_order_by_ext(self):
+    """
+    查询时默认的排序
+    """
+    return None
+
 def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
