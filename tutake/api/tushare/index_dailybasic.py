@@ -57,14 +57,12 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'trade_date',
-                'ts_code',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'trade_date',
+            'ts_code',
+            'start_date',
+            'end_date',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",

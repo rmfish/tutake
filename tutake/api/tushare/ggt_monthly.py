@@ -54,13 +54,11 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'month',
-                'start_month',
-                'end_month',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'month',
+            'start_month',
+            'end_month',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "month", "day_buy_amt", "day_buy_vol", "day_sell_amt", "day_sell_vol", "total_buy_amt", "total_buy_vol",

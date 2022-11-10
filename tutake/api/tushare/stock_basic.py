@@ -59,16 +59,14 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'name',
-                'exchange',
-                'market',
-                'is_hs',
-                'list_status',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'name',
+            'exchange',
+            'market',
+            'is_hs',
+            'list_status',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",

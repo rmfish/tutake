@@ -62,16 +62,14 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'ann_date',
-                'end_date',
-                'record_date',
-                'ex_date',
-                'imp_ann_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'ann_date',
+            'end_date',
+            'record_date',
+            'ex_date',
+            'imp_ann_date',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "end_date", "ann_date", "div_proc", "stk_div", "stk_bo_rate", "stk_co_rate", "cash_div",

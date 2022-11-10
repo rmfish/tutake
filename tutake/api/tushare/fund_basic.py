@@ -69,15 +69,13 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'market',
-                'update_flag',
-                'offset',
-                'limit',
-                'status',
-                'name',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'market',
+            'update_flag',
+            'offset',
+            'limit',
+            'status',
+            'name',
         ]
         entity_fields = [
             "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date",

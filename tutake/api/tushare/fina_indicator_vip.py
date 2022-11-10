@@ -212,16 +212,14 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'ann_date',
-                'start_date',
-                'end_date',
-                'period',
-                'update_flag',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'ann_date',
+            'start_date',
+            'end_date',
+            'period',
+            'update_flag',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "ann_date", "end_date", "eps", "dt_eps", "total_revenue_ps", "revenue_ps", "capital_rese_ps",

@@ -51,13 +51,11 @@ class Namechange(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'start_date',
+            'end_date',
+            'limit',
+            'offset',
         ]
         entity_fields = ["ts_code", "name", "start_date", "end_date", "ann_date", "change_reason"]
         BaseDao.__init__(self, engine, session_factory, TushareNamechange, 'tushare_namechange', query_fields,

@@ -50,13 +50,13 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [n for n in [
+        query_fields = [
             'ts_code',
             'exchange',
             'type',
             'limit',
             'offset',
-        ] if n not in ['limit', 'offset']]
+        ]
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
         BaseDao.__init__(self, engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
                          entity_fields)

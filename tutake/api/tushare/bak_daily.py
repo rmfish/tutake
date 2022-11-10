@@ -76,14 +76,12 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'offset',
-                'limit',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'trade_date',
+            'start_date',
+            'end_date',
+            'offset',
+            'limit',
         ]
         entity_fields = [
             "ts_code", "trade_date", "name", "pct_change", "close", "change", "open", "high", "low", "pre_close",

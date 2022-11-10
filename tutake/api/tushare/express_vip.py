@@ -77,15 +77,13 @@ class ExpressVip(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'ann_date',
-                'start_date',
-                'end_date',
-                'period',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'ann_date',
+            'start_date',
+            'end_date',
+            'period',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "ann_date", "end_date", "revenue", "operate_profit", "total_profit", "n_income", "total_assets",

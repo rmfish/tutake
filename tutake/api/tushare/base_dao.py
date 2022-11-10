@@ -1,4 +1,5 @@
 import logging
+from operator import and_
 
 import pandas as pd
 from sqlalchemy import text
@@ -71,34 +72,81 @@ class BaseDao(object):
         """
         return ''
 
-    def query(self, fields='', **kwargs):
-        params = {
-            key: kwargs[key]
-            for key in kwargs.keys()
-            if key in self.query_fields and key is not None and kwargs[key] != ''
-        }
-        query = self.session_factory().query(self.entities).filter_by(**params)
+    def default_time_range(self) -> ():
+        if 'start_date' in self.query_fields:
+            return 'start_date', 'end_date', self.entities.trade_date
+        elif 'start_month' in self.query_fields:
+            return 'start_month', 'end_month', self.entities.month
+        return None
+
+    def _get_time_criterion_filter(self, **kwargs):
+        time_range_query = self.default_time_range()
+        criterion = None
+        if time_range_query:
+            start = kwargs.get(time_range_query[0])
+            end = kwargs.get(time_range_query[1])
+            time_field = time_range_query[2]
+            if start and end:
+                criterion = and_(time_field >= start, time_field <= end)
+            elif end:
+                criterion = time_field <= end
+            elif start:
+                criterion = time_field >= start
+        return criterion
+
+    def _get_query_fields(self, fields=''):
         if fields != '':
-            entities = (
-                getattr(self.entities, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
-            query = query.with_entities(*entities)
-        ordr_by = self.default_order_by()
-        if ordr_by:
-            query = query.order_by(text(ordr_by))
+            return list(getattr(self.entities, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
+        return None
+
+    def _get_query_limit(self, **kwargs):
         limit = 20000  # 默认20000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             if input_limit < limit:
-                query = query.limit(input_limit)
+                return input_limit
             else:
-                query = query.limit(limit)
-        if self.default_limit() != "":
+                return limit
+        elif self.default_limit() != "":
             default_limit = int(self.default_limit())
             if default_limit < limit:
-                query = query.limit(default_limit)
+                return default_limit
             else:
-                query = query.limit(limit)
+                return limit
+
+        return None
+
+    def _get_query_offset(self, **kwargs):
         if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
-            query = query.offset(int(kwargs.get('offset')))
+            return kwargs.get('offset')
+        return None
+
+    def query(self, fields='', **kwargs):
+        filter_criterion = self._get_time_criterion_filter(**kwargs)
+        params = {
+            key: kwargs[key]
+            for key in kwargs.keys()
+            if key in self.query_fields and key in self.entity_fields and key is not None and kwargs[key] != ''
+        }
+        query = self.session_factory().query(self.entities).filter_by(**params)
+        if filter_criterion is not None:
+            query = query.filter(filter_criterion)
+
+        query_fields = self._get_query_fields(fields)
+        if query_fields:
+            query = query.with_entities(*query_fields)
+
+        ordr_by = self.default_order_by()
+        if ordr_by:
+            query = query.order_by(text(ordr_by))
+
+        query_limit = self._get_query_limit(**kwargs)
+        if query_limit:
+            query = query.limit(query_limit)
+
+        query_offset = self._get_query_offset(**kwargs)
+        if query_offset:
+            query = query.offset(query_offset)
+
         df = pd.read_sql(query.statement, query.session.bind)
         return df.drop(['id'], axis=1, errors='ignore')

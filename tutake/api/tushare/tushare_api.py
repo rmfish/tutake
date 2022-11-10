@@ -7,7 +7,5 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 500)  # 显示列数
     pd.set_option('display.width', 1000)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    df = pro.index_global(**{
-
-    })
+    df = pro.daily(end_date="20221104", start_date="20211103", ts_code='000001.SZ', limit=10, offset=10)
     print(df)

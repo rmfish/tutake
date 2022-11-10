@@ -52,13 +52,11 @@ class IndexMember(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'index_code',
-                'is_new',
-                'ts_code',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'index_code',
+            'is_new',
+            'ts_code',
+            'limit',
+            'offset',
         ]
         entity_fields = ["index_code", "index_name", "con_code", "con_name", "in_date", "out_date", "is_new"]
         BaseDao.__init__(self, engine, session_factory, TushareIndexMember, 'tushare_index_member', query_fields,

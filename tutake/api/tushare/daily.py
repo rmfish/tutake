@@ -56,14 +56,12 @@ class Daily(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'offset',
-                'limit',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'trade_date',
+            'start_date',
+            'end_date',
+            'offset',
+            'limit',
         ]
         entity_fields = [
             "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount"
@@ -149,10 +147,12 @@ setattr(Daily, 'tushare_parameters', tushare_parameters_ext)
 setattr(Daily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 500)    # 显示列数
+    pd.set_option('display.max_columns', 500)  # 显示列数
     pd.set_option('display.width', 1000)
     logger.setLevel(logging.INFO)
     api = Daily()
-    api.process(ProcessType.HISTORY)    # 同步历史数据
+    # api.process(ProcessType.HISTORY)    # 同步历史数据
     # api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.daily())    # 数据查询接口
+    print(api.daily(fields='ts_code,trade_date,close,other', end_date="20221104", start_date="20211103",
+                    ts_code='000001.SZ',
+                    limit=10, offset=10))  # 数据查询接口

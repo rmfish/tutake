@@ -62,15 +62,13 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'market_type',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'trade_date',
+            'start_date',
+            'end_date',
+            'market_type',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",

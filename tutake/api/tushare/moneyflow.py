@@ -66,14 +66,12 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'trade_date',
+            'start_date',
+            'end_date',
+            'limit',
+            'offset',
         ]
         entity_fields = [
             "ts_code", "trade_date", "buy_sm_vol", "buy_sm_amount", "sell_sm_vol", "sell_sm_amount", "buy_md_vol",

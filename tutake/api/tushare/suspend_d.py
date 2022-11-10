@@ -49,15 +49,13 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'ts_code',
-                'suspend_type',
-                'trade_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'ts_code',
+            'suspend_type',
+            'trade_date',
+            'start_date',
+            'end_date',
+            'limit',
+            'offset',
         ]
         entity_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
         BaseDao.__init__(self, engine, session_factory, TushareSuspendD, 'tushare_suspend_d', query_fields,

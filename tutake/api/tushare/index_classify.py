@@ -52,14 +52,12 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            n for n in [
-                'index_code',
-                'level',
-                'src',
-                'parent_code',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
+            'index_code',
+            'level',
+            'src',
+            'parent_code',
+            'limit',
+            'offset',
         ]
         entity_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
         BaseDao.__init__(self, engine, session_factory, TushareIndexClassify, 'tushare_index_classify', query_fields,
