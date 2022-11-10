@@ -60,14 +60,7 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'trade_date',
-            'start_date',
-            'end_date',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "avg_price", "change", "pct_change",
             "vol", "turnover_rate", "total_mv", "float_mv", "pe_ttm", "pb_mrq"

@@ -56,12 +56,7 @@ class NewShare(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'start_date',
-            'end_date',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "sub_code", "name", "ipo_date", "issue_date", "amount", "market_amount", "price", "pe",
             "limit_amount", "funds", "ballot"

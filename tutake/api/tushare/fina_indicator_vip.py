@@ -211,16 +211,7 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'ann_date',
-            'start_date',
-            'end_date',
-            'period',
-            'update_flag',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'update_flag', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "end_date", "eps", "dt_eps", "total_revenue_ps", "revenue_ps", "capital_rese_ps",
             "surplus_rese_ps", "undist_profit_ps", "extra_item", "profit_dedt", "gross_margin", "current_ratio",

@@ -56,14 +56,7 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'trade_date',
-            'ts_code',
-            'start_date',
-            'end_date',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['trade_date', 'ts_code', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
             "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"

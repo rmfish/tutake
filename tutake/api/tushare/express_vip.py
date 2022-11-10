@@ -76,15 +76,7 @@ class ExpressVip(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'ann_date',
-            'start_date',
-            'end_date',
-            'period',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "end_date", "revenue", "operate_profit", "total_profit", "n_income", "total_assets",
             "total_hldr_eqy_exc_min_int", "diluted_eps", "diluted_roe", "yoy_net_profit", "bps", "yoy_sales", "yoy_op",

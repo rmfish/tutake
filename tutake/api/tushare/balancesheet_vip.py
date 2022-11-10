@@ -203,18 +203,8 @@ class BalancesheetVip(BaseDao, TuShareBase, DataProcess):
 
     def __init__(self):
         query_fields = [
-            'ts_code',
-            'ann_date',
-            'f_ann_date',
-            'start_date',
-            'end_date',
-            'period',
-            'report_type',
-            'comp_type',
-            'end_type',
-            'end_type',
-            'limit',
-            'offset',
+            'ts_code', 'ann_date', 'f_ann_date', 'start_date', 'end_date', 'period', 'report_type', 'comp_type',
+            'end_type', 'end_type', 'limit', 'offset'
         ]
         entity_fields = [
             "ts_code", "ann_date", "f_ann_date", "end_date", "report_type", "comp_type", "end_type", "total_share",

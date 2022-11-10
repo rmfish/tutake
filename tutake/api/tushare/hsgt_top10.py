@@ -55,15 +55,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'trade_date',
-            'start_date',
-            'end_date',
-            'market_type',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market_type', 'limit', 'offset']
         entity_fields = [
             "trade_date", "ts_code", "name", "close", "change", "rank", "market_type", "amount", "net_amount", "buy",
             "sell"

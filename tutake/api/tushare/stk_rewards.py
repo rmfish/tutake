@@ -51,12 +51,7 @@ class StkRewards(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'end_date',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "end_date", "name", "title", "reward", "hold_vol"]
         BaseDao.__init__(self, engine, session_factory, TushareStkRewards, 'tushare_stk_rewards', query_fields,
                          entity_fields)

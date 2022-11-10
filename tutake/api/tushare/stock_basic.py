@@ -58,16 +58,7 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            'ts_code',
-            'name',
-            'exchange',
-            'market',
-            'is_hs',
-            'list_status',
-            'limit',
-            'offset',
-        ]
+        query_fields = ['ts_code', 'name', 'exchange', 'market', 'is_hs', 'list_status', 'limit', 'offset']
         entity_fields = [
             "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
             "curr_type", "list_status", "list_date", "delist_date", "is_hs"
