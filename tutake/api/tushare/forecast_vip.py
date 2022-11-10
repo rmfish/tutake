@@ -57,18 +57,7 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'ts_code',
-                'ann_date',
-                'start_date',
-                'end_date',
-                'period',
-                'type',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'type', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"

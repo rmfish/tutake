@@ -68,17 +68,7 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'ts_code',
-                'market',
-                'update_flag',
-                'offset',
-                'limit',
-                'status',
-                'name',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['ts_code', 'market', 'update_flag', 'offset', 'limit', 'status', 'name']
         entity_fields = [
             "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date",
             "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount",

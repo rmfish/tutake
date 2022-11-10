@@ -46,7 +46,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [n for n in [{% for input in inputs %}'{{input.name}}', {% endfor %}] if n not in ['limit', 'offset']]
+        query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
         BaseDao.__init__(self, engine, session_factory, {{entity_name}}, '{{table_name}}', query_fields, entity_fields)
         TuShareBase.__init__(self)

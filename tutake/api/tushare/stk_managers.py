@@ -56,16 +56,7 @@ class StkManagers(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'ts_code',
-                'ann_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "name", "gender", "lev", "title", "edu", "national", "birthday", "begin_date",
             "end_date", "resume"

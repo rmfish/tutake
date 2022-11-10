@@ -51,12 +51,7 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [n for n in [
-            'ts_code',
-            'code',
-            'limit',
-            'offset',
-        ] if n not in ['limit', 'offset']]
+        query_fields = ['ts_code', 'code', 'limit', 'offset']
         entity_fields = ["ts_code", "code", "name", "weight", "in_date", "out_date", "is_new"]
         BaseDao.__init__(self, engine, session_factory, TushareThsMember, 'tushare_ths_member', query_fields,
                          entity_fields)

@@ -51,15 +51,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'trade_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
         BaseDao.__init__(self, engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt', query_fields,
                          entity_fields)

@@ -57,17 +57,7 @@ class IndexBasic(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'ts_code',
-                'market',
-                'publisher',
-                'category',
-                'name',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['ts_code', 'market', 'publisher', 'category', 'name', 'limit', 'offset']
         entity_fields = [
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"

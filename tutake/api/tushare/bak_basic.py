@@ -68,12 +68,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [n for n in [
-            'trade_date',
-            'ts_code',
-            'limit',
-            'offset',
-        ] if n not in ['limit', 'offset']]
+        query_fields = ['trade_date', 'ts_code', 'limit', 'offset']
         entity_fields = [
             "trade_date", "ts_code", "name", "industry", "area", "pe", "float_share", "total_share", "total_assets",
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",

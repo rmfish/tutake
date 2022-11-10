@@ -49,15 +49,7 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = [
-            n for n in [
-                'trade_date',
-                'start_date',
-                'end_date',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
+        query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
         BaseDao.__init__(self, engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily', query_fields,
                          entity_fields)
