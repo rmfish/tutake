@@ -4,10 +4,8 @@ from pathlib import Path
 
 import yaml
 
-from tutake.utils.file_utils import project_root
-
-logger = logging.getLogger("tutake.config")
-
+from tutake.utils.file_utils import project_root, file
+from tutake.utils.logger import setup_logging
 
 class DotConfig(dict):
 
@@ -80,6 +78,7 @@ DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a020
 TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"
 # TUSHARE_DIR_KEY = "tutake.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
+TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
 
 
 class TutakeConfig(object):
@@ -105,14 +104,20 @@ class TutakeConfig(object):
         if self.get_config(TUSHARE_TOKEN_KEY) is None:
             self.set_config(TUSHARE_TOKEN_KEY, DEFAULT_TUSHARE_TOKEN)
 
-        logger.debug("Set default config. {}", self.__config)
+        if self.get_config(TUTAKE_LOGGING_CONFIG_KEY):
+            logger_config_path = self.get_config(TUTAKE_LOGGING_CONFIG_KEY)
+            if not str(logger_config_path).startswith("/"):
+                logger_config_path = file(project_root(), logger_config_path)
+            setup_logging(logger_config_path)
+
+        logging.getLogger("tutake.config").debug("Set default config. {}", self.__config)
 
     def _load_config_file(self, config_file: str) -> DotConfig:
         if os.path.exists(config_file):
             with open(config_file, 'r') as stream:
                 return DotConfig(yaml.safe_load(stream))
         else:
-            logger.error("Config file is not exits. %s" % config_file)
+            print("Config file is not exits. %s" % config_file)
         return DotConfig()
 
     def merge_config(self, _config: dict):
