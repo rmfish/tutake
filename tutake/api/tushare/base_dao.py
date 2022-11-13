@@ -1,11 +1,10 @@
 import logging
+import time
 from operator import and_
 
 import pandas as pd
 from sqlalchemy import text
 from sqlalchemy.orm import load_only
-
-logger = logging.getLogger('dao.base')
 
 
 class BaseDao(object):
@@ -17,9 +16,10 @@ class BaseDao(object):
         self.table_name = table_name
         self.query_fields = query_fields
         self.entity_fields = entity_fields
+        self.logger = logging.getLogger('dao.base.{}'.format(table_name))
 
     def delete_all(self):
-        logger.warning("Delete all data of tushare_stock_basic")
+        self.logger.warning("Delete all data of {}".format(self.table_name))
         session = self.session_factory()
         session.query(self.entities).delete()
         session.commit()
@@ -122,6 +122,7 @@ class BaseDao(object):
         return None
 
     def query(self, fields='', **kwargs):
+        start = time.time()
         filter_criterion = self._get_time_criterion_filter(**kwargs)
         params = {
             key: kwargs[key]
@@ -149,4 +150,7 @@ class BaseDao(object):
             query = query.offset(query_offset)
 
         df = pd.read_sql(query.statement, query.session.bind)
-        return df.drop(['id'], axis=1, errors='ignore')
+        df = df.drop(['id'], axis=1, errors='ignore')
+        self.logger.info(
+            "Finished {} query, it costs {}s".format(self.entities, time.time() - start))
+        return df

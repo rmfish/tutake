@@ -6,8 +6,6 @@ Tushare dividend接口
 
 @author: rmfish
 """
-import pandas as pd
-import logging
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -24,7 +22,6 @@ engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 't
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
-logger = logging.getLogger('api.tushare.dividend')
 
 
 class TushareDividend(Base):
@@ -146,7 +143,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
         @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
-            logger.debug("Invoke pro.dividend with args: {}".format(kwargs))
+            self.logger.debug("Invoke pro.dividend with args: {}".format(kwargs))
             res = self.tushare_api().dividend(**kwargs, fields=self.entity_fields)
             res.to_sql('tushare_dividend', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
@@ -166,10 +163,9 @@ setattr(Dividend, 'tushare_parameters', tushare_parameters_ext)
 setattr(Dividend, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 500)    # 显示列数
-    pd.set_option('display.width', 1000)
-    logger.setLevel(logging.INFO)
+    pd.set_option('display.max_columns', 50)    # 显示列数
+    pd.set_option('display.width', 100)
     api = Dividend()
-    api.process(ProcessType.HISTORY)    # 同步历史数据
-    # api.process(ProcessType.INCREASE)  # 同步增量数据
+    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api.process(ProcessType.INCREASE)    # 同步增量数据
     print(api.dividend())    # 数据查询接口

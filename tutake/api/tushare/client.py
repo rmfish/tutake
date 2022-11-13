@@ -1,3 +1,4 @@
+import logging
 from functools import partial
 
 import tushare as ts
@@ -11,7 +12,7 @@ def pro_api(token='', data_dir: str = None):
     return TushareQuery(token, data_dir)
 
 
-def process_api(config: dict):
+def process_api(config: dict = None):
     return TushareProcess(config)
 
 
@@ -20,7 +21,7 @@ class TushareProcess:
         tutake_config.merge_config(_config)
         self.dao = DAO()
 
-    def process(self, api_name, process_type: ProcessType):
+    def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
         api = self.dao.__getattr__(api_name)
         if api is not None:
             return api.process(process_type)
@@ -28,7 +29,7 @@ class TushareProcess:
             return None
 
     def __getattr__(self, name):
-        return partial(self.query, name)
+        return partial(self.process, name)
 
 
 class TushareQuery:
