@@ -35,11 +35,12 @@ class TaskManager:
             +------------------------- minute (0 - 59)
         :return:
         """
-        tasks = tutake_config.get_config("tutake.tasks")
+        tasks = tutake_config.get_config("tutake.schedule.tasks")
         for task in tasks:
             for k, v in task.items():
                 if k and v:
-                    self.task.add_job(k, trigger=CronTrigger.from_crontab(v, timezone='Asia/Shanghai'))
+                    self.task.add_job(k, trigger=CronTrigger.from_crontab(v, timezone=tutake_config.get_config(
+                        "tutake.schedule.timezone", 'Asia/Shanghai')))
 
     def start(self):
         self._config_schedule_tasks()

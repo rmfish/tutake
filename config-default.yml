@@ -2,6 +2,11 @@
 tutake:
   data:
     driver_url: sqlite:////Users/xxx/tutake/data  #单独指定数据的目录
+  schedule:
+    timezone: Asia/Shanghai
+    tasks:
+      - stock_basic: 0 0 * * *
+      - daily: 30 0 * * *
 
 tushare:
   token: #tushare api 的token
