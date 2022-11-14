@@ -14,3 +14,7 @@ loggers:
     level: INFO
     handlers: [ console ]
     propagate: False
+  apscheduler:
+    level: INFO
+    handlers: [ console ]
+    propagate: False

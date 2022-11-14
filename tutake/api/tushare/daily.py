@@ -18,7 +18,8 @@ from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_daily.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_daily.db'),
+                       connect_args={"check_same_thread": False})
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -137,9 +138,9 @@ setattr(Daily, 'tushare_parameters', tushare_parameters_ext)
 setattr(Daily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)    # 显示列数
+    pd.set_option('display.max_columns', 50)  # 显示列数
     pd.set_option('display.width', 100)
     api = Daily()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.daily())    # 数据查询接口
+    api.process(ProcessType.INCREASE)  # 同步增量数据
+    print(api.daily())  # 数据查询接口
