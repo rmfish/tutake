@@ -72,7 +72,7 @@ class TushareProcessTask:
             args = [job_id, api_name, kwargs.get('process_type')]
         else:
             args = [job_id, api_name]
-        self._scheduler.add_job(self._do_process, args=args, id=job_id, **kwargs)
+        self._scheduler.add_job(self._do_process, args=args, id=job_id, name=api_name, **kwargs)
 
     def __getattr__(self, name):
         return partial(self.add_job, name)

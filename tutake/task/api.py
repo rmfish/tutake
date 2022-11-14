@@ -158,8 +158,8 @@ _report_container = ProcessReportContainer()
 
 def get_job_results(job_id):
     status = request.args.get('status')
-    page = request.args.get('page')
-    page_size = request.args.get('size')
+    page = request.args.get('page', default=0)
+    page_size = request.args.get('size', default=20)
     results = _report_container.get_reports(job_id, status, page, page_size)
     if results:
         return jsonify([r.to_dict() for r in results])

@@ -253,6 +253,7 @@ class ProcessReportContainer(object):
             return self.running_reports.get(job_id)
         if page_size:
             page_size = int(page_size)
+
         session = session_factory()
         rows = session.query(TaskReport).filter_by(job_id=job_id).order_by(desc(TaskReport.start_time)).limit(
             page_size).offset(int(page) * page_size).all()
