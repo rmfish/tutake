@@ -25,6 +25,8 @@ from apscheduler.events import EVENT_ALL
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.jobstores.base import JobLookupError
 from flask import make_response
+from flask_cors import CORS
+
 from . import api
 from .utils import fix_job_def, pop_trigger
 
@@ -47,7 +49,7 @@ class APScheduler(object):
         self.app = None
 
         if app:
-            self.init_app(app)
+            CORS(app)
 
     @property
     def host_name(self):
@@ -85,6 +87,7 @@ class APScheduler(object):
 
         if self.api_enabled:
             self._load_api()
+        CORS(app)
 
     def start(self, paused=False):
         """

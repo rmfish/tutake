@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": "5000",
-    "desc": "",
+    "desc": "获取备用行情，包括特定的行情指标。量比、换手率、成交量、流通市值、强弱度(%)...",
     "id": 255,
     "if_exists": null,
     "inputs": [

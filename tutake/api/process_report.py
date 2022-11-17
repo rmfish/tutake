@@ -248,7 +248,7 @@ class ProcessReportContainer(object):
         report.start()
         return report
 
-    def get_reports(self, job_id, status, page=0, page_size=20):
+    def get_reports(self, job_id, status=None, page=0, page_size=20):
         if status == 'RUNNING':
             return self.running_reports.get(job_id)
         if page_size:

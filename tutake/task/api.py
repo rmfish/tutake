@@ -20,6 +20,7 @@ from apscheduler.jobstores.base import ConflictingIdError, JobLookupError
 from flask import current_app, request, Response
 from .json_ext import jsonify
 from ..api.process_report import ProcessReportContainer
+from ..code.tushare_api import TushareJsonApi
 
 
 def get_scheduler_info():
@@ -78,6 +79,9 @@ def get_job(job_id):
     return jsonify(job)
 
 
+api_loader = TushareJsonApi()
+
+
 def get_jobs():
     """Gets all scheduled jobs."""
 
@@ -86,7 +90,9 @@ def get_jobs():
     job_states = []
 
     for job in jobs:
-        job_states.append(job)
+        api = api_loader.get_api_by_name(job.name)
+        reports = _report_container.get_reports(job.id, page_size=1)
+        job_states.append({"job": job, "api": api, "reports": [r.to_dict() for r in reports]})
 
     return jsonify(job_states)
 

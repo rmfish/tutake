@@ -1,7 +1,7 @@
 {
     "database": "",
     "default_limit": "5000",
-    "desc": "备用基础信息",
+    "desc": "获取备用基础列表，数据从2016年开始",
     "id": 262,
     "if_exists": null,
     "inputs": [

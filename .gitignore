@@ -5,3 +5,4 @@ __pycache__/
 *.py[cod]
 .DS_Store
 .idea/
+*/node_modules/

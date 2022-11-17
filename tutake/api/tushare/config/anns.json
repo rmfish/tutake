@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "上市公司公告原文",
+    "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
     "id": 176,
     "if_exists": null,
     "inputs": [
