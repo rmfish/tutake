@@ -155,6 +155,9 @@ if __name__ == '__main__':
                  'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
                  'fina_indicator_vip', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
                  'ths_daily', 'ths_member', 'index_global', 'anns']
+    fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
+                'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
+    api_names.extend(fund_api)
     for n in api_names:
         api = generator.api_loader.get_api_by_name(n)
         if api:

@@ -1,3 +1,6 @@
+"""
+分红送股数据
+"""
 from tutake.api.process_report import ProcessType
 
 

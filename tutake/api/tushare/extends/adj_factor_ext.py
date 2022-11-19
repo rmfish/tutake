@@ -1,8 +1,11 @@
+"""
+获取股票复权因子，可提取单只股票全部历史复权因子，也可以提取单日全部股票的复权因子。更新时间：早上9点30分
+"""
 from tutake.api.process_report import ProcessType
 
 
 def default_cron_express_ext(self) -> str:
-    return "0 1 * * *"
+    return "35 9 * * *"
 
 
 def default_order_by_ext(self) -> str:

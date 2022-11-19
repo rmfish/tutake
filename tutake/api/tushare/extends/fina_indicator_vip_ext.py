@@ -1,9 +1,9 @@
 from tutake.api.process_report import ProcessType
-from tutake.api.tushare.extends.date_utils import financial_report_time_params
+from tutake.api.tushare.extends.date_utils import quarter_params
 
 
 def default_cron_express_ext(self) -> str:
-    return "0 1 * * *"
+    return "0 3 * * *"
 
 
 def default_order_by_ext(self) -> str:
@@ -31,7 +31,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return financial_report_time_params(self, process_type, '20041231')
+    return quarter_params(self, process_type, '20041231')
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

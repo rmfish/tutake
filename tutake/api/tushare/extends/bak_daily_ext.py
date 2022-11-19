@@ -1,3 +1,6 @@
+"""
+获取备用行情，包括特定的行情指标。量比、换手率、成交量、流通市值、强弱度(%)...
+"""
 from tutake.api.process_report import ProcessType
 
 

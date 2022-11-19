@@ -1,6 +1,6 @@
 {
     "database": "tushare_basic_data",
-    "default_cron": "10 0 * * *",
+    "default_cron": "10 0,17 * * *",
     "default_limit": null,
     "desc": "获取基础信息数据，包括股票代码、名称、上市日期、退市日期等",
     "id": 25,

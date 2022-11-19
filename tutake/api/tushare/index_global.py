@@ -16,12 +16,13 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.ggt_daily_ext import *
+from tutake.api.tushare.extends.index_global_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_index_global.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_index_global.db'),
+                       connect_args={'check_same_thread': False})
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()

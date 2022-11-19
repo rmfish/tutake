@@ -22,7 +22,8 @@ class DAO(object):
             'stk_managers', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
             'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'index_daily',
             'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'ths_daily', 'ths_member',
-            'index_global', 'anns', 'index_basic'
+            'index_global', 'anns', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
+            'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic'
         ]
 
     def instance_from_name(self, name):
@@ -174,6 +175,46 @@ class DAO(object):
         if name == 'anns':
             anns_module = import_module("tutake.api.tushare.anns")
             clazz = getattr(anns_module, "Anns")
+            return clazz()
+        if name == 'fund_adj':
+            fund_adj_module = import_module("tutake.api.tushare.fund_adj")
+            clazz = getattr(fund_adj_module, "FundAdj")
+            return clazz()
+        if name == 'fund_company':
+            fund_company_module = import_module("tutake.api.tushare.fund_company")
+            clazz = getattr(fund_company_module, "FundCompany")
+            return clazz()
+        if name == 'fund_div':
+            fund_div_module = import_module("tutake.api.tushare.fund_div")
+            clazz = getattr(fund_div_module, "FundDiv")
+            return clazz()
+        if name == 'fund_manager':
+            fund_manager_module = import_module("tutake.api.tushare.fund_manager")
+            clazz = getattr(fund_manager_module, "FundManager")
+            return clazz()
+        if name == 'fund_nav':
+            fund_nav_module = import_module("tutake.api.tushare.fund_nav")
+            clazz = getattr(fund_nav_module, "FundNav")
+            return clazz()
+        if name == 'fund_portfolio':
+            fund_portfolio_module = import_module("tutake.api.tushare.fund_portfolio")
+            clazz = getattr(fund_portfolio_module, "FundPortfolio")
+            return clazz()
+        if name == 'fund_sales_ratio':
+            fund_sales_ratio_module = import_module("tutake.api.tushare.fund_sales_ratio")
+            clazz = getattr(fund_sales_ratio_module, "FundSalesRatio")
+            return clazz()
+        if name == 'fund_sales_vol':
+            fund_sales_vol_module = import_module("tutake.api.tushare.fund_sales_vol")
+            clazz = getattr(fund_sales_vol_module, "FundSalesVol")
+            return clazz()
+        if name == 'fund_share':
+            fund_share_module = import_module("tutake.api.tushare.fund_share")
+            clazz = getattr(fund_share_module, "FundShare")
+            return clazz()
+        if name == 'fund_daily':
+            fund_daily_module = import_module("tutake.api.tushare.fund_daily")
+            clazz = getattr(fund_daily_module, "FundDaily")
             return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
