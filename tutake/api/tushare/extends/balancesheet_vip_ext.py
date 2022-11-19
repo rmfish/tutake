@@ -19,7 +19,7 @@ def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
     """
-    return "7000"
+    return "100000000"
 
 
 def prepare_ext(self, process_type: ProcessType):
@@ -36,7 +36,9 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     params = []
     str_format = "YYYYMMDD"
     start_record_period = pendulum.parse('19901231')  # 最早的数据记录
-    if ProcessType.HISTORY == process_type:
+    max_period = self.max("end_date")
+    if max_period is None or pendulum.now().diff(
+            pendulum.parse(max_period), abs=False).in_months() > 3 or ProcessType.HISTORY == process_type:
         min_period = self.min("end_date", condition="end_date is not null")
         if min_period is not None:
             period = pendulum.parse(min_period).add(months=-3).last_of('quarter')
@@ -46,14 +48,14 @@ def tushare_parameters_ext(self, process_type: ProcessType):
             params.append({"period": period.format(str_format)})
             period = period.add(months=-3).last_of("quarter")
     else:
-        max_period = self.max("end_date")
-        if max_period is not None:
-            period = pendulum.parse(max_period).add(months=3).last_of("quarter")
+        max_f_ann_date = self.max("f_ann_date")
+        if max_f_ann_date is not None:
+            period = pendulum.parse(max_f_ann_date).add(days=1)
         else:
             period = start_record_period
-        while period.diff(pendulum.now().last_of('quarter'), False).in_days() > 0:
-            params.append({"period": period.format(str_format)})
-            period = period.add(months=3).last_of("quarter")
+        while period.diff(pendulum.now(), False).in_days() > 0:
+            params.append({"f_ann_date": period.format(str_format)})
+            period = period.add(days=1)
     return params
 
 

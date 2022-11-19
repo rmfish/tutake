@@ -73,7 +73,9 @@ class BaseDao(object):
         return ''
 
     def default_time_range(self) -> ():
-        if 'start_date' in self.query_fields:
+        if self.table_name == 'tushare_balancesheet_vip':
+            return 'start_date', 'end_date', self.entities.end_date
+        elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date
         elif 'start_month' in self.query_fields:
             return 'start_month', 'end_month', self.entities.month
@@ -100,7 +102,7 @@ class BaseDao(object):
         return None
 
     def _get_query_limit(self, **kwargs):
-        limit = 20000  # 默认20000条 避免导致数据库压力过大
+        limit = 2000000  # 默认20000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             if input_limit < limit:

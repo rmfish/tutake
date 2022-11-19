@@ -6,6 +6,7 @@ Tushare balancesheet_vip接口
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
