@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取优币指数成分所对应的流通市值、权重以及指数调仓日价格等数据。",
     "id": 99,

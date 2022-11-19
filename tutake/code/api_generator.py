@@ -2,8 +2,8 @@ import json
 import logging
 import os
 
-import pendulum
 import jinja2
+import pendulum
 from yapf.yapflib.yapf_api import FormatCode
 
 from tutake.code.tushare_api import TushareJsonApi
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
                  'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
                  'fina_indicator_vip', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-                 'ths_daily', 'ths_member','index_global']
+                 'ths_daily', 'ths_member', 'index_global', 'anns']
     for n in api_names:
         api = generator.api_loader.get_api_by_name(n)
         if api:

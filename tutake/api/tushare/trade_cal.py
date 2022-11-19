@@ -6,18 +6,18 @@ Tushare trade_cal接口
 
 @author: rmfish
 """
+import logging
 from concurrent.futures import ThreadPoolExecutor
 
 import pandas as pd
-import logging
-from sqlalchemy import Integer, String, Float, Column, create_engine, text
+from sqlalchemy import Integer, String, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from tutake.api.tushare.process import ProcessType, DataProcess
 
 from tutake.api.tushare.base_dao import BaseDao, ProcessException, ProcessPercent
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.trade_cal_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep

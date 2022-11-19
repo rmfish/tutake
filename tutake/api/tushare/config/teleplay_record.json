@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 1000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "1000",
     "desc": "获取2009年以来全国拍摄制作电视剧备案公示数据",
     "id": 180,
     "if_exists": null,

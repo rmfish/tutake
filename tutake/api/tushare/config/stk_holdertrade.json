@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 3000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "3000",
     "desc": "获取上市公司增减持数据，了解重要股东近期及历史上的股份增减变化",
     "id": 175,
     "if_exists": null,

@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取CPI居民消费价格数据，包括全国、城市和农村的数据",
     "id": 228,

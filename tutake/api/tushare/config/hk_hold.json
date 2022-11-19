@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 3800,
+    "default_cron": "10 0 * * *",
+    "default_limit": "3800",
     "desc": "获取沪深港股通持股明细，数据来源港交所。",
     "id": 188,
     "if_exists": null,

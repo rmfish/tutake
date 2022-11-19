@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 2000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "2000",
     "desc": "获取深圳市场每日交易概况",
     "id": 268,
     "if_exists": null,

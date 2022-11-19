@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 1000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "1000",
     "desc": "外汇日线行情",
     "id": 179,
     "if_exists": null,

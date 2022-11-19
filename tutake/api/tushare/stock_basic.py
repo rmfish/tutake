@@ -2,24 +2,26 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare stock_basic接口
+获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
 数据接口-沪深股票-基础数据-股票列表  https://tushare.pro/document/2?doc_id=25
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.stock_basic_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
-                       connect_args={"check_same_thread": False})
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -69,7 +71,7 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
 
     def stock_basic(self, fields='', **kwargs):
         """
-        
+        获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
         | Arguments:
         | ts_code(str):   TS股票代码
         | name(str):   名称
@@ -152,15 +154,16 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(StockBasic, 'default_limit', default_limit_ext)
+setattr(StockBasic, 'default_cron_express', default_cron_express_ext)
 setattr(StockBasic, 'default_order_by', default_order_by_ext)
 setattr(StockBasic, 'prepare', prepare_ext)
 setattr(StockBasic, 'tushare_parameters', tushare_parameters_ext)
 setattr(StockBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     api = StockBasic()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.stock_basic())  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.stock_basic())    # 数据查询接口

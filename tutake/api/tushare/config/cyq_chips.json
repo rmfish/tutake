@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取A股每日的筹码分布情况，提供各价位占比，数据从2010年开始，每天17~18点之间更新当日数据",
     "id": 294,

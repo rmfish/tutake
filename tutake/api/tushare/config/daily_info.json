@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取交易所股票交易统计，包括各板块明细",
     "id": 215,

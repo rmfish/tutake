@@ -13,6 +13,9 @@ class DataProcess:
         self.name = name
         self._report_container = ProcessReportContainer()
 
+    def default_cron_express(self) -> str:
+        return ""
+
     def prepare(self, process_type: ProcessType):
         """
         同步历史数据准备工作

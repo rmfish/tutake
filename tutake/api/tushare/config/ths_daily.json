@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 3000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "3000",
     "desc": "获取同花顺板块指数行情。",
     "id": 260,
     "if_exists": null,

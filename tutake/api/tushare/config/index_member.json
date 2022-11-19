@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 2000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "2000",
     "desc": "申万行业成分构成",
     "id": 182,
     "if_exists": null,

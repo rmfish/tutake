@@ -1,11 +1,15 @@
-from tutake.api.tushare.process import ProcessType
-import pendulum
-
 """
 接口：moneyflow_hsgt，可以通过数据工具调试和查看数据。
 描述：获取沪股通、深股通、港股通每日资金流向数据，每次最多返回300条记录，总量不限制。每天18~20点之间完成当日更新
 积分要求：2000积分起，5000积分每分钟可提取500次
 """
+import pendulum
+
+from tutake.api.process_report import ProcessType
+
+
+def default_cron_express_ext(self) -> str:
+    return "0 1 * * *"
 
 
 def default_order_by_ext(self) -> str:

@@ -237,6 +237,8 @@ class TushareJsonApi(TushareApiInterface):
 if __name__ == '__main__':
     json_config = TushareJsonApi()
     db_config = TushareDBApi()
-    for i in db_config.get_all_leaf_api():
-        i['path'] = db_config.get_api_path(i['id'])
+    for i in json_config.get_all_leaf_api():
+        if i.get('default_limit'):
+            i['default_limit'] = str(i.get('default_limit'))
+        i['default_cron'] = "10 0 * * *"
         json_config.update_api(i)

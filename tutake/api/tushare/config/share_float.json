@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 5000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "5000",
     "desc": "限售股解禁",
     "id": 160,
     "if_exists": null,

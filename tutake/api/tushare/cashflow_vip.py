@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare cashflow_vip接口
+获取上市公司现金流量表
 数据接口-沪深股票-财务数据-现金流量表  https://tushare.pro/document/2?doc_id=4400
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.cashflow_vip_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -173,7 +176,7 @@ class CashflowVip(BaseDao, TuShareBase, DataProcess):
 
     def cashflow_vip(self, fields='', **kwargs):
         """
-        
+        获取上市公司现金流量表
         | Arguments:
         | ts_code(str): required  股票代码
         | ann_date(str):   公告日期
@@ -346,6 +349,7 @@ class CashflowVip(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(CashflowVip, 'default_limit', default_limit_ext)
+setattr(CashflowVip, 'default_cron_express', default_cron_express_ext)
 setattr(CashflowVip, 'default_order_by', default_order_by_ext)
 setattr(CashflowVip, 'prepare', prepare_ext)
 setattr(CashflowVip, 'tushare_parameters', tushare_parameters_ext)

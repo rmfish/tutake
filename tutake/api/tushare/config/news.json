@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 1000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "1000",
     "desc": "获取主流新闻网站的快讯新闻数据",
     "id": 143,
     "if_exists": null,

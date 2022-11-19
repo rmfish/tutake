@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare ths_member接口
+获取同花顺概念板块成分列表
 数据接口-指数-同花顺概念和行业指数成分  https://tushare.pro/document/2?doc_id=261
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.ths_member_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -58,7 +61,7 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
 
     def ths_member(self, fields='', **kwargs):
         """
-        
+        获取同花顺概念板块成分列表
         | Arguments:
         | ts_code(str):   板块指数代码
         | code(str):   股票代码
@@ -120,6 +123,7 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(ThsMember, 'default_limit', default_limit_ext)
+setattr(ThsMember, 'default_cron_express', default_cron_express_ext)
 setattr(ThsMember, 'default_order_by', default_order_by_ext)
 setattr(ThsMember, 'prepare', prepare_ext)
 setattr(ThsMember, 'tushare_parameters', tushare_parameters_ext)

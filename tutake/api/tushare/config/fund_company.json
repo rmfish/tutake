@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取公募基金管理人列表",
     "id": 118,

@@ -15,6 +15,16 @@ class DAO(object):
             self.instances[name] = self.instance_from_name(name)
         return self.instances.get(name)
 
+    def all_apis(self):
+        return [
+            'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
+            'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
+            'stk_managers', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
+            'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'index_daily',
+            'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'ths_daily', 'ths_member',
+            'index_global', 'anns', 'index_basic'
+        ]
+
     def instance_from_name(self, name):
 
         if name == 'adj_factor':
@@ -161,7 +171,13 @@ class DAO(object):
             index_global_module = import_module("tutake.api.tushare.index_global")
             clazz = getattr(index_global_module, "IndexGlobal")
             return clazz()
+        if name == 'anns':
+            anns_module = import_module("tutake.api.tushare.anns")
+            clazz = getattr(anns_module, "Anns")
+            return clazz()
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.tushare.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
             return clazz()
+        else:
+            return None

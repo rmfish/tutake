@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare moneyflow_hsgt接口
+获取沪股通、深股通、港股通每日资金流向数据
 数据接口-沪深股票-行情数据-沪深港通资金流向  https://tushare.pro/document/2?doc_id=47
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.moneyflow_hsgt_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -58,7 +61,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
 
     def moneyflow_hsgt(self, fields='', **kwargs):
         """
-        
+        获取沪股通、深股通、港股通每日资金流向数据
         | Arguments:
         | trade_date(str):   交易日期
         | start_date(str):   开始日期
@@ -121,6 +124,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(MoneyflowHsgt, 'default_limit', default_limit_ext)
+setattr(MoneyflowHsgt, 'default_cron_express', default_cron_express_ext)
 setattr(MoneyflowHsgt, 'default_order_by', default_order_by_ext)
 setattr(MoneyflowHsgt, 'prepare', prepare_ext)
 setattr(MoneyflowHsgt, 'tushare_parameters', tushare_parameters_ext)

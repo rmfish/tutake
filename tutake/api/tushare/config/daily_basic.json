@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "交易日每日15点～17点之间,获取全部股票每日重要的基本面指标，可用于选股分析、报表展示等。",
     "id": 32,

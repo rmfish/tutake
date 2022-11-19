@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 2000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "2000",
     "desc": "获取新冠状肺炎疫情感染人数统计数据",
     "id": 202,
     "if_exists": null,

@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare bak_basic接口
+获取备用基础列表，数据从2016年开始
 数据接口-沪深股票-基础数据-备用列表  https://tushare.pro/document/2?doc_id=262
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.bak_basic_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -79,7 +82,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
 
     def bak_basic(self, fields='', **kwargs):
         """
-        备用基础信息
+        获取备用基础列表，数据从2016年开始
         | Arguments:
         | trade_date(str):   交易日期
         | ts_code(str):   股票代码
@@ -158,6 +161,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(BakBasic, 'default_limit', default_limit_ext)
+setattr(BakBasic, 'default_cron_express', default_cron_express_ext)
 setattr(BakBasic, 'default_order_by', default_order_by_ext)
 setattr(BakBasic, 'prepare', prepare_ext)
 setattr(BakBasic, 'tushare_parameters', tushare_parameters_ext)

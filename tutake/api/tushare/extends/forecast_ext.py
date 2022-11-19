@@ -6,7 +6,11 @@
 """
 import pendulum
 
-from tutake.api.tushare.process import ProcessType
+from tutake.api.process_report import ProcessType
+
+
+def default_cron_express_ext(self) -> str:
+    return "0 1 * * *"
 
 
 def default_order_by_ext(self) -> str:
@@ -21,6 +25,7 @@ def default_limit_ext(self) -> str:
     每次取数的默认Limit
     """
     return '3500'
+
 
 def prepare_ext(self, process_type: ProcessType):
     """

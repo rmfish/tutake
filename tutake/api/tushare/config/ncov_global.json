@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 10000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "10000",
     "desc": "获取全球新冠疫情数据，包括国家和地区，同一日期可能有多条数据，当日可能多次公布，可以采用update_time最新时间的数据。如果取country=‘中国'，包含了各省市的明细数据。",
     "id": 213,
     "if_exists": null,

@@ -1,13 +1,10 @@
-import json
-import logging
 from functools import partial
 
 import tushare as ts
 from apscheduler.schedulers.background import BackgroundScheduler
 
-from tutake.api.process_report import ProcessReportContainer
+from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.process import ProcessType, ProcessReport
 from tutake.utils.config import tutake_config
 
 

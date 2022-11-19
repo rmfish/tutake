@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 2000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "2000",
     "desc": "获取债券回购日行情",
     "id": 256,
     "if_exists": null,

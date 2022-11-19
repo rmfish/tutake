@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": "4500",
     "desc": "获取A股月线行情",
     "id": 145,

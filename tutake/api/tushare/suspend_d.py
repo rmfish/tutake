@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare suspend_d接口
+每日停复牌信息
 数据接口-沪深股票-行情数据-每日停复牌信息  https://tushare.pro/document/2?doc_id=214
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.suspend_d_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -55,7 +58,7 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
 
     def suspend_d(self, fields='', **kwargs):
         """
-        
+        每日停复牌信息
         | Arguments:
         | ts_code(str):   股票代码(可输入多值)
         | suspend_type(str):   停复牌类型：S-停牌,R-复牌
@@ -125,6 +128,7 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(SuspendD, 'default_limit', default_limit_ext)
+setattr(SuspendD, 'default_cron_express', default_cron_express_ext)
 setattr(SuspendD, 'default_order_by', default_order_by_ext)
 setattr(SuspendD, 'prepare', prepare_ext)
 setattr(SuspendD, 'tushare_parameters', tushare_parameters_ext)

@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取概念股分类，目前只有ts一个来源，未来将逐步增加来源",
     "id": 125,

@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare hs_const接口
+获取沪股通、深股通成分数据
 数据接口-沪深股票-基础数据-沪深股通成分股  https://tushare.pro/document/2?doc_id=104
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.hs_const_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -55,7 +58,7 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
 
     def hs_const(self, fields='', **kwargs):
         """
-        
+        获取沪股通、深股通成分数据
         | Arguments:
         | hs_type(str): required  类型SH沪股通SZ深股通
         | is_new(str):   是否最新1最新0不是
@@ -115,6 +118,7 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(HsConst, 'default_limit', default_limit_ext)
+setattr(HsConst, 'default_cron_express', default_cron_express_ext)
 setattr(HsConst, 'default_order_by', default_order_by_ext)
 setattr(HsConst, 'prepare', prepare_ext)
 setattr(HsConst, 'tushare_parameters', tushare_parameters_ext)

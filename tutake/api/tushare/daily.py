@@ -2,24 +2,26 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare daily接口
+交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据
 数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.daily_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_daily.db'),
-                       connect_args={"check_same_thread": False})
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_daily.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
@@ -64,7 +66,7 @@ class Daily(BaseDao, TuShareBase, DataProcess):
 
     def daily(self, fields='', **kwargs):
         """
-        日线行情
+        交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
@@ -132,15 +134,16 @@ class Daily(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(Daily, 'default_limit', default_limit_ext)
+setattr(Daily, 'default_cron_express', default_cron_express_ext)
 setattr(Daily, 'default_order_by', default_order_by_ext)
 setattr(Daily, 'prepare', prepare_ext)
 setattr(Daily, 'tushare_parameters', tushare_parameters_ext)
 setattr(Daily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     api = Daily()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.daily())  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.daily())    # 数据查询接口

@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 2 * * *",
     "default_limit": null,
     "desc": "获取电影日度票房,当日更新上一日数据,数据从2018年9月开始，更多历史数据正在补充",
     "id": 115,

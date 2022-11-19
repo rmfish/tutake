@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare weekly接口
+获取A股周线行情
 数据接口-沪深股票-行情数据-周线行情  https://tushare.pro/document/2?doc_id=144
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.weekly_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -63,7 +66,7 @@ class Weekly(BaseDao, TuShareBase, DataProcess):
 
     def weekly(self, fields='', **kwargs):
         """
-        周线行情
+        获取A股周线行情
         | Arguments:
         | ts_code(str):   TS代码
         | trade_date(str):   交易日期
@@ -131,6 +134,7 @@ class Weekly(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(Weekly, 'default_limit', default_limit_ext)
+setattr(Weekly, 'default_cron_express', default_cron_express_ext)
 setattr(Weekly, 'default_order_by', default_order_by_ext)
 setattr(Weekly, 'prepare', prepare_ext)
 setattr(Weekly, 'tushare_parameters', tushare_parameters_ext)

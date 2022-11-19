@@ -13,11 +13,16 @@ class DAO(object):
             self.instances[name] = self.instance_from_name(name)
         return self.instances.get(name)
 
+    def all_apis(self):
+        return [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
+
     def instance_from_name(self, name):
 {% for api in apis %}
         if name == '{{api.name}}':
             {{api.name}}_module = import_module("tutake.api.tushare.{{api.name}}")
             clazz = getattr({{api.name}}_module, "{{api.title_name}}")
             return clazz(){% endfor %}
+        else:
+            return None
 
 

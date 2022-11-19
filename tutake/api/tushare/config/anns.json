@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "0 9 * * *",
     "default_limit": null,
     "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
     "id": 176,
@@ -76,7 +77,7 @@
         },
         {
             "column": "CONTENT",
-            "data_type": null,
+            "data_type": "str",
             "desc": "公告内容",
             "must": "Y",
             "name": "content"

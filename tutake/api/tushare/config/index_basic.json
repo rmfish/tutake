@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": "8000",
     "desc": "获取指数基础信息。",
     "id": 94,

@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 2000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "2000",
     "desc": "美国国债每日收益率曲线",
     "id": 219,
     "if_exists": null,

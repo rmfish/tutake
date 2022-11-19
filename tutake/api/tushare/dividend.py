@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare dividend接口
+分红送股数据
 数据接口-沪深股票-财务数据-分红送股数据  https://tushare.pro/document/2?doc_id=103
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.dividend_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -72,7 +75,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
 
     def dividend(self, fields='', **kwargs):
         """
-        
+        分红送股数据
         | Arguments:
         | ts_code(str):   TS代码
         | ann_date(str):   公告日
@@ -157,6 +160,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(Dividend, 'default_limit', default_limit_ext)
+setattr(Dividend, 'default_cron_express', default_cron_express_ext)
 setattr(Dividend, 'default_order_by', default_order_by_ext)
 setattr(Dividend, 'prepare', prepare_ext)
 setattr(Dividend, 'tushare_parameters', tushare_parameters_ext)

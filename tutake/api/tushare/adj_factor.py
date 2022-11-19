@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare adj_factor接口
+获取股票复权因子，可提取单只股票全部历史复权因子，也可以提取单日全部股票的复权因子。更新时间：早上9点30分
 数据接口-沪深股票-行情数据-复权因子  https://tushare.pro/document/2?doc_id=28
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.adj_factor_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -54,7 +57,7 @@ class AdjFactor(BaseDao, TuShareBase, DataProcess):
 
     def adj_factor(self, fields='', **kwargs):
         """
-        
+        获取股票复权因子，可提取单只股票全部历史复权因子，也可以提取单日全部股票的复权因子。更新时间：早上9点30分
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
@@ -114,6 +117,7 @@ class AdjFactor(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(AdjFactor, 'default_limit', default_limit_ext)
+setattr(AdjFactor, 'default_cron_express', default_cron_express_ext)
 setattr(AdjFactor, 'default_order_by', default_order_by_ext)
 setattr(AdjFactor, 'prepare', prepare_ext)
 setattr(AdjFactor, 'tushare_parameters', tushare_parameters_ext)

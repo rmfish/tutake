@@ -1,4 +1,14 @@
-from tutake.api.tushare.process import ProcessType
+"""
+Tushare {{name}}接口
+{{desc}}
+{{path}}  https://tushare.pro/document/2?doc_id={{id}}
+"""
+
+from tutake.api.process_report import ProcessType
+
+
+def default_cron_express_ext(self) -> str:
+    return "{{default_cron}}"
 
 
 def default_order_by_ext(self) -> str:

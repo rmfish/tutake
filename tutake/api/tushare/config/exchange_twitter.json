@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取Twitter上数字货币交易所发布的消息",
     "id": 92,

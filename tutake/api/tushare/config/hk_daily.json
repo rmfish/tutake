@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 3000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "3000",
     "desc": "获取港股每日增量和历史行情",
     "id": 192,
     "if_exists": null,

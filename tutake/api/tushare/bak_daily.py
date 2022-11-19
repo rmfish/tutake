@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare bak_daily接口
+获取备用行情，包括特定的行情指标。量比、换手率、成交量、流通市值、强弱度(%)...
 数据接口-沪深股票-行情数据-备用行情  https://tushare.pro/document/2?doc_id=255
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.bak_daily_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -87,7 +90,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
 
     def bak_daily(self, fields='', **kwargs):
         """
-        
+        获取备用行情，包括特定的行情指标。量比、换手率、成交量、流通市值、强弱度(%)...
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
@@ -175,6 +178,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(BakDaily, 'default_limit', default_limit_ext)
+setattr(BakDaily, 'default_cron_express', default_cron_express_ext)
 setattr(BakDaily, 'default_order_by', default_order_by_ext)
 setattr(BakDaily, 'prepare', prepare_ext)
 setattr(BakDaily, 'tushare_parameters', tushare_parameters_ext)

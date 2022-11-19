@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 800,
+    "default_cron": "10 0 * * *",
+    "default_limit": "800",
     "desc": "获取场内基金日线行情，类似股票日行情",
     "id": 127,
     "if_exists": null,

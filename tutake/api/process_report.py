@@ -1,9 +1,8 @@
 import json
-import time
 from enum import Enum
 
 import pendulum
-from sqlalchemy import create_engine, Column, Integer, String, DateTime, desc
+from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 from tutake.utils.config import tutake_config

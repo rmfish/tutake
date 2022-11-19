@@ -1,9 +1,9 @@
 """
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
-Tushare ggt_daily接口
-获取港股通每日成交信息，数据从2014年开始
-数据接口-沪深股票-行情数据-港股通每日成交统计  https://tushare.pro/document/2?doc_id=196
+Tushare anns接口
+获取上市公司公告数据及原文文本，数据从2000年开始。
+数据接口-另类数据-上市公司公告原文  https://tushare.pro/document/2?doc_id=176
 
 @author: rmfish
 """
@@ -21,26 +21,29 @@ from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_ggt_daily.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_anns.db'))
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
 
 
-class TushareGgtDaily(Base):
-    __tablename__ = "tushare_ggt_daily"
+class TushareAnns(Base):
+    __tablename__ = "tushare_anns"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    trade_date = Column(String, index=True, comment='交易日期')
-    buy_amount = Column(Float, comment='买入成交金额（亿元）')
-    buy_volume = Column(Float, comment='买入成交笔数（万笔）')
-    sell_amount = Column(Float, comment='卖出成交金额（亿元）')
-    sell_volume = Column(Float, comment='卖出成交笔数（万笔）')
+    ts_code = Column(String, index=True, comment='股票代码')
+    ann_date = Column(String, index=True, comment='公告日期')
+    ann_type = Column(String, comment='公告类型')
+    title = Column(String, comment='公告标题')
+    content = Column(String, comment='公告内容')
+    pub_time = Column(String, comment='公告发布时间')
+    src_url = Column(String, comment='pdf原文URL')
+    filepath = Column(String, comment='pdf原文')
 
 
-TushareGgtDaily.__table__.create(bind=engine, checkfirst=True)
+TushareAnns.__table__.create(bind=engine, checkfirst=True)
 
 
-class GgtDaily(BaseDao, TuShareBase, DataProcess):
+class Anns(BaseDao, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -49,30 +52,33 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
-        entity_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
-        BaseDao.__init__(self, engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily', query_fields,
-                         entity_fields)
+        query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
+        entity_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
+        BaseDao.__init__(self, engine, session_factory, TushareAnns, 'tushare_anns', query_fields, entity_fields)
         TuShareBase.__init__(self)
-        DataProcess.__init__(self, "ggt_daily")
+        DataProcess.__init__(self, "anns")
         self.dao = DAO()
 
-    def ggt_daily(self, fields='', **kwargs):
+    def anns(self, fields='', **kwargs):
         """
-        获取港股通每日成交信息，数据从2014年开始
+        获取上市公司公告数据及原文文本，数据从2000年开始。
         | Arguments:
-        | trade_date(str):   交易日期
-        | start_date(str):   开始日期
-        | end_date(str):   结束日期
+        | ts_code(str):   股票代码
+        | ann_date(str):   公告日期
+        | start_date(str):   公告开始日期
+        | end_date(str):   公告结束日期
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         trade_date(str)  交易日期
-         buy_amount(float)  买入成交金额（亿元）
-         buy_volume(float)  买入成交笔数（万笔）
-         sell_amount(float)  卖出成交金额（亿元）
-         sell_volume(float)  卖出成交笔数（万笔）
+         ts_code(str)  股票代码
+         ann_date(str)  公告日期
+         ann_type(str)  公告类型
+         title(str)  公告标题
+         content(str)  公告内容
+         pub_time(str)  公告发布时间
+         src_url(str)  pdf原文URL
+         filepath(str)  pdf原文
         
         """
         return super().query(fields, **kwargs)
@@ -89,7 +95,7 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         获取tushare数据并append到数据库中
         :return: 数量行数
         """
-        init_args = {"trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+        init_args = {"ts_code": "", "ann_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -106,9 +112,9 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
-            self.logger.debug("Invoke pro.ggt_daily with args: {}".format(kwargs))
-            res = self.tushare_api().ggt_daily(**kwargs, fields=self.entity_fields)
-            res.to_sql('tushare_ggt_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+            self.logger.debug("Invoke pro.anns with args: {}".format(kwargs))
+            res = self.tushare_api().anns(**kwargs, fields=self.entity_fields)
+            res.to_sql('tushare_anns', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
         df = fetch_save(offset)
@@ -119,17 +125,17 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
-setattr(GgtDaily, 'default_limit', default_limit_ext)
-setattr(GgtDaily, 'default_cron_express', default_cron_express_ext)
-setattr(GgtDaily, 'default_order_by', default_order_by_ext)
-setattr(GgtDaily, 'prepare', prepare_ext)
-setattr(GgtDaily, 'tushare_parameters', tushare_parameters_ext)
-setattr(GgtDaily, 'param_loop_process', param_loop_process_ext)
+setattr(Anns, 'default_limit', default_limit_ext)
+setattr(Anns, 'default_cron_express', default_cron_express_ext)
+setattr(Anns, 'default_order_by', default_order_by_ext)
+setattr(Anns, 'prepare', prepare_ext)
+setattr(Anns, 'tushare_parameters', tushare_parameters_ext)
+setattr(Anns, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    api = GgtDaily()
+    api = Anns()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.ggt_daily())    # 数据查询接口
+    print(api.anns())    # 数据查询接口

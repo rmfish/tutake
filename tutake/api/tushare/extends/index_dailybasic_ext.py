@@ -1,6 +1,10 @@
 import pendulum
 
-from tutake.api.tushare.process import ProcessType
+from tutake.api.process_report import ProcessType
+
+
+def default_cron_express_ext(self) -> str:
+    return "0 1 * * *"
 
 
 def default_order_by_ext(self) -> str:
@@ -37,6 +41,8 @@ def tushare_parameters_ext(self, process_type: ProcessType):
 
     return [{'ts_code': '000016.SH'}, {'ts_code': '000905.SH'}, {'ts_code': '399001.SZ'}, {'ts_code': '399005.SZ'},
             {'ts_code': '399006.SZ'}, {'ts_code': '399905.SZ'}]
+
+
 # params = []
 #     str_format = "YYYYMMDD"
 #     start_record_date = pendulum.parse('20140101')  # 最早的数据记录

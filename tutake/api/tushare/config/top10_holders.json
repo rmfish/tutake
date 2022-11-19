@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取上市公司前十大股东数据，包括持有数量和比例等信息。",
     "id": 61,

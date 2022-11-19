@@ -1,5 +1,6 @@
 {
     "database": null,
+    "default_cron": "10 2 1 * *",
     "default_limit": null,
     "desc": "获取电影月度票房数据,本月更新上一月数据,数据从2008年1月1日开始，超过10年历史数据。",
     "id": 113,

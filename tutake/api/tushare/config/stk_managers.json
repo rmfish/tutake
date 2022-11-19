@@ -1,5 +1,6 @@
 {
     "database": "tushare_basic_data",
+    "default_cron": "10 0 * * *",
     "default_limit": "4000",
     "desc": "上市公司管理层",
     "id": 193,

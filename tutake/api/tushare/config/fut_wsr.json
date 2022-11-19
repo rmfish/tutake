@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 1000,
+    "default_cron": "10 0 * * *",
+    "default_limit": "1000",
     "desc": "获取仓单日报数据，了解各仓库/厂库的仓单变化",
     "id": 140,
     "if_exists": null,

@@ -1,9 +1,8 @@
-import pendulum
 from apscheduler.triggers.cron import CronTrigger
-
 from flask import Flask
 
 from tutake.api.tushare.client import TushareProcessTask
+from tutake.api.tushare.dao import DAO
 from tutake.task.scheduler import APScheduler
 from tutake.utils.config import tutake_config
 
@@ -22,6 +21,7 @@ class TaskManager:
         self.app.config.from_object(Config())
         self.scheduler = APScheduler(self.task.get_scheduler())
         self.scheduler.init_app(self.app)
+        self.dao = DAO()
 
     def _config_schedule_tasks(self):
         """
@@ -35,12 +35,21 @@ class TaskManager:
             +------------------------- minute (0 - 59)
         :return:
         """
-        tasks = tutake_config.get_config("tutake.schedule.tasks")
-        for task in tasks:
-            for k, v in task.items():
-                if k and v:
-                    self.task.add_job(k, trigger=CronTrigger.from_crontab(v, timezone=tutake_config.get_config(
-                        "tutake.schedule.timezone", 'Asia/Shanghai')))
+        config_tasks = tutake_config.get_config("tutake.schedule.tasks")
+        timezone = tutake_config.get_config("tutake.schedule.timezone", 'Asia/Shanghai')
+        configs = {}
+        for i in config_tasks:
+            configs = {**configs, **i}
+        apis = self.dao.all_apis()
+        for api in apis:
+            api_instance = self.dao.instance_from_name(api)
+            cron = ""
+            if api_instance:
+                cron = api_instance.default_cron_express()
+            if configs.get(api):
+                cron = configs.get(api)
+            if cron:
+                self.task.add_job(api, trigger=CronTrigger.from_crontab(cron, timezone=timezone))
 
     def start(self):
         self._config_schedule_tasks()

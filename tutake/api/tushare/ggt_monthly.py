@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare ggt_monthly接口
+港股通每月成交信息，数据从2014年开始
 数据接口-沪深股票-行情数据-港股通每月成交统计  https://tushare.pro/document/2?doc_id=197
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.ggt_monthly_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -63,7 +66,7 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
 
     def ggt_monthly(self, fields='', **kwargs):
         """
-        港股通每月成交统计
+        港股通每月成交信息，数据从2014年开始
         | Arguments:
         | month(str):   月度
         | start_month(str):   开始月度
@@ -128,6 +131,7 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(GgtMonthly, 'default_limit', default_limit_ext)
+setattr(GgtMonthly, 'default_cron_express', default_cron_express_ext)
 setattr(GgtMonthly, 'default_order_by', default_order_by_ext)
 setattr(GgtMonthly, 'prepare', prepare_ext)
 setattr(GgtMonthly, 'tushare_parameters', tushare_parameters_ext)

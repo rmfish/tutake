@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare index_daily接口
+获取南华指数每日行情，指数行情也可以通过通用行情接口获取数据．
 数据接口-期货-南华期货指数行情  https://tushare.pro/document/2?doc_id=155
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.index_daily_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -64,7 +67,7 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
 
     def index_daily(self, fields='', **kwargs):
         """
-        南华期货指数行情
+        获取南华指数每日行情，指数行情也可以通过通用行情接口获取数据．
         | Arguments:
         | ts_code(str): required  指数代码
         | trade_date(str):   交易日期
@@ -132,6 +135,7 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(IndexDaily, 'default_limit', default_limit_ext)
+setattr(IndexDaily, 'default_cron_express', default_cron_express_ext)
 setattr(IndexDaily, 'default_order_by', default_order_by_ext)
 setattr(IndexDaily, 'prepare', prepare_ext)
 setattr(IndexDaily, 'tushare_parameters', tushare_parameters_ext)

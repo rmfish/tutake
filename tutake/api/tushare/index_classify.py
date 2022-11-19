@@ -2,18 +2,21 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare index_classify接口
+获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息
 数据接口-指数-申万行业分类  https://tushare.pro/document/2?doc_id=181
 
 @author: rmfish
 """
+import pandas as pd
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.index_classify_ext import *
-from tutake.api.tushare.process import ProcessType, DataProcess
+from tutake.api.tushare.extends.ggt_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 from tutake.utils.decorator import sleep
@@ -58,7 +61,7 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
 
     def index_classify(self, fields='', **kwargs):
         """
-        申万行业分类
+        获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息
         | Arguments:
         | index_code(str):   指数代码
         | level(str):   行业分级（L1/L2/L3）
@@ -122,6 +125,7 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
 
 
 setattr(IndexClassify, 'default_limit', default_limit_ext)
+setattr(IndexClassify, 'default_cron_express', default_cron_express_ext)
 setattr(IndexClassify, 'default_order_by', default_order_by_ext)
 setattr(IndexClassify, 'prepare', prepare_ext)
 setattr(IndexClassify, 'tushare_parameters', tushare_parameters_ext)

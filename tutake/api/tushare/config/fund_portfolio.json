@@ -1,6 +1,7 @@
 {
     "database": null,
-    "default_limit": 200,
+    "default_cron": "10 0 * * *",
+    "default_limit": "200",
     "desc": "获取公募基金持仓数据，季度更新",
     "id": 121,
     "if_exists": null,
