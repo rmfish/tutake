@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": "8000",
-    "desc": "",
+    "desc": "获取指数基础信息。",
     "id": 94,
     "if_exists": null,
     "inputs": [

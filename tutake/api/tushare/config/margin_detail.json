@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取沪深两市每日融资融券明细",
     "id": 59,
     "if_exists": null,
     "inputs": [

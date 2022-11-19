@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "全国电影剧本备案数据",
+    "desc": "获取全国电影剧本备案的公示数据",
     "id": 156,
     "if_exists": null,
     "inputs": [

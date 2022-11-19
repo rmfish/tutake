@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "可转债赎回信息",
+    "desc": "获取可转债到期赎回、强制赎回等信息。数据来源于公开披露渠道，供个人和机构研究使用，请不要用于数据商业目的。",
     "id": 269,
     "if_exists": null,
     "inputs": [

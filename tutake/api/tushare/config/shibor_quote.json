@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 4000,
     "desc": "Shibor报价数据",
     "id": 150,
     "if_exists": null,

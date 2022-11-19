@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 10000,
     "desc": "龙虎榜机构交易明细数据",
     "id": 107,
     "if_exists": null,

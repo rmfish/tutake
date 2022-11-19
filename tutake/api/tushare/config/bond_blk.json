@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取沪深交易所债券大宗交易数据",
     "id": 271,
     "if_exists": null,
     "inputs": [

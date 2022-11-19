@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "获取机构调研",
+    "default_limit": 100,
+    "desc": "获取上市公司机构调研记录数据",
     "id": 275,
     "if_exists": null,
     "inputs": [

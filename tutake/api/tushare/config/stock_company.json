@@ -1,7 +1,7 @@
 {
     "database": "tushare_basic_data",
     "default_limit": "4500",
-    "desc": "",
+    "desc": "获取上市公司基础信息",
     "id": 112,
     "if_exists": null,
     "inputs": [

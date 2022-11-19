@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 1000,
     "desc": "",
     "id": 111,
     "if_exists": null,

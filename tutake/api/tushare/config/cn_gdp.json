@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "GDP数据",
+    "desc": "获取国民经济之GDP数据",
     "id": 227,
     "if_exists": null,
     "inputs": [

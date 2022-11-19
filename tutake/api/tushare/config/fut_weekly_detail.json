@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "期货主要品种交易周报",
+    "default_limit": 4000,
+    "desc": "获取期货交易所主要品种每周交易统计信息，数据从2010年3月开始",
     "id": 216,
     "if_exists": null,
     "inputs": [

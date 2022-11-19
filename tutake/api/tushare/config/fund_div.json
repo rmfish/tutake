@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "基金分红数据",
+    "desc": "获取公募基金分红数据",
     "id": 120,
     "if_exists": null,
     "inputs": [

@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "分红送股数据",
     "id": 103,
     "if_exists": null,
     "inputs": [

@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取融资融券每日交易汇总数据",
     "id": 58,
     "if_exists": null,
     "inputs": [

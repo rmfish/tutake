@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取同花顺概念板块成分列表",
     "id": 261,
     "if_exists": null,
     "inputs": [

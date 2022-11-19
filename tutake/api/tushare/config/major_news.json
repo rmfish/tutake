@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "长篇新闻",
+    "default_limit": 60,
+    "desc": "获取长篇通讯信息，覆盖主要新闻资讯网站",
     "id": 195,
     "if_exists": null,
     "inputs": [

@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 1000,
     "desc": "期权日线行情",
     "id": 159,
     "if_exists": null,

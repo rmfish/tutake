@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "交易日历",
+    "default_limit": 6000,
+    "desc": "获取美股交易日历信息",
     "id": 253,
     "if_exists": null,
     "inputs": [

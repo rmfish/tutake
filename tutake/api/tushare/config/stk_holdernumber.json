@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "股东数据",
+    "default_limit": 3000,
+    "desc": "获取上市公司股东户数数据，数据不定期公布",
     "id": 166,
     "if_exists": null,
     "inputs": [

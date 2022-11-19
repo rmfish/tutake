@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取PPI工业生产者出厂价格指数数据",
     "id": 245,
     "if_exists": null,
     "inputs": [

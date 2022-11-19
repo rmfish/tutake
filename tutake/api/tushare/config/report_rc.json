@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "获取卖方盈利预测数据",
+    "default_limit": 2000,
+    "desc": "获取券商（卖方）每天研报的盈利预测数据，数据从2010年开始，每晚19~22点更新当日数据",
     "id": 292,
     "if_exists": null,
     "inputs": [

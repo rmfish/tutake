@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取可转债发行数据",
     "id": 186,
     "if_exists": null,
     "inputs": [

@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "管理人",
+    "desc": "获取公募基金管理人列表",
     "id": 118,
     "if_exists": null,
     "inputs": [

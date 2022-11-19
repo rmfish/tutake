@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "美股行情",
+    "default_limit": 6000,
+    "desc": "获取美股行情（未复权），包括全部股票全历史行情，以及重要的市场和估值指标",
     "id": 254,
     "if_exists": null,
     "inputs": [

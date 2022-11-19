@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": "4500",
-    "desc": "周线行情",
+    "desc": "获取A股周线行情",
     "id": 144,
     "if_exists": null,
     "inputs": [

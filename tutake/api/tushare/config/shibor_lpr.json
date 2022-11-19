@@ -1,90 +1,90 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "LPR贷款基础利率",
-    "id": 151,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": 4000,
+  "desc": "LPR贷款基础利率 贷款基础利率（Loan Prime Rate，简称LPR），是基于报价行自主报出的最优贷款利率计算并发布的贷款市场参考利率。目前，对社会公布1年期贷款基础利率。\n\nLPR报价银行团现由10家商业银行组成。报价银行应符合财务硬约束条件和宏观审慎政策框架要求，系统重要性程度高、市场影响力大、综合实力强，已建立内部收益率曲线和内部转移定价机制，具有较强的自主定价能力，已制定本行贷款基础利率管理办法，以及有利于开展报价工作的其他条件。市场利率定价自律机制依据《贷款基础利率集中报价和发布规则》确定和调整报价行成员，监督和管理贷款基础利率运行，规范报价行与指定发布人行为。\n\n全国银行间同业拆借中心受权贷款基础利率的报价计算和信息发布。每个交易日根据各报价行的报价，剔除最高、最低各1家报价，对其余报价进行加权平均计算后，得出贷款基础利率报价平均利率，并于11:30对外发布",
+  "id": 151,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "shibor_lpr",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "1Y",
+      "data_type": "float",
+      "desc": "1年贷款利率",
+      "must": "Y",
+      "name": "1y"
+    },
+    {
+      "column": "5Y",
+      "data_type": "float",
+      "desc": "5年贷款利率",
+      "must": "Y",
+      "name": "5y"
+    }
+  ],
+  "parent_id": 148,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "shibor_lpr",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "1Y",
-            "data_type": "float",
-            "desc": "1年贷款利率",
-            "must": "Y",
-            "name": "1y"
-        },
-        {
-            "column": "5Y",
-            "data_type": "float",
-            "desc": "5年贷款利率",
-            "must": "Y",
-            "name": "5y"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 148,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            224,
-            "国内宏观"
-        ],
-        [
-            148,
-            "利率数据"
-        ],
-        [
-            151,
-            "LPR贷款基础利率"
-        ]
+    [
+      224,
+      "国内宏观"
     ],
-    "title": "LPR贷款基础利率",
-    "validations": []
+    [
+      148,
+      "利率数据"
+    ],
+    [
+      151,
+      "LPR贷款基础利率"
+    ]
+  ],
+  "title": "LPR贷款基础利率",
+  "validations": []
 }

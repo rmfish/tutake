@@ -1,7 +1,7 @@
 {
     "database": "tushare_basic_data",
     "default_limit": "2000",
-    "desc": "新股上市",
+    "desc": "获取新股上市列表数据",
     "id": 123,
     "if_exists": null,
     "inputs": [

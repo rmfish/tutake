@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "广州民间借贷利率",
+    "desc": "广州民间借贷利率,广州民间金融街",
     "id": 174,
     "if_exists": null,
     "inputs": [

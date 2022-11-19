@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 2000,
     "desc": "每日持仓排名",
     "id": 139,
     "if_exists": null,

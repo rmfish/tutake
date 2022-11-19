@@ -1,7 +1,7 @@
 {
     "database": "tushare_basic_data",
     "default_limit": "4000",
-    "desc": "管理层薪酬和持股",
+    "desc": "获取上市公司管理层薪酬和持股",
     "id": 194,
     "if_exists": null,
     "inputs": [

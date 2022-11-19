@@ -1,6 +1,6 @@
 {
     "database": null,
-    "default_limit": null,
+    "default_limit": 2000,
     "desc": "期货日线行情",
     "id": 138,
     "if_exists": null,

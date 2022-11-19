@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "仓单日报",
+    "default_limit": 1000,
+    "desc": "获取仓单日报数据，了解各仓库/厂库的仓单变化",
     "id": 140,
     "if_exists": null,
     "inputs": [

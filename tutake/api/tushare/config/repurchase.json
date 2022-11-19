@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "股票回购数据",
+    "desc": "获取上市公司回购股票数据",
     "id": 124,
     "if_exists": null,
     "inputs": [

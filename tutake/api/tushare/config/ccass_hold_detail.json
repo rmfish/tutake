@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "获取中央结算系统持股明细数据",
+    "desc": "获取中央结算系统机构席位持股明细，数据覆盖全历史，根据交易所披露时间，当日数据在下一交易日早上9点前完成",
     "id": 274,
     "if_exists": null,
     "inputs": [

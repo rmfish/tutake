@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取上市公司资产负债表",
     "id": 36,
     "if_exists": null,
     "inputs": [

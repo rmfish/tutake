@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "市场每日交易统计",
+    "desc": "获取交易所股票交易统计，包括各板块明细",
     "id": 215,
     "if_exists": null,
     "inputs": [

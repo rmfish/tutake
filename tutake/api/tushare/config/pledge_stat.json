@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "",
+    "default_limit": 1000,
+    "desc": "获取股票质押统计数据",
     "id": 110,
     "if_exists": null,
     "inputs": [

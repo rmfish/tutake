@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取可转债行情",
     "id": 187,
     "if_exists": null,
     "inputs": [

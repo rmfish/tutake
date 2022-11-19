@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "黄金日行情",
+    "default_limit": 2000,
+    "desc": "获取上海黄金交易所现货合约日线行情",
     "id": 285,
     "if_exists": null,
     "inputs": [

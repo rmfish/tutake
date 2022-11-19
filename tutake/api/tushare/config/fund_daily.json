@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "场内基金日线行情",
+    "default_limit": 800,
+    "desc": "获取场内基金日线行情，类似股票日行情",
     "id": 127,
     "if_exists": null,
     "inputs": [

@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取业绩预告数据",
     "id": 45,
     "if_exists": null,
     "inputs": [

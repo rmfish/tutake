@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "港股列表",
+    "desc": "获取港股列表信息",
     "id": 191,
     "if_exists": null,
     "inputs": [

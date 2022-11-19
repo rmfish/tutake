@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取公募基金经理数据，包括基金经理简历等数据",
     "id": 208,
     "if_exists": null,
     "inputs": [

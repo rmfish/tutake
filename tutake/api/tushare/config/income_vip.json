@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "A股利润表",
+    "desc": "获取上市公司财务利润表数据",
     "id": 3300,
     "if_exists": null,
     "inputs": [

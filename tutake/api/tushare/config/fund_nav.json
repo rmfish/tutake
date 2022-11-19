@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "基金净值",
+    "desc": "获取公募基金净值数据",
     "id": 119,
     "if_exists": null,
     "inputs": [

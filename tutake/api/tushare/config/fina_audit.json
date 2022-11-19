@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取上市公司定期财务审计意见数据",
     "id": 80,
     "if_exists": null,
     "inputs": [

@@ -1,7 +1,7 @@
 {
     "database": null,
-    "default_limit": null,
-    "desc": "获取国际指数行情",
+    "default_limit": 4000,
+    "desc": "获取国际主要指数日线行情",
     "id": 211,
     "if_exists": null,
     "inputs": [

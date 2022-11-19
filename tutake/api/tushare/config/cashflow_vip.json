@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取上市公司现金流量表",
     "id": 4400,
     "if_exists": null,
     "inputs": [

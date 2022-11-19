@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "",
+    "desc": "获取周度票房数据,本周更新上一周数据,数据从2008年第一周开始，超过10年历史数据。",
     "id": 114,
     "if_exists": null,
     "inputs": [

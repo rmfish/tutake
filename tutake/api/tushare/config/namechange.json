@@ -1,7 +1,7 @@
 {
     "database": "tushare_basic_data",
     "default_limit": "10000",
-    "desc": "",
+    "desc": "历史名称变更记录",
     "id": 100,
     "if_exists": null,
     "inputs": [

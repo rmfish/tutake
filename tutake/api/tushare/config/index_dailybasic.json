@@ -1,7 +1,7 @@
 {
     "database": null,
     "default_limit": null,
-    "desc": "大盘指数每日指标",
+    "desc": "大盘指数每日指标，目前只提供上证综指，深证成指，上证50，中证500，中小板指，创业板指的每日指标数据",
     "id": 128,
     "if_exists": null,
     "inputs": [
