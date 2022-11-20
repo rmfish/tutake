@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "获取指数月线行情,每月更新一次",
+    "min_score": 600,
     "id": 172,
     "if_exists": null,
     "inputs": [

@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "分红送股数据",
+    "min_score": 800,
     "id": 103,
     "if_exists": null,
     "inputs": [

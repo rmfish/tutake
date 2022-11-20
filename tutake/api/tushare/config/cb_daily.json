@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取可转债行情",
+    "min_score": 2000,
     "id": 187,
     "if_exists": null,
     "inputs": [

@@ -12,7 +12,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.utils.config import tutake_config
-from tutake.utils.file_utils import project_root
+from tutake.utils.utils import project_root
+from tutake.utils.singleton import Singleton
 
 engine = create_engine("%s/%s" % (tutake_config.get_meta_sqlite_driver_url(), 'tushare_meta.db'))
 session_factory = sessionmaker()
@@ -173,6 +174,7 @@ class TushareDBApi(TushareApiInterface):
         return r.json()['data']
 
 
+@Singleton
 class TushareJsonApi(TushareApiInterface):
 
     def __init__(self):

@@ -200,6 +200,7 @@ class ProcessReport:
         if result.status == 'Skip':
             self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
         elif result.status == 'Failed':
+            print(result.err)
             self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
         elif result.status == 'Success':
             self.logger.info(

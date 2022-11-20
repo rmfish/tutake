@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "广州民间借贷利率,广州民间金融街",
+    "min_score": 2000,
     "id": 174,
     "if_exists": null,
     "inputs": [

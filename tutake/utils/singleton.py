@@ -1,4 +1,3 @@
-
 class Singleton(object):
 
     def __init__(self, cls):

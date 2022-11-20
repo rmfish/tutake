@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获得上市公司主营业务构成，分地区和产品两种方式",
+    "min_score": 2000,
     "id": 81,
     "if_exists": null,
     "inputs": [

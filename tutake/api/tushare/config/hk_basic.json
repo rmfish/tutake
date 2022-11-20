@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取港股列表信息",
+    "min_score": 2000,
     "id": 191,
     "if_exists": null,
     "inputs": [

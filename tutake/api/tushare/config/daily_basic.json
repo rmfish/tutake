@@ -1,223 +1,224 @@
 {
-    "database": null,
-    "default_cron": "10 0 * * *",
-    "default_limit": null,
-    "desc": "交易日每日15点～17点之间,获取全部股票每日重要的基本面指标，可用于选股分析、报表展示等。",
-    "id": 32,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_cron": "10 0 * * *",
+  "default_limit": null,
+  "desc": "交易日每日15点～17点之间,获取全部股票每日重要的基本面指标，可用于选股分析、报表展示等。",
+  "min_score": 600,
+  "id": 32,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "daily_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "number",
+      "desc": "当日收盘价",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "TURNOVER_RATE",
+      "data_type": "number",
+      "desc": "换手率",
+      "must": "Y",
+      "name": "turnover_rate"
+    },
+    {
+      "column": "TURNOVER_RATE_F",
+      "data_type": "number",
+      "desc": "换手率(自由流通股)",
+      "must": "Y",
+      "name": "turnover_rate_f"
+    },
+    {
+      "column": "VOLUME_RATIO",
+      "data_type": "number",
+      "desc": "量比",
+      "must": "Y",
+      "name": "volume_ratio"
+    },
+    {
+      "column": "PE",
+      "data_type": "number",
+      "desc": "市盈率（总市值/净利润）",
+      "must": "Y",
+      "name": "pe"
+    },
+    {
+      "column": "PE_TTM",
+      "data_type": "number",
+      "desc": "市盈率（TTM）",
+      "must": "Y",
+      "name": "pe_ttm"
+    },
+    {
+      "column": "PB",
+      "data_type": "number",
+      "desc": "市净率（总市值/净资产）",
+      "must": "Y",
+      "name": "pb"
+    },
+    {
+      "column": "PS",
+      "data_type": "number",
+      "desc": "市销率",
+      "must": "Y",
+      "name": "ps"
+    },
+    {
+      "column": "PS_TTM",
+      "data_type": "number",
+      "desc": "市销率（TTM）",
+      "must": "Y",
+      "name": "ps_ttm"
+    },
+    {
+      "column": "DV_RATIO",
+      "data_type": "number",
+      "desc": "股息率（%）",
+      "must": "Y",
+      "name": "dv_ratio"
+    },
+    {
+      "column": "DV_TTM",
+      "data_type": "number",
+      "desc": "股息率（TTM） （%）",
+      "must": "Y",
+      "name": "dv_ttm"
+    },
+    {
+      "column": "TOTAL_SHARE",
+      "data_type": "number",
+      "desc": "总股本",
+      "must": "Y",
+      "name": "total_share"
+    },
+    {
+      "column": "FLOAT_SHARE",
+      "data_type": "number",
+      "desc": "流通股本",
+      "must": "Y",
+      "name": "float_share"
+    },
+    {
+      "column": "FREE_SHARE",
+      "data_type": "number",
+      "desc": "自由流通股本",
+      "must": "Y",
+      "name": "free_share"
+    },
+    {
+      "column": "TOTAL_MV",
+      "data_type": "number",
+      "desc": "总市值",
+      "must": "Y",
+      "name": "total_mv"
+    },
+    {
+      "column": "CIRC_MV",
+      "data_type": "number",
+      "desc": "流通市值",
+      "must": "Y",
+      "name": "circ_mv"
+    },
+    {
+      "column": "UDLIMIT_STATUS",
+      "data_type": "int",
+      "desc": "涨跌停状态",
+      "must": "N",
+      "name": "limit_status"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "daily_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "number",
-            "desc": "当日收盘价",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "TURNOVER_RATE",
-            "data_type": "number",
-            "desc": "换手率",
-            "must": "Y",
-            "name": "turnover_rate"
-        },
-        {
-            "column": "TURNOVER_RATE_F",
-            "data_type": "number",
-            "desc": "换手率(自由流通股)",
-            "must": "Y",
-            "name": "turnover_rate_f"
-        },
-        {
-            "column": "VOLUME_RATIO",
-            "data_type": "number",
-            "desc": "量比",
-            "must": "Y",
-            "name": "volume_ratio"
-        },
-        {
-            "column": "PE",
-            "data_type": "number",
-            "desc": "市盈率（总市值/净利润）",
-            "must": "Y",
-            "name": "pe"
-        },
-        {
-            "column": "PE_TTM",
-            "data_type": "number",
-            "desc": "市盈率（TTM）",
-            "must": "Y",
-            "name": "pe_ttm"
-        },
-        {
-            "column": "PB",
-            "data_type": "number",
-            "desc": "市净率（总市值/净资产）",
-            "must": "Y",
-            "name": "pb"
-        },
-        {
-            "column": "PS",
-            "data_type": "number",
-            "desc": "市销率",
-            "must": "Y",
-            "name": "ps"
-        },
-        {
-            "column": "PS_TTM",
-            "data_type": "number",
-            "desc": "市销率（TTM）",
-            "must": "Y",
-            "name": "ps_ttm"
-        },
-        {
-            "column": "DV_RATIO",
-            "data_type": "number",
-            "desc": "股息率（%）",
-            "must": "Y",
-            "name": "dv_ratio"
-        },
-        {
-            "column": "DV_TTM",
-            "data_type": "number",
-            "desc": "股息率（TTM） （%）",
-            "must": "Y",
-            "name": "dv_ttm"
-        },
-        {
-            "column": "TOTAL_SHARE",
-            "data_type": "number",
-            "desc": "总股本",
-            "must": "Y",
-            "name": "total_share"
-        },
-        {
-            "column": "FLOAT_SHARE",
-            "data_type": "number",
-            "desc": "流通股本",
-            "must": "Y",
-            "name": "float_share"
-        },
-        {
-            "column": "FREE_SHARE",
-            "data_type": "number",
-            "desc": "自由流通股本",
-            "must": "Y",
-            "name": "free_share"
-        },
-        {
-            "column": "TOTAL_MV",
-            "data_type": "number",
-            "desc": "总市值",
-            "must": "Y",
-            "name": "total_mv"
-        },
-        {
-            "column": "CIRC_MV",
-            "data_type": "number",
-            "desc": "流通市值",
-            "must": "Y",
-            "name": "circ_mv"
-        },
-        {
-            "column": "UDLIMIT_STATUS",
-            "data_type": "int",
-            "desc": "涨跌停状态",
-            "must": "N",
-            "name": "limit_status"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            32,
-            "每日指标"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "每日指标",
-    "validations": [
-        {
-            "message": "ts_code和日期参数至少输入一个",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      32,
+      "每日指标"
     ]
+  ],
+  "title": "每日指标",
+  "validations": [
+    {
+      "message": "ts_code和日期参数至少输入一个",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

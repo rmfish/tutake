@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取全国电影剧本备案的公示数据",
+    "min_score": 120,
     "id": 156,
     "if_exists": null,
     "inputs": [

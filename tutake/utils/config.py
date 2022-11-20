@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from tutake.utils.file_utils import project_root, file
+from tutake.utils.utils import project_root, file
 from tutake.utils.logger import setup_logging
 
 class DotConfig(dict):

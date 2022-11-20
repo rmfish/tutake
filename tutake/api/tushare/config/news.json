@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "获取主流新闻网站的快讯新闻数据",
+    "min_score": 5000,
     "id": 143,
     "if_exists": null,
     "inputs": [

@@ -73,8 +73,15 @@ class BaseDao(object):
         return ''
 
     def default_time_range(self) -> ():
-        if self.table_name == 'tushare_balancesheet_vip':
+
+        if self.table_name == 'tushare_trade_cal':
+            return 'start_date', 'end_date', self.entities.cal_date
+        elif self.table_name == 'tushare_balancesheet_vip':
             return 'start_date', 'end_date', self.entities.end_date
+        elif self.table_name == 'tushare_fund_nav':
+            return 'start_date', 'end_date', self.entities.nav_date
+        elif self.table_name == 'tushare_fund_portfolio':
+            return 'start_date', 'end_date', self.entities.ann_date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date
         elif 'start_month' in self.query_fields:
@@ -154,5 +161,5 @@ class BaseDao(object):
         df = pd.read_sql(query.statement, query.session.bind)
         df = df.drop(['id'], axis=1, errors='ignore')
         self.logger.info(
-            "Finished {} query, it costs {}s".format(self.entities, time.time() - start))
+            "Finished {} query, it costs {}s".format(self.entities.__name__, time.time() - start))
         return df

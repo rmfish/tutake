@@ -22,7 +22,7 @@ class DAO(object):
             'stk_managers', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
             'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'index_daily',
             'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'ths_daily', 'ths_member',
-            'index_global', 'anns', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
+            'index_global', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
             'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic'
         ]
 
@@ -175,6 +175,10 @@ class DAO(object):
         if name == 'anns':
             anns_module = import_module("tutake.api.tushare.anns")
             clazz = getattr(anns_module, "Anns")
+            return clazz()
+        if name == 'trade_cal':
+            trade_cal_module = import_module("tutake.api.tushare.trade_cal")
+            clazz = getattr(trade_cal_module, "TradeCal")
             return clazz()
         if name == 'fund_adj':
             fund_adj_module = import_module("tutake.api.tushare.fund_adj")

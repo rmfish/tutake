@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": "3000",
     "desc": "获取上市公司股东户数数据，数据不定期公布",
+    "min_score": 600,
     "id": 166,
     "if_exists": null,
     "inputs": [

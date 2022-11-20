@@ -8,7 +8,7 @@ from yapf.yapflib.yapf_api import FormatCode
 
 from tutake.code.tushare_api import TushareJsonApi
 # from tutake.code.tushare_api import get_api, get_api_path, get_ready_api, get_all_leaf_api
-from tutake.utils.file_utils import file_dir, realpath
+from tutake.utils.utils import file_dir, realpath
 
 logger = logging.getLogger("api.generate")
 
@@ -154,7 +154,7 @@ if __name__ == '__main__':
     api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
                  'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
                  'fina_indicator_vip', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-                 'ths_daily', 'ths_member', 'index_global', 'anns']
+                 'ths_daily', 'ths_member', 'index_global', 'anns', 'trade_cal']
     fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
                 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
     api_names.extend(fund_api)

@@ -2,31 +2,29 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare trade_cal接口
-数据接口-沪深股票-基础数据-交易日历  https://tushare.pro/document/2?doc_id=26
+获取各大期货交易所交易日历数据，数据开始月1996年1月
+数据接口-期货-期货交易日历  https://tushare.pro/document/2?doc_id=137
 
 @author: rmfish
 """
-import logging
-from concurrent.futures import ThreadPoolExecutor
-
 import pandas as pd
-from sqlalchemy import Integer, String, Column, create_engine
+import tushare as ts
+from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from tutake.api.tushare.process import ProcessType, DataProcess
 
-from tutake.api.tushare.base_dao import BaseDao, ProcessException, ProcessPercent
+from tutake.api.process import DataProcess
+from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.trade_cal_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
-from tutake.utils.decorator import sleep
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'))
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_trade_cal.db'),
+                       connect_args={'check_same_thread': False})
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)
 Base = declarative_base()
-logger = logging.getLogger('api.tushare.trade_cal')
 
 
 class TushareTradeCal(Base):
@@ -50,25 +48,17 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self):
-        BaseDao.__init__(self, engine, session_factory, TushareTradeCal, 'tushare_trade_cal')
-        TuShareBase.__init__(self)
+        query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
+        entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
+        BaseDao.__init__(self, engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
+                         entity_fields)
+        DataProcess.__init__(self, "trade_cal")
+        TuShareBase.__init__(self, "trade_cal")
         self.dao = DAO()
-        self.query_fields = [
-            n for n in [
-                'exchange',
-                'cal_date',
-                'start_date',
-                'end_date',
-                'is_open',
-                'limit',
-                'offset',
-            ] if n not in ['limit', 'offset']
-        ]
-        self.entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
 
     def trade_cal(self, fields='', **kwargs):
         """
-        
+        获取各大期货交易所交易日历数据，数据开始月1996年1月
         | Arguments:
         | exchange(str):   交易所 SSE上交所 SZSE深交所
         | cal_date(str):   日历日期
@@ -78,7 +68,6 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
-
         :return: DataFrame
          exchange(str)  交易所 SSE上交所 SZSE深交所
          cal_date(str)  日历日期
@@ -86,139 +75,49 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
          pretrade_date(str)  上一个交易日
         
         """
-        params = {
-            key: kwargs[key]
-            for key in kwargs.keys()
-            if key in self.query_fields and key is not None and kwargs[key] != ''
-        }
-        query = session_factory().query(TushareTradeCal).filter_by(**params)
-        if fields != '':
-            entities = (
-                getattr(TushareTradeCal, f.strip()) for f in fields.split(',') if f.strip() in self.entity_fields)
-            query = query.with_entities(*entities)
-
-        input_limit = 10000    # 默认10000条 避免导致数据库压力过大
-        if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
-            input_limit = int(kwargs.get('limit'))
-            query = query.limit(input_limit)
-        if "" != "":
-            default_limit = int("")
-            if default_limit < input_limit:
-                query = query.limit(default_limit)
-        if kwargs.get('offset') and str(kwargs.get('offset')).isnumeric():
-            query = query.offset(int(kwargs.get('offset')))
-        df = pd.read_sql(query.statement, query.session.bind)
-        return df.drop(['id'], axis=1, errors='ignore')
-
-    def prepare(self, process_type: ProcessType):
-        """
-        同步历史数据准备工作
-        """
-
-    def tushare_parameters(self, process_type: ProcessType):
-        """
-        同步历史数据调用的参数
-        :return: list(dict)
-        """
-        return [{}]
-
-    def param_loop_process(self, process_type: ProcessType, **params):
-        """
-        每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
-        """
-        return params
+        return super().query(fields, **kwargs)
 
     def process(self, process_type: ProcessType):
         """
         同步历史数据
         :return:
         """
-        self.prepare(process_type)
-        params = self.tushare_parameters(process_type)
-        logger.debug("Process tushare params is {}".format(params))
-        if params:
-            percent = ProcessPercent(len(params))
+        return super()._process(process_type, self.fetch_and_append)
 
-            def action(param):
-                new_param = self.param_loop_process(process_type, **param)
-                if new_param is None:
-                    logger.debug("[{}] Skip exec param: {}".format(percent.format(), param))
-                    return
-                try:
-                    cnt = self.fetch_and_append(process_type, **new_param)
-                    logger.info("[{}] Fetch and append {} data, cnt is {} . param is {}".format(
-                        percent.format(), "trade_cal", cnt, param))
-                except Exception as err:
-                    if isinstance(err.args[0], str) and (err.args[0].startswith("抱歉，您没有访问该接口的权限")
-                                                         or err.args[0].startswith("抱歉，您每天最多访问该接口")):
-                        logger.error("Throw exception with param: {} err:{}".format(new_param, err))
-                        raise Exception("Exit with tushare api flow limit. {}", err.args[0])
-                    else:
-                        logger.error("Execute fetch_and_append throw exp. {}".format(err))
-                        return ProcessException(param=new_param, cause=err)
-
-            with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
-                repeat_params = []
-                for result in pool.map(action, params):
-                    percent.finish()
-                    if isinstance(result, ProcessException):
-                        repeat_params.append(result.param)
-                    elif isinstance(result, Exception):
-                        return
-                # 过程中出现错误的，需要补偿执行
-                cnt = len(repeat_params)
-                if cnt > 0:
-                    percent = ProcessPercent(cnt)
-                    logger.warning("Failed process with exception.Cnt {}  All params is {}".format(cnt, repeat_params))
-                    for p in repeat_params:
-                        action(p)
-                        percent.finish()
-
-    def fetch_and_append(self, process_type: ProcessType, **kwargs):
+    def fetch_and_append(self, **kwargs):
         """
         获取tushare数据并append到数据库中
         :return: 数量行数
         """
+        init_args = {
+            "exchange": "",
+            "cal_date": "",
+            "start_date": "",
+            "end_date": "",
+            "is_open": "",
+            "limit": "",
+            "offset": ""
+        }
         if len(kwargs.keys()) == 0:
-            kwargs = {
-                "exchange": "",
-                "cal_date": "",
-                "start_date": "",
-                "end_date": "",
-                "is_open": "",
-                "limit": "",
-                "offset": ""
-            }
+            kwargs = init_args
         # 初始化offset和limit
         if not kwargs.get("limit"):
-            kwargs['limit'] = ""
+            kwargs['limit'] = self.default_limit()
         init_offset = 0
         offset = 0
         if kwargs.get('offset'):
             offset = int(kwargs['offset'])
             init_offset = offset
 
-        kwargs = {
-            key: kwargs[key] for key in kwargs.keys() & list([
-                'exchange',
-                'cal_date',
-                'start_date',
-                'end_date',
-                'is_open',
-                'limit',
-                'offset',
-            ])
-        }
+        kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
-        @sleep(timeout=5, time_append=30, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
-            logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
-            res = pro.trade_cal(**kwargs, fields=self.entity_fields)
+            self.logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
+            res = self.tushare_query('trade_cal', fields=self.entity_fields, **kwargs)
             res.to_sql('tushare_trade_cal', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
-        pro = self.tushare_api()
         df = fetch_save(offset)
         offset += df.shape[0]
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
@@ -227,15 +126,20 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
         return offset - init_offset
 
 
+setattr(TradeCal, 'default_limit', default_limit_ext)
+setattr(TradeCal, 'default_cron_express', default_cron_express_ext)
+setattr(TradeCal, 'default_order_by', default_order_by_ext)
 setattr(TradeCal, 'prepare', prepare_ext)
 setattr(TradeCal, 'tushare_parameters', tushare_parameters_ext)
 setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 500)    # 显示列数
-    pd.set_option('display.width', 1000)
-    logger.setLevel(logging.INFO)
+    pd.set_option('display.max_columns', 50)    # 显示列数
+    pd.set_option('display.width', 100)
+    pro = ts.pro_api(tutake_config.get_tushare_token())
+    print(pro.trade_cal())
+
     api = TradeCal()
-    api.process(ProcessType.HISTORY)    # 同步历史数据
-    # api.process(ProcessType.INCREASE)  # 同步增量数据
+    # api.process(ProcessType.HISTORY)  # 同步历史数据
+    api.process(ProcessType.INCREASE)    # 同步增量数据
     print(api.trade_cal())    # 数据查询接口

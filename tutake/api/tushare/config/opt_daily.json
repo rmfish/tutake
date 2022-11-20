@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "期权日线行情",
+    "min_score": 1500,
     "id": 159,
     "if_exists": null,
     "inputs": [

@@ -1,130 +1,131 @@
 {
-    "database": null,
-    "default_cron": "10 0 * * *",
-    "default_limit": "10000",
-    "desc": "龙虎榜机构交易明细数据",
-    "id": 107,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_cron": "10 0 * * *",
+  "default_limit": "10000",
+  "desc": "龙虎榜机构交易明细数据,数据开始于2005年，每日晚8点更新",
+  "min_score": 600,
+  "id": 107,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "top_inst",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "EXALTER",
+      "data_type": "str",
+      "desc": "营业部名称",
+      "must": "Y",
+      "name": "exalter"
+    },
+    {
+      "column": "BUY",
+      "data_type": "float",
+      "desc": "买入额（万）",
+      "must": "Y",
+      "name": "buy"
+    },
+    {
+      "column": "BUY_RATE",
+      "data_type": "float",
+      "desc": "买入占总成交比例",
+      "must": "Y",
+      "name": "buy_rate"
+    },
+    {
+      "column": "SELL",
+      "data_type": "float",
+      "desc": "卖出额（万）",
+      "must": "Y",
+      "name": "sell"
+    },
+    {
+      "column": "SELL_RATE",
+      "data_type": "float",
+      "desc": "卖出占总成交比例",
+      "must": "Y",
+      "name": "sell_rate"
+    },
+    {
+      "column": "NET_BUY",
+      "data_type": "float",
+      "desc": "净成交额（万）",
+      "must": "Y",
+      "name": "net_buy"
+    },
+    {
+      "column": "SIDE",
+      "data_type": "str",
+      "desc": "买卖类型0买入1卖出",
+      "must": "Y",
+      "name": "side"
+    },
+    {
+      "column": "REASON",
+      "data_type": "str",
+      "desc": "上榜理由",
+      "must": "Y",
+      "name": "reason"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "top_inst",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "EXALTER",
-            "data_type": "str",
-            "desc": "营业部名称",
-            "must": "Y",
-            "name": "exalter"
-        },
-        {
-            "column": "BUY",
-            "data_type": "float",
-            "desc": "买入额（万）",
-            "must": "Y",
-            "name": "buy"
-        },
-        {
-            "column": "BUY_RATE",
-            "data_type": "float",
-            "desc": "买入占总成交比例",
-            "must": "Y",
-            "name": "buy_rate"
-        },
-        {
-            "column": "SELL",
-            "data_type": "float",
-            "desc": "卖出额（万）",
-            "must": "Y",
-            "name": "sell"
-        },
-        {
-            "column": "SELL_RATE",
-            "data_type": "float",
-            "desc": "卖出占总成交比例",
-            "must": "Y",
-            "name": "sell_rate"
-        },
-        {
-            "column": "NET_BUY",
-            "data_type": "float",
-            "desc": "净成交额（万）",
-            "must": "Y",
-            "name": "net_buy"
-        },
-        {
-            "column": "SIDE",
-            "data_type": "str",
-            "desc": "买卖类型0买入1卖出",
-            "must": "Y",
-            "name": "side"
-        },
-        {
-            "column": "REASON",
-            "data_type": "str",
-            "desc": "上榜理由",
-            "must": "Y",
-            "name": "reason"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            107,
-            "龙虎榜机构交易明细"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "龙虎榜机构交易明细",
-    "validations": []
+    [
+      107,
+      "龙虎榜机构交易明细"
+    ]
+  ],
+  "title": "龙虎榜机构交易明细",
+  "validations": []
 }

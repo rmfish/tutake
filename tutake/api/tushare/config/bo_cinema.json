@@ -3,6 +3,7 @@
     "default_cron": "10 2 * * *",
     "default_limit": null,
     "desc": "获取每日各影院的票房数据,数据从2018年9月开始，更多历史数据正在补充",
+    "min_score": 500,
     "id": 116,
     "if_exists": null,
     "inputs": [

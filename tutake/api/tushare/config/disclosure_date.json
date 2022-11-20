@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取财报披露计划日期",
+    "min_score": 2000,
     "id": 162,
     "if_exists": null,
     "inputs": [

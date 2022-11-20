@@ -2,24 +2,23 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare daily接口
-交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据
+交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据,全部历史，交易日每日15点～17点之间更新
 数据接口-沪深股票-行情数据-日线行情  https://tushare.pro/document/2?doc_id=27
 
 @author: rmfish
 """
 import pandas as pd
+import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
-from tutake.utils.decorator import sleep
 
 engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_daily.db'),
                        connect_args={'check_same_thread': False})
@@ -61,13 +60,13 @@ class Daily(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
         BaseDao.__init__(self, engine, session_factory, TushareDaily, 'tushare_daily', query_fields, entity_fields)
-        TuShareBase.__init__(self)
         DataProcess.__init__(self, "daily")
+        TuShareBase.__init__(self, "daily")
         self.dao = DAO()
 
     def daily(self, fields='', **kwargs):
         """
-        交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据
+        交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据,全部历史，交易日每日15点～17点之间更新
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
@@ -118,11 +117,10 @@ class Daily(BaseDao, TuShareBase, DataProcess):
 
         kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
-        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             self.logger.debug("Invoke pro.daily with args: {}".format(kwargs))
-            res = self.tushare_api().daily(**kwargs, fields=self.entity_fields)
+            res = self.tushare_query('daily', fields=self.entity_fields, **kwargs)
             res.to_sql('tushare_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
@@ -144,6 +142,9 @@ setattr(Daily, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
+    pro = ts.pro_api(tutake_config.get_tushare_token())
+    print(pro.daily())
+
     api = Daily()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据

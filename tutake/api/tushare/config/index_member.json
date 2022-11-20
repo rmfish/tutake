@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": "2000",
     "desc": "申万行业成分构成",
+    "min_score": 2000,
     "id": 182,
     "if_exists": null,
     "inputs": [

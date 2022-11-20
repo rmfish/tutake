@@ -26,7 +26,8 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return daily_params(self, process_type, lambda x: self.dao.stock_basic.column_data(['ts_code', 'list_date']))
+    return daily_params(self, process_type, lambda x: self.dao.stock_basic.count(),
+                        lambda x: self.dao.stock_basic.column_data(['ts_code', 'list_date']))
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

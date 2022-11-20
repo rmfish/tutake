@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "期权合约信息",
+    "min_score": 600,
     "id": 158,
     "if_exists": null,
     "inputs": [

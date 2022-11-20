@@ -2,7 +2,8 @@
     "database": null,
     "default_cron": "10 1 * * *",
     "default_limit": null,
-    "desc": "大宗交易",
+    "desc": "大宗交易,每日晚9点更新",
+    "min_score": 800,
     "id": 161,
     "if_exists": null,
     "inputs": [

@@ -1,217 +1,219 @@
 {
-    "database": null,
-    "default_cron": "10 0 * * *",
-    "default_limit": null,
-    "desc": "获取公募基金分红数据",
-    "id": 120,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "公告日",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日",
-            "must": "N",
-            "name": "ex_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日",
-            "must": "N",
-            "name": "pay_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_cron": "10 0 * * *",
+  "default_limit": null,
+  "default_query": "ts_code='500001.SH'",
+  "desc": "获取公募基金分红数据",
+  "min_score": 800,
+  "id": 120,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "公告日",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日",
+      "must": "N",
+      "name": "ex_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日",
+      "must": "N",
+      "name": "pay_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "fund_div",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "IMP_ANNDATE",
+      "data_type": "str",
+      "desc": "分红实施公告日",
+      "must": "Y",
+      "name": "imp_anndate"
+    },
+    {
+      "column": "BASE_DATE",
+      "data_type": "str",
+      "desc": "分配收益基准日",
+      "must": "Y",
+      "name": "base_date"
+    },
+    {
+      "column": "DIV_PROC",
+      "data_type": "str",
+      "desc": "方案进度",
+      "must": "Y",
+      "name": "div_proc"
+    },
+    {
+      "column": "RECORD_DATE",
+      "data_type": "str",
+      "desc": "权益登记日",
+      "must": "Y",
+      "name": "record_date"
+    },
+    {
+      "column": "EX_DATE",
+      "data_type": "str",
+      "desc": "除息日",
+      "must": "Y",
+      "name": "ex_date"
+    },
+    {
+      "column": "PAY_DATE",
+      "data_type": "str",
+      "desc": "派息日",
+      "must": "Y",
+      "name": "pay_date"
+    },
+    {
+      "column": "EARPAY_DATE",
+      "data_type": "str",
+      "desc": "收益支付日",
+      "must": "Y",
+      "name": "earpay_date"
+    },
+    {
+      "column": "NET_EX_DATE",
+      "data_type": "str",
+      "desc": "净值除权日",
+      "must": "Y",
+      "name": "net_ex_date"
+    },
+    {
+      "column": "DIV_CASH",
+      "data_type": "float",
+      "desc": "每股派息(元)",
+      "must": "Y",
+      "name": "div_cash"
+    },
+    {
+      "column": "BASE_UNIT",
+      "data_type": "float",
+      "desc": "基准基金份额(万份)",
+      "must": "Y",
+      "name": "base_unit"
+    },
+    {
+      "column": "EAR_DISTR",
+      "data_type": "float",
+      "desc": "可分配收益(元)",
+      "must": "Y",
+      "name": "ear_distr"
+    },
+    {
+      "column": "EAR_AMOUNT",
+      "data_type": "float",
+      "desc": "收益分配金额(元)",
+      "must": "Y",
+      "name": "ear_amount"
+    },
+    {
+      "column": "ACCOUNT_DATE",
+      "data_type": "str",
+      "desc": "红利再投资到账日",
+      "must": "Y",
+      "name": "account_date"
+    },
+    {
+      "column": "BASE_YEAR",
+      "data_type": "str",
+      "desc": "份额基准年度",
+      "must": "Y",
+      "name": "base_year"
+    },
+    {
+      "column": "UPDATE_FLAG",
+      "data_type": "str",
+      "desc": "更新标识",
+      "must": "N",
+      "name": "update_flag"
+    }
+  ],
+  "parent_id": 18,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "fund_div",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "IMP_ANNDATE",
-            "data_type": "str",
-            "desc": "分红实施公告日",
-            "must": "Y",
-            "name": "imp_anndate"
-        },
-        {
-            "column": "BASE_DATE",
-            "data_type": "str",
-            "desc": "分配收益基准日",
-            "must": "Y",
-            "name": "base_date"
-        },
-        {
-            "column": "DIV_PROC",
-            "data_type": "str",
-            "desc": "方案进度",
-            "must": "Y",
-            "name": "div_proc"
-        },
-        {
-            "column": "RECORD_DATE",
-            "data_type": "str",
-            "desc": "权益登记日",
-            "must": "Y",
-            "name": "record_date"
-        },
-        {
-            "column": "EX_DATE",
-            "data_type": "str",
-            "desc": "除息日",
-            "must": "Y",
-            "name": "ex_date"
-        },
-        {
-            "column": "PAY_DATE",
-            "data_type": "str",
-            "desc": "派息日",
-            "must": "Y",
-            "name": "pay_date"
-        },
-        {
-            "column": "EARPAY_DATE",
-            "data_type": "str",
-            "desc": "收益支付日",
-            "must": "Y",
-            "name": "earpay_date"
-        },
-        {
-            "column": "NET_EX_DATE",
-            "data_type": "str",
-            "desc": "净值除权日",
-            "must": "Y",
-            "name": "net_ex_date"
-        },
-        {
-            "column": "DIV_CASH",
-            "data_type": "float",
-            "desc": "每股派息(元)",
-            "must": "Y",
-            "name": "div_cash"
-        },
-        {
-            "column": "BASE_UNIT",
-            "data_type": "float",
-            "desc": "基准基金份额(万份)",
-            "must": "Y",
-            "name": "base_unit"
-        },
-        {
-            "column": "EAR_DISTR",
-            "data_type": "float",
-            "desc": "可分配收益(元)",
-            "must": "Y",
-            "name": "ear_distr"
-        },
-        {
-            "column": "EAR_AMOUNT",
-            "data_type": "float",
-            "desc": "收益分配金额(元)",
-            "must": "Y",
-            "name": "ear_amount"
-        },
-        {
-            "column": "ACCOUNT_DATE",
-            "data_type": "str",
-            "desc": "红利再投资到账日",
-            "must": "Y",
-            "name": "account_date"
-        },
-        {
-            "column": "BASE_YEAR",
-            "data_type": "str",
-            "desc": "份额基准年度",
-            "must": "Y",
-            "name": "base_year"
-        },
-        {
-            "column": "UPDATE_FLAG",
-            "data_type": "str",
-            "desc": "更新标识",
-            "must": "N",
-            "name": "update_flag"
-        }
+    [
+      18,
+      "公募基金"
     ],
-    "parent_id": 18,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            18,
-            "公募基金"
-        ],
-        [
-            120,
-            "基金分红"
-        ]
-    ],
-    "title": "基金分红",
-    "validations": [
-        {
-            "message": "ts_code,ex_date,pay_data,ann_date必选其一",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "ann_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "ex_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "pay_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      120,
+      "基金分红"
     ]
+  ],
+  "title": "基金分红",
+  "validations": [
+    {
+      "message": "ts_code,ex_date,pay_data,ann_date必选其一",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "ann_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "ex_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "pay_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

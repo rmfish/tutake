@@ -9,12 +9,22 @@ from tutake.utils.config import tutake_config
 class DataProcess:
 
     def __init__(self, name):
-        self.logger = logging.getLogger(('api.tushare.%s' % name))
+        self.logger = logging.getLogger('api.tushare.%s' % name)
         self.name = name
         self._report_container = ProcessReportContainer()
 
+    def name(self):
+        return self.name
+
     def default_cron_express(self) -> str:
         return ""
+
+    def api_token_limit(self) -> (int, int):
+        """
+        接口的限制
+        :return: （最小的积分，接口限流）
+        """
+        return ()
 
     def prepare(self, process_type: ProcessType):
         """
@@ -55,15 +65,9 @@ class DataProcess:
                     append_cnt = fetch_and_append(**new_param)
                     return ActionResult(start, time.time(), param, new_param, append_cnt)
                 except Exception as err:
-                    if isinstance(err.args[0], str) and (err.args[0].startswith("抱歉，您没有访问该接口的权限")
-                                                         or err.args[0].startswith("抱歉，您每天最多访问该接口")):
-                        return ActionResult(start, time.time(), param, new_param,
-                                            err=Exception("Exit with tushare api flow limit. {}", err.args[0]),
-                                            status='Failed')
-                    else:
-                        return ActionResult(start, time.time(), param, new_param,
-                                            err=ProcessException(param=new_param, cause=err),
-                                            status='Failed')
+                    return ActionResult(start, time.time(), param, new_param,
+                                        err=ProcessException(param=new_param, cause=err),
+                                        status='Failed')
 
             with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
                 for result in pool.map(action, params):

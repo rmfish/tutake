@@ -2,7 +2,8 @@
     "database": null,
     "default_cron": "10 0 * * *",
     "default_limit": "2000",
-    "desc": "每日持仓排名",
+    "desc": "每日持仓排名，数据开始月2022年1月",
+    "min_score": 600,
     "id": 139,
     "if_exists": null,
     "inputs": [

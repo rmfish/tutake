@@ -2,7 +2,7 @@
     "database": null,
     "default_cron": "10 0 * * *",
     "default_limit": null,
-    "desc": "获取台湾TMT行业上市公司各类产品月度营收情况",
+    "desc": "获取台湾TMT行业上市公司各类产品月度营收情况，数据开始于2011年，月度更新",
     "id": 87,
     "if_exists": null,
     "inputs": [

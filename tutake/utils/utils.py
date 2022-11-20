@@ -1,4 +1,7 @@
 import os
+from datetime import timedelta, datetime
+
+import pytz
 
 
 def file(dir, file_name):
@@ -31,5 +34,15 @@ def project_root():
     return realpath("{}/../../".format(file_dir(__file__)))
 
 
+def start_of_day(timezone="Asia/Shanghai"):
+    tz = pytz.timezone(timezone)
+    today = datetime.now(tz=tz)
+    return today.replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def end_of_day(timezone="Asia/Shanghai"):
+    return start_of_day(timezone) + timedelta(1)
+
+
 if __name__ == "__main__":
-    print(file(project_root(), "file_utils.py"))
+    print(file(project_root(), "utils.py"))

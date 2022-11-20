@@ -8,18 +8,17 @@ Tushare balancesheet_vip接口
 @author: rmfish
 """
 import pandas as pd
+import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.balancesheet_vip_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
-from tutake.utils.decorator import sleep
 
 engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_balancesheet_vip.db'),
                        connect_args={'check_same_thread': False})
@@ -238,8 +237,8 @@ class BalancesheetVip(BaseDao, TuShareBase, DataProcess):
         ]
         BaseDao.__init__(self, engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip',
                          query_fields, entity_fields)
-        TuShareBase.__init__(self)
         DataProcess.__init__(self, "balancesheet_vip")
+        TuShareBase.__init__(self, "balancesheet_vip")
         self.dao = DAO()
 
     def balancesheet_vip(self, fields='', **kwargs):
@@ -461,11 +460,10 @@ class BalancesheetVip(BaseDao, TuShareBase, DataProcess):
 
         kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
-        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             self.logger.debug("Invoke pro.balancesheet_vip with args: {}".format(kwargs))
-            res = self.tushare_api().balancesheet_vip(**kwargs, fields=self.entity_fields)
+            res = self.tushare_query('balancesheet_vip', fields=self.entity_fields, **kwargs)
             res.to_sql('tushare_balancesheet_vip', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
@@ -487,6 +485,9 @@ setattr(BalancesheetVip, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
+    pro = ts.pro_api(tutake_config.get_tushare_token())
+    print(pro.balancesheet_vip())
+
     api = BalancesheetVip()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据

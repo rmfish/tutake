@@ -3,15 +3,15 @@ import pendulum
 from tutake.api.process_report import ProcessType
 
 
-def daily_params(self, process_type: ProcessType, default_params_func):
+def daily_params(self, process_type: ProcessType, entity_cnt_func, default_params_func, step=2):
     if ProcessType.INCREASE == process_type:  # 如果是新增数据，可以按照天来获取数据更加快
         max_date = self.max("trade_date")
         date_format = 'YYYYMMDD'
-        if pendulum.now().isoweekday() < 6 and max_date:
+        if max_date:
             cnt = self.count(condition='trade_date=%s' % max_date)
-            df = self.tushare_api().daily(trade_date=max_date)
+            df = self.tushare_query(self.name, fields='', trade_date=max_date)
             if df.shape[0] == cnt:
-                stock_cnt = self.dao.stock_basic.count()
+                stock_cnt = entity_cnt_func(process_type)
                 start_date = pendulum.parse(max_date)
                 if pendulum.now().diff(start_date).days / 3 < stock_cnt:
                     dates = []
@@ -58,6 +58,82 @@ def daily_params_loop(self, process_type: ProcessType, **params):
             return params
     else:
         return params
+
+
+def day_by_day_params(self, process_type: ProcessType, start_date, date_column="ann_date"):
+    params = []
+    start_date = pendulum.parse(start_date)
+    if process_type == ProcessType.HISTORY:
+        min_date = self.min(date_column)
+        if min_date:
+            min_date = pendulum.parse(min_date)
+        else:
+            min_date = pendulum.now()
+        while min_date.diff(start_date, abs=False).days < 0:
+            min_date = min_date.add(days=-1)
+            params.append({date_column: min_date.format("YYYYMMDD")})
+    else:
+        end_date = pendulum.now()
+        max_date = self.max(date_column)
+        if max_date:
+            max_date = pendulum.parse(max_date)
+        else:
+            max_date = start_date
+        while max_date.diff(end_date, abs=False).days > 0:
+            max_date = max_date.add(days=1)
+            params.append({date_column: max_date.format("YYYYMMDD")})
+    return params
+
+
+def q_by_q_params(self, process_type: ProcessType, start_date, date_column="ann_date"):
+    params = []
+    start_date = pendulum.parse(start_date)
+    if process_type == ProcessType.HISTORY:
+        min_date = self.min(date_column)
+        if min_date:
+            min_date = pendulum.parse(min_date)
+        else:
+            min_date = pendulum.now()
+        while min_date.diff(start_date, abs=False).days < 0:
+            min_date = min_date.add(days=-1)
+            params.append({date_column: min_date.format("YYYYMMDD")})
+    else:
+        end_date = pendulum.now()
+        max_date = self.max(date_column)
+        if max_date:
+            max_date = pendulum.parse(max_date)
+        else:
+            max_date = start_date
+        while max_date.diff(end_date, abs=False).days > 0:
+            max_date = max_date.add(days=1)
+            params.append({date_column: max_date.format("YYYYMMDD")})
+    return params
+
+
+def start_end_step_params(self, process_type: ProcessType, start_date: str = "19990104", step=7):
+    date_format = 'YYYYMMDD'
+    start_date = pendulum.parse(start_date)
+    dates = []
+    if ProcessType.INCREASE == process_type:  # 如果是新增数据，可以按照天来获取数据更加快
+        max_date = self.max("trade_date")
+        if max_date:
+            start_date = pendulum.parse(max_date).add(days=1)
+        while start_date <= pendulum.now():
+            end_date = start_date.add(days=step)
+            dates.append(
+                {"start_date": start_date.format(date_format), "end_date": end_date.format(date_format)})
+            start_date = end_date.add(days=1)
+        return dates
+    else:
+        min_date = self.min("trade_date")
+        if min_date:
+            end_date = pendulum.parse(min_date).add(days=-1)
+            while end_date >= start_date:
+                start_date = end_date.add(days=-step)
+                dates.append(
+                    {"start_date": start_date.format(date_format), "end_date": end_date.format(date_format)})
+                end_date = start_date.add(days=-1)
+            return dates
 
 
 def quarter_params(self, process_type: ProcessType, start_period: str = "19901231"):

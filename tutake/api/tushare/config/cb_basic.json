@@ -3,6 +3,7 @@
     "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取可转债基本信息",
+    "min_score": 2000,
     "id": 185,
     "if_exists": null,
     "inputs": [

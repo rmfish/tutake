@@ -2,7 +2,8 @@
     "database": null,
     "default_cron": "10 0 * * *",
     "default_limit": "5000",
-    "desc": "获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向",
+    "desc": "获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向，每日晚19点更新",
+    "min_score": 2000,
     "id": 170,
     "if_exists": null,
     "inputs": [

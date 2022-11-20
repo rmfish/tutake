@@ -2,24 +2,23 @@
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
 Tushare index_daily接口
-获取南华指数每日行情，指数行情也可以通过通用行情接口获取数据．
+指数日线行情,每日15~17点更新
 数据接口-期货-南华期货指数行情  https://tushare.pro/document/2?doc_id=155
 
 @author: rmfish
 """
 import pandas as pd
+import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessType
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.extends.index_daily_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
-from tutake.utils.decorator import sleep
 
 engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_index_daily.db'),
                        connect_args={'check_same_thread': False})
@@ -62,13 +61,13 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
         ]
         BaseDao.__init__(self, engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
                          entity_fields)
-        TuShareBase.__init__(self)
         DataProcess.__init__(self, "index_daily")
+        TuShareBase.__init__(self, "index_daily")
         self.dao = DAO()
 
     def index_daily(self, fields='', **kwargs):
         """
-        获取南华指数每日行情，指数行情也可以通过通用行情接口获取数据．
+        指数日线行情,每日15~17点更新
         | Arguments:
         | ts_code(str): required  指数代码
         | trade_date(str):   交易日期
@@ -119,11 +118,10 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
 
         kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
-        @sleep(timeout=61, time_append=60, retry=20, match="^抱歉，您每分钟最多访问该接口")
         def fetch_save(offset_val=0):
             kwargs['offset'] = str(offset_val)
             self.logger.debug("Invoke pro.index_daily with args: {}".format(kwargs))
-            res = self.tushare_api().index_daily(**kwargs, fields=self.entity_fields)
+            res = self.tushare_query('index_daily', fields=self.entity_fields, **kwargs)
             res.to_sql('tushare_index_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
             return res
 
@@ -145,6 +143,9 @@ setattr(IndexDaily, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
+    pro = ts.pro_api(tutake_config.get_tushare_token())
+    print(pro.index_daily())
+
     api = IndexDaily()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据
