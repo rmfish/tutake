@@ -82,7 +82,7 @@ class CodeGenerator(object):
             self.set_index(api_config)
             self.generate_order_by(api_config)
             self.render_code(api_config['name'], api_tmpl.render(api_config))
-            self.render_code("extends/%s_ext" % api_config['name'], api_ext_tmpl.render(api_config), False)
+            self.render_code("%s_ext" % api_config['name'], api_ext_tmpl.render(api_config), False)
         else:
             logger.warning("Miss name info with api. {} {}".format(api_config.get('id'), api_config.get('title')))
         return api_config

@@ -16,7 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from tutake.api.process import DataProcess
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.weekly_ext import *
+from tutake.api.tushare.weekly_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 
@@ -140,11 +140,10 @@ setattr(Weekly, 'tushare_parameters', tushare_parameters_ext)
 setattr(Weekly, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    df = pro.weekly(ts_code="000002.SZ")
-    print(df)
+    print(pro.weekly())
 
     api = Weekly()
     # api.process(ProcessType.HISTORY)  # 同步历史数据

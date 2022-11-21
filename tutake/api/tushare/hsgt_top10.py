@@ -16,7 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from tutake.api.process import DataProcess
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.hsgt_top10_ext import *
+from tutake.api.tushare.hsgt_top10_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 

@@ -16,7 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from tutake.api.process import DataProcess
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.extends.stk_rewards_ext import *
+from tutake.api.tushare.stk_rewards_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 
@@ -129,12 +129,12 @@ setattr(StkRewards, 'tushare_parameters', tushare_parameters_ext)
 setattr(StkRewards, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.stk_rewards(ts_code='601179.SH', ann_date='20201231'))
+    print(pro.stk_rewards(ts_code='601179.SH'))
 
     api = StkRewards()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.stk_rewards())  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.stk_rewards(ts_code='601179.SH'))    # 数据查询接口

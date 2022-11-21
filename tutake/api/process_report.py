@@ -113,7 +113,7 @@ class ProcessReport:
         return {"id": self._id, "name": self.name, "process_type": self.process_type,
                 "start_time": self.start_time.format("YYYY-MM-DD HH:mm:ss"),
                 "end_time": self.end_time.format("YYYY-MM-DD HH:mm:ss"),
-                "cost_second": self._cost_time(), "records": result[0],
+                "cost_second": self.process_time(), "records": result[0],
                 "api_invoke": result[1], "cnt_run": result[2], "cnt_success": result[3],
                 "cnt_skip": result[4],
                 "cnt_failed": result[5], "cnt_repeat": result[6], "params": self.params, "status": self.status,
@@ -176,7 +176,7 @@ class ProcessReport:
         self.status = 'SUCCESS'
         return self
 
-    def _cost_time(self):
+    def process_time(self):
         period = self.start_time.diff(self.end_time, abs=False)
         return period.in_seconds() + period.microseconds / 1000000
 
@@ -242,7 +242,7 @@ class ProcessReportContainer(object):
         if reports:
             reports.remove(report)
 
-    def create_process_report(self, _id, name, process_type: ProcessType, logger):
+    def create_process_report(self, _id, name, process_type: ProcessType, logger) -> ProcessReport:
         report = ProcessReport(_id, name, process_type, logger)
         self._add_report(report)
         report.start()

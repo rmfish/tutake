@@ -80,4 +80,6 @@ class DataProcess:
                     report.set_exec_params(repeat_params, 'Repeat')
                     for p in repeat_params:
                         report.finish_task(action(p))
-        return report.close()
+        report = report.close()
+        self.logger.info(f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")
+        return report

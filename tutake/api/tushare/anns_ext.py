@@ -5,6 +5,7 @@ Tushare anns接口
 """
 
 from tutake.api.process_report import ProcessType
+from tutake.api.tushare.date_utils import start_end_step_params
 
 
 def default_cron_express_ext(self) -> str:
@@ -22,7 +23,7 @@ def default_limit_ext(self) -> str:
     """
     每次取数的默认Limit
     """
-    return ''
+    return '150'
 
 
 def prepare_ext(self, process_type: ProcessType):
@@ -36,7 +37,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return []
+    return start_end_step_params(self, process_type, start_date="20000516", step=1, date_col='ann_date')
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

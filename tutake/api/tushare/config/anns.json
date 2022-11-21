@@ -3,7 +3,7 @@
     "default_cron": "0 9 * * *",
     "default_limit": null,
     "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
-    "min_score": 2000,
+    "min_score": 5000,
     "id": 176,
     "if_exists": null,
     "inputs": [
