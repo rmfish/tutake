@@ -129,7 +129,7 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.fund_sales_ratio(offset=5))
+    print(pro.fund_sales_ratio())
 
     api = FundSalesRatio()
     # api.process(ProcessType.HISTORY)  # 同步历史数据

@@ -143,9 +143,9 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.monthly())
+    print(pro.monthly(ts_code='000001.SZ'))
 
     api = Monthly()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.monthly())    # 数据查询接口
+    print(api.monthly(ts_code='000001.SZ'))    # 数据查询接口

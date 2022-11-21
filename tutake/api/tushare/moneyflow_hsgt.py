@@ -133,9 +133,9 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.moneyflow_hsgt())
+    print(pro.moneyflow_hsgt(trade_date='20221118'))
 
     api = MoneyflowHsgt()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.moneyflow_hsgt())    # 数据查询接口
+    print(api.moneyflow_hsgt(trade_date='20221118'))    # 数据查询接口

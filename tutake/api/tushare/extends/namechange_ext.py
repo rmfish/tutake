@@ -6,7 +6,7 @@ def default_cron_express_ext(self) -> str:
 
 
 def default_order_by_ext(self) -> str:
-    return "start_date desc,ts_code"
+    return "start_date desc,ts_code desc"
 
 
 def default_limit_ext(self):

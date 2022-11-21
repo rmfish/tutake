@@ -140,12 +140,12 @@ setattr(FundShare, 'tushare_parameters', tushare_parameters_ext)
 setattr(FundShare, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
     print(pro.fund_share())
 
     api = FundShare()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.fund_share())  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.fund_share())    # 数据查询接口

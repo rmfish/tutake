@@ -148,12 +148,12 @@ setattr(FundNav, 'tushare_parameters', tushare_parameters_ext)
 setattr(FundNav, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.fund_nav(nav_date="20221111"))
+    print(pro.fund_nav(nav_date='20221111'))
 
     api = FundNav()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.fund_nav(nav_date="20221111"))  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.fund_nav(nav_date='20221111'))    # 数据查询接口

@@ -76,11 +76,13 @@ class BaseDao(object):
 
         if self.table_name == 'tushare_trade_cal':
             return 'start_date', 'end_date', self.entities.cal_date
+        elif self.table_name == 'tushare_new_share':
+            return 'start_date', 'end_date', self.entities.ipo_date
         elif self.table_name == 'tushare_balancesheet_vip':
             return 'start_date', 'end_date', self.entities.end_date
         elif self.table_name == 'tushare_fund_nav':
             return 'start_date', 'end_date', self.entities.nav_date
-        elif self.table_name == 'tushare_fund_portfolio':
+        elif self.table_name in ['tushare_fund_portfolio', 'tushare_stk_managers', 'tushare_namechange']:
             return 'start_date', 'end_date', self.entities.ann_date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date

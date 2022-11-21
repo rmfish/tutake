@@ -91,6 +91,22 @@ def _baseline_score(i):
         return -1, i
 
 
+def _test_token(path):
+    with open(path, 'r', encoding='utf-8') as f:
+        tokens = {"5000": set(), "2000": set(), "800": set(), "120": set()}
+        for t in set(f.read().split("\n")):
+            tt = t.split(" #")
+            tokens[tt[1]].add(tt[0])
+        for i in tokens:
+            print(f"{i}:")
+            for j in tokens[i]:
+                print(f" - {j}")
+        # print(tokens)
+        # i = _baseline_score(t.split(" ")[0])
+        # if i[0] > 0:
+        #     print(f"{i[1]} #{i[0]}")
+
+
 class TushareTokenPool(object):
 
     def __init__(self, score, tokens: []):
@@ -221,6 +237,7 @@ class TushareTokenQueue:
                     self.not_empty.notifyAll()
 
             timer = threading.Timer(alive_time - time.time(), release)
+            timer.setDaemon(True)
             timer.start()
 
     def get(self, timeout=None):
@@ -260,7 +277,7 @@ class TushareTokenQueue:
 
 
 if __name__ == '__main__':
-    print()
+    _test_token("/Users/rmfish/Documents/Projects/PycharmProjects/tutake/tmp/token2.txt")
     # tokens = [TushareClient(i, time.time() - 5000) for i in ["123", "345"]]
     # queue = TushareTokenQueue(tokens)
     # print(queue)

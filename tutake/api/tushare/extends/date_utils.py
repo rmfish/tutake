@@ -110,12 +110,12 @@ def q_by_q_params(self, process_type: ProcessType, start_date, date_column="ann_
     return params
 
 
-def start_end_step_params(self, process_type: ProcessType, start_date: str = "19990104", step=7):
+def start_end_step_params(self, process_type: ProcessType, start_date: str = "19990104", step=7, date_col='trade_date'):
     date_format = 'YYYYMMDD'
     start_date = pendulum.parse(start_date)
     dates = []
     if ProcessType.INCREASE == process_type:  # 如果是新增数据，可以按照天来获取数据更加快
-        max_date = self.max("trade_date")
+        max_date = self.max(date_col)
         if max_date:
             start_date = pendulum.parse(max_date).add(days=1)
         while start_date <= pendulum.now():
@@ -125,7 +125,7 @@ def start_end_step_params(self, process_type: ProcessType, start_date: str = "19
             start_date = end_date.add(days=1)
         return dates
     else:
-        min_date = self.min("trade_date")
+        min_date = self.min(date_col)
         if min_date:
             end_date = pendulum.parse(min_date).add(days=-1)
             while end_date >= start_date:

@@ -1,4 +1,5 @@
 from tutake.api.process_report import ProcessType
+from tutake.api.tushare.extends.date_utils import start_end_step_params
 
 
 def default_cron_express_ext(self) -> str:
@@ -25,8 +26,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    cnt = self.count()
-    return [{"offset": cnt}]
+    return start_end_step_params(self, process_type, start_date='19900101', step=30)
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

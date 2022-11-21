@@ -20,7 +20,7 @@ from tutake.api.tushare.extends.stk_managers_ext import *
 from tutake.api.tushare.tushare_base import TuShareBase
 from tutake.utils.config import tutake_config
 
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
+engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_stk_managers.db'),
                        connect_args={'check_same_thread': False})
 session_factory = sessionmaker()
 session_factory.configure(bind=engine)

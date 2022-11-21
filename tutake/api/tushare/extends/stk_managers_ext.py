@@ -1,4 +1,5 @@
 from tutake.api.process_report import ProcessType
+from tutake.api.tushare.extends.date_utils import start_end_step_params
 
 
 def default_cron_express_ext(self) -> str:
@@ -6,7 +7,7 @@ def default_cron_express_ext(self) -> str:
 
 
 def default_order_by_ext(self) -> str:
-    return "trade_date desc,ts_code"
+    return "ann_date desc,ts_code"
 
 
 def default_limit_ext(self):
@@ -18,7 +19,7 @@ def prepare_ext(self, process_type: ProcessType):
     同步历史数据准备工作
     :return:
     """
-    self.delete_all()
+    # self.delete_all()
 
 
 def tushare_parameters_ext(self, process_type: ProcessType):
@@ -26,7 +27,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return [{}]
+    return start_end_step_params(self, process_type, start_date='20191221', step=30, date_col='ann_date')
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

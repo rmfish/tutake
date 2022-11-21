@@ -2,6 +2,7 @@
   "database": null,
   "default_cron": "10 0 * * *",
   "default_limit": "4500",
+  "default_query": "ts_code='000001.SZ'",
   "desc": "获取A股月线行情,全部历史，每月更新",
   "min_score": 600,
   "id": 145,

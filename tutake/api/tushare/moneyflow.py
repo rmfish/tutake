@@ -167,9 +167,9 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.moneyflow())
+    print(pro.moneyflow(ts_code='000001.SH'))
 
     api = Moneyflow()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
     api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.moneyflow())    # 数据查询接口
+    print(api.moneyflow(ts_code='000001.SH'))    # 数据查询接口

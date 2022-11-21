@@ -9,7 +9,7 @@ Tushare fund_manager接口
 """
 import pandas as pd
 import tushare as ts
-from sqlalchemy import Integer, String, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
@@ -139,12 +139,12 @@ setattr(FundManager, 'tushare_parameters', tushare_parameters_ext)
 setattr(FundManager, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.fund_manager(ann_date='20151121'))
+    print(pro.fund_manager())
 
     api = FundManager()
     # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
-    print(api.fund_manager(ann_date='20151121'))  # 数据查询接口
+    api.process(ProcessType.INCREASE)    # 同步增量数据
+    print(api.fund_manager())    # 数据查询接口
