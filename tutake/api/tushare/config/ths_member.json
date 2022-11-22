@@ -1,105 +1,105 @@
 {
-    "database": null,
-    "default_cron": "10 0 * * *",
-    "default_limit": null,
-    "desc": "获取同花顺概念板块成分列表",
-    "id": 261,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "板块指数代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取同花顺概念板块成分列表",
+  "min_score": 5000,
+  "id": 261,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "板块指数代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ths_member",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "WEIGHT",
+      "data_type": "float",
+      "desc": "权重",
+      "must": "N",
+      "name": "weight"
+    },
+    {
+      "column": "IN_DATE",
+      "data_type": "str",
+      "desc": "纳入日期",
+      "must": "N",
+      "name": "in_date"
+    },
+    {
+      "column": "OUT_DATE",
+      "data_type": "str",
+      "desc": "剔除日期",
+      "must": "N",
+      "name": "out_date"
+    },
+    {
+      "column": "IS_NEW",
+      "data_type": "str",
+      "desc": "是否最新Y是N否",
+      "must": "N",
+      "name": "is_new"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "ths_member",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "WEIGHT",
-            "data_type": "float",
-            "desc": "权重",
-            "must": "N",
-            "name": "weight"
-        },
-        {
-            "column": "IN_DATE",
-            "data_type": "str",
-            "desc": "纳入日期",
-            "must": "N",
-            "name": "in_date"
-        },
-        {
-            "column": "OUT_DATE",
-            "data_type": "str",
-            "desc": "剔除日期",
-            "must": "N",
-            "name": "out_date"
-        },
-        {
-            "column": "IS_NEW",
-            "data_type": "str",
-            "desc": "是否最新Y是N否",
-            "must": "N",
-            "name": "is_new"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            261,
-            "同花顺概念和行业指数成分"
-        ]
-    ],
-    "title": "同花顺概念和行业指数成分",
-    "validations": []
+    [
+      261,
+      "同花顺概念和行业指数成分"
+    ]
+  ],
+  "title": "同花顺概念和行业指数成分",
+  "validations": []
 }

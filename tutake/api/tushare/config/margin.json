@@ -1,136 +1,135 @@
 {
-  "database": null,
-  "default_cron": "10 0 * * *",
-  "default_limit": null,
-  "desc": "获取融资融券每日交易汇总数据,数据开始于2010年，每日9点更新",
-  "min_score": 600,
-  "id": 58,
-  "if_exists": null,
-  "inputs": [
-    {
-      "data_type": "str",
-      "desc": "交易日期",
-      "must": "N",
-      "name": "trade_date"
-    },
-    {
-      "data_type": "str",
-      "desc": "交易所代码",
-      "must": "N",
-      "name": "exchange_id"
-    },
-    {
-      "data_type": "str",
-      "desc": "开始日期",
-      "must": "N",
-      "name": "start_date"
-    },
-    {
-      "data_type": "str",
-      "desc": "结束日期",
-      "must": "N",
-      "name": "end_date"
-    },
-    {
-      "data_type": "int",
-      "desc": "单次返回数据长度",
-      "must": "N",
-      "name": "limit"
-    },
-    {
-      "data_type": "int",
-      "desc": "请求数据的开始位移量",
-      "must": "N",
-      "name": "offset"
-    }
-  ],
-  "is_ready": null,
-  "name": "margin",
-  "order_by": null,
-  "outputs": [
-    {
-      "column": "TRADE_DATE",
-      "data_type": "str",
-      "desc": "交易日期",
-      "must": "Y",
-      "name": "trade_date"
-    },
-    {
-      "column": "EXCHANGE_ID",
-      "data_type": "str",
-      "desc": "交易所代码（SSE上交所SZSE深交所）",
-      "must": "Y",
-      "name": "exchange_id"
-    },
-    {
-      "column": "RZYE",
-      "data_type": "float",
-      "desc": "融资余额(元)",
-      "must": "Y",
-      "name": "rzye"
-    },
-    {
-      "column": "RZMRE",
-      "data_type": "float",
-      "desc": "融资买入额(元)",
-      "must": "Y",
-      "name": "rzmre"
-    },
-    {
-      "column": "RZCHE",
-      "data_type": "float",
-      "desc": "融资偿还额(元)",
-      "must": "Y",
-      "name": "rzche"
-    },
-    {
-      "column": "RQYE",
-      "data_type": "float",
-      "desc": "融券余额(元)",
-      "must": "Y",
-      "name": "rqye"
-    },
-    {
-      "column": "RQMCL",
-      "data_type": "float",
-      "desc": "融券卖出量(股,份,手)",
-      "must": "Y",
-      "name": "rqmcl"
-    },
-    {
-      "column": "RZRQYE",
-      "data_type": "float",
-      "desc": "融资融券余额(元)",
-      "must": "Y",
-      "name": "rzrqye"
-    },
-    {
-      "column": "RQYL",
-      "data_type": "float",
-      "desc": "融券余量",
-      "must": "Y",
-      "name": "rqyl"
-    }
-  ],
-  "parent_id": 17,
-  "path": [
-    [
-      2,
-      "数据接口"
+    "database": null,
+    "default_limit": null,
+    "desc": "获取融资融券每日交易汇总数据,数据开始于2010年，每日9点更新",
+    "id": 58,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易所代码",
+            "must": "N",
+            "name": "exchange_id"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
     ],
-    [
-      14,
-      "沪深股票"
+    "is_ready": null,
+    "min_score": 600,
+    "name": "margin",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "EXCHANGE_ID",
+            "data_type": "str",
+            "desc": "交易所代码（SSE上交所SZSE深交所）",
+            "must": "Y",
+            "name": "exchange_id"
+        },
+        {
+            "column": "RZYE",
+            "data_type": "float",
+            "desc": "融资余额(元)",
+            "must": "Y",
+            "name": "rzye"
+        },
+        {
+            "column": "RZMRE",
+            "data_type": "float",
+            "desc": "融资买入额(元)",
+            "must": "Y",
+            "name": "rzmre"
+        },
+        {
+            "column": "RZCHE",
+            "data_type": "float",
+            "desc": "融资偿还额(元)",
+            "must": "Y",
+            "name": "rzche"
+        },
+        {
+            "column": "RQYE",
+            "data_type": "float",
+            "desc": "融券余额(元)",
+            "must": "Y",
+            "name": "rqye"
+        },
+        {
+            "column": "RQMCL",
+            "data_type": "float",
+            "desc": "融券卖出量(股,份,手)",
+            "must": "Y",
+            "name": "rqmcl"
+        },
+        {
+            "column": "RZRQYE",
+            "data_type": "float",
+            "desc": "融资融券余额(元)",
+            "must": "Y",
+            "name": "rzrqye"
+        },
+        {
+            "column": "RQYL",
+            "data_type": "float",
+            "desc": "融券余量",
+            "must": "Y",
+            "name": "rqyl"
+        }
     ],
-    [
-      17,
-      "市场参考数据"
+    "parent_id": 17,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            14,
+            "沪深股票"
+        ],
+        [
+            17,
+            "市场参考数据"
+        ],
+        [
+            58,
+            "融资融券交易汇总"
+        ]
     ],
-    [
-      58,
-      "融资融券交易汇总"
-    ]
-  ],
-  "title": "融资融券交易汇总",
-  "validations": []
+    "title": "融资融券交易汇总",
+    "validations": []
 }

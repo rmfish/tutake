@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取A股每日筹码平均成本和胜率情况，每天17~18点左右更新，数据从2005年开始",
     "id": 293,

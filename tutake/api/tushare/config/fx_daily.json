@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "外汇日线行情",
-    "min_score": 2000,
     "id": 179,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "fx_daily",
     "order_by": null,
     "outputs": [

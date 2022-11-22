@@ -36,11 +36,16 @@ class TaskManager:
         :return:
         """
         config_tasks = tutake_config.get_config("tutake.schedule.tasks")
+        # default_cron = tutake_config.get_config("tutake.schedule.default_cron", "37 20 * * *")
         timezone = tutake_config.get_config("tutake.schedule.timezone", 'Asia/Shanghai')
         configs = {}
         for i in config_tasks:
             configs = {**configs, **i}
+        default_cron = configs.get('default')
+        if not default_cron:
+            default_cron = "10 0,6,21 * * *"
         apis = self.dao.all_apis()
+        default_schedule = []
         for api in apis:
             api_instance = self.dao.instance_from_name(api)
             cron = ""
@@ -49,7 +54,12 @@ class TaskManager:
             if configs.get(api):
                 cron = configs.get(api)
             if cron:
-                self.task.add_job(api, trigger=CronTrigger.from_crontab(cron, timezone=timezone))
+                self.task.add_job(f"tushare_{api}", api, trigger=CronTrigger.from_crontab(cron, timezone=timezone))
+            else:
+                default_schedule.append(api)
+        if len(default_schedule) > 0:
+            self.task.add_job("default_schedule", default_schedule,
+                              trigger=CronTrigger.from_crontab(default_cron, timezone=timezone))
 
     def start(self):
         self._config_schedule_tasks()

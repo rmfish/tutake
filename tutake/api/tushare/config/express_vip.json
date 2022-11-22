@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取上市公司业绩快报",
-    "min_score": 800,
     "id": 4600,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "express_vip",
     "order_by": null,
     "outputs": [

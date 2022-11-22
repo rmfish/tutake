@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "3000",
     "desc": "获取上市公司增减持数据，了解重要股东近期及历史上的股份增减变化，每晚19点更新",
-    "min_score": 2000,
     "id": 175,
     "if_exists": null,
     "inputs": [
@@ -57,6 +55,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "stk_holdertrade",
     "order_by": null,
     "outputs": [

@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "15000",
     "desc": "获取公募基金数据列表，包括场内和场外基金",
-    "min_score": 1500,
     "id": 19,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": 1,
+    "min_score": 1500,
     "name": "fund_basic",
     "order_by": null,
     "outputs": [

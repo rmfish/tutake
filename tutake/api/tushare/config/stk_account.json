@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取股票账户开户数据，统计周期为一周，此数据官方已经停止更新。",
-    "min_score": 600,
     "id": 164,
     "if_exists": null,
     "inputs": [
@@ -39,6 +37,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 600,
     "name": "stk_account",
     "order_by": null,
     "outputs": [

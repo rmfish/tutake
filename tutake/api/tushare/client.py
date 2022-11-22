@@ -1,3 +1,6 @@
+import collections
+import logging
+import time
 from functools import partial
 
 import tushare as ts
@@ -39,6 +42,7 @@ class TushareProcessTask:
         self.dao = DAO()
         self._scheduler = BackgroundScheduler(timezone="Asia/Shanghai")
         self.report_container = ProcessReportContainer()
+        self.logger = logging.getLogger("tutake.task")
 
     def _finish_task_report(self, job_id, report: ProcessReport):
         self.report_container.save_report(report)
@@ -48,14 +52,36 @@ class TushareProcessTask:
         #     self._task_history[job_id] = task
         # task.add_report(report)
 
-    def _do_process(self, job_id, api_name, process_type: ProcessType = ProcessType.INCREASE):
-        api = self.dao.__getattr__(api_name)
-        if api is not None:
-            report = api.process(process_type)
-            self._finish_task_report(job_id, report)
-            return report
-        else:
-            return None
+    def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
+        def __process(_job_id, __name):
+            api = self.dao.__getattr__(__name)
+            if api is not None:
+                report = api.process(process_type)
+                self._finish_task_report(_job_id, report)
+                return report
+            else:
+                return None
+
+        if isinstance(api_name, str):
+            report = __process(f"tushare_{api_name}", api_name)
+            self.logger.info(f"Finish {api_name} process,report is \n {report}")
+        elif isinstance(api_name, collections.Sequence):
+            reports = []
+            start = time.time()
+            self.logger.info(f"Start Schedule task with apis {api_name}")
+            for api in api_name:
+                try:
+                    report = __process(f"tushare_{api}", api)
+                    reports.append(report)
+                    self.logger.info(f"Finish {api} process,report is \n {report}")
+                except Exception as err:
+                    self.logger.error(f"Exception with {api} process,err is {err}")
+                    continue
+            self.logger.info(f"Finished {len(api_name)} of scheduled tasks, it takes {time.time() - start}s")
+            if reports:
+                self.logger.info("Process results summary:")
+                for r in reports:
+                    self.logger.info(f"{r.name} {r.process_result()}  cost {r.process_time()}s")
 
     def get_scheduler(self):
         return self._scheduler
@@ -63,13 +89,12 @@ class TushareProcessTask:
     def get_results(self, job_id) -> [ProcessReport]:
         return self.report_container.get_reports(job_id)
 
-    def add_job(self, api_name, **kwargs):
-        job_id = 'tushare_{}'.format(api_name)
+    def add_job(self, job_id, api_name, **kwargs):
         if kwargs.get('process_type'):
-            args = [job_id, api_name, kwargs.get('process_type')]
+            args = [api_name, kwargs.get('process_type')]
         else:
-            args = [job_id, api_name]
-        self._scheduler.add_job(self._do_process, args=args, id=job_id, name=api_name, **kwargs)
+            args = [api_name]
+        self._scheduler.add_job(self._do_process, args=args, id=job_id, name=job_id, **kwargs)
 
     def __getattr__(self, name):
         return partial(self.add_job, name)

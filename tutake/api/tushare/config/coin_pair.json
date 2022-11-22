@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "",
     "id": 258,

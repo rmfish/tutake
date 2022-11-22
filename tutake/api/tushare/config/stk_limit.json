@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "5800",
     "desc": "获取全市场（包含A/B股和基金）每日涨跌停价格，包括涨停价格，跌停价格等，每个交易日8点40左右更新当日股票涨跌停价格。交易日9点更新",
-    "min_score": 2000,
     "id": 183,
     "if_exists": null,
     "inputs": [
@@ -45,6 +43,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "stk_limit",
     "order_by": null,
     "outputs": [

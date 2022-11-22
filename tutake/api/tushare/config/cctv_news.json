@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "30 22 * * *",
     "default_limit": null,
     "desc": "获取新闻联播文字稿数据，数据开始于2006年6月，超过12年历史，每天21：30～22点更新当日数据",
-    "min_score": 5000,
     "id": 154,
     "if_exists": null,
     "inputs": [
@@ -27,6 +25,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "cctv_news",
     "order_by": null,
     "outputs": [

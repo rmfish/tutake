@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "100",
     "desc": "获取上海黄金交易所现货合约基础信息",
     "id": 284,

@@ -1,123 +1,122 @@
 {
-  "database": null,
-  "default_cron": "10 0 * * *",
-  "default_limit": "2000",
-  "desc": "获取基金规模数据，包含上海和深圳ETF基金",
-  "min_score": 5000,
-  "id": 207,
-  "if_exists": null,
-  "inputs": [
-    {
-      "data_type": "str",
-      "desc": "TS基金代码",
-      "must": "N",
-      "name": "ts_code"
-    },
-    {
-      "data_type": "str",
-      "desc": "交易日期",
-      "must": "N",
-      "name": "trade_date"
-    },
-    {
-      "data_type": "str",
-      "desc": "开始日期",
-      "must": "N",
-      "name": "start_date"
-    },
-    {
-      "data_type": "str",
-      "desc": "结束日期",
-      "must": "N",
-      "name": "end_date"
-    },
-    {
-      "data_type": "str",
-      "desc": "市场：SH/SZ",
-      "must": "N",
-      "name": "market"
-    },
-    {
-      "data_type": "str",
-      "desc": "类型",
-      "must": "N",
-      "name": "fund_type"
-    },
-    {
-      "data_type": "int",
-      "desc": "单次返回数据长度",
-      "must": "N",
-      "name": "limit"
-    },
-    {
-      "data_type": "int",
-      "desc": "请求数据的开始位移量",
-      "must": "N",
-      "name": "offset"
-    }
-  ],
-  "is_ready": null,
-  "name": "fund_share",
-  "order_by": null,
-  "outputs": [
-    {
-      "column": "TS_CODE",
-      "data_type": "str",
-      "desc": "基金代码",
-      "must": "Y",
-      "name": "ts_code"
-    },
-    {
-      "column": "TRADE_DATE",
-      "data_type": "str",
-      "desc": "交易（变动）日期",
-      "must": "Y",
-      "name": "trade_date"
-    },
-    {
-      "column": "FD_SHARE",
-      "data_type": "float",
-      "desc": "基金份额（万）",
-      "must": "Y",
-      "name": "fd_share"
-    },
-    {
-      "column": "TOTAL_SHARE",
-      "data_type": "float",
-      "desc": "合计份额（万）",
-      "must": "N",
-      "name": "total_share"
-    },
-    {
-      "column": "FUND_TYPE",
-      "data_type": "str",
-      "desc": "基金类型",
-      "must": "Y",
-      "name": "fund_type"
-    },
-    {
-      "column": "MARKET",
-      "data_type": "str",
-      "desc": "市场",
-      "must": "Y",
-      "name": "market"
-    }
-  ],
-  "parent_id": 18,
-  "path": [
-    [
-      2,
-      "数据接口"
+    "database": null,
+    "default_limit": "2000",
+    "desc": "获取基金规模数据，包含上海和深圳ETF基金",
+    "id": 207,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "TS基金代码",
+            "must": "N",
+            "name": "ts_code"
+        },
+        {
+            "data_type": "str",
+            "desc": "交易日期",
+            "must": "N",
+            "name": "trade_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始日期",
+            "must": "N",
+            "name": "start_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束日期",
+            "must": "N",
+            "name": "end_date"
+        },
+        {
+            "data_type": "str",
+            "desc": "市场：SH/SZ",
+            "must": "N",
+            "name": "market"
+        },
+        {
+            "data_type": "str",
+            "desc": "类型",
+            "must": "N",
+            "name": "fund_type"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
     ],
-    [
-      18,
-      "公募基金"
+    "is_ready": null,
+    "min_score": 5000,
+    "name": "fund_share",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "TS_CODE",
+            "data_type": "str",
+            "desc": "基金代码",
+            "must": "Y",
+            "name": "ts_code"
+        },
+        {
+            "column": "TRADE_DATE",
+            "data_type": "str",
+            "desc": "交易（变动）日期",
+            "must": "Y",
+            "name": "trade_date"
+        },
+        {
+            "column": "FD_SHARE",
+            "data_type": "float",
+            "desc": "基金份额（万）",
+            "must": "Y",
+            "name": "fd_share"
+        },
+        {
+            "column": "TOTAL_SHARE",
+            "data_type": "float",
+            "desc": "合计份额（万）",
+            "must": "N",
+            "name": "total_share"
+        },
+        {
+            "column": "FUND_TYPE",
+            "data_type": "str",
+            "desc": "基金类型",
+            "must": "Y",
+            "name": "fund_type"
+        },
+        {
+            "column": "MARKET",
+            "data_type": "str",
+            "desc": "市场",
+            "must": "Y",
+            "name": "market"
+        }
     ],
-    [
-      207,
-      "基金规模"
-    ]
-  ],
-  "title": "基金规模",
-  "validations": []
+    "parent_id": 18,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            18,
+            "公募基金"
+        ],
+        [
+            207,
+            "基金规模"
+        ]
+    ],
+    "title": "基金规模",
+    "validations": []
 }

@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取上市公司财务利润表数据",
-    "min_score": 2000,
     "id": 3300,
     "if_exists": null,
     "inputs": [
@@ -82,6 +80,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "income_vip",
     "order_by": null,
     "outputs": [

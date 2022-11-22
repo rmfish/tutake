@@ -96,7 +96,7 @@ class IndexGlobal(BaseDao, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType):
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
         """
         同步历史数据
         :return:
@@ -154,6 +154,5 @@ if __name__ == '__main__':
     print(pro.index_global())
 
     api = IndexGlobal()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)    # 同步增量数据
+    api.process()    # 同步增量数据
     print(api.index_global())    # 数据查询接口

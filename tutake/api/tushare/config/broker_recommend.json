@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 1 1 * *",
     "default_limit": null,
     "desc": "每月初获取券商月度金股",
     "id": 267,

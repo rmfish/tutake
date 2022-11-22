@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "4000",
     "desc": "获取期货交易所主要品种每周交易统计信息，数据从2010年3月开始",
     "id": 216,

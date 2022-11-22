@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "获取每日结算参数数据，包括交易和交割费率等，数据开始月2012年1月",
-    "min_score": 600,
     "id": 141,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 600,
     "name": "fut_settle",
     "order_by": null,
     "outputs": [

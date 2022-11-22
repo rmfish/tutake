@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "2000",
     "desc": "期货主力(连续)合约与月合约映射",
     "id": 189,

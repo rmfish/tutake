@@ -4,7 +4,7 @@ from tutake.api.process_report import ProcessType
 
 
 def default_cron_express_ext(self) -> str:
-    return "0 1 * * *"
+    return ""
 
 
 def default_order_by_ext(self) -> str:
@@ -38,36 +38,10 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     399006.SZ,创业板指
     399905.SZ,中证500
     """
+    codes = ['000001.SH', '000005.SH', '000006.SH', '000016.SH', '000300.SH', '000905.SH', '399001.SZ', '399005.SZ',
+             '399006.SZ', '399016.SZ', '399300.SZ', '399905.SZ']
+    return [{'ts_code': i} for i in codes]
 
-    return [{'ts_code': '000016.SH'}, {'ts_code': '000905.SH'}, {'ts_code': '399001.SZ'}, {'ts_code': '399005.SZ'},
-            {'ts_code': '399006.SZ'}, {'ts_code': '399905.SZ'}]
-
-
-# params = []
-#     str_format = "YYYYMMDD"
-#     start_record_date = pendulum.parse('20140101')  # 最早的数据记录
-#     day_period = 500
-#     if ProcessType.HISTORY == process_type:
-#         min_date = self.min("trade_date", condition="trade_date is not null")
-#         if min_date is not None:
-#             end_date = pendulum.parse(min_date).add(days=-1)
-#         else:
-#             end_date = pendulum.now()
-#         while end_date > start_record_date:
-#             start_date = end_date.add(days=-day_period)
-#             params.append({"start_date": start_date.format(str_format), "end_date": end_date.format(str_format)})
-#             end_date = start_date.add(days=-day_period)
-#     else:
-#         max_date = self.max("trade_date")
-#         if max_date is not None:
-#             start_date = pendulum.parse(max_date)
-#         else:
-#             start_date = start_record_date.add(days=-1)
-#         while start_date.diff(pendulum.now(), False).in_hours() > 0:
-#             end_date = start_date.add(days=day_period)
-#             params.append({"start_date": start_date.format(str_format), "end_date": end_date.format(str_format)})
-#             start_date = start_date.add(days=day_period)
-#     return params
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):
     """

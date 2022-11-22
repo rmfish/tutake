@@ -93,7 +93,7 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType):
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
         """
         同步历史数据
         :return:
@@ -145,12 +145,11 @@ setattr(IndexDaily, 'tushare_parameters', tushare_parameters_ext)
 setattr(IndexDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)    # 显示列数
+    pd.set_option('display.max_columns', 50)  # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.index_daily(ts_code='000001.SH'))
+    print(pro.index_daily(start_date="20221004", end_date="20221010"))
 
     api = IndexDaily()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.index_daily(ts_code='000001.SH'))    # 数据查询接口
+    # api.process()  # 同步增量数据
+    # print(api.index_daily(ts_code='000001.SH'))  # 数据查询接口

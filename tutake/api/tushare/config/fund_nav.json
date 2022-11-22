@@ -1,10 +1,8 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
-    "default_query":"nav_date='20221111'",
+    "default_query": "nav_date='20221111'",
     "desc": "获取公募基金净值数据",
-    "min_score": 5000,
     "id": 119,
     "if_exists": null,
     "inputs": [
@@ -52,6 +50,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "fund_nav",
     "order_by": null,
     "outputs": [

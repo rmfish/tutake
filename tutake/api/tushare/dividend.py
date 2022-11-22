@@ -109,7 +109,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType):
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
         """
         同步历史数据
         :return:
@@ -173,9 +173,8 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.dividend())
+    print(pro.dividend(ts_code='000002.SZ'))
 
     api = Dividend()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)    # 同步增量数据
-    print(api.dividend())    # 数据查询接口
+    api.process()    # 同步增量数据
+    print(api.dividend(ts_code='000002.SZ'))    # 数据查询接口

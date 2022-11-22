@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取公募基金管理人列表",
-    "min_score": 1500,
     "id": 118,
     "if_exists": null,
     "inputs": [
@@ -28,6 +26,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 1500,
     "name": "fund_company",
     "order_by": null,
     "outputs": [

@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "0 9 * * *",
     "default_limit": null,
     "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
-    "min_score": 5000,
     "id": 176,
     "if_exists": null,
     "inputs": [
@@ -45,6 +43,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "anns",
     "order_by": null,
     "outputs": [

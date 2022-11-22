@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "3000",
     "desc": "获取港股每日增量和历史行情",
-    "min_score": 2000,
     "id": 192,
     "if_exists": null,
     "inputs": [
@@ -45,6 +43,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "hk_daily",
     "order_by": null,
     "outputs": [

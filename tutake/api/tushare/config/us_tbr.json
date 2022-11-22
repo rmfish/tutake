@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "2000",
     "desc": "获取美国短期国债利率数据",
     "id": 221,

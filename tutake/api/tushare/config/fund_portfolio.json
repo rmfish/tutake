@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "200",
     "desc": "获取公募基金持仓数据，季度更新",
-    "min_score": 5000,
     "id": 121,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "fund_portfolio",
     "order_by": null,
     "outputs": [

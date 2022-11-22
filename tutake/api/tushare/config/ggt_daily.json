@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "获取港股通每日成交信息，数据从2014年开始",
     "id": 196,
@@ -38,6 +37,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "ggt_daily",
     "order_by": null,
     "outputs": [

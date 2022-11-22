@@ -41,6 +41,8 @@ class ProcessPercent(object):
     def __init__(self, total):
         self.total = total
         self.finished = 0
+        self.step = 2
+        self.step_percent = 0
 
     def finish(self, cnt: float = 1):
         self.finished += cnt
@@ -49,6 +51,13 @@ class ProcessPercent(object):
         if self.total is None or self.total == 0:
             return 0
         return self.finished / self.total
+
+    def is_step_percent(self):
+        if self.percent() >= self.step_percent / 100:
+            self.step_percent += self.step
+            return True
+        else:
+            return False
 
     def format(self):
         return '{}%'.format('%.2f' % (self.percent() * 100))
@@ -124,16 +133,19 @@ class ProcessReport:
         return json.dumps(self.to_dict(), sort_keys=True)
 
     def __str__(self):
-        result = self._get_result_summary()
-        result_summary = "{}/{} [Run:{} Success:{} Skip:{} Failed:{} Repeat:{}]".format(result[0], result[1], result[2],
-                                                                                        result[3], result[4], result[5],
-                                                                                        result[6])
+
         return '''===ReportSummary===\nProcess: {} {}\nTime: {} ~ {}\nCost: {}s\nTaskInfo: {}\nParams: {}\nActionInfos: {}\n'''.format(
             self.name, self.process_type, self.start_time.format("YYYY-MM-DD HH:mm:ss"),
             self.end_time.format("HH:mm:ss"),
-            self._cost_time(),
-            result_summary,
+            self.process_time(),
+            self.process_result(),
             self._get_params_summary(), self._get_action_summary())
+
+    def process_result(self):
+        result = self._get_result_summary()
+        return "{}/{} [Run:{} Success:{} Skip:{} Failed:{} Repeat:{}]".format(result[0], result[1], result[2],
+                                                                              result[3], result[4], result[5],
+                                                                              result[6])
 
     def _get_result_summary(self):
         run = len(self.task)
@@ -203,10 +215,18 @@ class ProcessReport:
             print(result.err)
             self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
         elif result.status == 'Success':
-            self.logger.info(
-                "[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-                                                                                self.get_process_percent()[1],
-                                                                                result.cnt, result.new_params))
+            if self.percent.is_step_percent():
+                self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+                                                                                                 self.get_process_percent()[
+                                                                                                     1],
+                                                                                                 result.cnt,
+                                                                                                 result.new_params))
+            else:
+                self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+                                                                                                  self.get_process_percent()[
+                                                                                                      1],
+                                                                                                  result.cnt,
+                                                                                                  result.new_params))
         if result and result.err:
             if isinstance(result.err, ProcessException):
                 return False

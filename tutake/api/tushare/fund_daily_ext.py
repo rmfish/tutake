@@ -9,7 +9,7 @@ from tutake.api.tushare.date_utils import daily_params, daily_params_loop
 
 
 def default_cron_express_ext(self) -> str:
-    return "10 0 * * *"
+    return ""
 
 
 def default_order_by_ext(self) -> str:

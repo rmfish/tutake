@@ -65,7 +65,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType):
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
         """
         同步历史数据
         :return:
@@ -126,7 +126,6 @@ if __name__ == '__main__':
 
 
     api = {{title_name}}()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)  # 同步增量数据
+    api.process()  # 同步增量数据
     print(api.{{name}}({% autoescape false %}{{default_query}}{% endautoescape %}))  # 数据查询接口
 

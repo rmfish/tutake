@@ -242,5 +242,5 @@ if __name__ == '__main__':
     for i in json_config.get_all_leaf_api():
         if i.get('default_limit'):
             i['default_limit'] = str(i.get('default_limit'))
-        i['default_cron'] = "10 0 * * *"
+        del i['default_cron']
         json_config.update_api(i)

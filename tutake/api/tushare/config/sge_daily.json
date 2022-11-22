@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "2000",
     "desc": "获取上海黄金交易所现货合约日线行情",
     "id": 285,

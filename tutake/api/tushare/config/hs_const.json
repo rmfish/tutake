@@ -1,7 +1,7 @@
 {
     "database": "tushare_basic_data",
-    "default_cron": "10 0 * * *",
     "default_limit": null,
+    "default_query": "hs_type='SH'",
     "desc": "获取沪股通、深股通成分数据",
     "id": 104,
     "if_exists": null,

@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 1 * * *",
     "default_limit": null,
     "desc": "大宗交易,每日晚9点更新",
-    "min_score": 800,
     "id": 161,
     "if_exists": null,
     "inputs": [
@@ -45,6 +43,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 800,
     "name": "block_trade",
     "order_by": null,
     "outputs": [

@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "300",
     "desc": "获取沪股通、深股通每日前十大成交股数据",
     "id": 48,

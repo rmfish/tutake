@@ -1,8 +1,6 @@
 {
-    "default_cron": "10 0 * * *",
     "default_limit": "4000",
     "desc": "上市公司管理层",
-    "min_score": 5000,
     "id": 193,
     "if_exists": null,
     "inputs": [
@@ -44,6 +42,7 @@
         }
     ],
     "is_ready": 1,
+    "min_score": 5000,
     "name": "stk_managers",
     "order_by": null,
     "outputs": [

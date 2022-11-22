@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "5000",
     "desc": "获取全市场融资融券标的",
     "id": 286,

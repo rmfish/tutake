@@ -1,9 +1,7 @@
 {
-    "default_cron": "10 0 * * *",
     "default_limit": "4000",
     "default_query": "ts_code='601179.SH'",
     "desc": "获取上市公司管理层薪酬和持股",
-    "min_score": 5000,
     "id": 194,
     "if_exists": null,
     "inputs": [
@@ -33,6 +31,7 @@
         }
     ],
     "is_ready": 1,
+    "min_score": 5000,
     "name": "stk_rewards",
     "order_by": null,
     "outputs": [

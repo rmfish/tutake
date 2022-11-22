@@ -1,10 +1,8 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "default_query": "ts_code='000001.SH'",
     "desc": "大盘指数每日指标，目前只提供上证综指，深证成指，上证50，中证500，中小板指，创业板指的每日指标数据",
-    "min_score": 400,
     "id": 128,
     "if_exists": null,
     "inputs": [
@@ -46,6 +44,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 400,
     "name": "index_dailybasic",
     "order_by": null,
     "outputs": [

@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取公募基金经理数据，包括基金经理简历等数据",
-    "min_score": 5000,
     "id": 208,
     "if_exists": null,
     "inputs": [
@@ -39,6 +37,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "fund_manager",
     "order_by": null,
     "outputs": [

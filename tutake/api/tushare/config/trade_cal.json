@@ -1,7 +1,5 @@
 {
-    "default_cron": "10 0 * * *",
     "desc": "获取各大期货交易所交易日历数据，数据开始月1996年1月",
-    "min_score": 600,
     "id": 137,
     "inputs": [
         {
@@ -46,6 +44,7 @@
             "name": "offset"
         }
     ],
+    "min_score": 600,
     "name": "trade_cal",
     "outputs": [
         {

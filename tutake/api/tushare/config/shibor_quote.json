@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 12 * * *",
     "default_limit": "4000",
     "desc": "Shibor报价数据，每日12点更新",
-    "min_score": 120,
     "id": 150,
     "if_exists": null,
     "inputs": [
@@ -45,6 +43,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 120,
     "name": "shibor_quote",
     "order_by": null,
     "outputs": [

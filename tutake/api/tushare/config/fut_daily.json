@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "2000",
     "desc": "期货日线行情，数据开始月1996年1月",
-    "min_score": 800,
     "id": 138,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 800,
     "name": "fut_daily",
     "order_by": null,
     "outputs": [

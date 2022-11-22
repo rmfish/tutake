@@ -5,7 +5,7 @@ from tutake.api.process_report import ProcessType
 
 
 def default_cron_express_ext(self) -> str:
-    return "0 1 * * *"
+    return ""
 
 
 def default_order_by_ext(self) -> str:

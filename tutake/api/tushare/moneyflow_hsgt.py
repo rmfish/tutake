@@ -82,7 +82,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType):
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
         """
         同步历史数据
         :return:
@@ -144,6 +144,5 @@ if __name__ == '__main__':
     print(pro.moneyflow_hsgt(trade_date='20221118'))
 
     api = MoneyflowHsgt()
-    # api.process(ProcessType.HISTORY)  # 同步历史数据
-    api.process(ProcessType.INCREASE)    # 同步增量数据
+    api.process()    # 同步增量数据
     print(api.moneyflow_hsgt(trade_date='20221118'))    # 数据查询接口

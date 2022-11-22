@@ -136,9 +136,10 @@ def start_end_step_params(self, process_type: ProcessType, start_date: str = "19
             return dates
 
 
-def quarter_params(self, process_type: ProcessType, start_period: str = "19901231"):
+def quarter_params(self, process_type: ProcessType, start_period: str = "19901231", date_col="f_ann_date"):
     """
     基于财报的相关数据，主要使用end_date（财报季），f_ann_date（发表日）数据查询相关的数据
+    :param date_col:
     :param start_period: 最早的财报季
     :param self:
     :param process_type:
@@ -159,12 +160,12 @@ def quarter_params(self, process_type: ProcessType, start_period: str = "1990123
             params.append({"period": period.format(str_format)})
             period = period.add(months=-3).last_of("quarter")
     else:
-        max_f_ann_date = self.max("f_ann_date")
+        max_f_ann_date = self.max(date_col)
         if max_f_ann_date is not None:
             period = pendulum.parse(max_f_ann_date).add(days=1)
         else:
             period = start_record_period
         while period.diff(pendulum.now(), False).in_days() > 0:
-            params.append({"f_ann_date": period.format(str_format)})
+            params.append({date_col: period.format(str_format)})
             period = period.add(days=1)
     return params

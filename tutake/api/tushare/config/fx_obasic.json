@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取海外外汇基础信息，目前只有FXCM交易商的数据",
-    "min_score": 2000,
     "id": 178,
     "if_exists": null,
     "inputs": [
@@ -39,6 +37,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "fx_obasic",
     "order_by": null,
     "outputs": [

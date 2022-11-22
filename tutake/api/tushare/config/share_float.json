@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "5000",
     "desc": "限售股解禁",
-    "min_score": 1000,
     "id": 160,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 1000,
     "name": "share_float",
     "order_by": null,
     "outputs": [

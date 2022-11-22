@@ -49,6 +49,7 @@ class DataProcess:
         同步历史数据
         :return:
         """
+        self.logger.info(f"Start {self.entities.__name__} {process_type} process.")
         report = self._report_container.create_process_report("tushare_%s" % self.name, self.name, process_type,
                                                               self.logger)
         self.prepare(process_type)

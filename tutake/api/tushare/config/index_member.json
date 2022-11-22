@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
-    "default_limit": "2000",
+    "default_limit": "3000",
     "desc": "申万行业成分构成",
-    "min_score": 2000,
     "id": 182,
     "if_exists": null,
     "inputs": [
@@ -39,6 +37,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 5000,
     "name": "index_member",
     "order_by": null,
     "outputs": [

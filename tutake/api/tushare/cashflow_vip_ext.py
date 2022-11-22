@@ -9,7 +9,7 @@ from tutake.api.tushare.date_utils import quarter_params
 
 
 def default_cron_express_ext(self) -> str:
-    return "0 2 * * *"
+    return ""
 
 
 def default_order_by_ext(self) -> str:
@@ -37,7 +37,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return quarter_params(self, process_type)
+    return quarter_params(self, process_type, start_period='19980930', date_col='ann_date')
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

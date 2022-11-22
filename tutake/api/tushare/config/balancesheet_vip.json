@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": null,
     "desc": "获取上市公司资产负债表",
-    "min_score": 2000,
     "id": 36,
     "if_exists": null,
     "inputs": [
@@ -82,6 +80,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 2000,
     "name": "balancesheet_vip",
     "order_by": null,
     "outputs": [

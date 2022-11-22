@@ -1,6 +1,5 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "60",
     "desc": "获取长篇通讯信息，覆盖主要新闻资讯网站",
     "id": 195,

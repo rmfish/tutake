@@ -10,6 +10,10 @@ handlers:
     formatter: simple
     stream: ext://sys.stdout
 loggers:
+  tutake:
+    level: DEBUG
+    handlers: [ console ]
+    propagate: False
   api:
     level: INFO
     handlers: [ console ]

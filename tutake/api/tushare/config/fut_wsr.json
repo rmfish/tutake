@@ -1,9 +1,7 @@
 {
     "database": null,
-    "default_cron": "10 0 * * *",
     "default_limit": "1000",
     "desc": "获取仓单日报数据，了解各仓库/厂库的仓单变化，数据开始月2006年1月",
-    "min_score": 1000,
     "id": 140,
     "if_exists": null,
     "inputs": [
@@ -51,6 +49,7 @@
         }
     ],
     "is_ready": null,
+    "min_score": 1000,
     "name": "fut_wsr",
     "order_by": null,
     "outputs": [
