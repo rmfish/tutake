@@ -2,7 +2,7 @@
 获取上市公司业绩快报
 """
 from tutake.api.process_report import ProcessType
-from tutake.api.tushare.extends.date_utils import quarter_params
+from tutake.api.tushare.date_utils import quarter_params
 
 
 def default_cron_express_ext(self) -> str:

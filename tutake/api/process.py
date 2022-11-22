@@ -64,10 +64,11 @@ class DataProcess:
                 try:
                     append_cnt = fetch_and_append(**new_param)
                     return ActionResult(start, time.time(), param, new_param, append_cnt)
+                except ProcessException as err:
+                    return ActionResult(start, time.time(), {**param, **err.param}, new_param, err=err, status='Failed')
                 except Exception as err:
                     return ActionResult(start, time.time(), param, new_param,
-                                        err=ProcessException(param=new_param, cause=err),
-                                        status='Failed')
+                                        err=ProcessException(param=new_param, cause=err), status='Failed')
 
             with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
                 for result in pool.map(action, params):

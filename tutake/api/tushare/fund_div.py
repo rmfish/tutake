@@ -14,6 +14,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessException
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fund_div_ext import *
@@ -132,11 +133,14 @@ class FundDiv(BaseDao, TuShareBase, DataProcess):
         kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
         def fetch_save(offset_val=0):
-            kwargs['offset'] = str(offset_val)
-            self.logger.debug("Invoke pro.fund_div with args: {}".format(kwargs))
-            res = self.tushare_query('fund_div', fields=self.entity_fields, **kwargs)
-            res.to_sql('tushare_fund_div', con=engine, if_exists='append', index=False, index_label=['ts_code'])
-            return res
+            try:
+                kwargs['offset'] = str(offset_val)
+                self.logger.debug("Invoke pro.fund_div with args: {}".format(kwargs))
+                res = self.tushare_query('fund_div', fields=self.entity_fields, **kwargs)
+                res.to_sql('tushare_fund_div', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                return res
+            except Exception as err:
+                raise ProcessException(kwargs, err)
 
         df = fetch_save(offset)
         offset += df.shape[0]

@@ -5,7 +5,7 @@ Tushare fund_daily接口
 """
 
 from tutake.api.process_report import ProcessType
-from tutake.api.tushare.extends.date_utils import daily_params, daily_params_loop
+from tutake.api.tushare.date_utils import daily_params, daily_params_loop
 
 
 def default_cron_express_ext(self) -> str:

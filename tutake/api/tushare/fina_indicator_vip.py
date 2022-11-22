@@ -14,6 +14,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
+from tutake.api.process_report import ProcessException
 from tutake.api.tushare.base_dao import BaseDao
 from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fina_indicator_vip_ext import *
@@ -467,15 +468,18 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
         kwargs = {key: kwargs[key] for key in kwargs.keys() & init_args.keys()}
 
         def fetch_save(offset_val=0):
-            kwargs['offset'] = str(offset_val)
-            self.logger.debug("Invoke pro.fina_indicator_vip with args: {}".format(kwargs))
-            res = self.tushare_query('fina_indicator_vip', fields=self.entity_fields, **kwargs)
-            res.to_sql('tushare_fina_indicator_vip',
-                       con=engine,
-                       if_exists='append',
-                       index=False,
-                       index_label=['ts_code'])
-            return res
+            try:
+                kwargs['offset'] = str(offset_val)
+                self.logger.debug("Invoke pro.fina_indicator_vip with args: {}".format(kwargs))
+                res = self.tushare_query('fina_indicator_vip', fields=self.entity_fields, **kwargs)
+                res.to_sql('tushare_fina_indicator_vip',
+                           con=engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
+                return res
+            except Exception as err:
+                raise ProcessException(kwargs, err)
 
         df = fetch_save(offset)
         offset += df.shape[0]
