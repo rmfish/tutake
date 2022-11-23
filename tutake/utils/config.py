@@ -4,8 +4,9 @@ from pathlib import Path
 
 import yaml
 
-from tutake.utils.utils import project_root, file
 from tutake.utils.logger import setup_logging
+from tutake.utils.utils import project_root, file
+
 
 class DotConfig(dict):
 
@@ -120,10 +121,11 @@ class TutakeConfig(object):
             print("Config file is not exits. %s" % config_file)
         return DotConfig()
 
-    def merge_config(self, _config: dict):
+    def merge_config(self, **_config):
         if _config is not None:
             for key in _config:
-                self.set_config(key, _config[key])
+                new_key = key.replace("_", ".")
+                self.set_config(new_key, _config[key])
 
     def require_config(self, key: str):
         config = self.get_config(key)

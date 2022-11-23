@@ -5,6 +5,8 @@ from functools import partial
 
 import tushare as ts
 from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.triggers.cron import CronTrigger
 
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.tushare.dao import DAO
@@ -15,42 +17,62 @@ def pro_api(token='', data_dir: str = None):
     return TushareQuery(token, data_dir)
 
 
-def process_api(config: dict = None):
-    return TushareProcess(config)
+def process_api(**config):
+    return TushareProcess(**config)
 
 
-def task_api(config: dict = None):
-    return TushareProcessTask(config)
-
-
-# class TushareTaskHistory(object):
-#
-#     def __init__(self, job_id):
-#         self.job_id = job_id
-#         self.result: [ProcessReport] = []
-#
-#     def add_report(self, report: ProcessReport):
-#         self.result.append(report)
-#
-#     def to_json(self):
-#         return [i.to_dict() for i in self.result]
+def task_api(**config):
+    return TushareProcessTask(**config)
 
 
 class TushareProcessTask:
-    def __init__(self, _config: dict = None):
-        tutake_config.merge_config(_config)
+    def __init__(self, **config):
+        tutake_config.merge_config(**config)
+        self.timezone = tutake_config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
         self.dao = DAO()
-        self._scheduler = BackgroundScheduler(timezone="Asia/Shanghai")
+        if tutake_config.get_config("tutake.scheduler.background", False):
+            self._scheduler = BackgroundScheduler(timezone=self.timezone)
+        else:
+            self._scheduler = BlockingScheduler(timezone=self.timezone)
         self.report_container = ProcessReportContainer()
         self.logger = logging.getLogger("tutake.task")
 
+    def _config_schedule_tasks(self):
+        """
+            *    *    *    *    *
+            -    -    -    -    -
+            |    |    |    |    |
+            |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+            |    |    |    +---------- month (1 - 12) OR jan,feb,mar,apr ...
+            |    |    +--------------- day of month (1 - 31)
+            |    +-------------------- hour (0 - 23)
+            +------------------------- minute (0 - 59)
+        :return:
+        """
+        config_tasks = tutake_config.get_config("tutake.scheduler.tasks", [])
+        configs = {}
+        for i in config_tasks:
+            configs = {**configs, **i}
+        default_cron = configs.get('default') or "10 0,6,21 * * *"
+        apis = self.dao.all_apis()
+        default_schedule = []
+        for api in apis:
+            api_instance = self.dao.instance_from_name(api)
+            cron = ""
+            if api_instance:
+                cron = api_instance.default_cron_express()
+            if configs.get(api):
+                cron = configs.get(api)
+            if cron:
+                self.add_job(f"tushare_{api}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
+            else:
+                default_schedule.append(api)
+        if len(default_schedule) > 0:
+            self.add_job("default_schedule", default_schedule,
+                         trigger=CronTrigger.from_crontab(default_cron, timezone=self.timezone))
+
     def _finish_task_report(self, job_id, report: ProcessReport):
         self.report_container.save_report(report)
-        # task = self._task_history.get(job_id)
-        # if task is None:
-        #     task = TushareTaskHistory(job_id)
-        #     self._task_history[job_id] = task
-        # task.add_report(report)
 
     def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
         def __process(_job_id, __name):
@@ -96,13 +118,17 @@ class TushareProcessTask:
             args = [api_name]
         self._scheduler.add_job(self._do_process, args=args, id=job_id, name=job_id, **kwargs)
 
+    def start(self):
+        self._config_schedule_tasks()
+        self._scheduler.start()
+
     def __getattr__(self, name):
         return partial(self.add_job, name)
 
 
 class TushareProcess:
-    def __init__(self, _config: dict = None):
-        tutake_config.merge_config(_config)
+    def __init__(self, **config):
+        tutake_config.merge_config(**config)
         self.dao = DAO()
 
     def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
@@ -145,3 +171,6 @@ if __name__ == "__main__":
     dao = pro_api("aec595052cb10051350a6a164f41b344b922f0b3ee206efdec2e0082")
     # print(dao.stock_basic(fields='name,ts_code,', name='ST国华'))
     print(dao.shibor(start_date='20180101', end_date='20181101'))
+
+    task = task_api(tutake_scheduler_background=True)
+    task.start()
