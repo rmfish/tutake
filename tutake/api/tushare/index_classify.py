@@ -54,7 +54,7 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexClassify, 'tushare_index_classify',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "index_classify", config)
-        TuShareBase.__init__(self, "index_classify", config)
+        TuShareBase.__init__(self, "index_classify", config, 2000)
         self.dao = DAO()
 
     def index_classify(self, fields='', **kwargs):

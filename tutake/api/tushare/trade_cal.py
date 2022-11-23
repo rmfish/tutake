@@ -51,7 +51,7 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "trade_cal", config)
-        TuShareBase.__init__(self, "trade_cal", config)
+        TuShareBase.__init__(self, "trade_cal", config, 600)
         self.dao = DAO()
 
     def trade_cal(self, fields='', **kwargs):

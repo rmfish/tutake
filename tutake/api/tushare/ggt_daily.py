@@ -52,7 +52,7 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "ggt_daily", config)
-        TuShareBase.__init__(self, "ggt_daily", config)
+        TuShareBase.__init__(self, "ggt_daily", config, 5000)
         self.dao = DAO()
 
     def ggt_daily(self, fields='', **kwargs):

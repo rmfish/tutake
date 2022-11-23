@@ -9,7 +9,7 @@ import pandas as pd
 import requests
 import tushare as ts
 
-from tutake.code.tushare_api import TushareJsonApi
+from tutake.utils.config import TUSHARE_TOKENS_KEY
 from tutake.utils.utils import end_of_day
 
 
@@ -123,18 +123,15 @@ class TushareTokenPool(object):
 
 
 class TuShareBase(object):
-    def __init__(self, api_name, config):
+    def __init__(self, api_name, config, token_integral=120):
         tushare_token = config.get_tushare_token()
         if tushare_token:
             self.t_api = TushareClient(tushare_token)
-        tushare_tokens = config.get_config('tushare.tokens')
+        tushare_tokens = config.get_config(TUSHARE_TOKENS_KEY)
         if tushare_tokens and len(tushare_tokens) > 1:
-            json_config = TushareJsonApi()
-            api_config = json_config.get_api_by_name(api_name)
-            require_score = api_config.get("min_score") or 0
             clients = []
             for t in tushare_tokens:
-                if t >= require_score:
+                if t >= token_integral:
                     clients.extend([TushareClient(token, t, time.time() - t) for token in tushare_tokens[t]])
             self.client_queue = TushareTokenQueue(clients, self.logger)
         assert self.t_api is not None or self.client_queue is not None, 'Tushare token is required, pls config it in config.yaml'

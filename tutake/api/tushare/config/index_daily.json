@@ -40,6 +40,7 @@
             "name": "offset"
         }
     ],
+    "integral_required": 600,
     "min_score": 600,
     "name": "index_daily",
     "outputs": [

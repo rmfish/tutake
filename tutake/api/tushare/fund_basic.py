@@ -76,7 +76,7 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "fund_basic", config)
-        TuShareBase.__init__(self, "fund_basic", config)
+        TuShareBase.__init__(self, "fund_basic", config, 1500)
         self.dao = DAO()
 
     def fund_basic(self, fields='', **kwargs):

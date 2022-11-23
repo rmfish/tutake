@@ -36,6 +36,7 @@
             "name": "limit"
         }
     ],
+    "integral_required": 600,
     "is_ready": null,
     "min_score": 600,
     "name": "opt_basic",

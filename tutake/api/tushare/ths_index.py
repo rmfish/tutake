@@ -53,7 +53,7 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "ths_index", config)
-        TuShareBase.__init__(self, "ths_index", config)
+        TuShareBase.__init__(self, "ths_index", config, 5000)
         self.dao = DAO()
 
     def ths_index(self, fields='', **kwargs):

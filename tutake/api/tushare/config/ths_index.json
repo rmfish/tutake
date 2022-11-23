@@ -36,9 +36,10 @@
             "name": "offset"
         }
     ],
+    "integral_required": 5000,
     "is_ready": null,
-    "name": "ths_index",
     "min_score": 5000,
+    "name": "ths_index",
     "order_by": null,
     "outputs": [
         {

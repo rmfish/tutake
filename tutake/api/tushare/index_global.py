@@ -62,7 +62,7 @@ class IndexGlobal(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexGlobal, 'tushare_index_global', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "index_global", config)
-        TuShareBase.__init__(self, "index_global", config)
+        TuShareBase.__init__(self, "index_global", config, 120)
         self.dao = DAO()
 
     def index_global(self, fields='', **kwargs):

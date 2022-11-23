@@ -238,7 +238,9 @@ if __name__ == '__main__':
     json_config = TushareJsonApi()
     db_config = TushareDBApi(TutakeConfig(project_root()))
     for i in json_config.get_all_leaf_api():
+        if i.get('min_score'):
+            i['integral_required'] = i.get('min_score')
         if i.get('default_limit'):
             i['default_limit'] = str(i.get('default_limit'))
-        del i['default_cron']
+        # del i['default_cron']
         json_config.update_api(i)

@@ -60,7 +60,7 @@ class FundDaily(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundDaily, 'tushare_fund_daily', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "fund_daily", config)
-        TuShareBase.__init__(self, "fund_daily", config)
+        TuShareBase.__init__(self, "fund_daily", config, 2000)
         self.dao = DAO()
 
     def fund_daily(self, fields='', **kwargs):

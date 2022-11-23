@@ -53,7 +53,7 @@ class FundSalesVol(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundSalesVol, 'tushare_fund_sales_vol',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "fund_sales_vol", config)
-        TuShareBase.__init__(self, "fund_sales_vol", config)
+        TuShareBase.__init__(self, "fund_sales_vol", config, 2000)
         self.dao = DAO()
 
     def fund_sales_vol(self, fields='', **kwargs):

@@ -68,7 +68,7 @@ class FundDiv(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "fund_div", config)
-        TuShareBase.__init__(self, "fund_div", config)
+        TuShareBase.__init__(self, "fund_div", config, 800)
         self.dao = DAO()
 
     def fund_div(self, fields='', **kwargs):

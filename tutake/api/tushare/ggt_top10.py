@@ -67,7 +67,7 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareGgtTop10, 'tushare_ggt_top10', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "ggt_top10", config)
-        TuShareBase.__init__(self, "ggt_top10", config)
+        TuShareBase.__init__(self, "ggt_top10", config, 5000)
         self.dao = DAO()
 
     def ggt_top10(self, fields='', **kwargs):

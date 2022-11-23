@@ -60,7 +60,7 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "fund_nav", config)
-        TuShareBase.__init__(self, "fund_nav", config)
+        TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.dao = DAO()
 
     def fund_nav(self, fields='', **kwargs):

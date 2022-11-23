@@ -43,6 +43,7 @@
             "name": "offset"
         }
     ],
+    "integral_required": 2000,
     "is_ready": null,
     "min_score": 2000,
     "name": "index_classify",

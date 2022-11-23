@@ -5,7 +5,7 @@ from pathlib import Path
 import yaml
 
 from tutake.utils.logger import setup_logging
-from tutake.utils.utils import project_root, file
+from tutake.utils.utils import project_root, file, file_dir
 
 
 class DotConfig(dict):
@@ -75,17 +75,20 @@ class DotConfig(dict):
 
 TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUSHARE_TOKEN_KEY = "tushare.token"
+TUSHARE_TOKENS_KEY = "tushare.tokens"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
 TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"
-# TUSHARE_DIR_KEY = "tutake.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
+TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
 
 
 class TutakeConfig(object):
 
     def __init__(self, path=None, config_name="config.yml"):
-        self.__config = self._load_config_file(f'{path}/{config_name}')
+        self.config_dir = path or project_root()
+        self.config_file = f'{path}/{config_name}'
+        self.__config = self._load_config_file(self.config_file)
         self._default_config()
 
     def _default_config(self):
@@ -95,23 +98,25 @@ class TutakeConfig(object):
         """
         data_driver_url = self.get_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
         meta_driver_url = self.get_config(TUSHARE_META_DRIVER_URL_KEY)
-        # self.set_tutake_dir(self.get_config(TUSHARE_DIR_KEY))
 
         if not data_driver_url:
             self.set_tutake_data_dir()
         if not meta_driver_url:
             self.set_tutake_meta_dir()
 
-        if self.get_config(TUSHARE_TOKEN_KEY) is None:
-            self.set_config(TUSHARE_TOKEN_KEY, DEFAULT_TUSHARE_TOKEN)
+        self.logger_config_file = self._init_logger_config()
+        if self.logger_config_file:
+            setup_logging(self.logger_config_file)
 
-        if self.get_config(TUTAKE_LOGGING_CONFIG_KEY):
-            logger_config_path = self.get_config(TUTAKE_LOGGING_CONFIG_KEY)
-            if not str(logger_config_path).startswith("/"):
-                logger_config_path = file(project_root(), logger_config_path)
-            setup_logging(logger_config_path)
+        logging.getLogger("tutake.config").debug("Set default config. {}".format(self))
 
-        logging.getLogger("tutake.config").debug("Set default config. {}", self.__config)
+    def __str__(self):
+        return f"ConfigFile: {self.config_file}" \
+               f"\n\t{TUTAKE_SQLITE_DRIVER_URL_KEY}:\t{self.get_config(TUTAKE_SQLITE_DRIVER_URL_KEY)}" \
+               f"\n\t{TUSHARE_TOKEN_KEY}:\t{self.get_tushare_token()}" \
+               f"\n\t{TUTAKE_PROCESS_THREAD_CNT_KEY}:\t{self.get_process_thread_cnt()}" \
+               f"\n\t{TUTAKE_LOGGING_CONFIG_KEY}:\t{self.logger_config_file}" \
+               f"\n\t{TUTAKE_SCHEDULER_CONFIG_KEY}:\t{self.get_config(TUTAKE_SCHEDULER_CONFIG_KEY)}"
 
     def _load_config_file(self, config_file: str) -> DotConfig:
         if os.path.exists(config_file):
@@ -146,37 +151,29 @@ class TutakeConfig(object):
     def set_config(self, key, val) -> True:
         return self.__config.set(key, val)
 
-    def set_tutake_data_dir(self, dir: None):
-        if dir is None:
+    def set_tutake_data_dir(self, _dir=None):
+        if _dir is None:
             db_name = 'tushare_stock_basic.db'
-            dir = "%s/data" % (project_root())
-            if os.path.exists("%s/%s" % (dir, db_name)):
-                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(project_root(), 'data'))
+            _dir = "%s/data" % (self.config_dir)
+            if os.path.exists("%s/%s" % (_dir, db_name)):
+                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(self.config_dir, 'data'))
             else:
                 self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY,
                                 self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'data'))
         else:
-            self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(dir))
+            self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
-    def set_tutake_meta_dir(self, dir: None):
-        if dir is None:
+    def set_tutake_meta_dir(self, _dir=None):
+        if _dir is None:
             db_name = 'tushare_meta.db'
-            dir = "%s/meta" % (project_root())
-            if os.path.exists("%s/%s" % (dir, db_name)):
-                self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(project_root(), 'meta'))
+            _dir = "%s/meta" % (self.config_dir)
+            if os.path.exists("%s/%s" % (_dir, db_name)):
+                self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(self.config_dir, 'meta'))
             else:
                 self.set_config(TUSHARE_META_DRIVER_URL_KEY,
                                 self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'meta'))
         else:
-            self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(dir))
-
-    # def set_tutake_dir(self, tutake_dir: str = None):
-    #     tutake_driver_url = self._get_default_driver_url(tutake_dir, 'data')
-    #     logger.info("Set config %s %s" % (TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url))
-    #     self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, tutake_driver_url)
-    #     tutake_driver_url = self._get_default_driver_url(tutake_dir, 'meta')
-    #     logger.info("Set config %s %s" % (TUSHARE_META_DRIVER_URL_KEY, tutake_driver_url))
-    #     self.set_config(TUSHARE_META_DRIVER_URL_KEY, tutake_driver_url)
+            self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
     def _get_default_driver_url(self, path, dir):
         if path is None:
@@ -201,7 +198,24 @@ class TutakeConfig(object):
             self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
 
     def get_tushare_token(self):
-        return self.require_config(TUSHARE_TOKEN_KEY)
+        token = self.get_config(TUSHARE_TOKEN_KEY)
+        if token is None:
+            tokens = self.get_config(TUSHARE_TOKENS_KEY)
+            if tokens:
+                return tokens[next(iter(tokens))]
+        return DEFAULT_TUSHARE_TOKEN
+
+    def _init_logger_config(self):
+        logger_config_path = self.get_config(TUTAKE_LOGGING_CONFIG_KEY)
+        if logger_config_path and not str(logger_config_path).startswith("/"):
+            logger_config_path = file(self.config_dir, logger_config_path)
+
+        if not logger_config_path or not os.path.exists(logger_config_path):
+            logging.warning(
+                f"Logger config file is not config or not exists. {logger_config_path}")
+            logger_config_path = f"{file_dir(__file__)}/ts_logger.yml"
+            logging.warning(f"Use default logger config: {logger_config_path}")
+        return logger_config_path
 
     def get_process_thread_cnt(self):
         return self.get_config(TUTAKE_PROCESS_THREAD_CNT_KEY, 4)

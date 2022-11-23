@@ -54,7 +54,7 @@ class StkRewards(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk_rewards', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "stk_rewards", config)
-        TuShareBase.__init__(self, "stk_rewards", config)
+        TuShareBase.__init__(self, "stk_rewards", config, 5000)
         self.dao = DAO()
 
     def stk_rewards(self, fields='', **kwargs):

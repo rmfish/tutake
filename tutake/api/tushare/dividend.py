@@ -68,7 +68,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_dividend', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "dividend", config)
-        TuShareBase.__init__(self, "dividend", config)
+        TuShareBase.__init__(self, "dividend", config, 800)
         self.dao = DAO()
 
     def dividend(self, fields='', **kwargs):

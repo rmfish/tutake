@@ -61,7 +61,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "hsgt_top10", config)
-        TuShareBase.__init__(self, "hsgt_top10", config)
+        TuShareBase.__init__(self, "hsgt_top10", config, 120)
         self.dao = DAO()
 
     def hsgt_top10(self, fields='', **kwargs):

@@ -73,7 +73,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "moneyflow", config)
-        TuShareBase.__init__(self, "moneyflow", config)
+        TuShareBase.__init__(self, "moneyflow", config, 2000)
         self.dao = DAO()
 
     def moneyflow(self, fields='', **kwargs):

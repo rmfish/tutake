@@ -83,7 +83,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "bak_daily", config)
-        TuShareBase.__init__(self, "bak_daily", config)
+        TuShareBase.__init__(self, "bak_daily", config, 120)
         self.dao = DAO()
 
     def bak_daily(self, fields='', **kwargs):

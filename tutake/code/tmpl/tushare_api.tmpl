@@ -47,7 +47,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
         entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
         BaseDao.__init__(self, self.engine, session_factory, {{entity_name}}, '{{table_name}}', query_fields, entity_fields)
         DataProcess.__init__(self,"{{name}}", config)
-        TuShareBase.__init__(self,"{{name}}", config)
+        TuShareBase.__init__(self,"{{name}}", config, {{integral_required or 120}})
         self.dao = DAO()
 
     def {{name}}(self, fields='', **kwargs):

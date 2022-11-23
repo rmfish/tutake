@@ -62,7 +62,7 @@ class StkManagers(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk_managers', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "stk_managers", config)
-        TuShareBase.__init__(self, "stk_managers", config)
+        TuShareBase.__init__(self, "stk_managers", config, 5000)
         self.dao = DAO()
 
     def stk_managers(self, fields='', **kwargs):

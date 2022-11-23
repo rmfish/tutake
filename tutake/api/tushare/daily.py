@@ -59,7 +59,7 @@ class Daily(BaseDao, TuShareBase, DataProcess):
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareDaily, 'tushare_daily', query_fields, entity_fields)
         DataProcess.__init__(self, "daily", config)
-        TuShareBase.__init__(self, "daily", config)
+        TuShareBase.__init__(self, "daily", config, 120)
         self.dao = DAO()
 
     def daily(self, fields='', **kwargs):

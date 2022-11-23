@@ -54,7 +54,7 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareThsMember, 'tushare_ths_member', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "ths_member", config)
-        TuShareBase.__init__(self, "ths_member", config)
+        TuShareBase.__init__(self, "ths_member", config, 5000)
         self.dao = DAO()
 
     def ths_member(self, fields='', **kwargs):

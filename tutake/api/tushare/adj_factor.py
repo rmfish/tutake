@@ -50,7 +50,7 @@ class AdjFactor(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareAdjFactor, 'tushare_adj_factor', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "adj_factor", config)
-        TuShareBase.__init__(self, "adj_factor", config)
+        TuShareBase.__init__(self, "adj_factor", config, 120)
         self.dao = DAO()
 
     def adj_factor(self, fields='', **kwargs):

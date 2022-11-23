@@ -51,7 +51,7 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_suspend_d', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "suspend_d", config)
-        TuShareBase.__init__(self, "suspend_d", config)
+        TuShareBase.__init__(self, "suspend_d", config, 120)
         self.dao = DAO()
 
     def suspend_d(self, fields='', **kwargs):

@@ -62,7 +62,7 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "index_dailybasic", config)
-        TuShareBase.__init__(self, "index_dailybasic", config)
+        TuShareBase.__init__(self, "index_dailybasic", config, 5000)
         self.dao = DAO()
 
     def index_dailybasic(self, fields='', **kwargs):

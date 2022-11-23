@@ -42,6 +42,7 @@
             "name": "offset"
         }
     ],
+    "integral_required": 800,
     "is_ready": null,
     "min_score": 800,
     "name": "index_weight",

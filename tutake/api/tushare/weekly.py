@@ -60,7 +60,7 @@ class Weekly(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareWeekly, 'tushare_weekly', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "weekly", config)
-        TuShareBase.__init__(self, "weekly", config)
+        TuShareBase.__init__(self, "weekly", config, 600)
         self.dao = DAO()
 
     def weekly(self, fields='', **kwargs):

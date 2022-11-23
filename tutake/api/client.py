@@ -123,8 +123,11 @@ class TushareProcessTask:
         self._scheduler.add_job(self._do_process, args=args, id=job_id, name=job_id, **kwargs)
 
     def start(self):
-        self._config_schedule_tasks()
-        self._scheduler.start()
+        try:
+            self._config_schedule_tasks()
+            self._scheduler.start()
+        except (Exception, KeyboardInterrupt) as err:
+            self.logger.error(f"Exit with {type(err).__name__} {err}")
 
     def __getattr__(self, name):
         return partial(self.add_job, name)

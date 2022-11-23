@@ -236,7 +236,7 @@ class BalancesheetVip(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "balancesheet_vip", config)
-        TuShareBase.__init__(self, "balancesheet_vip", config)
+        TuShareBase.__init__(self, "balancesheet_vip", config, 5000)
         self.dao = DAO()
 
     def balancesheet_vip(self, fields='', **kwargs):

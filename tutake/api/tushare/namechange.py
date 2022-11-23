@@ -53,7 +53,7 @@ class Namechange(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_namechange', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "namechange", config)
-        TuShareBase.__init__(self, "namechange", config)
+        TuShareBase.__init__(self, "namechange", config, 120)
         self.dao = DAO()
 
     def namechange(self, fields='', **kwargs):

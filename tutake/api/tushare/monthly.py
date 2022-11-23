@@ -60,7 +60,7 @@ class Monthly(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareMonthly, 'tushare_monthly', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "monthly", config)
-        TuShareBase.__init__(self, "monthly", config)
+        TuShareBase.__init__(self, "monthly", config, 600)
         self.dao = DAO()
 
     def monthly(self, fields='', **kwargs):

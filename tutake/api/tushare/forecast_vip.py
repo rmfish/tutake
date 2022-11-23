@@ -63,7 +63,7 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_forecast_vip', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "forecast_vip", config)
-        TuShareBase.__init__(self, "forecast_vip", config)
+        TuShareBase.__init__(self, "forecast_vip", config, 5000)
         self.dao = DAO()
 
     def forecast_vip(self, fields='', **kwargs):

@@ -64,7 +64,7 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareStockBasic, 'tushare_stock_basic', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "stock_basic", config)
-        TuShareBase.__init__(self, "stock_basic", config)
+        TuShareBase.__init__(self, "stock_basic", config, 120)
         self.dao = DAO()
 
     def stock_basic(self, fields='', **kwargs):

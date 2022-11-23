@@ -54,7 +54,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "moneyflow_hsgt", config)
-        TuShareBase.__init__(self, "moneyflow_hsgt", config)
+        TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)
         self.dao = DAO()
 
     def moneyflow_hsgt(self, fields='', **kwargs):

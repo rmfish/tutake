@@ -57,7 +57,7 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio',
                          query_fields, entity_fields)
         DataProcess.__init__(self, "fund_portfolio", config)
-        TuShareBase.__init__(self, "fund_portfolio", config)
+        TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.dao = DAO()
 
     def fund_portfolio(self, fields='', **kwargs):

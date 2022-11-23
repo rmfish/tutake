@@ -54,7 +54,7 @@ class IndexMember(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexMember, 'tushare_index_member', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "index_member", config)
-        TuShareBase.__init__(self, "index_member", config)
+        TuShareBase.__init__(self, "index_member", config, 5000)
         self.dao = DAO()
 
     def index_member(self, fields='', **kwargs):

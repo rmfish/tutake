@@ -62,7 +62,7 @@ class NewShare(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_new_share', query_fields,
                          entity_fields)
         DataProcess.__init__(self, "new_share", config)
-        TuShareBase.__init__(self, "new_share", config)
+        TuShareBase.__init__(self, "new_share", config, 120)
         self.dao = DAO()
 
     def new_share(self, fields='', **kwargs):
