@@ -10,22 +10,16 @@ Tushare moneyflow接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.moneyflow_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_moneyflow.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareMoneyflow(Base):
@@ -54,9 +48,6 @@ class TushareMoneyflow(Base):
     trade_count = Column(Integer, comment='交易笔数')
 
 
-TushareMoneyflow.__table__.create(bind=engine, checkfirst=True)
-
-
 class Moneyflow(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -65,7 +56,13 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_moneyflow.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareMoneyflow.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "trade_date", "buy_sm_vol", "buy_sm_amount", "sell_sm_vol", "sell_sm_amount", "buy_md_vol",
@@ -73,10 +70,10 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
             "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
             "net_mf_amount", "trade_count"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "moneyflow")
-        TuShareBase.__init__(self, "moneyflow")
+        DataProcess.__init__(self, "moneyflow", config)
+        TuShareBase.__init__(self, "moneyflow", config)
         self.dao = DAO()
 
     def moneyflow(self, fields='', **kwargs):
@@ -147,7 +144,11 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.moneyflow with args: {}".format(kwargs))
                 res = self.tushare_query('moneyflow', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_moneyflow', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_moneyflow',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -170,9 +171,10 @@ setattr(Moneyflow, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.moneyflow(ts_code='000001.SH'))
 
-    api = Moneyflow()
+    api = Moneyflow(config)
     api.process()    # 同步增量数据
     print(api.moneyflow(ts_code='000001.SH'))    # 数据查询接口

@@ -10,22 +10,16 @@ Tushare fund_nav接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fund_nav_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_fund_nav.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareFundNav(Base):
@@ -43,9 +37,6 @@ class TushareFundNav(Base):
     update_flag = Column(String, comment='更新标识')
 
 
-TushareFundNav.__table__.create(bind=engine, checkfirst=True)
-
-
 class FundNav(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -54,15 +45,22 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_fund_nav.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareFundNav.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'nav_date', 'offset', 'limit', 'market', 'start_date', 'end_date']
         entity_fields = [
             "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
             "adj_nav", "update_flag"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields, entity_fields)
-        DataProcess.__init__(self, "fund_nav")
-        TuShareBase.__init__(self, "fund_nav")
+        BaseDao.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
+                         entity_fields)
+        DataProcess.__init__(self, "fund_nav", config)
+        TuShareBase.__init__(self, "fund_nav", config)
         self.dao = DAO()
 
     def fund_nav(self, fields='', **kwargs):
@@ -131,7 +129,11 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_nav with args: {}".format(kwargs))
                 res = self.tushare_query('fund_nav', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_nav', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_fund_nav',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -154,9 +156,10 @@ setattr(FundNav, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.fund_nav(nav_date='20221111'))
 
-    api = FundNav()
+    api = FundNav(config)
     api.process()    # 同步增量数据
     print(api.fund_nav(nav_date='20221111'))    # 数据查询接口

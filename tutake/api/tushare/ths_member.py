@@ -10,22 +10,16 @@ Tushare ths_member接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.ths_member_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_ths_member.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareThsMember(Base):
@@ -40,9 +34,6 @@ class TushareThsMember(Base):
     is_new = Column(String, comment='是否最新Y是N否')
 
 
-TushareThsMember.__table__.create(bind=engine, checkfirst=True)
-
-
 class ThsMember(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -51,13 +42,19 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_ths_member.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareThsMember.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'code', 'limit', 'offset']
         entity_fields = ["ts_code", "code", "name", "weight", "in_date", "out_date", "is_new"]
-        BaseDao.__init__(self, engine, session_factory, TushareThsMember, 'tushare_ths_member', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareThsMember, 'tushare_ths_member', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "ths_member")
-        TuShareBase.__init__(self, "ths_member")
+        DataProcess.__init__(self, "ths_member", config)
+        TuShareBase.__init__(self, "ths_member", config)
         self.dao = DAO()
 
     def ths_member(self, fields='', **kwargs):
@@ -112,7 +109,11 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ths_member with args: {}".format(kwargs))
                 res = self.tushare_query('ths_member', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ths_member', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_ths_member',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -135,9 +136,10 @@ setattr(ThsMember, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.ths_member())
 
-    api = ThsMember()
+    api = ThsMember(config)
     api.process()    # 同步增量数据
     print(api.ths_member())    # 数据查询接口

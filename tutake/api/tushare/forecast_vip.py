@@ -10,22 +10,16 @@ Tushare forecast_vip接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.forecast_vip_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_forecast_vip.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareForecastVip(Base):
@@ -46,9 +40,6 @@ class TushareForecastVip(Base):
     change_reason = Column(String, comment='业绩变动原因')
 
 
-TushareForecastVip.__table__.create(bind=engine, checkfirst=True)
-
-
 class ForecastVip(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -57,16 +48,22 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_forecast_vip.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareForecastVip.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'type', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareForecastVip, 'tushare_forecast_vip', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_forecast_vip', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "forecast_vip")
-        TuShareBase.__init__(self, "forecast_vip")
+        DataProcess.__init__(self, "forecast_vip", config)
+        TuShareBase.__init__(self, "forecast_vip", config)
         self.dao = DAO()
 
     def forecast_vip(self, fields='', **kwargs):
@@ -140,7 +137,11 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.forecast_vip with args: {}".format(kwargs))
                 res = self.tushare_query('forecast_vip', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_forecast_vip', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_forecast_vip',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -163,9 +164,10 @@ setattr(ForecastVip, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.forecast_vip())
 
-    api = ForecastVip()
+    api = ForecastVip(config)
     api.process()    # 同步增量数据
     print(api.forecast_vip())    # 数据查询接口

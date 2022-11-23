@@ -10,22 +10,16 @@ Tushare fund_sales_ratio接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fund_sales_ratio_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_fund_sales_ratio.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareFundSalesRatio(Base):
@@ -39,9 +33,6 @@ class TushareFundSalesRatio(Base):
     rests = Column(Float, comment='其他（%）')
 
 
-TushareFundSalesRatio.__table__.create(bind=engine, checkfirst=True)
-
-
 class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -50,13 +41,19 @@ class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_fund_sales_ratio.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareFundSalesRatio.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['年份', 'limit', 'offset']
         entity_fields = ["year", "bank", "sec_comp", "fund_comp", "indep_comp", "rests"]
-        BaseDao.__init__(self, engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio', query_fields,
-                         entity_fields)
-        DataProcess.__init__(self, "fund_sales_ratio")
-        TuShareBase.__init__(self, "fund_sales_ratio")
+        BaseDao.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio',
+                         query_fields, entity_fields)
+        DataProcess.__init__(self, "fund_sales_ratio", config)
+        TuShareBase.__init__(self, "fund_sales_ratio", config)
         self.dao = DAO()
 
     def fund_sales_ratio(self, fields='', **kwargs):
@@ -110,7 +107,7 @@ class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
                 self.logger.debug("Invoke pro.fund_sales_ratio with args: {}".format(kwargs))
                 res = self.tushare_query('fund_sales_ratio', fields=self.entity_fields, **kwargs)
                 res.to_sql('tushare_fund_sales_ratio',
-                           con=engine,
+                           con=self.engine,
                            if_exists='append',
                            index=False,
                            index_label=['ts_code'])
@@ -136,9 +133,10 @@ setattr(FundSalesRatio, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.fund_sales_ratio())
 
-    api = FundSalesRatio()
+    api = FundSalesRatio(config)
     api.process()    # 同步增量数据
     print(api.fund_sales_ratio())    # 数据查询接口

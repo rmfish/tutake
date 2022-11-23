@@ -10,22 +10,16 @@ Tushare trade_cal接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.trade_cal_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_trade_cal.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareTradeCal(Base):
@@ -37,9 +31,6 @@ class TushareTradeCal(Base):
     pretrade_date = Column(String, comment='上一个交易日')
 
 
-TushareTradeCal.__table__.create(bind=engine, checkfirst=True)
-
-
 class TradeCal(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -48,13 +39,19 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_trade_cal.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareTradeCal.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
-        BaseDao.__init__(self, engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "trade_cal")
-        TuShareBase.__init__(self, "trade_cal")
+        DataProcess.__init__(self, "trade_cal", config)
+        TuShareBase.__init__(self, "trade_cal", config)
         self.dao = DAO()
 
     def trade_cal(self, fields='', **kwargs):
@@ -117,7 +114,11 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
                 res = self.tushare_query('trade_cal', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_trade_cal', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_trade_cal',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -140,9 +141,10 @@ setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.trade_cal())
 
-    api = TradeCal()
+    api = TradeCal(config)
     api.process()    # 同步增量数据
     print(api.trade_cal())    # 数据查询接口

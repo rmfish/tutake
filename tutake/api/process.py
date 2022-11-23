@@ -3,15 +3,15 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from tutake.api.process_report import ProcessReport, ProcessType, ActionResult, ProcessException, ProcessReportContainer
-from tutake.utils.config import tutake_config
 
 
 class DataProcess:
 
-    def __init__(self, name):
+    def __init__(self, name, config):
         self.logger = logging.getLogger('api.tushare.%s' % name)
         self.name = name
-        self._report_container = ProcessReportContainer()
+        self._report_container = ProcessReportContainer(config)
+        self.config = config
 
     def name(self):
         return self.name
@@ -71,7 +71,7 @@ class DataProcess:
                     return ActionResult(start, time.time(), param, new_param,
                                         err=ProcessException(param=new_param, cause=err), status='Failed')
 
-            with ThreadPoolExecutor(max_workers=tutake_config.get_process_thread_cnt()) as pool:
+            with ThreadPoolExecutor(max_workers=self.config.get_process_thread_cnt()) as pool:
                 for result in pool.map(action, params):
                     if report.finish_task(result):
                         self.logger.critical("Stop with critical exception. {}", result)

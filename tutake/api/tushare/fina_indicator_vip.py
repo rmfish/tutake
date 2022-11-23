@@ -10,22 +10,16 @@ Tushare fina_indicator_vip接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fina_indicator_vip_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_fina_indicator_vip.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareFinaIndicatorVip(Base):
@@ -200,9 +194,6 @@ class TushareFinaIndicatorVip(Base):
     update_flag = Column(String, index=True, comment='更新标识')
 
 
-TushareFinaIndicatorVip.__table__.create(bind=engine, checkfirst=True)
-
-
 class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -211,7 +202,13 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_fina_indicator_vip.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareFinaIndicatorVip.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'update_flag', 'limit', 'offset']
         entity_fields = [
             "ts_code", "ann_date", "end_date", "eps", "dt_eps", "total_revenue_ps", "revenue_ps", "capital_rese_ps",
@@ -241,10 +238,10 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
             "tr_yoy", "or_yoy", "q_gr_yoy", "q_gr_qoq", "q_sales_yoy", "q_sales_qoq", "q_op_yoy", "q_op_qoq",
             "q_profit_yoy", "q_profit_qoq", "q_netprofit_yoy", "q_netprofit_qoq", "equity_yoy", "rd_exp", "update_flag"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
+        BaseDao.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
                          query_fields, entity_fields)
-        DataProcess.__init__(self, "fina_indicator_vip")
-        TuShareBase.__init__(self, "fina_indicator_vip")
+        DataProcess.__init__(self, "fina_indicator_vip", config)
+        TuShareBase.__init__(self, "fina_indicator_vip", config)
         self.dao = DAO()
 
     def fina_indicator_vip(self, fields='', **kwargs):
@@ -473,7 +470,7 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
                 self.logger.debug("Invoke pro.fina_indicator_vip with args: {}".format(kwargs))
                 res = self.tushare_query('fina_indicator_vip', fields=self.entity_fields, **kwargs)
                 res.to_sql('tushare_fina_indicator_vip',
-                           con=engine,
+                           con=self.engine,
                            if_exists='append',
                            index=False,
                            index_label=['ts_code'])
@@ -499,9 +496,10 @@ setattr(FinaIndicatorVip, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.fina_indicator_vip())
 
-    api = FinaIndicatorVip()
+    api = FinaIndicatorVip(config)
     api.process()    # 同步增量数据
     print(api.fina_indicator_vip())    # 数据查询接口

@@ -84,8 +84,8 @@ TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
 
 class TutakeConfig(object):
 
-    def __init__(self, path):
-        self.__config = self._load_config_file('{}/config.yml'.format(path))
+    def __init__(self, path=None, config_name="config.yml"):
+        self.__config = self._load_config_file(f'{path}/{config_name}')
         self._default_config()
 
     def _default_config(self):
@@ -197,13 +197,11 @@ class TutakeConfig(object):
         return self.require_config(TUSHARE_META_DRIVER_URL_KEY)
 
     def set_tushare_token(self, tushare_token):
-        self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
+        if tushare_token:
+            self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
 
     def get_tushare_token(self):
         return self.require_config(TUSHARE_TOKEN_KEY)
 
     def get_process_thread_cnt(self):
         return self.get_config(TUTAKE_PROCESS_THREAD_CNT_KEY, 4)
-
-
-tutake_config = TutakeConfig(project_root())

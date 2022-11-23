@@ -10,22 +10,16 @@ Tushare hs_const接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.hs_const_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareHsConst(Base):
@@ -38,9 +32,6 @@ class TushareHsConst(Base):
     is_new = Column(String, index=True, comment='是否最新')
 
 
-TushareHsConst.__table__.create(bind=engine, checkfirst=True)
-
-
 class HsConst(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -49,12 +40,19 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareHsConst.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['hs_type', 'is_new', 'limit', 'offset']
         entity_fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
-        BaseDao.__init__(self, engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields, entity_fields)
-        DataProcess.__init__(self, "hs_const")
-        TuShareBase.__init__(self, "hs_const")
+        BaseDao.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields,
+                         entity_fields)
+        DataProcess.__init__(self, "hs_const", config)
+        TuShareBase.__init__(self, "hs_const", config)
         self.dao = DAO()
 
     def hs_const(self, fields='', **kwargs):
@@ -107,7 +105,11 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.hs_const with args: {}".format(kwargs))
                 res = self.tushare_query('hs_const', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_hs_const', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_hs_const',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -130,9 +132,10 @@ setattr(HsConst, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.hs_const(hs_type='SH'))
 
-    api = HsConst()
+    api = HsConst(config)
     api.process()    # 同步增量数据
     print(api.hs_const(hs_type='SH'))    # 数据查询接口

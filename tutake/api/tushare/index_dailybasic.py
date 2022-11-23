@@ -10,22 +10,16 @@ Tushare index_dailybasic接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.index_dailybasic_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_index_dailybasic.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareIndexDailybasic(Base):
@@ -45,9 +39,6 @@ class TushareIndexDailybasic(Base):
     pb = Column(Float, comment='市净率')
 
 
-TushareIndexDailybasic.__table__.create(bind=engine, checkfirst=True)
-
-
 class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -56,16 +47,22 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_index_dailybasic.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareIndexDailybasic.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['trade_date', 'ts_code', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
             "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
+        BaseDao.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
                          query_fields, entity_fields)
-        DataProcess.__init__(self, "index_dailybasic")
-        TuShareBase.__init__(self, "index_dailybasic")
+        DataProcess.__init__(self, "index_dailybasic", config)
+        TuShareBase.__init__(self, "index_dailybasic", config)
         self.dao = DAO()
 
     def index_dailybasic(self, fields='', **kwargs):
@@ -128,7 +125,7 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
                 self.logger.debug("Invoke pro.index_dailybasic with args: {}".format(kwargs))
                 res = self.tushare_query('index_dailybasic', fields=self.entity_fields, **kwargs)
                 res.to_sql('tushare_index_dailybasic',
-                           con=engine,
+                           con=self.engine,
                            if_exists='append',
                            index=False,
                            index_label=['ts_code'])
@@ -154,9 +151,10 @@ setattr(IndexDailybasic, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.index_dailybasic(ts_code='000001.SH'))
 
-    api = IndexDailybasic()
+    api = IndexDailybasic(config)
     api.process()    # 同步增量数据
     print(api.index_dailybasic(ts_code='000001.SH'))    # 数据查询接口

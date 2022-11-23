@@ -1,41 +1,45 @@
-import collections
 import logging
 import time
+from collections.abc import Sequence
 from functools import partial
 
-import tushare as ts
+import tushare
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.tushare.dao import DAO
-from tutake.utils.config import tutake_config
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 def pro_api(token='', data_dir: str = None):
-    return TushareQuery(token, data_dir)
+    config = TutakeConfig()
+    config.set_tushare_token(token)
+    config.set_tutake_data_dir(data_dir)
+    return TushareQuery(config)
 
 
-def process_api(**config):
-    return TushareProcess(**config)
+def process_api(config: TutakeConfig):
+    return TushareProcess(config)
 
 
-def task_api(**config):
-    return TushareProcessTask(**config)
+def task_api(config: TutakeConfig):
+    return TushareProcessTask(config)
 
 
 class TushareProcessTask:
-    def __init__(self, **config):
-        tutake_config.merge_config(**config)
-        self.timezone = tutake_config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
+    def __init__(self, config: TutakeConfig):
+        self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
         self.dao = DAO()
-        if tutake_config.get_config("tutake.scheduler.background", False):
+        if config.get_config("tutake.scheduler.background", False):
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
         else:
             self._scheduler = BlockingScheduler(timezone=self.timezone)
-        self.report_container = ProcessReportContainer()
+        self.report_container = ProcessReportContainer(config)
         self.logger = logging.getLogger("tutake.task")
+        self.config = config
 
     def _config_schedule_tasks(self):
         """
@@ -49,7 +53,7 @@ class TushareProcessTask:
             +------------------------- minute (0 - 59)
         :return:
         """
-        config_tasks = tutake_config.get_config("tutake.scheduler.tasks", [])
+        config_tasks = self.config.get_config("tutake.scheduler.tasks", [])
         configs = {}
         for i in config_tasks:
             configs = {**configs, **i}
@@ -57,7 +61,7 @@ class TushareProcessTask:
         apis = self.dao.all_apis()
         default_schedule = []
         for api in apis:
-            api_instance = self.dao.instance_from_name(api)
+            api_instance = self.dao.instance_from_name(api, self.config)
             cron = ""
             if api_instance:
                 cron = api_instance.default_cron_express()
@@ -76,7 +80,7 @@ class TushareProcessTask:
 
     def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
         def __process(_job_id, __name):
-            api = self.dao.__getattr__(__name)
+            api = self.dao.__getattr__(__name, self.config)
             if api is not None:
                 report = api.process(process_type)
                 self._finish_task_report(_job_id, report)
@@ -87,7 +91,7 @@ class TushareProcessTask:
         if isinstance(api_name, str):
             report = __process(f"tushare_{api_name}", api_name)
             self.logger.info(f"Finish {api_name} process,report is \n {report}")
-        elif isinstance(api_name, collections.Sequence):
+        elif isinstance(api_name, Sequence):
             reports = []
             start = time.time()
             self.logger.info(f"Start Schedule task with apis {api_name}")
@@ -127,12 +131,12 @@ class TushareProcessTask:
 
 
 class TushareProcess:
-    def __init__(self, **config):
-        tutake_config.merge_config(**config)
+    def __init__(self, config: TutakeConfig):
         self.dao = DAO()
+        self.config = config
 
     def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
-        api = self.dao.__getattr__(api_name)
+        api = self.dao.__getattr__(api_name, self.config)
         if api is not None:
             return api.process(process_type)
         else:
@@ -143,11 +147,10 @@ class TushareProcess:
 
 
 class TushareQuery:
-    def __init__(self, tushare_token, data_dir: str = None):
-        if tushare_token != '':
-            self.tushare = ts.pro_api(tushare_token)
-        if data_dir is not None:
-            tutake_config.set_tutake_data_dir(data_dir)
+    def __init__(self, config):
+        token = config.get_tushare_token()
+        if token != '':
+            self.tushare = tushare.pro_api(token)
         self.dao = DAO()
 
     def query(self, api_name, fields='', **kwargs):
@@ -168,9 +171,9 @@ class TushareQuery:
 
 
 if __name__ == "__main__":
-    dao = pro_api("aec595052cb10051350a6a164f41b344b922f0b3ee206efdec2e0082")
+    # dao = pro_api("aec595052cb10051350a6a164f41b344b922f0b3ee206efdec2e0082")
     # print(dao.stock_basic(fields='name,ts_code,', name='ST国华'))
-    print(dao.shibor(start_date='20180101', end_date='20181101'))
+    # print(dao.shibor(start_date='20180101', end_date='20181101'))
 
-    task = task_api(tutake_scheduler_background=False)
+    task = task_api(TutakeConfig(project_root()))
     task.start()

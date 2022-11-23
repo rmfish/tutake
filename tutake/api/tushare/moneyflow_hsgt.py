@@ -10,22 +10,16 @@ Tushare moneyflow_hsgt接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.moneyflow_hsgt_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_moneyflow_hsgt.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareMoneyflowHsgt(Base):
@@ -40,9 +34,6 @@ class TushareMoneyflowHsgt(Base):
     south_money = Column(String, comment='南向资金')
 
 
-TushareMoneyflowHsgt.__table__.create(bind=engine, checkfirst=True)
-
-
 class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -51,13 +42,19 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_moneyflow_hsgt.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareMoneyflowHsgt.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
-        BaseDao.__init__(self, engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt', query_fields,
-                         entity_fields)
-        DataProcess.__init__(self, "moneyflow_hsgt")
-        TuShareBase.__init__(self, "moneyflow_hsgt")
+        BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt',
+                         query_fields, entity_fields)
+        DataProcess.__init__(self, "moneyflow_hsgt", config)
+        TuShareBase.__init__(self, "moneyflow_hsgt", config)
         self.dao = DAO()
 
     def moneyflow_hsgt(self, fields='', **kwargs):
@@ -114,7 +111,7 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
                 self.logger.debug("Invoke pro.moneyflow_hsgt with args: {}".format(kwargs))
                 res = self.tushare_query('moneyflow_hsgt', fields=self.entity_fields, **kwargs)
                 res.to_sql('tushare_moneyflow_hsgt',
-                           con=engine,
+                           con=self.engine,
                            if_exists='append',
                            index=False,
                            index_label=['ts_code'])
@@ -140,9 +137,10 @@ setattr(MoneyflowHsgt, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.moneyflow_hsgt(trade_date='20221118'))
 
-    api = MoneyflowHsgt()
+    api = MoneyflowHsgt(config)
     api.process()    # 同步增量数据
     print(api.moneyflow_hsgt(trade_date='20221118'))    # 数据查询接口

@@ -10,22 +10,16 @@ Tushare stock_company接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.stock_company_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareStockCompany(Base):
@@ -50,9 +44,6 @@ class TushareStockCompany(Base):
     main_business = Column(String, comment='主要业务及产品')
 
 
-TushareStockCompany.__table__.create(bind=engine, checkfirst=True)
-
-
 class StockCompany(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -61,16 +52,22 @@ class StockCompany(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_basic_data.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareStockCompany.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'exchange', 'status', 'limit', 'offset']
         entity_fields = [
             "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province", "city",
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareStockCompany, 'tushare_stock_company', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock_company', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "stock_company")
-        TuShareBase.__init__(self, "stock_company")
+        DataProcess.__init__(self, "stock_company", config)
+        TuShareBase.__init__(self, "stock_company", config)
         self.dao = DAO()
 
     def stock_company(self, fields='', **kwargs):
@@ -137,7 +134,7 @@ class StockCompany(BaseDao, TuShareBase, DataProcess):
                 self.logger.debug("Invoke pro.stock_company with args: {}".format(kwargs))
                 res = self.tushare_query('stock_company', fields=self.entity_fields, **kwargs)
                 res.to_sql('tushare_stock_company',
-                           con=engine,
+                           con=self.engine,
                            if_exists='append',
                            index=False,
                            index_label=['ts_code'])
@@ -163,9 +160,10 @@ setattr(StockCompany, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.stock_company())
 
-    api = StockCompany()
+    api = StockCompany(config)
     api.process()    # 同步增量数据
     print(api.stock_company())    # 数据查询接口

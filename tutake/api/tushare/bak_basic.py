@@ -10,22 +10,16 @@ Tushare bak_basic接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.bak_basic_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_bak_basic.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareBakBasic(Base):
@@ -57,9 +51,6 @@ class TushareBakBasic(Base):
     holder_num = Column(Integer, comment='股东人数')
 
 
-TushareBakBasic.__table__.create(bind=engine, checkfirst=True)
-
-
 class BakBasic(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -68,17 +59,23 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_bak_basic.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareBakBasic.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['trade_date', 'ts_code', 'limit', 'offset']
         entity_fields = [
             "trade_date", "ts_code", "name", "industry", "area", "pe", "float_share", "total_share", "total_assets",
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareBakBasic, 'tushare_bak_basic', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_bak_basic', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "bak_basic")
-        TuShareBase.__init__(self, "bak_basic")
+        DataProcess.__init__(self, "bak_basic", config)
+        TuShareBase.__init__(self, "bak_basic", config)
         self.dao = DAO()
 
     def bak_basic(self, fields='', **kwargs):
@@ -150,7 +147,11 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))
                 res = self.tushare_query('bak_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_bak_basic', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_bak_basic',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -173,9 +174,10 @@ setattr(BakBasic, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.bak_basic())
 
-    api = BakBasic()
+    api = BakBasic(config)
     api.process()    # 同步增量数据
     print(api.bak_basic())    # 数据查询接口

@@ -80,7 +80,7 @@
         }
     ],
     "is_ready": null,
-    "min_score": 2000,
+    "min_score": 5000,
     "name": "balancesheet_vip",
     "order_by": null,
     "outputs": [

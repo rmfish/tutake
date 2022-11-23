@@ -10,22 +10,16 @@ Tushare ths_index接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.ths_index_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_ths_index.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareThsIndex(Base):
@@ -39,9 +33,6 @@ class TushareThsIndex(Base):
     type = Column(String, index=True, comment='N概念指数S特色指数')
 
 
-TushareThsIndex.__table__.create(bind=engine, checkfirst=True)
-
-
 class ThsIndex(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -50,13 +41,19 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_ths_index.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareThsIndex.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'exchange', 'type', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
-        BaseDao.__init__(self, engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "ths_index")
-        TuShareBase.__init__(self, "ths_index")
+        DataProcess.__init__(self, "ths_index", config)
+        TuShareBase.__init__(self, "ths_index", config)
         self.dao = DAO()
 
     def ths_index(self, fields='', **kwargs):
@@ -111,7 +108,11 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ths_index with args: {}".format(kwargs))
                 res = self.tushare_query('ths_index', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ths_index', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_ths_index',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -134,9 +135,10 @@ setattr(ThsIndex, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.ths_index())
 
-    api = ThsIndex()
+    api = ThsIndex(config)
     api.process()    # 同步增量数据
     print(api.ths_index())    # 数据查询接口

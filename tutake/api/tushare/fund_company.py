@@ -10,22 +10,16 @@ Tushare fund_company接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fund_company_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_fund_company.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareFundCompany(Base):
@@ -51,9 +45,6 @@ class TushareFundCompany(Base):
     credit_code = Column(String, comment='统一社会信用代码')
 
 
-TushareFundCompany.__table__.create(bind=engine, checkfirst=True)
-
-
 class FundCompany(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -62,17 +53,23 @@ class FundCompany(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_fund_company.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareFundCompany.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['setup_date', 'limit', 'offset']
         entity_fields = [
             "name", "shortname", "short_enname", "province", "city", "address", "phone", "office", "website",
             "chairman", "manager", "reg_capital", "setup_date", "end_date", "employees", "main_business", "org_code",
             "credit_code"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareFundCompany, 'tushare_fund_company', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareFundCompany, 'tushare_fund_company', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "fund_company")
-        TuShareBase.__init__(self, "fund_company")
+        DataProcess.__init__(self, "fund_company", config)
+        TuShareBase.__init__(self, "fund_company", config)
         self.dao = DAO()
 
     def fund_company(self, fields='', **kwargs):
@@ -137,7 +134,11 @@ class FundCompany(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_company with args: {}".format(kwargs))
                 res = self.tushare_query('fund_company', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_company', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_fund_company',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -160,9 +161,10 @@ setattr(FundCompany, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.fund_company())
 
-    api = FundCompany()
+    api = FundCompany(config)
     api.process()    # 同步增量数据
     print(api.fund_company())    # 数据查询接口

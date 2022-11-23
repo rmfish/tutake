@@ -10,22 +10,16 @@ Tushare fund_adj接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.fund_adj_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_fund_adj.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareFundAdj(Base):
@@ -37,9 +31,6 @@ class TushareFundAdj(Base):
     discount_rate = Column(Float, comment='贴水率（%）')
 
 
-TushareFundAdj.__table__.create(bind=engine, checkfirst=True)
-
-
 class FundAdj(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -48,12 +39,19 @@ class FundAdj(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_fund_adj.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareFundAdj.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "adj_factor", "discount_rate"]
-        BaseDao.__init__(self, engine, session_factory, TushareFundAdj, 'tushare_fund_adj', query_fields, entity_fields)
-        DataProcess.__init__(self, "fund_adj")
-        TuShareBase.__init__(self, "fund_adj")
+        BaseDao.__init__(self, self.engine, session_factory, TushareFundAdj, 'tushare_fund_adj', query_fields,
+                         entity_fields)
+        DataProcess.__init__(self, "fund_adj", config)
+        TuShareBase.__init__(self, "fund_adj", config)
         self.dao = DAO()
 
     def fund_adj(self, fields='', **kwargs):
@@ -107,7 +105,11 @@ class FundAdj(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_adj with args: {}".format(kwargs))
                 res = self.tushare_query('fund_adj', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_adj', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_fund_adj',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -130,9 +132,10 @@ setattr(FundAdj, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.fund_adj())
 
-    api = FundAdj()
+    api = FundAdj(config)
     api.process()    # 同步增量数据
     print(api.fund_adj())    # 数据查询接口

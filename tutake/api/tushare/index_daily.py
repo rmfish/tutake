@@ -10,22 +10,16 @@ Tushare index_daily接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.index_daily_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_index_daily.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareIndexDaily(Base):
@@ -44,9 +38,6 @@ class TushareIndexDaily(Base):
     amount = Column(Float, comment='None')
 
 
-TushareIndexDaily.__table__.create(bind=engine, checkfirst=True)
-
-
 class IndexDaily(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -55,15 +46,21 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_index_daily.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareIndexDaily.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "index_daily")
-        TuShareBase.__init__(self, "index_daily")
+        DataProcess.__init__(self, "index_daily", config)
+        TuShareBase.__init__(self, "index_daily", config)
         self.dao = DAO()
 
     def index_daily(self, fields='', **kwargs):
@@ -124,7 +121,11 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_daily with args: {}".format(kwargs))
                 res = self.tushare_query('index_daily', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_daily', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_index_daily',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -145,11 +146,12 @@ setattr(IndexDaily, 'tushare_parameters', tushare_parameters_ext)
 setattr(IndexDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
-    print(pro.index_daily(start_date="20221004", end_date="20221010"))
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
+    print(pro.index_daily(ts_code='000001.SH'))
 
-    api = IndexDaily()
-    # api.process()  # 同步增量数据
-    # print(api.index_daily(ts_code='000001.SH'))  # 数据查询接口
+    api = IndexDaily(config)
+    api.process()    # 同步增量数据
+    print(api.index_daily(ts_code='000001.SH'))    # 数据查询接口

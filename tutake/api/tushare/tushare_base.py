@@ -10,7 +10,6 @@ import requests
 import tushare as ts
 
 from tutake.code.tushare_api import TushareJsonApi
-from tutake.utils.config import tutake_config
 from tutake.utils.utils import end_of_day
 
 
@@ -124,11 +123,11 @@ class TushareTokenPool(object):
 
 
 class TuShareBase(object):
-    def __init__(self, api_name):
-        tushare_token = tutake_config.get_tushare_token()
+    def __init__(self, api_name, config):
+        tushare_token = config.get_tushare_token()
         if tushare_token:
             self.t_api = TushareClient(tushare_token)
-        tushare_tokens = tutake_config.get_config('tushare.tokens')
+        tushare_tokens = config.get_config('tushare.tokens')
         if tushare_tokens and len(tushare_tokens) > 1:
             json_config = TushareJsonApi()
             api_config = json_config.get_api_by_name(api_name)

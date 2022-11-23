@@ -3,16 +3,9 @@ from enum import Enum
 
 import pendulum
 from sqlalchemy import create_engine, Column, Integer, String, desc
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy.orm import sessionmaker
 
-from tutake.utils.config import tutake_config
-from tutake.utils.singleton import Singleton
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tutake.db'),
-                       connect_args={"check_same_thread": False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.api.tushare.base_dao import Base
 
 
 class TaskReport(Base):
@@ -27,9 +20,6 @@ class TaskReport(Base):
     status = Column(String, comment='任务状态')
     params = Column(String, comment='任务状态')
     task = Column(String, comment='任务状态')
-
-
-TaskReport.__table__.create(bind=engine, checkfirst=True)
 
 
 class ProcessType(str, Enum):
@@ -100,6 +90,7 @@ class ActionResult(object):
 
 
 class ProcessReport:
+
     def __init__(self, _id, _name, _process_type: ProcessType, _logger):
         self.percent = ProcessPercent(0)
         self.name = _name
@@ -245,10 +236,21 @@ class ProcessReport:
         return None
 
 
-@Singleton
 class ProcessReportContainer(object):
-    def __init__(self):
+    instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.instance is None:
+            cls.instance = super().__new__(cls)
+        return cls.instance
+
+    def __init__(self, config):
         self.running_reports = dict()
+        engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tutake.db'),
+                               connect_args={"check_same_thread": False})
+        self.session_factory = sessionmaker()
+        self.session_factory.configure(bind=engine)
+        TaskReport.__table__.create(bind=engine, checkfirst=True)
 
     def _add_report(self, report: ProcessReport):
         reports = self.running_reports.get(report.get_id())
@@ -274,7 +276,7 @@ class ProcessReportContainer(object):
         if page_size:
             page_size = int(page_size)
 
-        session = session_factory()
+        session = self.session_factory()
         rows = session.query(TaskReport).filter_by(job_id=job_id).order_by(desc(TaskReport.start_time)).limit(
             page_size).offset(int(page) * page_size).all()
         reports = []
@@ -312,7 +314,7 @@ class ProcessReportContainer(object):
             task_report.end_time = str(report.end_time)
             task_report.params = json.dumps(report.params)
             task_report.task = json.dumps(report.task, default=lambda x: x.__dict__)
-            session = session_factory()
+            session = self.session_factory()
             session.add(task_report)
             session.commit()
             self._remove_report(report)

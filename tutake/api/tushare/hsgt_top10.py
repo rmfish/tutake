@@ -10,22 +10,16 @@ Tushare hsgt_top10接口
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.base_dao import BaseDao
-from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.hsgt_top10_ext import *
+from tutake.api.tushare.base_dao import BaseDao, Base
+from tutake.api.tushare.dao import DAO
 from tutake.api.tushare.tushare_base import TuShareBase
-from tutake.utils.config import tutake_config
-
-engine = create_engine("%s/%s" % (tutake_config.get_data_sqlite_driver_url(), 'tushare_hsgt_top10.db'),
-                       connect_args={'check_same_thread': False})
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-Base = declarative_base()
+from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import project_root
 
 
 class TushareHsgtTop10(Base):
@@ -44,9 +38,6 @@ class TushareHsgtTop10(Base):
     sell = Column(Float, comment='卖出金额')
 
 
-TushareHsgtTop10.__table__.create(bind=engine, checkfirst=True)
-
-
 class HsgtTop10(BaseDao, TuShareBase, DataProcess):
     instance = None
 
@@ -55,16 +46,22 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self):
+    def __init__(self, config):
+        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_hsgt_top10.db'),
+                                    connect_args={'check_same_thread': False})
+        session_factory = sessionmaker()
+        session_factory.configure(bind=self.engine)
+        TushareHsgtTop10.__table__.create(bind=self.engine, checkfirst=True)
+
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market_type', 'limit', 'offset']
         entity_fields = [
             "trade_date", "ts_code", "name", "close", "change", "rank", "market_type", "amount", "net_amount", "buy",
             "sell"
         ]
-        BaseDao.__init__(self, engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10', query_fields,
+        BaseDao.__init__(self, self.engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10', query_fields,
                          entity_fields)
-        DataProcess.__init__(self, "hsgt_top10")
-        TuShareBase.__init__(self, "hsgt_top10")
+        DataProcess.__init__(self, "hsgt_top10", config)
+        TuShareBase.__init__(self, "hsgt_top10", config)
         self.dao = DAO()
 
     def hsgt_top10(self, fields='', **kwargs):
@@ -134,7 +131,11 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.hsgt_top10 with args: {}".format(kwargs))
                 res = self.tushare_query('hsgt_top10', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_hsgt_top10', con=engine, if_exists='append', index=False, index_label=['ts_code'])
+                res.to_sql('tushare_hsgt_top10',
+                           con=self.engine,
+                           if_exists='append',
+                           index=False,
+                           index_label=['ts_code'])
                 return res
             except Exception as err:
                 raise ProcessException(kwargs, err)
@@ -157,9 +158,10 @@ setattr(HsgtTop10, 'param_loop_process', param_loop_process_ext)
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
-    pro = ts.pro_api(tutake_config.get_tushare_token())
+    config = TutakeConfig(project_root())
+    pro = ts.pro_api(config.get_tushare_token())
     print(pro.hsgt_top10())
 
-    api = HsgtTop10()
+    api = HsgtTop10(config)
     api.process()    # 同步增量数据
     print(api.hsgt_top10())    # 数据查询接口

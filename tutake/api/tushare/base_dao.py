@@ -4,8 +4,9 @@ from operator import and_
 
 import pandas as pd
 from sqlalchemy import text
-from sqlalchemy.orm import load_only
+from sqlalchemy.orm import load_only, declarative_base
 
+Base = declarative_base()
 
 class BaseDao(object):
 

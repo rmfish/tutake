@@ -7,20 +7,13 @@ from collections import OrderedDict
 from os import walk
 
 import requests
-from sqlalchemy import create_engine, MetaData, Integer, String, Column
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine, Integer, String, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.utils.config import tutake_config
-from tutake.utils.utils import project_root
+from tutake.api.tushare.base_dao import Base
+from tutake.utils.config import TutakeConfig
 from tutake.utils.singleton import Singleton
-
-engine = create_engine("%s/%s" % (tutake_config.get_meta_sqlite_driver_url(), 'tushare_meta.db'))
-session_factory = sessionmaker()
-session_factory.configure(bind=engine)
-
-Base = declarative_base()
-metadata = MetaData(engine)
+from tutake.utils.utils import project_root
 
 
 class TushareApiInterface(metaclass=ABCMeta):
@@ -57,12 +50,17 @@ class TushareApi(Base):
         self.title = title
         self.desc = desc
         self.parent_id = parent_id
-
-
-TushareApi.__table__.create(bind=engine, checkfirst=True)
+        super().__init__()
 
 
 class TushareDBApi(TushareApiInterface):
+
+    def __init__(self, config):
+        engine = create_engine("%s/%s" % (config.get_meta_sqlite_driver_url(), 'tushare_meta.db'))
+        self.session_factory = sessionmaker()
+        self.session_factory.configure(bind=engine)
+        TushareApi.__table__.create(bind=engine, checkfirst=True)
+        self.config = config
 
     def add_new_api(self, session, api_id, title, desc, parent_id):
         """Adds a new api to the system"""
@@ -89,12 +87,12 @@ class TushareDBApi(TushareApiInterface):
         session.commit()
 
     def get_api_children(self, parent_id):
-        apis = session_factory().query(TushareApi).filter_by(parent_id=parent_id).all()
+        apis = self.session_factory().query(TushareApi).filter_by(parent_id=parent_id).all()
         if apis:
             return [self._assemble_api(i) for i in apis]
 
     def get_ready_api(self, ):
-        apis = session_factory().query(TushareApi).filter_by(is_ready=1).all()
+        apis = self.session_factory().query(TushareApi).filter_by(is_ready=1).all()
         if apis:
             return [self._assemble_api(i) for i in apis]
 
@@ -103,18 +101,18 @@ class TushareDBApi(TushareApiInterface):
         获得所有子接口
         :return:
         """
-        apis = session_factory().query(TushareApi).all()
+        apis = self.session_factory().query(TushareApi).all()
         parent_ids = [_api.parent_id for _api in apis if _api.parent_id]
         leaf_apis = [api for api in apis if api.id not in parent_ids]
         if leaf_apis:
             return [self._assemble_api(i) for i in leaf_apis]
 
     def get_api(self, api_id):
-        api = session_factory().query(TushareApi).get(api_id)
+        api = self.session_factory().query(TushareApi).get(api_id)
         return self._assemble_api(api)
 
     def get_api_by_name(self, name):
-        return session_factory().query(TushareApi).filter_by(name=name).one()
+        return self.session_factory().query(TushareApi).filter_by(name=name).one()
 
     def _assemble_api(self, api):
         if api is None:
@@ -131,26 +129,26 @@ class TushareDBApi(TushareApiInterface):
         return obj
 
     def get_api_path(self, api_id):
-        api = session_factory().query(TushareApi).get(api_id)
+        api = self.session_factory().query(TushareApi).get(api_id)
         path = [(api.id, api.title)]
         while api.parent_id is not None:
-            api = session_factory().query(TushareApi).get(api.parent_id)
+            api = self.session_factory().query(TushareApi).get(api.parent_id)
             path.insert(0, (api.id, api.title))
         return path
 
     def dump(self):
-        cookie = tutake_config.get_config("tushare.meta.cookie")
+        cookie = self.config.get_config("tushare.meta.cookie")
 
         def save_api(apis, parent_id=None):
             for i in range(len(apis)):
                 api = apis[i]
                 api_id = api['id']
-                self.add_new_api(session_factory(), api_id, api['title'], api["desc"], parent_id)
+                self.add_new_api(self.session_factory(), api_id, api['title'], api["desc"], parent_id)
                 api_detail = self.api_http(api_id, cookie)
                 if len(api["children"]) == 0:
                     print("Update api detail. id:{0} name:{1}".format(api_id, api['title']))
                     if api_detail is not None:
-                        self.update_api_detail(session_factory(), api_id, api_detail)
+                        self.update_api_detail(self.session_factory(), api_id, api_detail)
                 save_api(api["children"], api_id)
 
         metabase = self.api_tree_http(cookie)
@@ -238,7 +236,7 @@ class TushareJsonApi(TushareApiInterface):
 
 if __name__ == '__main__':
     json_config = TushareJsonApi()
-    db_config = TushareDBApi()
+    db_config = TushareDBApi(TutakeConfig(project_root()))
     for i in json_config.get_all_leaf_api():
         if i.get('default_limit'):
             i['default_limit'] = str(i.get('default_limit'))
