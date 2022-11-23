@@ -172,5 +172,5 @@ if __name__ == "__main__":
     # print(dao.stock_basic(fields='name,ts_code,', name='ST国华'))
     print(dao.shibor(start_date='20180101', end_date='20181101'))
 
-    task = task_api(tutake_scheduler_background=True)
+    task = task_api(tutake_scheduler_background=False)
     task.start()

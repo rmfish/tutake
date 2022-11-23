@@ -2,11 +2,16 @@
 tutake:
   data:
     driver_url: sqlite:////Users/xxx/tutake/data  #单独指定数据的目录
-  schedule:
+  process:
+    thread_cnt: 10
+  logging:
+    config_file: ts_logger.yml
+  scheduler:
     timezone: Asia/Shanghai
+    background: False
     tasks:
-      - stock_basic: 0 0 * * *
-      - daily: 30 0 * * *
+      - default: 10 0,11,21 * * *
+      - stock_basic: 0 0,11,21 * * *
 
 tushare:
   token: #tushare api 的token
