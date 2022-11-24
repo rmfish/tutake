@@ -52,7 +52,7 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "suspend_d", config)
         TuShareBase.__init__(self, "suspend_d", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def suspend_d(self, fields='', **kwargs):
         """

@@ -84,7 +84,7 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "bak_daily", config)
         TuShareBase.__init__(self, "bak_daily", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def bak_daily(self, fields='', **kwargs):
         """

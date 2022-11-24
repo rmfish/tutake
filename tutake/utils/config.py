@@ -87,7 +87,9 @@ class TutakeConfig(object):
 
     def __init__(self, path=None, config_name="config.yml"):
         self.config_dir = path or project_root()
-        self.config_file = f'{path}/{config_name}'
+        self.config_file = f'{self.config_dir}/{config_name}'
+        if not os.path.exists(self.config_file):
+            self.config_file = None
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
 
@@ -119,7 +121,7 @@ class TutakeConfig(object):
                f"\n\t{TUTAKE_SCHEDULER_CONFIG_KEY}:\t{self.get_config(TUTAKE_SCHEDULER_CONFIG_KEY)}"
 
     def _load_config_file(self, config_file: str) -> DotConfig:
-        if os.path.exists(config_file):
+        if config_file and os.path.exists(config_file):
             with open(config_file, 'r') as stream:
                 return DotConfig(yaml.safe_load(stream))
         else:
@@ -175,13 +177,14 @@ class TutakeConfig(object):
         else:
             self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
-    def _get_default_driver_url(self, path, dir):
+    def _get_default_driver_url(self, path, sub_dir=None):
         if path is None:
             path = "%s/.tutake" % Path.home()
-        if dir:
-            path = "%s/%s" % (path, dir)
-        os.makedirs(path)
-        return 'sqlite:///%s' % (path)
+        if sub_dir:
+            path = "%s/%s" % (path, sub_dir)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        return f'sqlite:///{path}'
 
     @staticmethod
     def __set(config: DotConfig, k, v):

@@ -67,7 +67,7 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def ths_daily(self, fields='', **kwargs):
         """

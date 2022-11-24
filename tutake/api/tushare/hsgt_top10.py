@@ -62,7 +62,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "hsgt_top10", config)
         TuShareBase.__init__(self, "hsgt_top10", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def hsgt_top10(self, fields='', **kwargs):
         """

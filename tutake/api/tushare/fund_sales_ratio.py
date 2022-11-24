@@ -54,7 +54,7 @@ class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
                          query_fields, entity_fields)
         DataProcess.__init__(self, "fund_sales_ratio", config)
         TuShareBase.__init__(self, "fund_sales_ratio", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def fund_sales_ratio(self, fields='', **kwargs):
         """

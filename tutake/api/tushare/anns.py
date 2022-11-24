@@ -55,7 +55,7 @@ class Anns(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_anns', query_fields, entity_fields)
         DataProcess.__init__(self, "anns", config)
         TuShareBase.__init__(self, "anns", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def anns(self, fields='', **kwargs):
         """

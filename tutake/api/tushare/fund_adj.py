@@ -52,7 +52,7 @@ class FundAdj(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "fund_adj", config)
         TuShareBase.__init__(self, "fund_adj", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def fund_adj(self, fields='', **kwargs):
         """

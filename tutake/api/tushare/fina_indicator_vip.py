@@ -242,7 +242,7 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
                          query_fields, entity_fields)
         DataProcess.__init__(self, "fina_indicator_vip", config)
         TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def fina_indicator_vip(self, fields='', **kwargs):
         """

@@ -1,6 +1,7 @@
 import logging
 import time
 from collections.abc import Sequence
+from datetime import datetime, timedelta
 from functools import partial
 
 import tushare
@@ -32,7 +33,7 @@ def task_api(config: TutakeConfig):
 class TushareProcessTask:
     def __init__(self, config: TutakeConfig):
         self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
-        self.dao = DAO()
+        self.dao = DAO(config)
         if config.get_config("tutake.scheduler.background", False):
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
         else:
@@ -80,7 +81,7 @@ class TushareProcessTask:
 
     def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
         def __process(_job_id, __name):
-            api = self.dao.__getattr__(__name, self.config)
+            api = self.dao.__getattr__(__name)
             if api is not None:
                 report = api.process(process_type)
                 self._finish_task_report(_job_id, report)
@@ -122,9 +123,16 @@ class TushareProcessTask:
             args = [api_name]
         self._scheduler.add_job(self._do_process, args=args, id=job_id, name=job_id, **kwargs)
 
-    def start(self):
+    def start(self, now=False):
         try:
             self._config_schedule_tasks()
+            if now:
+                high_priority_job = [job for job in self._scheduler.get_jobs() if job.id != 'default_schedule']
+                default_job = [job for job in self._scheduler.get_jobs() if job.id == 'default_schedule']
+                for job in high_priority_job:
+                    job.modify(next_run_time=datetime.now())
+                for job in default_job:
+                    job.modify(next_run_time=datetime.now() + timedelta(seconds=5))
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:
             self.logger.error(f"Exit with {type(err).__name__} {err}")
@@ -135,11 +143,11 @@ class TushareProcessTask:
 
 class TushareProcess:
     def __init__(self, config: TutakeConfig):
-        self.dao = DAO()
+        self.dao = DAO(config)
         self.config = config
 
     def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
-        api = self.dao.__getattr__(api_name, self.config)
+        api = self.dao.__getattr__(api_name)
         if api is not None:
             return api.process(process_type)
         else:
@@ -154,7 +162,8 @@ class TushareQuery:
         token = config.get_tushare_token()
         if token != '':
             self.tushare = tushare.pro_api(token)
-        self.dao = DAO()
+        self.config = config
+        self.dao = DAO(config)
 
     def query(self, api_name, fields='', **kwargs):
         api = self.dao.__getattr__(api_name)
@@ -179,4 +188,4 @@ if __name__ == "__main__":
     # print(dao.shibor(start_date='20180101', end_date='20181101'))
 
     task = task_api(TutakeConfig(project_root()))
-    task.start()
+    task.start(True)

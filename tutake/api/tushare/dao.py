@@ -1,18 +1,22 @@
 from importlib import import_module
 
-from tutake.utils.singleton import Singleton
 
-
-@Singleton
 class DAO(object):
+    instance = None
 
-    def __init__(self):
+    def __new__(cls, *args, **kwargs):
+        if cls.instance is None:
+            cls.instance = super().__new__(cls)
+        return cls.instance
+
+    def __init__(self, config):
         self.instances = {}
+        self.config = config
         pass
 
-    def __getattr__(self, name, config):
+    def __getattr__(self, name):
         if not self.instances.get(name):
-            self.instances[name] = self.instance_from_name(name, config)
+            self.instances[name] = self.instance_from_name(name, self.config)
         return self.instances.get(name)
 
     def all_apis(self):

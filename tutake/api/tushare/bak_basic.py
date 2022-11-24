@@ -76,7 +76,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def bak_basic(self, fields='', **kwargs):
         """

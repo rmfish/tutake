@@ -61,7 +61,7 @@ class Weekly(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "weekly", config)
         TuShareBase.__init__(self, "weekly", config, 600)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def weekly(self, fields='', **kwargs):
         """

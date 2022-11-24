@@ -170,7 +170,7 @@ class CashflowVip(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "cashflow_vip", config)
         TuShareBase.__init__(self, "cashflow_vip", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def cashflow_vip(self, fields='', **kwargs):
         """

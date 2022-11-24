@@ -55,7 +55,7 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
                          query_fields, entity_fields)
         DataProcess.__init__(self, "index_classify", config)
         TuShareBase.__init__(self, "index_classify", config, 2000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def index_classify(self, fields='', **kwargs):
         """

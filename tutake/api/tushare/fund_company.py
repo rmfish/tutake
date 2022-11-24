@@ -70,7 +70,7 @@ class FundCompany(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "fund_company", config)
         TuShareBase.__init__(self, "fund_company", config, 1500)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def fund_company(self, fields='', **kwargs):
         """

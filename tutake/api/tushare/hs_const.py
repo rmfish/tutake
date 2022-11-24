@@ -53,7 +53,7 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "hs_const", config)
         TuShareBase.__init__(self, "hs_const", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def hs_const(self, fields='', **kwargs):
         """

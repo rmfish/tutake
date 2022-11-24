@@ -68,7 +68,7 @@ class StockCompany(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def stock_company(self, fields='', **kwargs):
         """

@@ -74,7 +74,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "moneyflow", config)
         TuShareBase.__init__(self, "moneyflow", config, 2000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def moneyflow(self, fields='', **kwargs):
         """

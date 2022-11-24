@@ -64,7 +64,7 @@ class IndexBasic(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def index_basic(self, fields='', **kwargs):
         """

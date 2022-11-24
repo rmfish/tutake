@@ -54,7 +54,7 @@ class Namechange(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "namechange", config)
         TuShareBase.__init__(self, "namechange", config, 120)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def namechange(self, fields='', **kwargs):
         """

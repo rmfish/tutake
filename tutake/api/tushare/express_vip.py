@@ -86,7 +86,7 @@ class ExpressVip(BaseDao, TuShareBase, DataProcess):
                          entity_fields)
         DataProcess.__init__(self, "express_vip", config)
         TuShareBase.__init__(self, "express_vip", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def express_vip(self, fields='', **kwargs):
         """

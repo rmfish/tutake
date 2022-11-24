@@ -58,7 +58,7 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
                          query_fields, entity_fields)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
-        self.dao = DAO()
+        self.dao = DAO(config)
 
     def fund_portfolio(self, fields='', **kwargs):
         """
