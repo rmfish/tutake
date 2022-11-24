@@ -50,7 +50,6 @@
     ],
     "integral_required": 1500,
     "is_ready": 1,
-    "min_score": 1500,
     "name": "fund_basic",
     "order_by": null,
     "outputs": [

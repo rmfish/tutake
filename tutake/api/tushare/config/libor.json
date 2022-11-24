@@ -45,7 +45,6 @@
     ],
     "integral_required": 120,
     "is_ready": null,
-    "min_score": 120,
     "name": "libor",
     "order_by": null,
     "outputs": [

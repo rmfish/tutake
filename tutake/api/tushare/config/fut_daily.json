@@ -50,7 +50,6 @@
     ],
     "integral_required": 800,
     "is_ready": null,
-    "min_score": 800,
     "name": "fut_daily",
     "order_by": null,
     "outputs": [

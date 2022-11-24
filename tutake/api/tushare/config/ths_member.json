@@ -32,7 +32,6 @@
     ],
     "integral_required": 5000,
     "is_ready": null,
-    "min_score": 5000,
     "name": "ths_member",
     "order_by": null,
     "outputs": [

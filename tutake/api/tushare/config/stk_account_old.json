@@ -32,7 +32,6 @@
     ],
     "integral_required": 600,
     "is_ready": null,
-    "min_score": 600,
     "name": "stk_account_old",
     "order_by": null,
     "outputs": [

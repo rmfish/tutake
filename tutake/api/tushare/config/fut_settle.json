@@ -50,7 +50,6 @@
     ],
     "integral_required": 600,
     "is_ready": null,
-    "min_score": 600,
     "name": "fut_settle",
     "order_by": null,
     "outputs": [

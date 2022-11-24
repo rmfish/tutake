@@ -45,7 +45,6 @@
     ],
     "integral_required": 800,
     "is_ready": null,
-    "min_score": 800,
     "name": "fund_div",
     "order_by": null,
     "outputs": [

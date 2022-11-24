@@ -32,7 +32,6 @@
     ],
     "integral_required": 5000,
     "is_ready": 1,
-    "min_score": 5000,
     "name": "stk_rewards",
     "order_by": null,
     "outputs": [

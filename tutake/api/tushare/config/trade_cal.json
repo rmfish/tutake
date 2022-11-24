@@ -45,7 +45,6 @@
         }
     ],
     "integral_required": 600,
-    "min_score": 600,
     "name": "trade_cal",
     "outputs": [
         {

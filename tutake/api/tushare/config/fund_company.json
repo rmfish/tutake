@@ -27,7 +27,6 @@
     ],
     "integral_required": 1500,
     "is_ready": null,
-    "min_score": 1500,
     "name": "fund_company",
     "order_by": null,
     "outputs": [

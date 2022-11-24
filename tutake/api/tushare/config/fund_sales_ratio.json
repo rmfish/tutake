@@ -26,7 +26,6 @@
     ],
     "integral_required": 5000,
     "is_ready": null,
-    "min_score": 5000,
     "name": "fund_sales_ratio",
     "order_by": null,
     "outputs": [

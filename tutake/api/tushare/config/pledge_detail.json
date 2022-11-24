@@ -26,7 +26,6 @@
     ],
     "integral_required": 2000,
     "is_ready": null,
-    "min_score": 2000,
     "name": "pledge_detail",
     "order_by": null,
     "outputs": [

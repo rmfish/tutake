@@ -50,7 +50,6 @@
     ],
     "integral_required": 1000,
     "is_ready": null,
-    "min_score": 1000,
     "name": "fut_wsr",
     "order_by": null,
     "outputs": [

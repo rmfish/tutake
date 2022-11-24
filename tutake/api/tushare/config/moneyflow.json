@@ -45,7 +45,6 @@
     ],
     "integral_required": 2000,
     "is_ready": 1,
-    "min_score": 2000,
     "name": "moneyflow",
     "order_by": null,
     "outputs": [

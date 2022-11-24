@@ -44,7 +44,6 @@
     ],
     "integral_required": 120,
     "is_ready": 1,
-    "min_score": 120,
     "name": "daily",
     "order_by": null,
     "outputs": [

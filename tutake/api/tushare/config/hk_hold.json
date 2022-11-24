@@ -56,7 +56,6 @@
     ],
     "integral_required": 2000,
     "is_ready": null,
-    "min_score": 2000,
     "name": "hk_hold",
     "order_by": null,
     "outputs": [

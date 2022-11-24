@@ -33,7 +33,6 @@
     ],
     "integral_required": 2000,
     "is_ready": null,
-    "min_score": 2000,
     "name": "hk_basic",
     "order_by": null,
     "outputs": [
