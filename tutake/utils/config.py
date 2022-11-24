@@ -102,9 +102,9 @@ class TutakeConfig(object):
         meta_driver_url = self.get_config(TUSHARE_META_DRIVER_URL_KEY)
 
         if not data_driver_url:
-            self.set_tutake_data_dir()
+            self.set_tutake_data_dir(self._get_default_data_dir('data'))
         if not meta_driver_url:
-            self.set_tutake_meta_dir()
+            self.set_tutake_data_dir(self._get_default_data_dir('meta'))
 
         self.logger_config_file = self._init_logger_config()
         if self.logger_config_file:
@@ -154,28 +154,22 @@ class TutakeConfig(object):
         return self.__config.set(key, val)
 
     def set_tutake_data_dir(self, _dir=None):
-        if _dir is None:
-            db_name = 'tushare_stock_basic.db'
-            _dir = "%s/data" % (self.config_dir)
-            if os.path.exists("%s/%s" % (_dir, db_name)):
-                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(self.config_dir, 'data'))
-            else:
-                self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY,
-                                self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'data'))
-        else:
+        if _dir:
             self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
     def set_tutake_meta_dir(self, _dir=None):
-        if _dir is None:
-            db_name = 'tushare_meta.db'
-            _dir = "%s/meta" % (self.config_dir)
-            if os.path.exists("%s/%s" % (_dir, db_name)):
-                self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(self.config_dir, 'meta'))
-            else:
-                self.set_config(TUSHARE_META_DRIVER_URL_KEY,
-                                self._get_default_driver_url("%s/%s" % (Path.home(), '.tutake'), 'meta'))
-        else:
+        if _dir:
             self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
+
+    def _get_default_data_dir(self, dir_name):
+        db_name = 'tushare_stock_basic.db'
+        if dir_name == 'meta':
+            db_name = 'tushare_meta.db'
+        _dir = "%s/%s" % (self.config_dir, dir_name)
+        if os.path.exists("%s/%s" % (_dir, db_name)):
+            return _dir
+        else:
+            return "%s/%s" % (Path.home(), '.tutake')
 
     def _get_default_driver_url(self, path, sub_dir=None):
         if path is None:

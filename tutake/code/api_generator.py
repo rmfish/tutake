@@ -136,7 +136,7 @@ if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     current_dir = file_dir(__file__)
     tmpl_dir = "{}/tmpl".format(current_dir)
-    api_dir = realpath("{}/../api/tushare".format(current_dir))
+    api_dir = realpath("{}/../api/ts".format(current_dir))
 
     generator = CodeGenerator(tmpl_dir, api_dir)
     api_params = []

@@ -5,7 +5,7 @@ import pendulum
 from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.tushare.base_dao import Base
+from tutake.api.ts.base_dao import Base
 
 
 class TaskReport(Base):

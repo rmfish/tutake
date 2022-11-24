@@ -10,7 +10,7 @@ import requests
 from sqlalchemy import create_engine, Integer, String, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.tushare.base_dao import Base
+from tutake.api.ts.base_dao import Base
 from tutake.utils.config import TutakeConfig
 from tutake.utils.singleton import Singleton
 from tutake.utils.utils import project_root
@@ -238,10 +238,6 @@ if __name__ == '__main__':
     json_config = TushareJsonApi()
     db_config = TushareDBApi(TutakeConfig(project_root()))
     for i in json_config.get_all_leaf_api():
-        # if i.get('min_score'):
-        #     i['integral_required'] = i.get('min_score')
         # if i.get('default_limit'):
         #     i['default_limit'] = str(i.get('default_limit'))
-        if i.get('min_score'):
-            del i['min_score']
         json_config.update_api(i)

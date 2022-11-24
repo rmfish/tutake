@@ -11,7 +11,7 @@ handlers:
     stream: ext://sys.stdout
 loggers:
   tutake:
-    level: DEBUG
+    level: INFO
     handlers: [ console ]
     propagate: False
   api:
@@ -19,6 +19,6 @@ loggers:
     handlers: [ console ]
     propagate: False
   apscheduler:
-    level: DEBUG
+    level: INFO
     handlers: [ console ]
     propagate: False

@@ -1,1 +1,2 @@
-from tutake.api.client import (pro_api, process_api, task_api)
+from tutake.api.process_client import (process_api, task_api)
+from tutake.api.query_client import (pro_api)
