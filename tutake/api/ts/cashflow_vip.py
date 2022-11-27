@@ -167,7 +167,7 @@ class CashflowVip(BaseDao, TuShareBase, DataProcess):
             "beg_bal_cash", "end_bal_cash_equ", "beg_bal_cash_equ", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareCashflowVip, 'tushare_cashflow_vip', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "cashflow_vip", config)
         TuShareBase.__init__(self, "cashflow_vip", config, 5000)
         self.dao = DAO(config)

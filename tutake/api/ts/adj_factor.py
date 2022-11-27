@@ -48,7 +48,7 @@ class AdjFactor(BaseDao, TuShareBase, DataProcess):
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "adj_factor"]
         BaseDao.__init__(self, self.engine, session_factory, TushareAdjFactor, 'tushare_adj_factor', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "adj_factor", config)
         TuShareBase.__init__(self, "adj_factor", config, 120)
         self.dao = DAO(config)

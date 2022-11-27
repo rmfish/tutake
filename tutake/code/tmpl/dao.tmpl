@@ -25,7 +25,7 @@ class DAO(object):
     def instance_from_name(self, name, config):
 {% for api in apis %}
         if name == '{{api.name}}':
-            {{api.name}}_module = import_module("tutake.api.tushare.{{api.name}}")
+            {{api.name}}_module = import_module("tutake.api.ts.{{api.name}}")
             clazz = getattr({{api.name}}_module, "{{api.title_name}}")
             return clazz(config){% endfor %}
         else:

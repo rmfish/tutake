@@ -60,7 +60,7 @@ class NewShare(BaseDao, TuShareBase, DataProcess):
             "limit_amount", "funds", "ballot"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_new_share', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "new_share", config)
         TuShareBase.__init__(self, "new_share", config, 120)
         self.dao = DAO(config)

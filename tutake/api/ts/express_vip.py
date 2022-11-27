@@ -83,7 +83,7 @@ class ExpressVip(BaseDao, TuShareBase, DataProcess):
             "perf_summary", "is_audit", "remark"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareExpressVip, 'tushare_express_vip', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "express_vip", config)
         TuShareBase.__init__(self, "express_vip", config, 5000)
         self.dao = DAO(config)

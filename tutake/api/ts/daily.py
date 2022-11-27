@@ -57,7 +57,8 @@ class Daily(BaseDao, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "open", "high", "low", "close", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareDaily, 'tushare_daily', query_fields, entity_fields)
+        BaseDao.__init__(self, self.engine, session_factory, TushareDaily, 'tushare_daily', query_fields, entity_fields,
+                         config)
         DataProcess.__init__(self, "daily", config)
         TuShareBase.__init__(self, "daily", config, 120)
         self.dao = DAO(config)

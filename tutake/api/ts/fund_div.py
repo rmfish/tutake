@@ -66,7 +66,7 @@ class FundDiv(BaseDao, TuShareBase, DataProcess):
             "base_year", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_div", config)
         TuShareBase.__init__(self, "fund_div", config, 800)
         self.dao = DAO(config)

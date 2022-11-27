@@ -49,7 +49,7 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
         query_fields = ['ts_code', 'suspend_type', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
         BaseDao.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_suspend_d', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "suspend_d", config)
         TuShareBase.__init__(self, "suspend_d", config, 120)
         self.dao = DAO(config)

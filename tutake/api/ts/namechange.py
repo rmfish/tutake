@@ -51,7 +51,7 @@ class Namechange(BaseDao, TuShareBase, DataProcess):
         query_fields = ['ts_code', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "start_date", "end_date", "ann_date", "change_reason"]
         BaseDao.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_namechange', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "namechange", config)
         TuShareBase.__init__(self, "namechange", config, 120)
         self.dao = DAO(config)

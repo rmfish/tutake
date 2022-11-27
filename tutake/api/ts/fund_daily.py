@@ -58,7 +58,7 @@ class FundDaily(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "pre_close", "open", "high", "low", "close", "change", "pct_chg", "vol", "amount"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundDaily, 'tushare_fund_daily', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_daily", config)
         TuShareBase.__init__(self, "fund_daily", config, 5000)
         self.dao = DAO(config)

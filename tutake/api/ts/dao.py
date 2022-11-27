@@ -9,12 +9,10 @@ class DAO(object):
             cls.instance = super().__new__(cls)
         return cls.instance
 
-    def __init__(self, config, hotspot=False):
+    def __init__(self, config):
         self.instances = {}
         self.config = config
-        if hotspot:
-            for api in self.all_apis():
-                self.instance_from_name(api, config)
+        pass
 
     def __getattr__(self, name):
         if not self.instances.get(name):
@@ -26,10 +24,10 @@ class DAO(object):
             'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
             'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
             'stk_managers', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
-            'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'index_daily',
-            'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'ths_daily', 'ths_member',
-            'index_global', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
-            'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic'
+            'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily', 'ths_member',
+            'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
+            'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily',
+            'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global'
         ]
 
     def instance_from_name(self, name, config):
@@ -146,26 +144,6 @@ class DAO(object):
             fina_indicator_vip_module = import_module("tutake.api.ts.fina_indicator_vip")
             clazz = getattr(fina_indicator_vip_module, "FinaIndicatorVip")
             return clazz(config)
-        if name == 'index_daily':
-            index_daily_module = import_module("tutake.api.ts.index_daily")
-            clazz = getattr(index_daily_module, "IndexDaily")
-            return clazz(config)
-        if name == 'index_dailybasic':
-            index_dailybasic_module = import_module("tutake.api.ts.index_dailybasic")
-            clazz = getattr(index_dailybasic_module, "IndexDailybasic")
-            return clazz(config)
-        if name == 'index_classify':
-            index_classify_module = import_module("tutake.api.ts.index_classify")
-            clazz = getattr(index_classify_module, "IndexClassify")
-            return clazz(config)
-        if name == 'index_member':
-            index_member_module = import_module("tutake.api.ts.index_member")
-            clazz = getattr(index_member_module, "IndexMember")
-            return clazz(config)
-        if name == 'ths_index':
-            ths_index_module = import_module("tutake.api.ts.ths_index")
-            clazz = getattr(ths_index_module, "ThsIndex")
-            return clazz(config)
         if name == 'ths_daily':
             ths_daily_module = import_module("tutake.api.ts.ths_daily")
             clazz = getattr(ths_daily_module, "ThsDaily")
@@ -173,10 +151,6 @@ class DAO(object):
         if name == 'ths_member':
             ths_member_module = import_module("tutake.api.ts.ths_member")
             clazz = getattr(ths_member_module, "ThsMember")
-            return clazz(config)
-        if name == 'index_global':
-            index_global_module = import_module("tutake.api.ts.index_global")
-            clazz = getattr(index_global_module, "IndexGlobal")
             return clazz(config)
         if name == 'anns':
             anns_module = import_module("tutake.api.ts.anns")
@@ -229,6 +203,30 @@ class DAO(object):
         if name == 'index_basic':
             index_basic_module = import_module("tutake.api.ts.index_basic")
             clazz = getattr(index_basic_module, "IndexBasic")
+            return clazz(config)
+        if name == 'index_daily':
+            index_daily_module = import_module("tutake.api.ts.index_daily")
+            clazz = getattr(index_daily_module, "IndexDaily")
+            return clazz(config)
+        if name == 'index_dailybasic':
+            index_dailybasic_module = import_module("tutake.api.ts.index_dailybasic")
+            clazz = getattr(index_dailybasic_module, "IndexDailybasic")
+            return clazz(config)
+        if name == 'index_classify':
+            index_classify_module = import_module("tutake.api.ts.index_classify")
+            clazz = getattr(index_classify_module, "IndexClassify")
+            return clazz(config)
+        if name == 'index_member':
+            index_member_module = import_module("tutake.api.ts.index_member")
+            clazz = getattr(index_member_module, "IndexMember")
+            return clazz(config)
+        if name == 'ths_index':
+            ths_index_module = import_module("tutake.api.ts.ths_index")
+            clazz = getattr(ths_index_module, "ThsIndex")
+            return clazz(config)
+        if name == 'index_global':
+            index_global_module = import_module("tutake.api.ts.index_global")
+            clazz = getattr(index_global_module, "IndexGlobal")
             return clazz(config)
         else:
             return None

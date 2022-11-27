@@ -58,7 +58,7 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "index_daily", config)
         TuShareBase.__init__(self, "index_daily", config, 5000)
         self.dao = DAO(config)

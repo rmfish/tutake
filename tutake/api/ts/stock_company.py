@@ -65,7 +65,7 @@ class StockCompany(BaseDao, TuShareBase, DataProcess):
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock_company', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)
         self.dao = DAO(config)

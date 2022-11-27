@@ -12,7 +12,7 @@ class TushareQuery:
         if token != '':
             self.tushare = tushare.pro_api(token)
         self.config = config
-        self.dao = DAO(config, True)
+        self.dao = DAO(config)
 
     def query(self, api_name, fields='', **kwargs):
         api = self.dao.__getattr__(api_name)

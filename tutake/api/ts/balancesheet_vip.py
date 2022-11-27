@@ -234,7 +234,7 @@ class BalancesheetVip(BaseDao, TuShareBase, DataProcess):
             "oth_eq_ppbond", "receiv_financing", "use_right_assets", "lease_liab", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip',
-                         query_fields, entity_fields)
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "balancesheet_vip", config)
         TuShareBase.__init__(self, "balancesheet_vip", config, 5000)
         self.dao = DAO(config)

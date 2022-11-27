@@ -10,7 +10,7 @@ def default_cron_express_ext(self) -> str:
 
 
 def default_order_by_ext(self) -> str:
-    return "trade_date desc,ts_code"
+    return "trade_date,ts_code"
 
 
 def default_limit_ext(self):

@@ -58,7 +58,7 @@ class Monthly(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareMonthly, 'tushare_monthly', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "monthly", config)
         TuShareBase.__init__(self, "monthly", config, 600)
         self.dao = DAO(config)

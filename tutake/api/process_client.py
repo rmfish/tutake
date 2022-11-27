@@ -155,4 +155,4 @@ if __name__ == "__main__":
     # print(dao.shibor(start_date='20180101', end_date='20181101'))
 
     task = task_api(TutakeConfig(project_root()))
-    task.start(True)
+    task.start()

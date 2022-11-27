@@ -53,19 +53,25 @@ class CodeGenerator(object):
                 logger.error("Exp in render code {} {}".format(file_name, err))
 
     def _load_api_config(self, api):
-        config_file = "%s/config/%s.json" % (self.output_dir, api['name'])
-        if os.path.exists(config_file):
-            f = open(config_file)
-            data = json.load(f)
-            return {**api, **data}
-        else:
-            return api
+        if api:
+            config_file = "%s/config/%s.json" % (self.output_dir, api['name'])
+            if os.path.exists(config_file):
+                f = open(config_file)
+                data = json.load(f)
+                return {**api, **data}
+            else:
+                return api
 
     def generate_api_code(self, api_id):
         api_tmpl = self.env.get_template('tushare_api.tmpl')
         api_ext_tmpl = self.env.get_template('tushare_api_ext.tmpl')
-        api_config = self._load_api_config(self.api_loader.get_api(api_id))
-        if api_config.get('name'):
+        api = self.api_loader.get_api(api_id)
+        if not api:
+            print("Api is not exist.{}".format(api_id))
+            return None
+
+        api_config = self._load_api_config(api)
+        if api_config and api_config.get('name'):
             print("Render code {} {}.py".format(api_id, api_config.get('name')))
             api_config['path'] = '-'.join(tups[1] for tups in api_config['path'])
             api_config['table_name'] = "tushare_{}".format(api_config.get("name"))
@@ -152,19 +158,17 @@ if __name__ == '__main__':
     #         api_params.append(generator.generate_api_code(i['id']))
 
     api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
-                 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
-                 'fina_indicator_vip', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-                 'ths_daily', 'ths_member', 'index_global', 'anns', 'trade_cal']
+                 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily',
+                 'ths_member', 'anns', 'trade_cal']
+    index_api = ['index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
+                 'index_global']
     fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
                 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
     api_names.extend(fund_api)
+    api_names.extend(index_api)
     for n in api_names:
         api = generator.api_loader.get_api_by_name(n)
         if api:
             api_params.append(generator.generate_api_code(api['id']))
-
-    api_ids = [94]
-    for i in api_ids:
-        api_params.append(generator.generate_api_code(i))
 
     generator.generate_dao_code(api_params)

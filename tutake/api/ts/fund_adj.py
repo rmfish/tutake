@@ -49,7 +49,7 @@ class FundAdj(BaseDao, TuShareBase, DataProcess):
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "adj_factor", "discount_rate"]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundAdj, 'tushare_fund_adj', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_adj", config)
         TuShareBase.__init__(self, "fund_adj", config, 5000)
         self.dao = DAO(config)

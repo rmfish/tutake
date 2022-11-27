@@ -64,7 +64,7 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
             "vol", "turnover_rate", "total_mv", "float_mv", "pe_ttm", "pb_mrq"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths_daily', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
         self.dao = DAO(config)

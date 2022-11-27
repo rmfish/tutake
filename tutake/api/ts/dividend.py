@@ -66,7 +66,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
             "base_share", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_dividend', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "dividend", config)
         TuShareBase.__init__(self, "dividend", config, 800)
         self.dao = DAO(config)

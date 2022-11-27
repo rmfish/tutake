@@ -239,7 +239,7 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
             "q_profit_yoy", "q_profit_qoq", "q_netprofit_yoy", "q_netprofit_qoq", "equity_yoy", "rd_exp", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
-                         query_fields, entity_fields)
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "fina_indicator_vip", config)
         TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
         self.dao = DAO(config)

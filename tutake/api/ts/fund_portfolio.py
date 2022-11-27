@@ -55,7 +55,7 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
             "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio',
-                         query_fields, entity_fields)
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.dao = DAO(config)

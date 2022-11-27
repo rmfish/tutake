@@ -57,7 +57,7 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
             "total_sell_amt", "total_sell_vol"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "ggt_monthly", config)
         TuShareBase.__init__(self, "ggt_monthly", config, 120)
         self.dao = DAO(config)

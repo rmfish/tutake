@@ -58,7 +58,7 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
             "adj_nav", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_nav", config)
         TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.dao = DAO(config)

@@ -52,7 +52,7 @@ class IndexMember(BaseDao, TuShareBase, DataProcess):
         query_fields = ['index_code', 'is_new', 'ts_code', 'limit', 'offset']
         entity_fields = ["index_code", "index_name", "con_code", "con_name", "in_date", "out_date", "is_new"]
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexMember, 'tushare_index_member', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "index_member", config)
         TuShareBase.__init__(self, "index_member", config, 5000)
         self.dao = DAO(config)

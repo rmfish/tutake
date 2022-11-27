@@ -67,7 +67,7 @@ class FundCompany(BaseDao, TuShareBase, DataProcess):
             "credit_code"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundCompany, 'tushare_fund_company', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_company", config)
         TuShareBase.__init__(self, "fund_company", config, 1500)
         self.dao = DAO(config)

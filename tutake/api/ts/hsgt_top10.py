@@ -59,7 +59,7 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
             "sell"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "hsgt_top10", config)
         TuShareBase.__init__(self, "hsgt_top10", config, 120)
         self.dao = DAO(config)

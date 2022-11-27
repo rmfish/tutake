@@ -71,7 +71,7 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
             "net_mf_amount", "trade_count"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "moneyflow", config)
         TuShareBase.__init__(self, "moneyflow", config, 2000)
         self.dao = DAO(config)

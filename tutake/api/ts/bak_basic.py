@@ -73,7 +73,7 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_bak_basic', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)
         self.dao = DAO(config)

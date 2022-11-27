@@ -179,7 +179,7 @@ class TushareJsonApi(TushareApiInterface):
         self._load_config()
 
     def _load_config(self):
-        config_dir = "{}/tutake/api/tushare/config".format(project_root())
+        config_dir = "{}/tutake/api/ts/config".format(project_root())
         files = []
         for (dirpath, dirnames, filenames) in walk(config_dir):
             files.extend(filenames)
@@ -191,7 +191,7 @@ class TushareJsonApi(TushareApiInterface):
         self.apis = apis
 
     def _write_config(self, config):
-        config_path = "{}/tutake/api/tushare/config/{}.json".format(project_root(), config['name'])
+        config_path = "{}/tutake/api/ts/config/{}.json".format(project_root(), config['name'])
         with open(config_path, "w") as file:
             file.write(json.dumps(OrderedDict(config), indent=4, ensure_ascii=False, sort_keys=True))
 

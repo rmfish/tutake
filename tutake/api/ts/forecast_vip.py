@@ -61,7 +61,7 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_forecast_vip', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "forecast_vip", config)
         TuShareBase.__init__(self, "forecast_vip", config, 5000)
         self.dao = DAO(config)

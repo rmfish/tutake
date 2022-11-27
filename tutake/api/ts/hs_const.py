@@ -50,7 +50,7 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
         query_fields = ['hs_type', 'is_new', 'limit', 'offset']
         entity_fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
         BaseDao.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "hs_const", config)
         TuShareBase.__init__(self, "hs_const", config, 120)
         self.dao = DAO(config)

@@ -61,7 +61,7 @@ class IndexBasic(BaseDao, TuShareBase, DataProcess):
             "list_date", "weight_rule", "desc", "exp_date"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.dao = DAO(config)

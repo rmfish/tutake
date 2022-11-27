@@ -51,7 +51,7 @@ class FundSalesVol(BaseDao, TuShareBase, DataProcess):
         query_fields = ['year', 'quarter', 'name', 'limit', 'offset']
         entity_fields = ["year", "quarter", "inst_name", "fund_scale", "scale", "rank"]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundSalesVol, 'tushare_fund_sales_vol',
-                         query_fields, entity_fields)
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_sales_vol", config)
         TuShareBase.__init__(self, "fund_sales_vol", config, 2000)
         self.dao = DAO(config)

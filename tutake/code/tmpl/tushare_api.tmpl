@@ -14,10 +14,10 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
-from tutake.api.tushare.{{name}}_ext import *
-from tutake.api.tushare.base_dao import BaseDao, Base
-from tutake.api.tushare.dao import DAO
-from tutake.api.tushare.tushare_base import TuShareBase
+from tutake.api.ts.{{name}}_ext import *
+from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
@@ -45,7 +45,7 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
 
         query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
-        BaseDao.__init__(self, self.engine, session_factory, {{entity_name}}, '{{table_name}}', query_fields, entity_fields)
+        BaseDao.__init__(self, self.engine, session_factory, {{entity_name}}, '{{table_name}}', query_fields, entity_fields, config)
         DataProcess.__init__(self,"{{name}}", config)
         TuShareBase.__init__(self,"{{name}}", config, {{integral_required or 120}})
         self.dao = DAO(config)

@@ -164,7 +164,7 @@ class IncomeVip(BaseDao, TuShareBase, DataProcess):
             "amodcost_fin_assets", "update_flag"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_income_vip', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "income_vip", config)
         TuShareBase.__init__(self, "income_vip", config, 5000)
         self.dao = DAO(config)

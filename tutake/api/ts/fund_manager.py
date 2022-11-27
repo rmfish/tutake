@@ -58,7 +58,7 @@ class FundManager(BaseDao, TuShareBase, DataProcess):
             "resume"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareFundManager, 'tushare_fund_manager', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "fund_manager", config)
         TuShareBase.__init__(self, "fund_manager", config, 5000)
         self.dao = DAO(config)

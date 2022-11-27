@@ -58,7 +58,7 @@ class Weekly(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
         BaseDao.__init__(self, self.engine, session_factory, TushareWeekly, 'tushare_weekly', query_fields,
-                         entity_fields)
+                         entity_fields, config)
         DataProcess.__init__(self, "weekly", config)
         TuShareBase.__init__(self, "weekly", config, 600)
         self.dao = DAO(config)

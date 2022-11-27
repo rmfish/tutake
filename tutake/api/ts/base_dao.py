@@ -6,12 +6,15 @@ import pandas as pd
 from sqlalchemy import text
 from sqlalchemy.orm import load_only, declarative_base
 
+from tutake.utils.config import TutakeConfig
+
 Base = declarative_base()
 
 
 class BaseDao(object):
 
-    def __init__(self, engine, session_factory, entities, table_name, query_fields, entity_fields):
+    def __init__(self, engine, session_factory, entities, table_name, query_fields, entity_fields,
+                 config: TutakeConfig):
         self.engine = engine
         self.entities = entities
         self.session_factory = session_factory
@@ -19,6 +22,7 @@ class BaseDao(object):
         self.query_fields = query_fields
         self.entity_fields = entity_fields
         self.logger = logging.getLogger('dao.base.{}'.format(table_name))
+        self.time_order = config.get_config("tutake.query.time_order")
 
     def delete_all(self):
         self.logger.warning("Delete all data of {}".format(self.table_name))
@@ -136,6 +140,26 @@ class BaseDao(object):
             return kwargs.get('offset')
         return None
 
+    def _get_order_by(self):
+        order_by = self.default_order_by()
+        if self.time_order:
+            time_range = self.default_time_range()
+            if time_range:
+                time_column = time_range[2]
+                if order_by:
+                    tokens = order_by.split(",")
+                    n_order_by = []
+                    for t in tokens:
+                        if t.startswith(time_column.name):
+                            n_order_by.append(f"{time_column.name} {self.time_order}")
+                        else:
+                            n_order_by.append(t)
+                    return ",".join(n_order_by)
+                else:
+                    return f"{time_column.name} {self.time_order}"
+        else:
+            return order_by
+
     def query(self, fields='', **kwargs):
         start = time.time()
         filter_criterion = self._get_time_criterion_filter(**kwargs)
@@ -152,7 +176,7 @@ class BaseDao(object):
         if query_fields:
             query = query.with_entities(*query_fields)
 
-        ordr_by = self.default_order_by()
+        ordr_by = self._get_order_by()
         if ordr_by:
             query = query.order_by(text(ordr_by))
 
