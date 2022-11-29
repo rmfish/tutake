@@ -74,10 +74,12 @@ class DotConfig(dict):
 
 
 TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
+TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
 TUSHARE_TOKEN_KEY = "tushare.token"
 TUSHARE_TOKENS_KEY = "tushare.tokens"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
 TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"
+TUSHARE_META_DIR_KEY = "tushare.meta.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
 TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
@@ -98,13 +100,11 @@ class TutakeConfig(object):
         确认必须的配置项
         :return:
         """
-        data_driver_url = self.get_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
-        meta_driver_url = self.get_config(TUSHARE_META_DRIVER_URL_KEY)
+        data_dir = self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data')
+        self.set_tutake_data_dir(data_dir)
 
-        if not data_driver_url:
-            self.set_tutake_data_dir(self._get_default_data_dir('data'))
-        if not meta_driver_url:
-            self.set_tutake_data_dir(self._get_default_data_dir('meta'))
+        meta_dir = self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta')
+        self.set_tutake_meta_dir(meta_dir)
 
         self.logger_config_file = self._init_logger_config()
         if self.logger_config_file:
@@ -178,6 +178,7 @@ class TutakeConfig(object):
             path = "%s/%s" % (path, sub_dir)
         if not os.path.exists(path):
             os.makedirs(path)
+        path = os.path.expanduser(path)
         return f'sqlite:///{path}'
 
     @staticmethod
@@ -200,7 +201,7 @@ class TutakeConfig(object):
             tokens = self.get_config(TUSHARE_TOKENS_KEY)
             if tokens:
                 return tokens[next(iter(tokens))]
-        return DEFAULT_TUSHARE_TOKEN
+        return token
 
     def _init_logger_config(self):
         logger_config_path = self.get_config(TUTAKE_LOGGING_CONFIG_KEY)

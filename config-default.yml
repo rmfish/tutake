@@ -1,7 +1,7 @@
 #执行时需要将这个文件调整为 config.yml
 tutake:
   data:
-    driver_url: sqlite:////Users/xxx/tutake/data  #单独指定数据的目录
+    dir: ~/.tutake/data  #单独指定数据的目录
   process:
     thread_cnt: 10
   logging:
