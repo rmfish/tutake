@@ -23,11 +23,12 @@ class DAO(object):
         return [
             'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
             'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
-            'stk_managers', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
-            'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily', 'ths_member',
-            'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
-            'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily',
-            'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global'
+            'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
+            'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip',
+            'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager',
+            'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily',
+            'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
+            'index_global'
         ]
 
     def instance_from_name(self, name, config):
@@ -99,6 +100,10 @@ class DAO(object):
         if name == 'stk_managers':
             stk_managers_module = import_module("tutake.api.ts.stk_managers")
             clazz = getattr(stk_managers_module, "StkManagers")
+            return clazz(config)
+        if name == 'daily_basic':
+            daily_basic_module = import_module("tutake.api.ts.daily_basic")
+            clazz = getattr(daily_basic_module, "DailyBasic")
             return clazz(config)
         if name == 'ggt_daily':
             ggt_daily_module = import_module("tutake.api.ts.ggt_daily")

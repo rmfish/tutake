@@ -157,7 +157,7 @@ if __name__ == '__main__':
     #     for i in apis:
     #         api_params.append(generator.generate_api_code(i['id']))
 
-    api_names = ['ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
+    api_names = ['daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip',
                  'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily',
                  'ths_member', 'anns', 'trade_cal']
     index_api = ['index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
