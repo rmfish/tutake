@@ -37,7 +37,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return start_end_step_params(self, process_type, '19901215', step=3)
+    return start_end_step_params(self, process_type, '19901215', step=2)
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):
