@@ -27,8 +27,8 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     :return: list(dict)
     """
     return start_end_step_params(self, process_type, '19901215', step=3)
-    # return daily_params(self, process_type, lambda x: self.dao.stock_basic.count(),
-    #                     lambda x: self.dao.stock_basic.column_data(['ts_code', 'list_date']))
+    # return daily_params(self, process_type, lambda x: self.api.stock_basic.count(),
+    #                     lambda x: self.api.stock_basic.column_data(['ts_code', 'list_date']))
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

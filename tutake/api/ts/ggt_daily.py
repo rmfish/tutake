@@ -16,7 +16,7 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ggt_daily_ext import *
 from tutake.api.ts.base_dao import BaseDao, Base
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
@@ -53,7 +53,7 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
                          entity_fields, config)
         DataProcess.__init__(self, "ggt_daily", config)
         TuShareBase.__init__(self, "ggt_daily", config, 5000)
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
 
     def ggt_daily(self, fields='', **kwargs):
         """

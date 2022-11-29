@@ -104,8 +104,8 @@ class CodeGenerator(object):
             api['exist_primary_key'] = True
 
     def generate_dao_code(self, apis):
-        tmpl = self.env.get_template('dao.tmpl')
-        self.render_code("dao", tmpl.render({"apis": apis}))
+        tmpl = self.env.get_template('api.tmpl')
+        self.render_code("tushare_api", tmpl.render({"apis": apis}))
 
     def _generate_config_code(self, apis):
         for api in apis:

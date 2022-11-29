@@ -16,7 +16,7 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ths_daily_ext import *
 from tutake.api.ts.base_dao import BaseDao, Base
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
@@ -67,7 +67,7 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
                          entity_fields, config)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
 
     def ths_daily(self, fields='', **kwargs):
         """

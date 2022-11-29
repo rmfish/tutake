@@ -16,7 +16,7 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_portfolio_ext import *
 from tutake.api.ts.base_dao import BaseDao, Base
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
@@ -58,7 +58,7 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
                          query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
 
     def fund_portfolio(self, fields='', **kwargs):
         """

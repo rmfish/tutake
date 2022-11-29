@@ -134,7 +134,7 @@ class TuShareBase(object):
                 if t >= token_integral:
                     clients.extend([TushareClient(token, t, time.time() - t) for token in tushare_tokens[t]])
             self.client_queue = TushareTokenQueue(clients, self.logger)
-        assert self.t_api is not None or self.client_queue is not None, 'Tushare token is required, pls config it in config.yaml'
+        # assert self.t_api is not None or self.client_queue is not None, 'Tushare token is required, pls config it in config.yaml'
 
     def tushare_query(self, api, fields, **kwargs):
         if self.client_queue:

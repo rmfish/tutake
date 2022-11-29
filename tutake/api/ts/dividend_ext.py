@@ -34,7 +34,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return self.dao.stock_basic.column_data(['ts_code'])
+    return self.api.stock_basic.column_data(['ts_code'])
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

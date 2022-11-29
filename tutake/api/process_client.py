@@ -9,7 +9,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
@@ -25,7 +25,7 @@ def task_api(config: TutakeConfig):
 class TushareProcessTask:
     def __init__(self, config: TutakeConfig):
         self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
         if config.get_config("tutake.scheduler.background", False):
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
         else:
@@ -51,10 +51,10 @@ class TushareProcessTask:
         for i in config_tasks:
             configs = {**configs, **i}
         default_cron = configs.get('default') or "10 0,6,21 * * *"
-        apis = self.dao.all_apis()
+        apis = self.api.all_apis()
         default_schedule = []
         for api in apis:
-            api_instance = self.dao.instance_from_name(api, self.config)
+            api_instance = self.api.instance_from_name(api, self.config)
             cron = ""
             if api_instance:
                 cron = api_instance.default_cron_express()
@@ -73,7 +73,7 @@ class TushareProcessTask:
 
     def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
         def __process(_job_id, __name):
-            api = self.dao.__getattr__(__name)
+            api = self.api.__getattr__(__name)
             if api is not None:
                 report = api.process(process_type)
                 self._finish_task_report(_job_id, report)
@@ -135,11 +135,11 @@ class TushareProcessTask:
 
 class TushareProcess:
     def __init__(self, config: TutakeConfig):
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
         self.config = config
 
     def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
-        api = self.dao.__getattr__(api_name)
+        api = self.api.__getattr__(api_name)
         if api is not None:
             return api.process(process_type)
         else:

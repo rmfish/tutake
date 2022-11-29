@@ -35,7 +35,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return self.dao.index_basic.column_data(['ts_code', 'list_date'],
+    return self.api.index_basic.column_data(['ts_code', 'list_date'],
                                             TushareIndexBasic.market.not_in(['MSCI', 'CNI']),
                                             TushareIndexBasic.list_date.is_not(None))
 

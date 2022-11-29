@@ -16,7 +16,7 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.income_vip_ext import *
 from tutake.api.ts.base_dao import BaseDao, Base
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
@@ -167,7 +167,7 @@ class IncomeVip(BaseDao, TuShareBase, DataProcess):
                          entity_fields, config)
         DataProcess.__init__(self, "income_vip", config)
         TuShareBase.__init__(self, "income_vip", config, 5000)
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
 
     def income_vip(self, fields='', **kwargs):
         """

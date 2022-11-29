@@ -2,20 +2,20 @@ from functools import partial
 
 import tushare
 
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
 
 
 class TushareQuery:
     def __init__(self, config):
         token = config.get_tushare_token()
-        if token != '':
+        if token and token != '':
             self.tushare = tushare.pro_api(token)
         self.config = config
-        self.dao = DAO(config)
+        self.api = TushareAPI(config)
 
     def query(self, api_name, fields='', **kwargs):
-        api = self.dao.__getattr__(api_name)
+        api = self.api.__getattr__(api_name)
         if api is None:
             return self.fail_over(api_name, fields, **kwargs)
         method = getattr(api, api_name)
@@ -46,7 +46,8 @@ def pro_bar(api: TushareQuery, ts_code='', start_date='', end_date='', freq='D',
 
 
 if __name__ == "__main__":
-    api = pro_api("aec595052cb10051350a6a164f41b344b922f0b3ee206efdec2e0082")
-    print(api.stock_basic(fields='name,ts_code'))
-    df = pro_bar(api, ts_code='000001.SZ', adj='hfq', start_date='20180101', end_date='20181011')
-    print(df)
+    api = pro_api(data_dir='~/Library/Mobile Documents/com~apple~CloudDocs/Database/5_Data/Quant/data')
+    print(api.daily_full(ts_code='000002.SZ'))
+    print(api.daily_basic(ts_code='000002.SZ'))
+    # df = pro_bar(api, ts_code='000001.SZ', adj='hfq', start_date='20180101', end_date='20181011')
+    # print(df)

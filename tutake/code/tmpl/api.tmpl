@@ -1,7 +1,7 @@
 from importlib import import_module
 
 
-class DAO(object):
+class TushareAPI(object):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -20,7 +20,13 @@ class DAO(object):
         return self.instances.get(name)
 
     def all_apis(self):
-        return [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
+        return [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}].extend(['daily_full'])
+
+    def _instance_from_name(self, name, config):
+        if name == 'daily_full':
+            adj_factor_module = import_module("tutake.api.ts.daily_full")
+            clazz = getattr(adj_factor_module, "DailyFull")
+            return clazz(config)
 
     def instance_from_name(self, name, config):
 {% for api in apis %}
@@ -29,6 +35,10 @@ class DAO(object):
             clazz = getattr({{api.name}}_module, "{{api.title_name}}")
             return clazz(config){% endfor %}
         else:
-            return None
+            instance = self._instance_from_name(name, config)
+            if instance:
+                return instance
+            else:
+                return None
 
 

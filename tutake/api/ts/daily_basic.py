@@ -16,7 +16,7 @@ from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.daily_basic_ext import *
 from tutake.api.ts.base_dao import BaseDao, Base
-from tutake.api.ts.dao import DAO
+from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
@@ -70,8 +70,8 @@ class DailyBasic(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic', query_fields,
                          entity_fields, config)
         DataProcess.__init__(self, "daily_basic", config)
-        TuShareBase.__init__(self, "daily_basic", config, 5000)
-        self.dao = DAO(config)
+        TuShareBase.__init__(self, "daily_basic", config, 2000)
+        self.api = TushareAPI(config)
 
     def daily_basic(self, fields='', **kwargs):
         """

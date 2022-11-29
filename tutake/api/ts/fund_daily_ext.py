@@ -37,8 +37,8 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return daily_params(self, process_type, lambda x: self.dao.fund_basic.count(condition='list_date is not null'),
-                        lambda x: [i for i in self.dao.fund_basic.column_data(['ts_code', 'list_date']) if
+    return daily_params(self, process_type, lambda x: self.api.fund_basic.count(condition='list_date is not null'),
+                        lambda x: [i for i in self.api.fund_basic.column_data(['ts_code', 'list_date']) if
                                    i.get("list_date")])
 
 
