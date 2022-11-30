@@ -24,18 +24,18 @@ clone 代码后复制配置文件 `config-default.yml` -> `config.yml`
 需要配置两个参数：
 
 ```yaml
-#执行时需要将这个文件调整为 config.yml
+#执行时需要将这个文件复制为 config.yml
 tutake:
   data:
-    driver_url: sqlite:////Users/xxx/tutake/data  # sqlite的driver的地址，制定到存放下载数据的目录，注意不同操作系统的/可能会有差异
+    dir: ~/.tutake/data  #单独指定数据的目录
   process:
     thread_cnt: 10
   scheduler:
     timezone: Asia/Shanghai
     background: False
     tasks:
-      - default: 10 0 * * *   #定时任务执行脚本
-      - stock_basic: 0 0 * * * 
+      - default: 10 0,11,21 * * *
+      - stock_basic: 0 0,11,21 * * *
 
 tushare:
   token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
@@ -229,7 +229,7 @@ def meta_query(self):
 目前调试的接口是按照个人需要生成的，还有很多接口没有生成，如果有需要的可以留言，或者阅读代码自行添加。目前的接口基本覆盖了股票、基金、指数、期货相关的接口
 
 ## 关于数据
-基本一个接口会有一个数据文件，但是数据文件会比较大，如果有人想直接要这个数据，也可以加Star留言
+基本一个接口会有一个数据文件，但是数据文件会比较大，如果有人想直接要这个数据，也可以加Star留言，后续数据稳定了，会发布历史数据供大家一次性下载。同时也计划开发定期增量数据更新的功能(日/周/月/季度/年)，解决大家账号低权限无法下载的问题。
 
 ![data.png](data.png)
 

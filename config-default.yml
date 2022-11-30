@@ -14,4 +14,4 @@ tutake:
       - stock_basic: 0 0,11,21 * * *
 
 tushare:
-  token: #tushare api 的token
+  token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
