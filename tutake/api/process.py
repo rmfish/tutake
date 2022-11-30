@@ -16,6 +16,9 @@ class DataProcess:
     def name(self):
         return self.name
 
+    def process(self, process_type: ProcessType = ProcessType.INCREASE):
+        pass
+
     def default_cron_express(self) -> str:
         return ""
 

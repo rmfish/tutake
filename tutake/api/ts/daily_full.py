@@ -1,11 +1,13 @@
 import pandas as pd
 
+from tutake.api.process import DataProcess
 from tutake.api.ts.tushare_api import TushareAPI
 
 
-class DailyFull(object):
+class DailyFull(DataProcess):
     def __init__(self, config):
         self.api = TushareAPI(config)
+        DataProcess.__init__(self, "daily_full", config)
 
     def daily_full(self, fields='', **kwargs):
         if not kwargs["ts_code"]:

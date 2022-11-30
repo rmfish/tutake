@@ -20,7 +20,9 @@ class TushareAPI(object):
         return self.instances.get(name)
 
     def all_apis(self):
-        return [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}].extend(['daily_full'])
+        apis = [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
+        apis.extend(['daily_full'])
+        return apis
 
     def _instance_from_name(self, name, config):
         if name == 'daily_full':

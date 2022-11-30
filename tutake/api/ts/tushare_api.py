@@ -20,7 +20,7 @@ class TushareAPI(object):
         return self.instances.get(name)
 
     def all_apis(self):
-        return [
+        apis = [
             'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
             'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
             'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
@@ -29,7 +29,9 @@ class TushareAPI(object):
             'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily',
             'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
             'index_global'
-        ].extend(['daily_full'])
+        ]
+        apis.extend(['daily_full'])
+        return apis
 
     def _instance_from_name(self, name, config):
         if name == 'daily_full':
