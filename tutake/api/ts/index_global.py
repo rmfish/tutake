@@ -65,6 +65,57 @@ class IndexGlobal(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_global", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS指数代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日"
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": "开盘点位"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘点位"
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": "最高点位"
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": "最低点位"
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": "昨日收盘点"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "涨跌点位"
+        }, {
+            "name": "pct_chg",
+            "type": "Float",
+            "comment": "涨跌幅"
+        }, {
+            "name": "swing",
+            "type": "Float",
+            "comment": "振幅"
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": "成交量"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "成交额"
+        }]
+
     def index_global(self, fields='', **kwargs):
         """
         获取国际主要指数日线行情

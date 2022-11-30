@@ -57,6 +57,37 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "ggt_ss",
+            "type": "String",
+            "comment": "港股通（上海）"
+        }, {
+            "name": "ggt_sz",
+            "type": "String",
+            "comment": "港股通（深圳）"
+        }, {
+            "name": "hgt",
+            "type": "String",
+            "comment": "沪股通"
+        }, {
+            "name": "sgt",
+            "type": "String",
+            "comment": "深股通"
+        }, {
+            "name": "north_money",
+            "type": "String",
+            "comment": "北向资金"
+        }, {
+            "name": "south_money",
+            "type": "String",
+            "comment": "南向资金"
+        }]
+
     def moneyflow_hsgt(self, fields='', **kwargs):
         """
         获取沪股通、深股通、港股通每日资金流向数据

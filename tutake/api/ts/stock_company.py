@@ -70,6 +70,77 @@ class StockCompany(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "stock_company", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "exchange",
+            "type": "String",
+            "comment": "交易所代码SSE上交所 SZSE深交所"
+        }, {
+            "name": "chairman",
+            "type": "String",
+            "comment": "法人代表"
+        }, {
+            "name": "manager",
+            "type": "String",
+            "comment": "总经理"
+        }, {
+            "name": "secretary",
+            "type": "String",
+            "comment": "董秘"
+        }, {
+            "name": "reg_capital",
+            "type": "Float",
+            "comment": "注册资本"
+        }, {
+            "name": "setup_date",
+            "type": "String",
+            "comment": "注册日期"
+        }, {
+            "name": "province",
+            "type": "String",
+            "comment": "所在省份"
+        }, {
+            "name": "city",
+            "type": "String",
+            "comment": "所在城市"
+        }, {
+            "name": "introduction",
+            "type": "String",
+            "comment": "公司介绍"
+        }, {
+            "name": "website",
+            "type": "String",
+            "comment": "公司主页"
+        }, {
+            "name": "email",
+            "type": "String",
+            "comment": "电子邮件"
+        }, {
+            "name": "office",
+            "type": "String",
+            "comment": "办公室"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "business_scope",
+            "type": "String",
+            "comment": "经营范围"
+        }, {
+            "name": "employees",
+            "type": "Integer",
+            "comment": "员工人数"
+        }, {
+            "name": "main_business",
+            "type": "String",
+            "comment": "主要业务及产品"
+        }]
+
     def stock_company(self, fields='', **kwargs):
         """
         获取上市公司基础信息

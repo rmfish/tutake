@@ -64,6 +64,53 @@ class HsgtTop10(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "hsgt_top10", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "股票名称"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘价"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "涨跌幅"
+        }, {
+            "name": "rank",
+            "type": "String",
+            "comment": "资金排名"
+        }, {
+            "name": "market_type",
+            "type": "String",
+            "comment": "市场类型（1：沪市 3：深市）"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "成交金额"
+        }, {
+            "name": "net_amount",
+            "type": "Float",
+            "comment": "净成交金额"
+        }, {
+            "name": "buy",
+            "type": "Float",
+            "comment": "买入金额"
+        }, {
+            "name": "sell",
+            "type": "Float",
+            "comment": "卖出金额"
+        }]
+
     def hsgt_top10(self, fields='', **kwargs):
         """
         获取沪股通、深股通每日前十大成交股数据

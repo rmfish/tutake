@@ -55,6 +55,29 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "hs_const", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "hs_type",
+            "type": "String",
+            "comment": "沪深港通类型SH沪SZ深"
+        }, {
+            "name": "in_date",
+            "type": "String",
+            "comment": "纳入日期"
+        }, {
+            "name": "out_date",
+            "type": "String",
+            "comment": "剔除日期"
+        }, {
+            "name": "is_new",
+            "type": "String",
+            "comment": "是否最新"
+        }]
+
     def hs_const(self, fields='', **kwargs):
         """
         获取沪股通、深股通成分数据

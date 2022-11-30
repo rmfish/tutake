@@ -65,6 +65,57 @@ class NewShare(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "new_share", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS股票代码"
+        }, {
+            "name": "sub_code",
+            "type": "String",
+            "comment": "申购代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "名称"
+        }, {
+            "name": "ipo_date",
+            "type": "String",
+            "comment": "上网发行日期"
+        }, {
+            "name": "issue_date",
+            "type": "String",
+            "comment": "上市日期"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "发行总量（万股）"
+        }, {
+            "name": "market_amount",
+            "type": "Float",
+            "comment": "上网发行总量（万股）"
+        }, {
+            "name": "price",
+            "type": "Float",
+            "comment": "发行价格"
+        }, {
+            "name": "pe",
+            "type": "Float",
+            "comment": "市盈率"
+        }, {
+            "name": "limit_amount",
+            "type": "Float",
+            "comment": "个人申购上限（万股）"
+        }, {
+            "name": "funds",
+            "type": "Float",
+            "comment": "募集资金（亿元）"
+        }, {
+            "name": "ballot",
+            "type": "Float",
+            "comment": "中签率"
+        }]
+
     def new_share(self, fields='', **kwargs):
         """
         获取新股上市列表数据,每日19点更新

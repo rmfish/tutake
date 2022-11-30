@@ -57,6 +57,37 @@ class StkRewards(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "stk_rewards", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS股票代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "报告期"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "姓名"
+        }, {
+            "name": "title",
+            "type": "String",
+            "comment": "职务"
+        }, {
+            "name": "reward",
+            "type": "Float",
+            "comment": "报酬"
+        }, {
+            "name": "hold_vol",
+            "type": "Float",
+            "comment": "持股数"
+        }]
+
     def stk_rewards(self, fields='', **kwargs):
         """
         获取上市公司管理层薪酬和持股

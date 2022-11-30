@@ -63,6 +63,53 @@ class FundDaily(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_daily", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": "昨收盘价(元)"
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": "开盘价(元)"
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": "最高价(元)"
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": "最低价(元)"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘价(元)"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "涨跌(元)"
+        }, {
+            "name": "pct_chg",
+            "type": "Float",
+            "comment": "涨跌幅(%)"
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": "成交量(手)"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "成交金额(千元)"
+        }]
+
     def fund_daily(self, fields='', **kwargs):
         """
         获取场内基金日线行情，类似股票日行情

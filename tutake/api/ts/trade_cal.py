@@ -54,6 +54,25 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "trade_cal", config, 600)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "exchange",
+            "type": "String",
+            "comment": "交易所 SSE上交所 SZSE深交所"
+        }, {
+            "name": "cal_date",
+            "type": "String",
+            "comment": "日历日期"
+        }, {
+            "name": "is_open",
+            "type": "String",
+            "comment": "是否交易 0休市 1交易"
+        }, {
+            "name": "pretrade_date",
+            "type": "String",
+            "comment": "上一个交易日"
+        }]
+
     def trade_cal(self, fields='', **kwargs):
         """
         获取各大期货交易所交易日历数据，数据开始月1996年1月

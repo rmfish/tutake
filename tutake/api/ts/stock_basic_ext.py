@@ -26,7 +26,7 @@ def tushare_parameters_ext(self, process_type: ProcessType):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return [{}]
+    return [{"list_status": "L"}, {"list_status": "D"}, {"list_status": "P"}]
 
 
 def param_loop_process_ext(self, process_type: ProcessType, **params):

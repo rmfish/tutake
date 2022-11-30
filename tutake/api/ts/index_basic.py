@@ -66,6 +66,61 @@ class IndexBasic(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "简称"
+        }, {
+            "name": "fullname",
+            "type": "String",
+            "comment": "指数全称"
+        }, {
+            "name": "market",
+            "type": "String",
+            "comment": "市场"
+        }, {
+            "name": "publisher",
+            "type": "String",
+            "comment": "发布方"
+        }, {
+            "name": "index_type",
+            "type": "String",
+            "comment": "指数风格"
+        }, {
+            "name": "category",
+            "type": "String",
+            "comment": "指数类别"
+        }, {
+            "name": "base_date",
+            "type": "String",
+            "comment": "基期"
+        }, {
+            "name": "base_point",
+            "type": "Float",
+            "comment": "基点"
+        }, {
+            "name": "list_date",
+            "type": "String",
+            "comment": "发布日期"
+        }, {
+            "name": "weight_rule",
+            "type": "String",
+            "comment": "加权方式"
+        }, {
+            "name": "desc",
+            "type": "String",
+            "comment": "描述"
+        }, {
+            "name": "exp_date",
+            "type": "String",
+            "comment": "终止日期"
+        }]
+
     def index_basic(self, fields='', **kwargs):
         """
         获取指数基础信息。

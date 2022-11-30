@@ -66,6 +66,61 @@ class ForecastVip(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "forecast_vip", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS股票代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "报告期"
+        }, {
+            "name": "type",
+            "type": "String",
+            "comment": "业绩预告类型"
+        }, {
+            "name": "p_change_min",
+            "type": "Float",
+            "comment": "预告净利润变动幅度下限（%）"
+        }, {
+            "name": "p_change_max",
+            "type": "Float",
+            "comment": "预告净利润变动幅度上限（%）"
+        }, {
+            "name": "net_profit_min",
+            "type": "Float",
+            "comment": "预告净利润下限（万元）"
+        }, {
+            "name": "net_profit_max",
+            "type": "Float",
+            "comment": "预告净利润上限（万元）"
+        }, {
+            "name": "last_parent_net",
+            "type": "Float",
+            "comment": "上年同期归属母公司净利润"
+        }, {
+            "name": "notice_times",
+            "type": "Integer",
+            "comment": "公布次数"
+        }, {
+            "name": "first_ann_date",
+            "type": "String",
+            "comment": "首次公告日"
+        }, {
+            "name": "summary",
+            "type": "String",
+            "comment": "业绩预告摘要"
+        }, {
+            "name": "change_reason",
+            "type": "String",
+            "comment": "业绩变动原因"
+        }]
+
     def forecast_vip(self, fields='', **kwargs):
         """
         获取业绩预告数据

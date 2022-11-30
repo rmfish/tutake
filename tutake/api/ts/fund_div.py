@@ -71,6 +71,77 @@ class FundDiv(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_div", config, 800)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "imp_anndate",
+            "type": "String",
+            "comment": "分红实施公告日"
+        }, {
+            "name": "base_date",
+            "type": "String",
+            "comment": "分配收益基准日"
+        }, {
+            "name": "div_proc",
+            "type": "String",
+            "comment": "方案进度"
+        }, {
+            "name": "record_date",
+            "type": "String",
+            "comment": "权益登记日"
+        }, {
+            "name": "ex_date",
+            "type": "String",
+            "comment": "除息日"
+        }, {
+            "name": "pay_date",
+            "type": "String",
+            "comment": "派息日"
+        }, {
+            "name": "earpay_date",
+            "type": "String",
+            "comment": "收益支付日"
+        }, {
+            "name": "net_ex_date",
+            "type": "String",
+            "comment": "净值除权日"
+        }, {
+            "name": "div_cash",
+            "type": "Float",
+            "comment": "每股派息(元)"
+        }, {
+            "name": "base_unit",
+            "type": "Float",
+            "comment": "基准基金份额(万份)"
+        }, {
+            "name": "ear_distr",
+            "type": "Float",
+            "comment": "可分配收益(元)"
+        }, {
+            "name": "ear_amount",
+            "type": "Float",
+            "comment": "收益分配金额(元)"
+        }, {
+            "name": "account_date",
+            "type": "String",
+            "comment": "红利再投资到账日"
+        }, {
+            "name": "base_year",
+            "type": "String",
+            "comment": "份额基准年度"
+        }, {
+            "name": "update_flag",
+            "type": "String",
+            "comment": "更新标识"
+        }]
+
     def fund_div(self, fields='', **kwargs):
         """
         获取公募基金分红数据

@@ -69,6 +69,73 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ths_daily", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS指数代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘点位"
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": "开盘点位"
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": "最高点位"
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": "最低点位"
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": "昨日收盘点"
+        }, {
+            "name": "avg_price",
+            "type": "Float",
+            "comment": "平均点位"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "涨跌点位"
+        }, {
+            "name": "pct_change",
+            "type": "Float",
+            "comment": "涨跌幅"
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": "成交量"
+        }, {
+            "name": "turnover_rate",
+            "type": "Float",
+            "comment": "换手率"
+        }, {
+            "name": "total_mv",
+            "type": "Float",
+            "comment": "总市值"
+        }, {
+            "name": "float_mv",
+            "type": "Float",
+            "comment": "流通市值"
+        }, {
+            "name": "pe_ttm",
+            "type": "Float",
+            "comment": "PE TTM"
+        }, {
+            "name": "pb_mrq",
+            "type": "Float",
+            "comment": "PB MRQ"
+        }]
+
     def ths_daily(self, fields='', **kwargs):
         """
         获取同花顺板块指数行情。

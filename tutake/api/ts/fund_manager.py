@@ -63,6 +63,49 @@ class FundManager(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_manager", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "基金代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "基金经理姓名"
+        }, {
+            "name": "gender",
+            "type": "String",
+            "comment": "性别"
+        }, {
+            "name": "birth_year",
+            "type": "String",
+            "comment": "出生年份"
+        }, {
+            "name": "edu",
+            "type": "String",
+            "comment": "学历"
+        }, {
+            "name": "nationality",
+            "type": "String",
+            "comment": "国籍"
+        }, {
+            "name": "begin_date",
+            "type": "String",
+            "comment": "任职日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "历任日期"
+        }, {
+            "name": "resume",
+            "type": "String",
+            "comment": "简历"
+        }]
+
     def fund_manager(self, fields='', **kwargs):
         """
         获取公募基金经理数据，包括基金经理简历等数据

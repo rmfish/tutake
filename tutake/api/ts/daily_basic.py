@@ -73,6 +73,85 @@ class DailyBasic(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "daily_basic", config, 2000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS股票代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "当日收盘价"
+        }, {
+            "name": "turnover_rate",
+            "type": "Float",
+            "comment": "换手率"
+        }, {
+            "name": "turnover_rate_f",
+            "type": "Float",
+            "comment": "换手率(自由流通股)"
+        }, {
+            "name": "volume_ratio",
+            "type": "Float",
+            "comment": "量比"
+        }, {
+            "name": "pe",
+            "type": "Float",
+            "comment": "市盈率（总市值/净利润）"
+        }, {
+            "name": "pe_ttm",
+            "type": "Float",
+            "comment": "市盈率（TTM）"
+        }, {
+            "name": "pb",
+            "type": "Float",
+            "comment": "市净率（总市值/净资产）"
+        }, {
+            "name": "ps",
+            "type": "Float",
+            "comment": "市销率"
+        }, {
+            "name": "ps_ttm",
+            "type": "Float",
+            "comment": "市销率（TTM）"
+        }, {
+            "name": "dv_ratio",
+            "type": "Float",
+            "comment": "股息率（%）"
+        }, {
+            "name": "dv_ttm",
+            "type": "Float",
+            "comment": "股息率（TTM） （%）"
+        }, {
+            "name": "total_share",
+            "type": "Float",
+            "comment": "总股本"
+        }, {
+            "name": "float_share",
+            "type": "Float",
+            "comment": "流通股本"
+        }, {
+            "name": "free_share",
+            "type": "Float",
+            "comment": "自由流通股本"
+        }, {
+            "name": "total_mv",
+            "type": "Float",
+            "comment": "总市值"
+        }, {
+            "name": "circ_mv",
+            "type": "Float",
+            "comment": "流通市值"
+        }, {
+            "name": "limit_status",
+            "type": "Integer",
+            "comment": "涨跌停状态"
+        }]
+
     def daily_basic(self, fields='', **kwargs):
         """
         交易日每日15点～17点之间,获取全部股票每日重要的基本面指标，可用于选股分析、报表展示等。

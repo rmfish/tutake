@@ -56,6 +56,33 @@ class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_sales_ratio", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "year",
+            "type": "Integer",
+            "comment": "年度"
+        }, {
+            "name": "bank",
+            "type": "Float",
+            "comment": "商业银行（%）"
+        }, {
+            "name": "sec_comp",
+            "type": "Float",
+            "comment": "证券公司（%）"
+        }, {
+            "name": "fund_comp",
+            "type": "Float",
+            "comment": "基金公司直销（%）"
+        }, {
+            "name": "indep_comp",
+            "type": "Float",
+            "comment": "独立基金销售机构（%）"
+        }, {
+            "name": "rests",
+            "type": "Float",
+            "comment": "其他（%）"
+        }]
+
     def fund_sales_ratio(self, fields='', **kwargs):
         """
         获取各渠道公募基金销售保有规模占比数据，年度更新

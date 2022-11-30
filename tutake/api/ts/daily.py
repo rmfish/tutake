@@ -63,6 +63,53 @@ class Daily(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "daily", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": "开盘价"
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": "最高价"
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": "最低价"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘价"
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": "昨收价"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "涨跌额"
+        }, {
+            "name": "pct_chg",
+            "type": "Float",
+            "comment": "涨跌幅"
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": "成交量"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "成交额"
+        }]
+
     def daily(self, fields='', **kwargs):
         """
         交易日每天15点～16点之间入库。本接口是未复权行情，停牌期间不提供数据,获取股票行情数据，或通过通用行情接口获取数据，包含了前后复权数据,全部历史，交易日每日15点～17点之间更新

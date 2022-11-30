@@ -63,6 +63,53 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_daily", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "None"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "None"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "pct_chg",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": "None"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "None"
+        }]
+
     def index_daily(self, fields='', **kwargs):
         """
         指数日线行情,每日15~17点更新

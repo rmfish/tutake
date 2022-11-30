@@ -54,6 +54,25 @@ class FundAdj(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_adj", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "ts基金代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "adj_factor",
+            "type": "Float",
+            "comment": "复权因子"
+        }, {
+            "name": "discount_rate",
+            "type": "Float",
+            "comment": "贴水率（%）"
+        }]
+
     def fund_adj(self, fields='', **kwargs):
         """
         获取基金复权因子，用于计算基金复权行情，每日17点更新

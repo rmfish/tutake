@@ -72,6 +72,81 @@ class FundCompany(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_company", config, 1500)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "name",
+            "type": "String",
+            "comment": "公司名称"
+        }, {
+            "name": "shortname",
+            "type": "String",
+            "comment": "简称"
+        }, {
+            "name": "short_enname",
+            "type": "String",
+            "comment": "英文缩写"
+        }, {
+            "name": "province",
+            "type": "String",
+            "comment": "省份"
+        }, {
+            "name": "city",
+            "type": "String",
+            "comment": "城市"
+        }, {
+            "name": "address",
+            "type": "String",
+            "comment": "注册地址"
+        }, {
+            "name": "phone",
+            "type": "String",
+            "comment": "电话"
+        }, {
+            "name": "office",
+            "type": "String",
+            "comment": "办公地址"
+        }, {
+            "name": "website",
+            "type": "String",
+            "comment": "公司网址"
+        }, {
+            "name": "chairman",
+            "type": "String",
+            "comment": "法人代表"
+        }, {
+            "name": "manager",
+            "type": "String",
+            "comment": "总经理"
+        }, {
+            "name": "reg_capital",
+            "type": "Float",
+            "comment": "注册资本"
+        }, {
+            "name": "setup_date",
+            "type": "String",
+            "comment": "成立日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "公司终止日期"
+        }, {
+            "name": "employees",
+            "type": "Float",
+            "comment": "员工总数"
+        }, {
+            "name": "main_business",
+            "type": "String",
+            "comment": "主要产品及业务"
+        }, {
+            "name": "org_code",
+            "type": "String",
+            "comment": "组织机构代码"
+        }, {
+            "name": "credit_code",
+            "type": "String",
+            "comment": "统一社会信用代码"
+        }]
+
     def fund_company(self, fields='', **kwargs):
         """
         获取公募基金管理人列表

@@ -50,6 +50,9 @@ class {{title_name}}(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self,"{{name}}", config, {{integral_required or 120}})
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{% for output in outputs %}{"name":"{{output.name}}","type":"{{output.data_type|get_sql_type}}","comment":"{{output.desc}}"}{% if not loop.last %},{% endif %}{% endfor %}]
+
     def {{name}}(self, fields='', **kwargs):
         """
         {{desc}}

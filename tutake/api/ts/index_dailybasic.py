@@ -65,6 +65,57 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_dailybasic", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "total_mv",
+            "type": "Float",
+            "comment": "当日总市值"
+        }, {
+            "name": "float_mv",
+            "type": "Float",
+            "comment": "当日流通市值"
+        }, {
+            "name": "total_share",
+            "type": "Float",
+            "comment": "当日总股本"
+        }, {
+            "name": "float_share",
+            "type": "Float",
+            "comment": "当日流通股本"
+        }, {
+            "name": "free_share",
+            "type": "Float",
+            "comment": "当日自由流通股本"
+        }, {
+            "name": "turnover_rate",
+            "type": "Float",
+            "comment": "换手率"
+        }, {
+            "name": "turnover_rate_f",
+            "type": "Float",
+            "comment": "换手率(自由流通股本)"
+        }, {
+            "name": "pe",
+            "type": "Float",
+            "comment": "市盈率"
+        }, {
+            "name": "pe_ttm",
+            "type": "Float",
+            "comment": "市盈率TTM"
+        }, {
+            "name": "pb",
+            "type": "Float",
+            "comment": "市净率"
+        }]
+
     def index_dailybasic(self, fields='', **kwargs):
         """
         大盘指数每日指标，目前只提供上证综指，深证成指，上证50，中证500，中小板指，创业板指的每日指标数据

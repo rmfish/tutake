@@ -67,6 +67,69 @@ class StockBasic(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "stock_basic", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "symbol",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "股票名称"
+        }, {
+            "name": "area",
+            "type": "String",
+            "comment": "地域"
+        }, {
+            "name": "industry",
+            "type": "String",
+            "comment": "所属行业"
+        }, {
+            "name": "fullname",
+            "type": "String",
+            "comment": "股票全称"
+        }, {
+            "name": "enname",
+            "type": "String",
+            "comment": "英文全称"
+        }, {
+            "name": "cnspell",
+            "type": "String",
+            "comment": "拼音缩写"
+        }, {
+            "name": "market",
+            "type": "String",
+            "comment": "市场类型"
+        }, {
+            "name": "exchange",
+            "type": "String",
+            "comment": "交易所代码"
+        }, {
+            "name": "curr_type",
+            "type": "String",
+            "comment": "交易货币"
+        }, {
+            "name": "list_status",
+            "type": "String",
+            "comment": "上市状态 L上市 D退市 P暂停上市"
+        }, {
+            "name": "list_date",
+            "type": "String",
+            "comment": "上市日期"
+        }, {
+            "name": "delist_date",
+            "type": "String",
+            "comment": "退市日期"
+        }, {
+            "name": "is_hs",
+            "type": "String",
+            "comment": "是否沪深港通标的，N否 H沪股通 S深股通"
+        }]
+
     def stock_basic(self, fields='', **kwargs):
         """
         获取基础信息数据，包括股票代码、名称、上市日期、退市日期等

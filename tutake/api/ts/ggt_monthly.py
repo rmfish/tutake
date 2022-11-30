@@ -62,6 +62,45 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ggt_monthly", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "month",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "day_buy_amt",
+            "type": "Float",
+            "comment": "当月日均买入成交金额（亿元）"
+        }, {
+            "name": "day_buy_vol",
+            "type": "Float",
+            "comment": "当月日均买入成交笔数（万笔）"
+        }, {
+            "name": "day_sell_amt",
+            "type": "Float",
+            "comment": "当月日均卖出成交金额（亿元）"
+        }, {
+            "name": "day_sell_vol",
+            "type": "Float",
+            "comment": "当月日均卖出成交笔数（万笔）"
+        }, {
+            "name": "total_buy_amt",
+            "type": "Float",
+            "comment": "总买入成交金额（亿元）"
+        }, {
+            "name": "total_buy_vol",
+            "type": "Float",
+            "comment": "总买入成交笔数（万笔）"
+        }, {
+            "name": "total_sell_amt",
+            "type": "Float",
+            "comment": "总卖出成交金额（亿元）"
+        }, {
+            "name": "total_sell_vol",
+            "type": "Float",
+            "comment": "总卖出成交笔数（万笔）"
+        }]
+
     def ggt_monthly(self, fields='', **kwargs):
         """
         港股通每月成交信息，数据从2014年开始

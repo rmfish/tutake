@@ -27,7 +27,9 @@ class TushareQuery:
         if self.tushare is not None:
             return self.tushare.query(api_name, fields, **kwargs)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str):
+        if name.startswith("_"):
+            return self.api.__getattr__(name[1:])
         return partial(self.query, name)
 
 
@@ -43,11 +45,3 @@ def pro_bar(api: TushareQuery, ts_code='', start_date='', end_date='', freq='D',
     return tushare.pro_bar(ts_code, api, start_date, end_date, freq, asset, exchange, adj, ma, factors, adjfactor,
                            offset,
                            limit, contract_type)
-
-
-if __name__ == "__main__":
-    api = pro_api(data_dir='~/Library/Mobile Documents/com~apple~CloudDocs/Database/5_Data/Quant/data')
-    print(api.daily_full(ts_code='000002.SZ'))
-    print(api.daily_basic(ts_code='000002.SZ'))
-    # df = pro_bar(api, ts_code='000001.SZ', adj='hfq', start_date='20180101', end_date='20181011')
-    # print(df)

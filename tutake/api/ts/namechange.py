@@ -56,6 +56,33 @@ class Namechange(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "namechange", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "证券名称"
+        }, {
+            "name": "start_date",
+            "type": "String",
+            "comment": "开始日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "结束日期"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "change_reason",
+            "type": "String",
+            "comment": "变更原因"
+        }]
+
     def namechange(self, fields='', **kwargs):
         """
         历史名称变更记录

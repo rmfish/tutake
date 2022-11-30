@@ -56,6 +56,33 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ths_index", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "名称"
+        }, {
+            "name": "count",
+            "type": "Integer",
+            "comment": "成分个数"
+        }, {
+            "name": "exchange",
+            "type": "String",
+            "comment": "交易所"
+        }, {
+            "name": "list_date",
+            "type": "String",
+            "comment": "上市日期"
+        }, {
+            "name": "type",
+            "type": "String",
+            "comment": "N概念指数S特色指数"
+        }]
+
     def ths_index(self, fields='', **kwargs):
         """
         获取同花顺板块指数

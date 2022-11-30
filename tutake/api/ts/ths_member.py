@@ -57,6 +57,37 @@ class ThsMember(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ths_member", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "指数代码"
+        }, {
+            "name": "code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "股票名称"
+        }, {
+            "name": "weight",
+            "type": "Float",
+            "comment": "权重"
+        }, {
+            "name": "in_date",
+            "type": "String",
+            "comment": "纳入日期"
+        }, {
+            "name": "out_date",
+            "type": "String",
+            "comment": "剔除日期"
+        }, {
+            "name": "is_new",
+            "type": "String",
+            "comment": "是否最新Y是N否"
+        }]
+
     def ths_member(self, fields='', **kwargs):
         """
         获取同花顺概念板块成分列表

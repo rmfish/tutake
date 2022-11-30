@@ -57,6 +57,37 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_classify", config, 2000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "index_code",
+            "type": "String",
+            "comment": "指数代码"
+        }, {
+            "name": "industry_name",
+            "type": "String",
+            "comment": "行业名称"
+        }, {
+            "name": "level",
+            "type": "String",
+            "comment": "行业名称"
+        }, {
+            "name": "industry_code",
+            "type": "String",
+            "comment": "行业代码"
+        }, {
+            "name": "is_pub",
+            "type": "String",
+            "comment": "是否发布指数"
+        }, {
+            "name": "parent_code",
+            "type": "String",
+            "comment": "父级代码"
+        }, {
+            "name": "src",
+            "type": "String",
+            "comment": "行业分类（SW申万）"
+        }]
+
     def index_classify(self, fields='', **kwargs):
         """
         获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息

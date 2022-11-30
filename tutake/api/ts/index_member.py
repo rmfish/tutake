@@ -57,6 +57,37 @@ class IndexMember(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "index_member", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "index_code",
+            "type": "String",
+            "comment": "指数代码"
+        }, {
+            "name": "index_name",
+            "type": "String",
+            "comment": "指数名称"
+        }, {
+            "name": "con_code",
+            "type": "String",
+            "comment": "成分股票代码"
+        }, {
+            "name": "con_name",
+            "type": "String",
+            "comment": "成分股票名称"
+        }, {
+            "name": "in_date",
+            "type": "String",
+            "comment": "纳入日期"
+        }, {
+            "name": "out_date",
+            "type": "String",
+            "comment": "剔除日期"
+        }, {
+            "name": "is_new",
+            "type": "String",
+            "comment": "是否最新Y是N否"
+        }]
+
     def index_member(self, fields='', **kwargs):
         """
         申万行业成分构成

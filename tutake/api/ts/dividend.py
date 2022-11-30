@@ -71,6 +71,77 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "dividend", config, 800)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "分送年度"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "预案公告日（董事会）"
+        }, {
+            "name": "div_proc",
+            "type": "String",
+            "comment": "实施进度"
+        }, {
+            "name": "stk_div",
+            "type": "Float",
+            "comment": "每股送转"
+        }, {
+            "name": "stk_bo_rate",
+            "type": "Float",
+            "comment": "每股送股比例"
+        }, {
+            "name": "stk_co_rate",
+            "type": "Float",
+            "comment": "每股转增比例"
+        }, {
+            "name": "cash_div",
+            "type": "Float",
+            "comment": "每股分红（税后）"
+        }, {
+            "name": "cash_div_tax",
+            "type": "Float",
+            "comment": "每股分红（税前）"
+        }, {
+            "name": "record_date",
+            "type": "String",
+            "comment": "股权登记日"
+        }, {
+            "name": "ex_date",
+            "type": "String",
+            "comment": "除权除息日"
+        }, {
+            "name": "pay_date",
+            "type": "String",
+            "comment": "派息日"
+        }, {
+            "name": "div_listdate",
+            "type": "String",
+            "comment": "红股上市日"
+        }, {
+            "name": "imp_ann_date",
+            "type": "String",
+            "comment": "实施公告日"
+        }, {
+            "name": "base_date",
+            "type": "String",
+            "comment": "基准日"
+        }, {
+            "name": "base_share",
+            "type": "Float",
+            "comment": "实施基准股本（万）"
+        }, {
+            "name": "update_flag",
+            "type": "String",
+            "comment": "是否变更过（1表示变更）"
+        }]
+
     def dividend(self, fields='', **kwargs):
         """
         分红送股数据

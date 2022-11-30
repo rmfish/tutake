@@ -55,6 +55,29 @@ class GgtDaily(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ggt_daily", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "buy_amount",
+            "type": "Float",
+            "comment": "买入成交金额（亿元）"
+        }, {
+            "name": "buy_volume",
+            "type": "Float",
+            "comment": "买入成交笔数（万笔）"
+        }, {
+            "name": "sell_amount",
+            "type": "Float",
+            "comment": "卖出成交金额（亿元）"
+        }, {
+            "name": "sell_volume",
+            "type": "Float",
+            "comment": "卖出成交笔数（万笔）"
+        }]
+
     def ggt_daily(self, fields='', **kwargs):
         """
         获取港股通每日成交信息，数据从2014年开始

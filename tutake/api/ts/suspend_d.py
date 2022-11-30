@@ -54,6 +54,25 @@ class SuspendD(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "suspend_d", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "停复牌日期"
+        }, {
+            "name": "suspend_timing",
+            "type": "String",
+            "comment": "日内停牌时间段"
+        }, {
+            "name": "suspend_type",
+            "type": "String",
+            "comment": "停复牌类型：S-停牌，R-复牌"
+        }]
+
     def suspend_d(self, fields='', **kwargs):
         """
         每日停复牌信息

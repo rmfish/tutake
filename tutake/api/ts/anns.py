@@ -58,6 +58,41 @@ class Anns(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "anns", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "ann_type",
+            "type": "String",
+            "comment": "公告类型"
+        }, {
+            "name": "title",
+            "type": "String",
+            "comment": "公告标题"
+        }, {
+            "name": "content",
+            "type": "String",
+            "comment": "公告内容"
+        }, {
+            "name": "pub_time",
+            "type": "String",
+            "comment": "公告发布时间"
+        }, {
+            "name": "src_url",
+            "type": "String",
+            "comment": "pdf原文URL"
+        }, {
+            "name": "filepath",
+            "type": "String",
+            "comment": "pdf原文"
+        }]
+
     def anns(self, fields='', **kwargs):
         """
         获取上市公司公告数据及原文文本，数据从2000年开始。

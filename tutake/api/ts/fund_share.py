@@ -56,6 +56,33 @@ class FundShare(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_share", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "基金代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易（变动）日期"
+        }, {
+            "name": "fd_share",
+            "type": "Float",
+            "comment": "基金份额（万）"
+        }, {
+            "name": "total_share",
+            "type": "Float",
+            "comment": "合计份额（万）"
+        }, {
+            "name": "fund_type",
+            "type": "String",
+            "comment": "基金类型"
+        }, {
+            "name": "market",
+            "type": "String",
+            "comment": "市场"
+        }]
+
     def fund_share(self, fields='', **kwargs):
         """
         获取基金规模数据，包含上海和深圳ETF基金

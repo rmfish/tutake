@@ -63,6 +63,53 @@ class Monthly(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "monthly", config, 600)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": ""
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": ""
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "open",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "high",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "low",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "pre_close",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "change",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "pct_chg",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "vol",
+            "type": "Float",
+            "comment": ""
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": ""
+        }]
+
     def monthly(self, fields='', **kwargs):
         """
         获取A股月线行情,全部历史，每月更新

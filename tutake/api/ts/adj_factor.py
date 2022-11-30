@@ -53,6 +53,21 @@ class AdjFactor(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "adj_factor", config, 120)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "adj_factor",
+            "type": "Float",
+            "comment": "复权因子"
+        }]
+
     def adj_factor(self, fields='', **kwargs):
         """
         获取股票复权因子，可提取单只股票全部历史复权因子，也可以提取单日全部股票的复权因子。更新时间：早上9点30分

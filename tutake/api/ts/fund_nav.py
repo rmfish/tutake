@@ -63,6 +63,49 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "nav_date",
+            "type": "String",
+            "comment": "截止日期"
+        }, {
+            "name": "unit_nav",
+            "type": "Float",
+            "comment": "单位净值"
+        }, {
+            "name": "accum_nav",
+            "type": "Float",
+            "comment": "累计净值"
+        }, {
+            "name": "accum_div",
+            "type": "Float",
+            "comment": "累计分红"
+        }, {
+            "name": "net_asset",
+            "type": "Float",
+            "comment": "资产净值"
+        }, {
+            "name": "total_netasset",
+            "type": "Float",
+            "comment": "合计资产净值"
+        }, {
+            "name": "adj_nav",
+            "type": "Float",
+            "comment": "复权单位净值"
+        }, {
+            "name": "update_flag",
+            "type": "String",
+            "comment": "更新标识"
+        }]
+
     def fund_nav(self, fields='', **kwargs):
         """
         获取公募基金净值数据

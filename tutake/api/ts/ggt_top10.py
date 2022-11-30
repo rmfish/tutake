@@ -70,6 +70,77 @@ class GgtTop10(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "ggt_top10", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "trade_date",
+            "type": "String",
+            "comment": "交易日期"
+        }, {
+            "name": "ts_code",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "name",
+            "type": "String",
+            "comment": "股票名称"
+        }, {
+            "name": "close",
+            "type": "Float",
+            "comment": "收盘价"
+        }, {
+            "name": "p_change",
+            "type": "Float",
+            "comment": "涨跌幅"
+        }, {
+            "name": "rank",
+            "type": "String",
+            "comment": "资金排名"
+        }, {
+            "name": "market_type",
+            "type": "String",
+            "comment": "市场类型 2：港股通（沪） 4：港股通（深）"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "累计成交金额"
+        }, {
+            "name": "net_amount",
+            "type": "Float",
+            "comment": "净买入金额"
+        }, {
+            "name": "sh_amount",
+            "type": "Float",
+            "comment": "沪市成交金额"
+        }, {
+            "name": "sh_net_amount",
+            "type": "Float",
+            "comment": "沪市净买入金额"
+        }, {
+            "name": "sh_buy",
+            "type": "Float",
+            "comment": "沪市买入金额"
+        }, {
+            "name": "sh_sell",
+            "type": "Float",
+            "comment": "沪市卖出金额"
+        }, {
+            "name": "sz_amount",
+            "type": "Float",
+            "comment": "深市成交金额"
+        }, {
+            "name": "sz_net_amount",
+            "type": "Float",
+            "comment": "深市净买入金额"
+        }, {
+            "name": "sz_buy",
+            "type": "Float",
+            "comment": "深市买入金额"
+        }, {
+            "name": "sz_sell",
+            "type": "Float",
+            "comment": "深市卖出金额"
+        }]
+
     def ggt_top10(self, fields='', **kwargs):
         """
         获取港股通每日成交数据，其中包括沪市、深市详细数据，每天18~20点之间完成当日更新

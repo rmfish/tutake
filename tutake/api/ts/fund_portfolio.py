@@ -60,6 +60,41 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS基金代码"
+        }, {
+            "name": "ann_date",
+            "type": "String",
+            "comment": "公告日期"
+        }, {
+            "name": "end_date",
+            "type": "String",
+            "comment": "截止日期"
+        }, {
+            "name": "symbol",
+            "type": "String",
+            "comment": "股票代码"
+        }, {
+            "name": "mkv",
+            "type": "Float",
+            "comment": "持有股票市值(元)"
+        }, {
+            "name": "amount",
+            "type": "Float",
+            "comment": "持有股票数量（股）"
+        }, {
+            "name": "stk_mkv_ratio",
+            "type": "Float",
+            "comment": "占股票市值比"
+        }, {
+            "name": "stk_float_ratio",
+            "type": "Float",
+            "comment": "占流通股本比例"
+        }]
+
     def fund_portfolio(self, fields='', **kwargs):
         """
         获取公募基金持仓数据，季度更新

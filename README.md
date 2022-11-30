@@ -53,7 +53,8 @@ if __name__ == '__main__':
     task.start(True)  # 如果设置为True,则立即开始执行 
 ```
 
-执行完毕就可以从本地查询数据:
+### Step3 查询数据
+下载完数据就可以从本地查询数据:
 
 ```python
 import tutake
@@ -106,6 +107,119 @@ if __name__ == '__main__':
 
 [6000 rows x 11 columns]
 ```
+
+#### 原生查询
+一些特殊场景下需要需要更多维度的查询，所以也支持使用sql查询。
+只需要通过接口前加上_就可以，比如股票基本信息`stock_basic`接口可以用`_stock_basic`来访问，
+具体可以参考 <a href="test/query_test.py">query_test.py</a>
+```python
+# query_test.py
+def sql_query(self):
+    """
+        查询上市和停市的股票数量 可以使用{table}占位符
+    """
+    print(self.api._stock_basic.sql("select list_status,count(*) cnt from {table}  group by list_status"))
+```
+
+查询结果：
+```python
+  list_status   cnt
+0           D   192
+1           L  5008
+```
+
+也可以查看接口的元数据：
+```python
+# query_test.py
+def meta_query(self):
+    print(self.api._stock_basic.meta())
+```
+结果如下：
+```json lines
+{
+  "table_name": "tushare_stock_basic",
+  "columns": [
+    {
+      "name": "ts_code",
+      "type": "String",
+      "comment": "TS代码"
+    },
+    {
+      "name": "symbol",
+      "type": "String",
+      "comment": "股票代码"
+    },
+    {
+      "name": "name",
+      "type": "String",
+      "comment": "股票名称"
+    },
+    {
+      "name": "area",
+      "type": "String",
+      "comment": "地域"
+    },
+    {
+      "name": "industry",
+      "type": "String",
+      "comment": "所属行业"
+    },
+    {
+      "name": "fullname",
+      "type": "String",
+      "comment": "股票全称"
+    },
+    {
+      "name": "enname",
+      "type": "String",
+      "comment": "英文全称"
+    },
+    {
+      "name": "cnspell",
+      "type": "String",
+      "comment": "拼音缩写"
+    },
+    {
+      "name": "market",
+      "type": "String",
+      "comment": "市场类型"
+    },
+    {
+      "name": "exchange",
+      "type": "String",
+      "comment": "交易所代码"
+    },
+    {
+      "name": "curr_type",
+      "type": "String",
+      "comment": "交易货币"
+    },
+    {
+      "name": "list_status",
+      "type": "String",
+      "comment": "上市状态 L上市 D退市 P暂停上市"
+    },
+    {
+      "name": "list_date",
+      "type": "String",
+      "comment": "上市日期"
+    },
+    {
+      "name": "delist_date",
+      "type": "String",
+      "comment": "退市日期"
+    },
+    {
+      "name": "is_hs",
+      "type": "String",
+      "comment": "是否沪深港通标的，N否 H沪股通 S深股通"
+    }
+  ],
+  "default_order_by": "ts_code",
+  "default_limit": ""
+}
+```
+
 
 ## 说明
 因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，

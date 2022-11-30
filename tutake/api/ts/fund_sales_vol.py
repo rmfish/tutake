@@ -56,6 +56,33 @@ class FundSalesVol(BaseDao, TuShareBase, DataProcess):
         TuShareBase.__init__(self, "fund_sales_vol", config, 2000)
         self.api = TushareAPI(config)
 
+    def columns_meta(self):
+        return [{
+            "name": "year",
+            "type": "Integer",
+            "comment": "年度"
+        }, {
+            "name": "quarter",
+            "type": "String",
+            "comment": "季度"
+        }, {
+            "name": "inst_name",
+            "type": "String",
+            "comment": "销售机构"
+        }, {
+            "name": "fund_scale",
+            "type": "Float",
+            "comment": "股票+混合公募基金保有规模（亿元）"
+        }, {
+            "name": "scale",
+            "type": "Float",
+            "comment": "非货币市场公募基金保有规模(亿元)"
+        }, {
+            "name": "rank",
+            "type": "Integer",
+            "comment": "排名"
+        }]
+
     def fund_sales_vol(self, fields='', **kwargs):
         """
         获取销售机构公募基金销售保有规模数据，本数据从2021年Q1开始公布，季度更新
