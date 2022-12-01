@@ -154,7 +154,7 @@ class TuShareBase(object):
                             f"Request limit {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您没有访问该接口的权限"):
-                        self.client_queue.alive(client, time.time() + 1000000000.0)
+                        self.client_queue.alive(client, time.time() + 4294967.0)
                         print(
                             f"Request limit {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)

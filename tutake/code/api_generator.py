@@ -39,12 +39,12 @@ class CodeGenerator(object):
         self.api_loader = TushareJsonApi()
 
     def render_code(self, file_name: str, code: str, overwrite: bool = True, file_suffix: str = 'py'):
-        file_path = "{}/{}.{}".format(self.output_dir, file_name, file_suffix)
+        file_path = f"{self.output_dir}{os.sep}{file_name}.{file_suffix}"
         if os.path.exists(file_path) and not overwrite:
             # 如果文件存在，且设置不覆盖，就直接退出
             return
 
-        with open(file_path, 'w') as file:
+        with open(file_path, 'w',encoding='utf-8') as file:
             try:
                 formatted, changed = FormatCode(code, style_config='setup.cfg')
                 file.write(formatted)
@@ -54,9 +54,9 @@ class CodeGenerator(object):
 
     def _load_api_config(self, api):
         if api:
-            config_file = "%s/config/%s.json" % (self.output_dir, api['name'])
+            config_file = f"{self.output_dir}{os.sep}config{os.sep}{api['name']}.json"
             if os.path.exists(config_file):
-                f = open(config_file)
+                f = open(config_file, encoding='utf-8')
                 data = json.load(f)
                 return {**api, **data}
             else:
@@ -113,7 +113,7 @@ class CodeGenerator(object):
             api['default_limit'] = None
             api['order_by'] = None
             print("Generate config %s.json" % api['name'])
-            self.render_code("config/%s" % api['name'], json.dumps(api, indent=4, ensure_ascii=False),
+            self.render_code(f"config{os.sep}{api['name']}", json.dumps(api, indent=4, ensure_ascii=False),
                              False, file_suffix='json')
 
     def generate_config(self):
@@ -141,8 +141,8 @@ class CodeGenerator(object):
 if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     current_dir = file_dir(__file__)
-    tmpl_dir = "{}/tmpl".format(current_dir)
-    api_dir = realpath("{}/../api/ts".format(current_dir))
+    tmpl_dir = f"{current_dir}{os.sep}tmpl"
+    api_dir = realpath(f"{current_dir}{os.sep}..{os.sep}api{os.sep}ts")
 
     generator = CodeGenerator(tmpl_dir, api_dir)
     api_params = []

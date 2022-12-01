@@ -2,7 +2,16 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 
+from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn, Task, SpinnerColumn, \
+    TotalFileSizeColumn, DownloadColumn, TransferSpeedColumn, FileSizeColumn, MofNCompleteColumn
+
 from tutake.api.process_report import ProcessReport, ProcessType, ActionResult, ProcessException, ProcessReportContainer
+
+process_bar = Progress(TextColumn("[progress.description]{task.description}"), SpinnerColumn(), BarColumn(),
+                       MofNCompleteColumn(),
+                       TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), TimeRemainingColumn(),
+                       TimeElapsedColumn())
+task_map = {}
 
 
 class DataProcess:
@@ -58,6 +67,13 @@ class DataProcess:
         self.prepare(process_type)
         params = self.tushare_parameters(process_type)
         if params:
+            if task_map.get(self.name):
+                task_id = task_map.get(self.name)
+                process_bar.update(task_id, total=len(params))
+            else:
+                task_id = process_bar.add_task(description=self.name, total=len(params))
+                task_map[self.name] = task_id
+
             report.set_exec_params(params)
 
             def action(param) -> ActionResult:
@@ -76,14 +92,18 @@ class DataProcess:
 
             with ThreadPoolExecutor(max_workers=self.config.get_process_thread_cnt()) as pool:
                 for result in pool.map(action, params):
+                    process_bar.advance(task_id, 1)
                     if report.finish_task(result):
+                        process_bar.stop_task(task_id)
                         self.logger.critical("Stop with critical exception. {}", result)
                         return report
 
                 repeat_params = report.repeat()
                 if repeat_params:
+                    process_bar.update(task_id, description=self.name + "_r", total=len(repeat_params))
                     report.set_exec_params(repeat_params, 'Repeat')
                     for p in repeat_params:
+                        process_bar.advance(task_id, 1)
                         report.finish_task(action(p))
         report = report.close()
         self.logger.info(f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")

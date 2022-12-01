@@ -53,7 +53,7 @@ class Dividend(BaseDao, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tushare_dividend.db'),
+        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_dividend.db'),
                                     connect_args={'check_same_thread': False})
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)

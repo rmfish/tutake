@@ -21,10 +21,10 @@ class TushareAPI(object):
 
     def all_apis(self):
         apis = [
-            'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
-            'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
-            'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
-            'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip',
+            'adj_factor', 'bak_basic', 'bak_daily', 'daily', 'fund_basic', 'hs_const', 'moneyflow', 'moneyflow_hsgt',
+            'monthly', 'namechange', 'new_share', 'stk_managers', 'stk_rewards', 'stock_basic', 'stock_company',
+            'suspend_d', 'weekly', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
+            'balancesheet', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip',
             'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager',
             'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily',
             'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
@@ -45,61 +45,41 @@ class TushareAPI(object):
             adj_factor_module = import_module("tutake.api.ts.adj_factor")
             clazz = getattr(adj_factor_module, "AdjFactor")
             return clazz(config)
-        if name == 'stock_company':
-            stock_company_module = import_module("tutake.api.ts.stock_company")
-            clazz = getattr(stock_company_module, "StockCompany")
-            return clazz(config)
-        if name == 'daily':
-            daily_module = import_module("tutake.api.ts.daily")
-            clazz = getattr(daily_module, "Daily")
-            return clazz(config)
-        if name == 'moneyflow':
-            moneyflow_module = import_module("tutake.api.ts.moneyflow")
-            clazz = getattr(moneyflow_module, "Moneyflow")
+        if name == 'bak_basic':
+            bak_basic_module = import_module("tutake.api.ts.bak_basic")
+            clazz = getattr(bak_basic_module, "BakBasic")
             return clazz(config)
         if name == 'bak_daily':
             bak_daily_module = import_module("tutake.api.ts.bak_daily")
             clazz = getattr(bak_daily_module, "BakDaily")
             return clazz(config)
-        if name == 'namechange':
-            namechange_module = import_module("tutake.api.ts.namechange")
-            clazz = getattr(namechange_module, "Namechange")
+        if name == 'daily':
+            daily_module = import_module("tutake.api.ts.daily")
+            clazz = getattr(daily_module, "Daily")
             return clazz(config)
         if name == 'fund_basic':
             fund_basic_module = import_module("tutake.api.ts.fund_basic")
             clazz = getattr(fund_basic_module, "FundBasic")
             return clazz(config)
-        if name == 'monthly':
-            monthly_module = import_module("tutake.api.ts.monthly")
-            clazz = getattr(monthly_module, "Monthly")
+        if name == 'hs_const':
+            hs_const_module = import_module("tutake.api.ts.hs_const")
+            clazz = getattr(hs_const_module, "HsConst")
+            return clazz(config)
+        if name == 'moneyflow':
+            moneyflow_module = import_module("tutake.api.ts.moneyflow")
+            clazz = getattr(moneyflow_module, "Moneyflow")
             return clazz(config)
         if name == 'moneyflow_hsgt':
             moneyflow_hsgt_module = import_module("tutake.api.ts.moneyflow_hsgt")
             clazz = getattr(moneyflow_hsgt_module, "MoneyflowHsgt")
             return clazz(config)
-        if name == 'stk_rewards':
-            stk_rewards_module = import_module("tutake.api.ts.stk_rewards")
-            clazz = getattr(stk_rewards_module, "StkRewards")
+        if name == 'monthly':
+            monthly_module = import_module("tutake.api.ts.monthly")
+            clazz = getattr(monthly_module, "Monthly")
             return clazz(config)
-        if name == 'hs_const':
-            hs_const_module = import_module("tutake.api.ts.hs_const")
-            clazz = getattr(hs_const_module, "HsConst")
-            return clazz(config)
-        if name == 'bak_basic':
-            bak_basic_module = import_module("tutake.api.ts.bak_basic")
-            clazz = getattr(bak_basic_module, "BakBasic")
-            return clazz(config)
-        if name == 'suspend_d':
-            suspend_d_module = import_module("tutake.api.ts.suspend_d")
-            clazz = getattr(suspend_d_module, "SuspendD")
-            return clazz(config)
-        if name == 'weekly':
-            weekly_module = import_module("tutake.api.ts.weekly")
-            clazz = getattr(weekly_module, "Weekly")
-            return clazz(config)
-        if name == 'stock_basic':
-            stock_basic_module = import_module("tutake.api.ts.stock_basic")
-            clazz = getattr(stock_basic_module, "StockBasic")
+        if name == 'namechange':
+            namechange_module = import_module("tutake.api.ts.namechange")
+            clazz = getattr(namechange_module, "Namechange")
             return clazz(config)
         if name == 'new_share':
             new_share_module = import_module("tutake.api.ts.new_share")
@@ -108,6 +88,26 @@ class TushareAPI(object):
         if name == 'stk_managers':
             stk_managers_module = import_module("tutake.api.ts.stk_managers")
             clazz = getattr(stk_managers_module, "StkManagers")
+            return clazz(config)
+        if name == 'stk_rewards':
+            stk_rewards_module = import_module("tutake.api.ts.stk_rewards")
+            clazz = getattr(stk_rewards_module, "StkRewards")
+            return clazz(config)
+        if name == 'stock_basic':
+            stock_basic_module = import_module("tutake.api.ts.stock_basic")
+            clazz = getattr(stock_basic_module, "StockBasic")
+            return clazz(config)
+        if name == 'stock_company':
+            stock_company_module = import_module("tutake.api.ts.stock_company")
+            clazz = getattr(stock_company_module, "StockCompany")
+            return clazz(config)
+        if name == 'suspend_d':
+            suspend_d_module = import_module("tutake.api.ts.suspend_d")
+            clazz = getattr(suspend_d_module, "SuspendD")
+            return clazz(config)
+        if name == 'weekly':
+            weekly_module = import_module("tutake.api.ts.weekly")
+            clazz = getattr(weekly_module, "Weekly")
             return clazz(config)
         if name == 'daily_basic':
             daily_basic_module = import_module("tutake.api.ts.daily_basic")
@@ -133,9 +133,9 @@ class TushareAPI(object):
             income_vip_module = import_module("tutake.api.ts.income_vip")
             clazz = getattr(income_vip_module, "IncomeVip")
             return clazz(config)
-        if name == 'balancesheet_vip':
-            balancesheet_vip_module = import_module("tutake.api.ts.balancesheet_vip")
-            clazz = getattr(balancesheet_vip_module, "BalancesheetVip")
+        if name == 'balancesheet':
+            balancesheet_module = import_module("tutake.api.ts.balancesheet")
+            clazz = getattr(balancesheet_module, "Balancesheet")
             return clazz(config)
         if name == 'cashflow_vip':
             cashflow_vip_module = import_module("tutake.api.ts.cashflow_vip")

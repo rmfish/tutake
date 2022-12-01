@@ -2,6 +2,7 @@
 Tushare的Api列表，可用于生成自动化的接口
 """
 import json
+import os
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 from os import walk
@@ -56,7 +57,7 @@ class TushareApi(Base):
 class TushareDBApi(TushareApiInterface):
 
     def __init__(self, config):
-        engine = create_engine("%s/%s" % (config.get_meta_sqlite_driver_url(), 'tushare_meta.db'))
+        engine = create_engine(config.get_meta_sqlite_driver_url('tushare_meta.db'))
         self.session_factory = sessionmaker()
         self.session_factory.configure(bind=engine)
         TushareApi.__table__.create(bind=engine, checkfirst=True)
@@ -179,20 +180,20 @@ class TushareJsonApi(TushareApiInterface):
         self._load_config()
 
     def _load_config(self):
-        config_dir = "{}/tutake/api/ts/config".format(project_root())
+        config_dir = f"{project_root()}{os.sep}tutake{os.sep}api{os.sep}ts{os.sep}config"
         files = []
         for (dirpath, dirnames, filenames) in walk(config_dir):
             files.extend(filenames)
             break
         apis = {}
         for f in files:
-            file_path = "{}/{}".format(config_dir, f)
-            apis[f[:-5]] = json.load(open(file_path))
+            file_path = f"{config_dir}{os.sep}{f}"
+            apis[f[:-5]] = json.load(open(file_path, encoding='utf-8'))
         self.apis = apis
 
     def _write_config(self, config):
-        config_path = "{}/tutake/api/ts/config/{}.json".format(project_root(), config['name'])
-        with open(config_path, "w") as file:
+        config_path = f"{project_root()}{os.sep}tutake{os.sep}api{os.sep}ts{os.sep}config{os.sep}{config['name']}.json"
+        with open(config_path, "w", encoding='utf-8') as file:
             file.write(json.dumps(OrderedDict(config), indent=4, ensure_ascii=False, sort_keys=True))
 
     def get_api_children(self, parent_id):

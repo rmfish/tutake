@@ -9,6 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+from tutake.api.process import process_bar
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
@@ -138,6 +139,7 @@ class TushareProcessTask:
                     job.modify(next_run_time=datetime.now())
                 for job in default_job:
                     job.modify(next_run_time=datetime.now() + timedelta(seconds=5))
+            # process_bar.start()
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:
             self.logger.error(f"Exit with {type(err).__name__} {err}")

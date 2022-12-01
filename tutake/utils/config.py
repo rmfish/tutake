@@ -185,8 +185,14 @@ class TutakeConfig(object):
     def __set(config: DotConfig, k, v):
         return config.set(k, v)
 
-    def get_data_sqlite_driver_url(self):
-        return self.require_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
+    def get_data_sqlite_driver_url(self, data_file=None):
+        url = self.require_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
+        if not data_file:
+            return url
+        if os.name == 'nt':
+            return f"{url}{os.sep}{data_file}".replace("\\", "\\\\")
+        else:
+            return f"{url}{os.sep}{data_file}"
 
     def get_meta_sqlite_driver_url(self):
         return self.require_config(TUSHARE_META_DRIVER_URL_KEY)

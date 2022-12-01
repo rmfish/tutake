@@ -246,7 +246,7 @@ class ProcessReportContainer(object):
 
     def __init__(self, config):
         self.running_reports = dict()
-        engine = create_engine("%s/%s" % (config.get_data_sqlite_driver_url(), 'tutake.db'),
+        engine = create_engine(config.get_data_sqlite_driver_url('tutake.db'),
                                connect_args={"check_same_thread": False})
         self.session_factory = sessionmaker()
         self.session_factory.configure(bind=engine)
