@@ -1,4 +1,5 @@
 import logging
+import os.path
 import time
 from collections.abc import Sequence
 from datetime import datetime, timedelta
@@ -11,15 +12,27 @@ from apscheduler.triggers.cron import CronTrigger
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
-from tutake.utils.utils import project_root
+from tutake.utils.utils import project_root, file_dir
 
 
-def process_api(config: TutakeConfig):
-    return TushareProcess(config)
-
-
-def task_api(config: TutakeConfig):
+def process_api(config_path):
+    config = __config_from_file(config_path)
+    if not config:
+        raise Exception(f"Config file {config_path} is not exists, pls check it.")
     return TushareProcessTask(config)
+
+
+def task_api(config_path):
+    config = __config_from_file(config_path)
+    if not config:
+        raise Exception(f"Config file {config_path} is not exists, pls check it.")
+    return TushareProcessTask(config)
+
+
+def __config_from_file(config_file_path):
+    if not os.path.exists(config_file_path):
+        return None
+    return TutakeConfig(file_dir(config_file_path), os.path.basename(config_file_path))
 
 
 class TushareProcessTask:

@@ -5,7 +5,7 @@ import tutake as tt
 
 class Test(object):
     def __init__(self):
-        self.api = tt.pro_api(data_dir='~/Library/Mobile Documents/com~apple~CloudDocs/Database/5_Data/Quant/data')
+        self.api = tt.pro_api("../config.yml")
 
     def meta_query(self):
         print(json.dumps(self.api._stock_basic.meta(), indent=2, ensure_ascii=False))

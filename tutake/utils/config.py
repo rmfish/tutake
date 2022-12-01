@@ -122,7 +122,7 @@ class TutakeConfig(object):
 
     def _load_config_file(self, config_file: str) -> DotConfig:
         if config_file and os.path.exists(config_file):
-            with open(config_file, 'r') as stream:
+            with open(config_file, 'r', encoding='utf8') as stream:
                 return DotConfig(yaml.safe_load(stream))
         else:
             print("Config file is not exits. %s" % config_file)

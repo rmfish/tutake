@@ -1,9 +1,11 @@
+import os
 from functools import partial
 
 import tushare
 
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
+from tutake.utils.utils import file_dir
 
 
 class TushareQuery:
@@ -33,11 +35,17 @@ class TushareQuery:
         return partial(self.query, name)
 
 
-def pro_api(token='', data_dir: str = None) -> TushareQuery:
-    config = TutakeConfig()
-    config.set_tushare_token(token)
-    config.set_tutake_data_dir(data_dir)
+def pro_api(config_file_path) -> TushareQuery:
+    config = __config_from_file(config_file_path)
+    if not config:
+        raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
     return TushareQuery(config)
+
+
+def __config_from_file(config_file_path):
+    if not os.path.exists(config_file_path):
+        return None
+    return TutakeConfig(file_dir(config_file_path), os.path.basename(config_file_path))
 
 
 def pro_bar(api: TushareQuery, ts_code='', start_date='', end_date='', freq='D', asset='E', exchange='', adj=None,
