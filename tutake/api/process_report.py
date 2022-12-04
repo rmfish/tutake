@@ -109,14 +109,15 @@ class ProcessReport:
         return self._id
 
     def to_dict(self):
-        result = self._get_result_summary()
+        result = self.result_summary()
         return {"id": self._id, "name": self.name, "process_type": self.process_type,
                 "start_time": self.start_time.format("YYYY-MM-DD HH:mm:ss"),
                 "end_time": self.end_time.format("YYYY-MM-DD HH:mm:ss"),
                 "cost_second": self.process_time(), "records": result[0],
-                "api_invoke": result[1], "cnt_run": result[2], "cnt_success": result[3],
-                "cnt_skip": result[4],
-                "cnt_failed": result[5], "cnt_repeat": result[6], "params": self.params, "status": self.status,
+                "api_invoke": result['record_cnt'], "cnt_run": result['task_cnt'], "cnt_success": result['success_cnt'],
+                "cnt_skip": result['skip_cnt'],
+                "cnt_failed": result['failed_cnt'], "cnt_repeat": result['repeat_cnt'], "params": self.params,
+                "status": self.status,
                 "process": self.percent.percent()
                 }
 
@@ -124,21 +125,18 @@ class ProcessReport:
         return json.dumps(self.to_dict(), sort_keys=True)
 
     def __str__(self):
-
         return '''===ReportSummary===\nProcess: {} {}\nTime: {} ~ {}\nCost: {}s\nTaskInfo: {}\nParams: {}\nActionInfos: {}\n'''.format(
             self.name, self.process_type, self.start_time.format("YYYY-MM-DD HH:mm:ss"),
             self.end_time.format("HH:mm:ss"),
             self.process_time(),
-            self.process_result(),
+            self.process_summary_str(),
             self._get_params_summary(), self._get_action_summary())
 
-    def process_result(self):
-        result = self._get_result_summary()
-        return "{}/{} [Run:{} Success:{} Skip:{} Failed:{} Repeat:{}]".format(result[0], result[1], result[2],
-                                                                              result[3], result[4], result[5],
-                                                                              result[6])
+    def process_summary_str(self):
+        result = self.result_summary()
+        return f"{result['record_cnt']}/{result['task_cnt']} [Run:{result['run_cnt']} Success:{result['success_cnt']} Skip:{result['skip_cnt']} Failed:{result['failed_cnt']} Repeat:{result['repeat_cnt']}]"
 
-    def _get_result_summary(self):
+    def result_summary(self):
         run = len(self.task)
         records, success, skip, failed, repeat = 0, 0, 0, 0, 0
         for t in self.task:
@@ -151,7 +149,8 @@ class ProcessReport:
                 failed += 1
                 if t.is_process_error():
                     repeat += 1
-        return records, self.total_task, run, success, skip, failed, repeat
+        return {"record_cnt": records, "task_cnt": self.total_task, "run_cnt": run, "success_cnt": success,
+                "skip_cnt": skip, "failed_cnt": failed, "repeat_cnt": repeat}
 
     def _get_params_summary(self) -> str:
         if self.params is None:
@@ -200,24 +199,24 @@ class ProcessReport:
     def finish_task(self, result: ActionResult) -> bool:
         self.task.append(result)
         self.percent.finish()
-        if result.status == 'Skip':
-            self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
-        elif result.status == 'Failed':
-            print(result.err)
-            self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
-        elif result.status == 'Success':
-            if self.percent.is_step_percent():
-                self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-                                                                                                 self.get_process_percent()[
-                                                                                                     1],
-                                                                                                 result.cnt,
-                                                                                                 result.new_params))
-            else:
-                self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-                                                                                                  self.get_process_percent()[
-                                                                                                      1],
-                                                                                                  result.cnt,
-                                                                                                  result.new_params))
+        # if result.status == 'Skip':
+        #     self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
+        # elif result.status == 'Failed':
+        #     print(result.err)
+        #     self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
+        # elif result.status == 'Success':
+        # if self.percent.is_step_percent():
+        #     self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+        #                                                                                      self.get_process_percent()[
+        #                                                                                          1],
+        #                                                                                      result.cnt,
+        #                                                                                      result.new_params))
+        # else:
+        #     self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+        #                                                                                       self.get_process_percent()[
+        #                                                                                           1],
+        #                                                                                       result.cnt,
+        #                                                                                       result.new_params))
         if result and result.err:
             if isinstance(result.err, ProcessException):
                 return False

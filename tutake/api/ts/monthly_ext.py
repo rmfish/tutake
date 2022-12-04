@@ -55,6 +55,8 @@ def param_loop_process_ext(self, process_type: ProcessType, **params):
             if params.get('list_date'):
                 if start_date.to_date_string()[:-2] > pendulum.now().to_date_string()[:-2]:
                     return None
+                if start_date.diff(pendulum.now(), abs=False).days < 0:
+                    return None
                 else:
                     params['start_date'] = start_date.format(date_format)
         return params

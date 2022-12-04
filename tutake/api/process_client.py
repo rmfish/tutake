@@ -47,6 +47,7 @@ class TushareProcessTask:
         self.report_container = ProcessReportContainer(config)
         self.logger = logging.getLogger("tutake.task")
         self.config = config
+        self.started_cnt = 0
 
     def _config_schedule_tasks(self):
         """
@@ -95,26 +96,34 @@ class TushareProcessTask:
             else:
                 return None
 
+        start = time.time()
+        reports = []
+        self._start_process()
         if isinstance(api_name, str):
-            report = __process(f"tushare_{api_name}", api_name)
-            self.logger.info(f"Finish {api_name} process,report is \n {report}")
+            reports.append(__process(f"tushare_{api_name}", api_name))
         elif isinstance(api_name, Sequence):
-            reports = []
-            start = time.time()
-            self.logger.info(f"Start Schedule task with apis {api_name}")
             for api in api_name:
                 try:
-                    report = __process(f"tushare_{api}", api)
-                    reports.append(report)
-                    self.logger.info(f"Finish {api} process,report is \n {report}")
+                    reports.append(__process(f"tushare_{api}", api))
                 except Exception as err:
-                    self.logger.error(f"Exception with {api} process,err is {err}")
+                    # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue
-            self.logger.info(f"Finished {len(api_name)} of scheduled tasks, it takes {time.time() - start}s")
-            if reports:
-                self.logger.info("Process results summary:")
-                for r in reports:
-                    self.logger.info(f"{r.name} {r.process_result()}  cost {r.process_time()}s")
+        self._end_process()
+        # self.logger.info(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
+        # if reports:
+        #     self.logger.info("Process results summary:")
+        #     for r in reports:
+        #         if r:
+        #             self.logger.info(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
+
+    def _start_process(self):
+        self.started_cnt += 1
+        process_bar.start()
+
+    def _end_process(self):
+        self.started_cnt -= 1
+        if self.started_cnt == 0:
+            process_bar.stop()
 
     def get_scheduler(self):
         return self._scheduler
@@ -139,7 +148,6 @@ class TushareProcessTask:
                     job.modify(next_run_time=datetime.now())
                 for job in default_job:
                     job.modify(next_run_time=datetime.now() + timedelta(seconds=5))
-            # process_bar.start()
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:
             self.logger.error(f"Exit with {type(err).__name__} {err}")
@@ -162,12 +170,3 @@ class TushareProcess:
 
     def __getattr__(self, name):
         return partial(self.process, name)
-
-
-if __name__ == "__main__":
-    # dao = pro_api("aec595052cb10051350a6a164f41b344b922f0b3ee206efdec2e0082")
-    # print(dao.stock_basic(fields='name,ts_code,', name='ST国华'))
-    # print(dao.shibor(start_date='20180101', end_date='20181101'))
-
-    task = task_api(TutakeConfig(project_root()))
-    task.start()

@@ -1,6 +1,4 @@
 from tutake import task_api
-from tutake.utils.config import TutakeConfig
-from tutake.utils.utils import file_dir
 
 if __name__ == '__main__':
     task = task_api("./config.yml")
