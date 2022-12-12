@@ -2,31 +2,8 @@ import logging
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn, Task, SpinnerColumn, \
-    MofNCompleteColumn, ProgressColumn
-from rich.text import Text
-
+from tutake.api.process_bar import process, finish_task
 from tutake.api.process_report import ProcessReport, ProcessType, ActionResult, ProcessException, ProcessReportContainer
-
-
-class TaskCntColumn(ProgressColumn):
-
-    def __init__(self, field_name):
-        self.field_name = field_name
-        super().__init__()
-
-    def render(self, task: "Task") -> Text:
-        record_cnt = task.fields.get(self.field_name)
-        if record_cnt is None:
-            return Text("0", style="progress.data.speed")
-        return Text(f"{record_cnt}", style="progress.data.speed")
-
-
-process_bar = Progress(TextColumn("[progress.description]{task.description}"), SpinnerColumn(), BarColumn(),
-                       MofNCompleteColumn(),
-                       TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), TimeRemainingColumn(),
-                       TimeElapsedColumn(), TaskCntColumn('record_cnt'), TaskCntColumn('success_cnt'),
-                       TaskCntColumn('skip_cnt'), TaskCntColumn('failed_cnt'))
 
 
 class DataProcess:
@@ -77,7 +54,7 @@ class DataProcess:
         :return:
         """
         # self.logger.info(f"Start {self.entities.__name__} {process_type} process.")
-        process_bar.console.log(f"Start {self.entities.__name__} {process_type} process.")
+        process.console.log(f"Start {self.entities.__name__} {process_type} process.")
         report = self._report_container.create_process_report("tushare_%s" % self.name, self.name, process_type,
                                                               self.logger)
         self.prepare(process_type)
@@ -99,27 +76,28 @@ class DataProcess:
                     return ActionResult(start, time.time(), param, new_param,
                                         err=ProcessException(param=new_param, cause=err), status='Failed')
 
-            task_id = process_bar.add_task(description=self.name, total=len(params))
+            task_id = process.add_task(description=self.name, total=len(params))
             with ThreadPoolExecutor(max_workers=self.config.get_process_thread_cnt()) as pool:
                 for result in pool.map(action, params):
-                    process_bar.advance(task_id, 1)
+                    process.advance(task_id, 1)
                     critical_failed = report.finish_task(result)
-                    process_bar.update(task_id, **report.result_summary())
+                    process.update(task_id, **report.result_summary())
                     if critical_failed:
-                        process_bar.stop_task(task_id)
+                        process.stop_task(task_id)
                         self.logger.critical("Stop with critical exception. {}", result)
                         return report
 
                 repeat_params = report.repeat()
                 while repeat_params and len(repeat_params) > 0:
-                    process_bar.update(task_id, description=self.name + "[R]", completed=0, total=len(repeat_params))
+                    process.update(task_id, description=self.name + "[R]", completed=0, total=len(repeat_params))
                     report.set_exec_params(repeat_params, 'Repeat')
                     for result in pool.map(action, repeat_params):
-                        process_bar.advance(task_id, 1)
+                        process.advance(task_id, 1)
                         report.finish_task(result)
-                        process_bar.update(task_id, **report.result_summary())
+                        process.update(task_id, **report.result_summary())
                     repeat_params = report.repeat()
+            finish_task(task_id)
         report = report.close()
-        process_bar.console.log(
+        process.console.log(
             f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")
         return report

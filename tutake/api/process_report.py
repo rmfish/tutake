@@ -6,7 +6,7 @@ import pendulum
 from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.process import process_bar
+from tutake.api.process_bar import process
 from tutake.api.ts.base_dao import Base
 
 
@@ -210,12 +210,12 @@ class ProcessReport:
             self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
         if result.status == 'Failed':
             # print(result.err)
-            process_bar.console.log(f"Throw exception with param: {result.params} err:{result.err}")
+            process.console.log(f"{self.name} Throw exception with param: {result.params} err:{result.err}")
             # self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
         elif result.status == 'Success':
             if self.percent.is_step_percent():
-                process_bar.console.log(
-                    f"[{self.name}-{self.get_process_percent()[1]}] Fetch and append data, cnt is {result.cnt} . param is {result.new_params}")
+                process.console.log(
+                    f"({self.name}-{self.get_process_percent()[1]}) Fetch and append data, cnt is {result.cnt} param is {result.new_params}")
                 # self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
                 #                                                                                  self.get_process_percent()[
                 #                                                                                      1],

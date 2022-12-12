@@ -9,7 +9,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from tutake.api.process import process_bar
+from tutake.api.process_bar import process
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
@@ -111,21 +111,21 @@ class TushareProcessTask:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue
         self._end_process()
-        process_bar.console.info(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
+        process.console.log(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
         if reports:
-            process_bar.console.info("Process results summary:")
+            process.console.log("Process results summary:")
             for r in reports:
                 if r:
-                    process_bar.console.info(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
+                    process.console.log(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
 
     def _start_process(self):
         self.started_cnt += 1
-        process_bar.start()
+        process.start()
 
     def _end_process(self):
         self.started_cnt -= 1
         if self.started_cnt == 0:
-            process_bar.stop()
+            process.stop()
 
     def get_scheduler(self):
         return self._scheduler
