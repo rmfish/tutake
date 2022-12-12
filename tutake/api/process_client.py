@@ -111,12 +111,12 @@ class TushareProcessTask:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue
         self._end_process()
-        # self.logger.info(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
-        # if reports:
-        #     self.logger.info("Process results summary:")
-        #     for r in reports:
-        #         if r:
-        #             self.logger.info(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
+        process_bar.console.info(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
+        if reports:
+            process_bar.console.info("Process results summary:")
+            for r in reports:
+                if r:
+                    process_bar.console.info(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
 
     def _start_process(self):
         self.started_cnt += 1

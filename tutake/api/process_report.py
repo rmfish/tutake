@@ -1,10 +1,12 @@
 import json
+import uuid
 from enum import Enum
 
 import pendulum
 from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.process import process_bar
 from tutake.api.ts.base_dao import Base
 
 
@@ -197,26 +199,34 @@ class ProcessReport:
         return self.percent.percent(), self.percent.format()
 
     def finish_task(self, result: ActionResult) -> bool:
-        self.task.append(result)
+        if "uuid" in result.params.keys():
+            for i, n in enumerate(self.task):
+                if result.params.get('uuid') and n.params.get("uuid"):
+                    self.task[i] = result
+        else:
+            self.task.append(result)
         self.percent.finish()
-        # if result.status == 'Skip':
-        #     self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
-        # elif result.status == 'Failed':
-        #     print(result.err)
-        #     self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
-        # elif result.status == 'Success':
-        # if self.percent.is_step_percent():
-        #     self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-        #                                                                                      self.get_process_percent()[
-        #                                                                                          1],
-        #                                                                                      result.cnt,
-        #                                                                                      result.new_params))
-        # else:
-        #     self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-        #                                                                                       self.get_process_percent()[
-        #                                                                                           1],
-        #                                                                                       result.cnt,
-        #                                                                                       result.new_params))
+        if result.status == 'Skip':
+            self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
+        if result.status == 'Failed':
+            # print(result.err)
+            process_bar.console.log(f"Throw exception with param: {result.params} err:{result.err}")
+            # self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
+        elif result.status == 'Success':
+            if self.percent.is_step_percent():
+                process_bar.console.log(
+                    f"[{self.name}-{self.get_process_percent()[1]}] Fetch and append data, cnt is {result.cnt} . param is {result.new_params}")
+                # self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+                #                                                                                  self.get_process_percent()[
+                #                                                                                      1],
+                #                                                                                  result.cnt,
+                #                                                                                  result.new_params))
+            # else:
+            #     self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+            #                                                                                       self.get_process_percent()[
+            #                                                                                           1],
+            #                                                                                       result.cnt,
+            #                                                                                       result.new_params))
         if result and result.err:
             if isinstance(result.err, ProcessException):
                 return False
@@ -231,6 +241,9 @@ class ProcessReport:
         if params and len(params) > 0:
             self.name = "{}_r".format(self.name)
             self.status = 'FAILED_OVER_RUNNING'
+            for p in params:
+                p["uuid"] = uuid.uuid1()
+
             return params
         return None
 

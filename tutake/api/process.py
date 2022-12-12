@@ -77,6 +77,7 @@ class DataProcess:
         :return:
         """
         # self.logger.info(f"Start {self.entities.__name__} {process_type} process.")
+        process_bar.console.log(f"Start {self.entities.__name__} {process_type} process.")
         report = self._report_container.create_process_report("tushare_%s" % self.name, self.name, process_type,
                                                               self.logger)
         self.prepare(process_type)
@@ -119,5 +120,6 @@ class DataProcess:
                         process_bar.update(task_id, **report.result_summary())
                     repeat_params = report.repeat()
         report = report.close()
-        # self.logger.info(f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")
+        process_bar.console.log(
+            f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")
         return report
