@@ -48,7 +48,7 @@
             "name": "name"
         }
     ],
-    "integral_required": 1500,
+    "integral_required": 5000,
     "is_ready": 1,
     "name": "fund_basic",
     "order_by": null,

@@ -76,7 +76,7 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
         BaseDao.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic', query_fields,
                          entity_fields, config)
         DataProcess.__init__(self, "fund_basic", config)
-        TuShareBase.__init__(self, "fund_basic", config, 1500)
+        TuShareBase.__init__(self, "fund_basic", config, 5000)
         self.api = TushareAPI(config)
 
     def columns_meta(self):
