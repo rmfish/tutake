@@ -13,7 +13,7 @@ from tutake.api.process import process_bar
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.utils.config import TutakeConfig
-from tutake.utils.utils import project_root, file_dir
+from tutake.utils.utils import file_dir
 
 
 def process_api(config_path):
@@ -73,8 +73,10 @@ class TushareProcessTask:
             cron = ""
             if api_instance:
                 cron = api_instance.default_cron_express()
-            if configs.get(api):
+            if api in configs.keys():
                 cron = configs.get(api)
+                if cron is None:  # 配置cron为空的代表跳过不执行
+                    continue
             if cron:
                 self.add_job(f"tushare_{api}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
             else:

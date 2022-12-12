@@ -146,17 +146,17 @@ class TuShareBase(object):
                     if str(err).startswith("抱歉，您每分钟最多访问该接口"):
                         self.client_queue.alive(client, time.time() + 60)
                         self.logger.debug(
-                            f"Flow limit {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
+                            f"Flow limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您每天最多访问该接口"):
                         self.client_queue.alive(client, end_of_day().timestamp())
                         print(
-                            f"Request limit {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
+                            f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您没有访问该接口的权限"):
                         self.client_queue.alive(client, time.time() + 4294967.0)
                         print(
-                            f"Request limit {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
+                            f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     else:
                         raise err
