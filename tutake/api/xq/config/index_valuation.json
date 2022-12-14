@@ -1,0 +1,134 @@
+{
+  "database": "xueqiu",
+  "default_limit": "10000",
+  "desc": "指数估值",
+  "id": 10001,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "str",
+      "desc": "最大行数",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "name": "index_valuation",
+  "order_by": "trade_date,trade_code",
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "TTYPE",
+      "data_type": "int",
+      "desc": "类型",
+      "must": "Y",
+      "name": "ttype"
+    },
+    {
+      "column": "PE",
+      "data_type": "float",
+      "desc": "pe",
+      "must": "Y",
+      "name": "pe"
+    },
+    {
+      "column": "PE_PERCENTILE",
+      "data_type": "float",
+      "desc": "pe百分位",
+      "must": "Y",
+      "name": "pe_percentile"
+    },
+    {
+      "column": "PEG",
+      "data_type": "float",
+      "desc": "预测peg",
+      "must": "Y",
+      "name": "peg"
+    },
+    {
+      "column": "PB_PERCENTILE",
+      "data_type": "float",
+      "desc": "pb百分位",
+      "must": "Y",
+      "name": "pb_percentile"
+    },
+    {
+      "column": "PB",
+      "data_type": "float",
+      "desc": "pb",
+      "must": "Y",
+      "name": "pb"
+    },
+    {
+      "column": "ROE",
+      "data_type": "str",
+      "desc": "ROE",
+      "must": "Y",
+      "name": "roe"
+    },
+    {
+      "column": "YEILD",
+      "data_type": "float",
+      "desc": "股息率",
+      "must": "Y",
+      "name": "yeild"
+    },
+    {
+      "column": "EVA_TYPE",
+      "data_type": "str",
+      "desc": "估值类型",
+      "must": "Y",
+      "name": "eva_type"
+    }
+  ],
+  "title": "指数估值数据"
+}

@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.monthly_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -38,7 +39,7 @@ class TushareMonthly(Base):
     amount = Column(Float, comment='')
 
 
-class Monthly(BaseDao, TuShareBase, DataProcess):
+class Monthly(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -57,8 +58,8 @@ class Monthly(BaseDao, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareMonthly, 'tushare_monthly', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMonthly, 'tushare_monthly', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "monthly", config)
         TuShareBase.__init__(self, "monthly", config, 600)
         self.api = TushareAPI(config)
@@ -185,7 +186,7 @@ setattr(Monthly, 'default_limit', default_limit_ext)
 setattr(Monthly, 'default_cron_express', default_cron_express_ext)
 setattr(Monthly, 'default_order_by', default_order_by_ext)
 setattr(Monthly, 'prepare', prepare_ext)
-setattr(Monthly, 'tushare_parameters', tushare_parameters_ext)
+setattr(Monthly, 'query_parameters', query_parameters_ext)
 setattr(Monthly, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

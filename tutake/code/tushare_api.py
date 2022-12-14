@@ -2,7 +2,7 @@
 Tushare的Api列表，可用于生成自动化的接口
 """
 import json
-import os
+import pathlib
 from abc import ABCMeta, abstractmethod
 from collections import OrderedDict
 from os import walk
@@ -11,9 +11,8 @@ import requests
 from sqlalchemy import create_engine, Integer, String, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.ts.base_dao import Base
+from tutake.api.base_dao import Base
 from tutake.utils.config import TutakeConfig
-from tutake.utils.singleton import Singleton
 from tutake.utils.utils import project_root
 
 
@@ -173,26 +172,26 @@ class TushareDBApi(TushareApiInterface):
         return r.json()['data']
 
 
-@Singleton
-class TushareJsonApi(TushareApiInterface):
+class JsonConfigApi(TushareApiInterface):
 
-    def __init__(self):
+    def __init__(self, _dir):
+        self._dir = _dir
         self._load_config()
 
     def _load_config(self):
-        config_dir = f"{project_root()}{os.sep}tutake{os.sep}api{os.sep}ts{os.sep}config"
+        config_dir = pathlib.PurePath(self._dir, "config")
         files = []
         for (dirpath, dirnames, filenames) in walk(config_dir):
             files.extend(filenames)
             break
         apis = {}
         for f in files:
-            file_path = f"{config_dir}{os.sep}{f}"
+            file_path = pathlib.PurePath(config_dir, f)
             apis[f[:-5]] = json.load(open(file_path, encoding='utf-8'))
         self.apis = apis
 
     def _write_config(self, config):
-        config_path = f"{project_root()}{os.sep}tutake{os.sep}api{os.sep}ts{os.sep}config{os.sep}{config['name']}.json"
+        config_path = pathlib.PurePath(self._dir, config, f"{config['name']}.json")
         with open(config_path, "w", encoding='utf-8') as file:
             file.write(json.dumps(OrderedDict(config), indent=4, ensure_ascii=False, sort_keys=True))
 
@@ -236,7 +235,7 @@ class TushareJsonApi(TushareApiInterface):
 
 
 if __name__ == '__main__':
-    json_config = TushareJsonApi()
+    json_config = JsonConfigApi()
     db_config = TushareDBApi(TutakeConfig(project_root()))
     for i in json_config.get_all_leaf_api():
         # if i.get('default_limit'):

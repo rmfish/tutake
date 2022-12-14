@@ -35,7 +35,7 @@ class DataProcess:
         同步历史数据准备工作
         """
 
-    def tushare_parameters(self, process_type: ProcessType):
+    def query_parameters(self, process_type: ProcessType):
         """
         同步历史数据调用的参数
         :return: list(dict)
@@ -58,7 +58,7 @@ class DataProcess:
         report = self._report_container.create_process_report("tushare_%s" % self.name, self.name, process_type,
                                                               self.logger)
         self.prepare(process_type)
-        params = self.tushare_parameters(process_type)
+        params = self.query_parameters(process_type)
         if params:
             report.set_exec_params(params)
 

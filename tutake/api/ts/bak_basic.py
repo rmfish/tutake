@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.bak_basic_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -51,7 +52,7 @@ class TushareBakBasic(Base):
     holder_num = Column(Integer, comment='股东人数')
 
 
-class BakBasic(BaseDao, TuShareBase, DataProcess):
+class BakBasic(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -72,8 +73,8 @@ class BakBasic(BaseDao, TuShareBase, DataProcess):
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_bak_basic', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_bak_basic', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)
         self.api = TushareAPI(config)
@@ -267,7 +268,7 @@ setattr(BakBasic, 'default_limit', default_limit_ext)
 setattr(BakBasic, 'default_cron_express', default_cron_express_ext)
 setattr(BakBasic, 'default_order_by', default_order_by_ext)
 setattr(BakBasic, 'prepare', prepare_ext)
-setattr(BakBasic, 'tushare_parameters', tushare_parameters_ext)
+setattr(BakBasic, 'query_parameters', query_parameters_ext)
 setattr(BakBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

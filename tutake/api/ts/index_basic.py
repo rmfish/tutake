@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_basic_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -40,7 +41,7 @@ class TushareIndexBasic(Base):
     exp_date = Column(String, comment='终止日期')
 
 
-class IndexBasic(BaseDao, TuShareBase, DataProcess):
+class IndexBasic(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -60,8 +61,8 @@ class IndexBasic(BaseDao, TuShareBase, DataProcess):
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.api = TushareAPI(config)
@@ -211,7 +212,7 @@ setattr(IndexBasic, 'default_limit', default_limit_ext)
 setattr(IndexBasic, 'default_cron_express', default_cron_express_ext)
 setattr(IndexBasic, 'default_order_by', default_order_by_ext)
 setattr(IndexBasic, 'prepare', prepare_ext)
-setattr(IndexBasic, 'tushare_parameters', tushare_parameters_ext)
+setattr(IndexBasic, 'query_parameters', query_parameters_ext)
 setattr(IndexBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.daily_basic_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -46,7 +47,7 @@ class TushareDailyBasic(Base):
     limit_status = Column(Integer, comment='涨跌停状态')
 
 
-class DailyBasic(BaseDao, TuShareBase, DataProcess):
+class DailyBasic(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -67,8 +68,8 @@ class DailyBasic(BaseDao, TuShareBase, DataProcess):
             "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv", "circ_mv",
             "limit_status"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "daily_basic", config)
         TuShareBase.__init__(self, "daily_basic", config, 2000)
         self.api = TushareAPI(config)
@@ -239,7 +240,7 @@ setattr(DailyBasic, 'default_limit', default_limit_ext)
 setattr(DailyBasic, 'default_cron_express', default_cron_express_ext)
 setattr(DailyBasic, 'default_order_by', default_order_by_ext)
 setattr(DailyBasic, 'prepare', prepare_ext)
-setattr(DailyBasic, 'tushare_parameters', tushare_parameters_ext)
+setattr(DailyBasic, 'query_parameters', query_parameters_ext)
 setattr(DailyBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

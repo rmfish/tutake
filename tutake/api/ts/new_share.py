@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.new_share_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -39,7 +40,7 @@ class TushareNewShare(Base):
     ballot = Column(Float, comment='中签率')
 
 
-class NewShare(BaseDao, TuShareBase, DataProcess):
+class NewShare(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -59,8 +60,8 @@ class NewShare(BaseDao, TuShareBase, DataProcess):
             "ts_code", "sub_code", "name", "ipo_date", "issue_date", "amount", "market_amount", "price", "pe",
             "limit_amount", "funds", "ballot"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_new_share', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_new_share', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "new_share", config)
         TuShareBase.__init__(self, "new_share", config, 120)
         self.api = TushareAPI(config)
@@ -194,7 +195,7 @@ setattr(NewShare, 'default_limit', default_limit_ext)
 setattr(NewShare, 'default_cron_express', default_cron_express_ext)
 setattr(NewShare, 'default_order_by', default_order_by_ext)
 setattr(NewShare, 'prepare', prepare_ext)
-setattr(NewShare, 'tushare_parameters', tushare_parameters_ext)
+setattr(NewShare, 'query_parameters', query_parameters_ext)
 setattr(NewShare, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

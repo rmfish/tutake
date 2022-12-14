@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ths_daily_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -43,7 +44,7 @@ class TushareThsDaily(Base):
     pb_mrq = Column(Float, comment='PB MRQ')
 
 
-class ThsDaily(BaseDao, TuShareBase, DataProcess):
+class ThsDaily(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -63,8 +64,8 @@ class ThsDaily(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "avg_price", "change", "pct_change",
             "vol", "turnover_rate", "total_mv", "float_mv", "pe_ttm", "pb_mrq"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths_daily', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths_daily', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
         self.api = TushareAPI(config)
@@ -220,7 +221,7 @@ setattr(ThsDaily, 'default_limit', default_limit_ext)
 setattr(ThsDaily, 'default_cron_express', default_cron_express_ext)
 setattr(ThsDaily, 'default_order_by', default_order_by_ext)
 setattr(ThsDaily, 'prepare', prepare_ext)
-setattr(ThsDaily, 'tushare_parameters', tushare_parameters_ext)
+setattr(ThsDaily, 'query_parameters', query_parameters_ext)
 setattr(ThsDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

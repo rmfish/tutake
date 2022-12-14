@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_nav_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -37,7 +38,7 @@ class TushareFundNav(Base):
     update_flag = Column(String, comment='更新标识')
 
 
-class FundNav(BaseDao, TuShareBase, DataProcess):
+class FundNav(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -57,8 +58,8 @@ class FundNav(BaseDao, TuShareBase, DataProcess):
             "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
             "adj_nav", "update_flag"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "fund_nav", config)
         TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.api = TushareAPI(config)
@@ -193,7 +194,7 @@ setattr(FundNav, 'default_limit', default_limit_ext)
 setattr(FundNav, 'default_cron_express', default_cron_express_ext)
 setattr(FundNav, 'default_order_by', default_order_by_ext)
 setattr(FundNav, 'prepare', prepare_ext)
-setattr(FundNav, 'tushare_parameters', tushare_parameters_ext)
+setattr(FundNav, 'query_parameters', query_parameters_ext)
 setattr(FundNav, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

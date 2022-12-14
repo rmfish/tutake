@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.bak_daily_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -58,7 +59,7 @@ class TushareBakDaily(Base):
     interval_6 = Column(Float, comment='近6月涨幅')
 
 
-class BakDaily(BaseDao, TuShareBase, DataProcess):
+class BakDaily(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -80,8 +81,8 @@ class BakDaily(BaseDao, TuShareBase, DataProcess):
             "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
             "interval_3", "interval_6"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "bak_daily", config)
         TuShareBase.__init__(self, "bak_daily", config, 120)
         self.api = TushareAPI(config)
@@ -312,7 +313,7 @@ setattr(BakDaily, 'default_limit', default_limit_ext)
 setattr(BakDaily, 'default_cron_express', default_cron_express_ext)
 setattr(BakDaily, 'default_order_by', default_order_by_ext)
 setattr(BakDaily, 'prepare', prepare_ext)
-setattr(BakDaily, 'tushare_parameters', tushare_parameters_ext)
+setattr(BakDaily, 'query_parameters', query_parameters_ext)
 setattr(BakDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

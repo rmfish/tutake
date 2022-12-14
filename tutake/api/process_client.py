@@ -9,9 +9,11 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
+from tutake.api.process import DataProcess
 from tutake.api.process_bar import process
 from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
+from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import file_dir
 
@@ -39,7 +41,6 @@ def __config_from_file(config_file_path):
 class TushareProcessTask:
     def __init__(self, config: TutakeConfig):
         self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
-        self.api = TushareAPI(config)
         if config.get_config("tutake.scheduler.background", False):
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
         else:
@@ -66,33 +67,41 @@ class TushareProcessTask:
         for i in config_tasks:
             configs = {**configs, **i}
         default_cron = configs.get('default') or "10 0,6,21 * * *"
-        apis = self.api.all_apis()
+        apis = self._get_all_api()
         default_schedule = []
         for api in apis:
-            api_instance = self.api.instance_from_name(api, self.config)
             cron = ""
-            if api_instance:
-                cron = api_instance.default_cron_express()
-            if api in configs.keys():
-                cron = configs.get(api)
+            if api:
+                cron = api.default_cron_express()
+            if api.name in configs.keys():
+                cron = configs.get(api.name)
                 if cron is None:  # 配置cron为空的代表跳过不执行
                     continue
             if cron:
-                self.add_job(f"tushare_{api}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
+                self.add_job(f"tutake_{api.name}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
             else:
                 default_schedule.append(api)
         if len(default_schedule) > 0:
             self.add_job("default_schedule", default_schedule,
                          trigger=CronTrigger.from_crontab(default_cron, timezone=self.timezone))
 
+    def _get_all_api(self):
+        tushare_api = TushareAPI(self.config)
+        xq_api = XueQiuAPI(self.config)
+        apis = []
+        for i in tushare_api.all_apis():
+            apis.append(tushare_api.instance_from_name(i, self.config))
+        for i in xq_api.all_apis():
+            apis.append(xq_api.instance_from_name(i, self.config))
+        return apis
+
     def _finish_task_report(self, job_id, report: ProcessReport):
         self.report_container.save_report(report)
 
-    def _do_process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
-        def __process(_job_id, __name):
-            api = self.api.__getattr__(__name)
-            if api is not None:
-                report = api.process(process_type)
+    def _do_process(self, apis, process_type: ProcessType = ProcessType.INCREASE):
+        def __process(_job_id, _api):
+            if _api is not None:
+                report = _api.process(process_type)
                 self._finish_task_report(_job_id, report)
                 return report
             else:
@@ -101,12 +110,12 @@ class TushareProcessTask:
         start = time.time()
         reports = []
         self._start_process()
-        if isinstance(api_name, str):
-            reports.append(__process(f"tushare_{api_name}", api_name))
-        elif isinstance(api_name, Sequence):
-            for api in api_name:
+        if isinstance(apis, DataProcess):
+            reports.append(__process(f"tutake_{apis.name}", apis))
+        elif isinstance(apis, Sequence):
+            for api in apis:
                 try:
-                    reports.append(__process(f"tushare_{api}", api))
+                    reports.append(__process(f"tutake_{api.name}", api))
                 except Exception as err:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue

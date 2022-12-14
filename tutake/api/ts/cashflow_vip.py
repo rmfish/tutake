@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.cashflow_vip_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -124,7 +125,7 @@ class TushareCashflowVip(Base):
     update_flag = Column(String, comment='更新标志')
 
 
-class CashflowVip(BaseDao, TuShareBase, DataProcess):
+class CashflowVip(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -166,8 +167,8 @@ class CashflowVip(BaseDao, TuShareBase, DataProcess):
             "net_cash_rece_sec", "credit_impa_loss", "use_right_asset_dep", "oth_loss_asset", "end_bal_cash",
             "beg_bal_cash", "end_bal_cash_equ", "beg_bal_cash_equ", "update_flag"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareCashflowVip, 'tushare_cashflow_vip', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCashflowVip, 'tushare_cashflow_vip',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "cashflow_vip", config)
         TuShareBase.__init__(self, "cashflow_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -747,7 +748,7 @@ setattr(CashflowVip, 'default_limit', default_limit_ext)
 setattr(CashflowVip, 'default_cron_express', default_cron_express_ext)
 setattr(CashflowVip, 'default_order_by', default_order_by_ext)
 setattr(CashflowVip, 'prepare', prepare_ext)
-setattr(CashflowVip, 'tushare_parameters', tushare_parameters_ext)
+setattr(CashflowVip, 'query_parameters', query_parameters_ext)
 setattr(CashflowVip, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

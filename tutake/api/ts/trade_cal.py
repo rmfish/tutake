@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.trade_cal_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -31,7 +32,7 @@ class TushareTradeCal(Base):
     pretrade_date = Column(String, comment='上一个交易日')
 
 
-class TradeCal(BaseDao, TuShareBase, DataProcess):
+class TradeCal(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -48,8 +49,8 @@ class TradeCal(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "trade_cal", config)
         TuShareBase.__init__(self, "trade_cal", config, 600)
         self.api = TushareAPI(config)
@@ -154,7 +155,7 @@ setattr(TradeCal, 'default_limit', default_limit_ext)
 setattr(TradeCal, 'default_cron_express', default_cron_express_ext)
 setattr(TradeCal, 'default_order_by', default_order_by_ext)
 setattr(TradeCal, 'prepare', prepare_ext)
-setattr(TradeCal, 'tushare_parameters', tushare_parameters_ext)
+setattr(TradeCal, 'query_parameters', query_parameters_ext)
 setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

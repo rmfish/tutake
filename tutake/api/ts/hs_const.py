@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.hs_const_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -32,7 +33,7 @@ class TushareHsConst(Base):
     is_new = Column(String, index=True, comment='是否最新')
 
 
-class HsConst(BaseDao, TuShareBase, DataProcess):
+class HsConst(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -49,8 +50,8 @@ class HsConst(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['hs_type', 'is_new', 'limit', 'offset']
         entity_fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "hs_const", config)
         TuShareBase.__init__(self, "hs_const", config, 120)
         self.api = TushareAPI(config)
@@ -149,7 +150,7 @@ setattr(HsConst, 'default_limit', default_limit_ext)
 setattr(HsConst, 'default_cron_express', default_cron_express_ext)
 setattr(HsConst, 'default_order_by', default_order_by_ext)
 setattr(HsConst, 'prepare', prepare_ext)
-setattr(HsConst, 'tushare_parameters', tushare_parameters_ext)
+setattr(HsConst, 'query_parameters', query_parameters_ext)
 setattr(HsConst, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

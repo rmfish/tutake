@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.moneyflow_hsgt_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -34,7 +35,7 @@ class TushareMoneyflowHsgt(Base):
     south_money = Column(String, comment='南向资金')
 
 
-class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
+class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -51,8 +52,8 @@ class MoneyflowHsgt(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "moneyflow_hsgt", config)
         TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)
         self.api = TushareAPI(config)
@@ -162,7 +163,7 @@ setattr(MoneyflowHsgt, 'default_limit', default_limit_ext)
 setattr(MoneyflowHsgt, 'default_cron_express', default_cron_express_ext)
 setattr(MoneyflowHsgt, 'default_order_by', default_order_by_ext)
 setattr(MoneyflowHsgt, 'prepare', prepare_ext)
-setattr(MoneyflowHsgt, 'tushare_parameters', tushare_parameters_ext)
+setattr(MoneyflowHsgt, 'query_parameters', query_parameters_ext)
 setattr(MoneyflowHsgt, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

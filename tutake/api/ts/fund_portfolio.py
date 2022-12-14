@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_portfolio_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -35,7 +36,7 @@ class TushareFundPortfolio(Base):
     stk_float_ratio = Column(Float, comment='占流通股本比例')
 
 
-class FundPortfolio(BaseDao, TuShareBase, DataProcess):
+class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -54,8 +55,8 @@ class FundPortfolio(BaseDao, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.api = TushareAPI(config)
@@ -180,7 +181,7 @@ setattr(FundPortfolio, 'default_limit', default_limit_ext)
 setattr(FundPortfolio, 'default_cron_express', default_cron_express_ext)
 setattr(FundPortfolio, 'default_order_by', default_order_by_ext)
 setattr(FundPortfolio, 'prepare', prepare_ext)
-setattr(FundPortfolio, 'tushare_parameters', tushare_parameters_ext)
+setattr(FundPortfolio, 'query_parameters', query_parameters_ext)
 setattr(FundPortfolio, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

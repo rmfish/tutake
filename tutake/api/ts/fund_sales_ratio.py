@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_sales_ratio_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -33,7 +34,7 @@ class TushareFundSalesRatio(Base):
     rests = Column(Float, comment='其他（%）')
 
 
-class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
+class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -50,8 +51,8 @@ class FundSalesRatio(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['年份', 'limit', 'offset']
         entity_fields = ["year", "bank", "sec_comp", "fund_comp", "indep_comp", "rests"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_sales_ratio", config)
         TuShareBase.__init__(self, "fund_sales_ratio", config, 5000)
         self.api = TushareAPI(config)
@@ -154,7 +155,7 @@ setattr(FundSalesRatio, 'default_limit', default_limit_ext)
 setattr(FundSalesRatio, 'default_cron_express', default_cron_express_ext)
 setattr(FundSalesRatio, 'default_order_by', default_order_by_ext)
 setattr(FundSalesRatio, 'prepare', prepare_ext)
-setattr(FundSalesRatio, 'tushare_parameters', tushare_parameters_ext)
+setattr(FundSalesRatio, 'query_parameters', query_parameters_ext)
 setattr(FundSalesRatio, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

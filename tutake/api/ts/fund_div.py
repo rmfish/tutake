@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_div_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -44,7 +45,7 @@ class TushareFundDiv(Base):
     update_flag = Column(String, comment='更新标识')
 
 
-class FundDiv(BaseDao, TuShareBase, DataProcess):
+class FundDiv(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -65,8 +66,8 @@ class FundDiv(BaseDao, TuShareBase, DataProcess):
             "earpay_date", "net_ex_date", "div_cash", "base_unit", "ear_distr", "ear_amount", "account_date",
             "base_year", "update_flag"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "fund_div", config)
         TuShareBase.__init__(self, "fund_div", config, 800)
         self.api = TushareAPI(config)
@@ -227,7 +228,7 @@ setattr(FundDiv, 'default_limit', default_limit_ext)
 setattr(FundDiv, 'default_cron_express', default_cron_express_ext)
 setattr(FundDiv, 'default_order_by', default_order_by_ext)
 setattr(FundDiv, 'prepare', prepare_ext)
-setattr(FundDiv, 'tushare_parameters', tushare_parameters_ext)
+setattr(FundDiv, 'query_parameters', query_parameters_ext)
 setattr(FundDiv, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

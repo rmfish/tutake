@@ -22,7 +22,7 @@ def prepare_ext(self, process_type: ProcessType):
     # self.delete_all()
 
 
-def tushare_parameters_ext(self, process_type: ProcessType):
+def query_parameters_ext(self, process_type: ProcessType):
     """
     同步历史数据调用的参数
     :return: list(dict)

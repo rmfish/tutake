@@ -7,7 +7,7 @@ from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.process_bar import process
-from tutake.api.ts.base_dao import Base
+from tutake.api.base_dao import Base
 
 
 class TaskReport(Base):

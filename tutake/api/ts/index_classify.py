@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_classify_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -34,7 +35,7 @@ class TushareIndexClassify(Base):
     src = Column(String, index=True, comment='行业分类（SW申万）')
 
 
-class IndexClassify(BaseDao, TuShareBase, DataProcess):
+class IndexClassify(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -51,8 +52,8 @@ class IndexClassify(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['index_code', 'level', 'src', 'parent_code', 'limit', 'offset']
         entity_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareIndexClassify, 'tushare_index_classify',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexClassify, 'tushare_index_classify',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_classify", config)
         TuShareBase.__init__(self, "index_classify", config, 2000)
         self.api = TushareAPI(config)
@@ -163,7 +164,7 @@ setattr(IndexClassify, 'default_limit', default_limit_ext)
 setattr(IndexClassify, 'default_cron_express', default_cron_express_ext)
 setattr(IndexClassify, 'default_order_by', default_order_by_ext)
 setattr(IndexClassify, 'prepare', prepare_ext)
-setattr(IndexClassify, 'tushare_parameters', tushare_parameters_ext)
+setattr(IndexClassify, 'query_parameters', query_parameters_ext)
 setattr(IndexClassify, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

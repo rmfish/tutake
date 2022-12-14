@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_dailybasic_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -39,7 +40,7 @@ class TushareIndexDailybasic(Base):
     pb = Column(Float, comment='市净率')
 
 
-class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
+class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -59,8 +60,8 @@ class IndexDailybasic(BaseDao, TuShareBase, DataProcess):
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
             "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_dailybasic", config)
         TuShareBase.__init__(self, "index_dailybasic", config, 5000)
         self.api = TushareAPI(config)
@@ -196,7 +197,7 @@ setattr(IndexDailybasic, 'default_limit', default_limit_ext)
 setattr(IndexDailybasic, 'default_cron_express', default_cron_express_ext)
 setattr(IndexDailybasic, 'default_order_by', default_order_by_ext)
 setattr(IndexDailybasic, 'prepare', prepare_ext)
-setattr(IndexDailybasic, 'tushare_parameters', tushare_parameters_ext)
+setattr(IndexDailybasic, 'query_parameters', query_parameters_ext)
 setattr(IndexDailybasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

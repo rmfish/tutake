@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.stk_rewards_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -34,7 +35,7 @@ class TushareStkRewards(Base):
     hold_vol = Column(Float, comment='持股数')
 
 
-class StkRewards(BaseDao, TuShareBase, DataProcess):
+class StkRewards(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -51,8 +52,8 @@ class StkRewards(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "end_date", "name", "title", "reward", "hold_vol"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk_rewards', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk_rewards', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "stk_rewards", config)
         TuShareBase.__init__(self, "stk_rewards", config, 5000)
         self.api = TushareAPI(config)
@@ -161,7 +162,7 @@ setattr(StkRewards, 'default_limit', default_limit_ext)
 setattr(StkRewards, 'default_cron_express', default_cron_express_ext)
 setattr(StkRewards, 'default_order_by', default_order_by_ext)
 setattr(StkRewards, 'prepare', prepare_ext)
-setattr(StkRewards, 'tushare_parameters', tushare_parameters_ext)
+setattr(StkRewards, 'query_parameters', query_parameters_ext)
 setattr(StkRewards, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

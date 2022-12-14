@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_basic_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -51,7 +52,7 @@ class TushareFundBasic(Base):
     market = Column(String, index=True, comment='E场内O场外')
 
 
-class FundBasic(BaseDao, TuShareBase, DataProcess):
+class FundBasic(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -73,8 +74,8 @@ class FundBasic(BaseDao, TuShareBase, DataProcess):
             "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate",
             "market"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "fund_basic", config)
         TuShareBase.__init__(self, "fund_basic", config, 5000)
         self.api = TushareAPI(config)
@@ -284,7 +285,7 @@ setattr(FundBasic, 'default_limit', default_limit_ext)
 setattr(FundBasic, 'default_cron_express', default_cron_express_ext)
 setattr(FundBasic, 'default_order_by', default_order_by_ext)
 setattr(FundBasic, 'prepare', prepare_ext)
-setattr(FundBasic, 'tushare_parameters', tushare_parameters_ext)
+setattr(FundBasic, 'query_parameters', query_parameters_ext)
 setattr(FundBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

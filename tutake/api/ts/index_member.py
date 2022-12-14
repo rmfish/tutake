@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_member_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -34,7 +35,7 @@ class TushareIndexMember(Base):
     is_new = Column(String, index=True, comment='是否最新Y是N否')
 
 
-class IndexMember(BaseDao, TuShareBase, DataProcess):
+class IndexMember(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -51,8 +52,8 @@ class IndexMember(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['index_code', 'is_new', 'ts_code', 'limit', 'offset']
         entity_fields = ["index_code", "index_name", "con_code", "con_name", "in_date", "out_date", "is_new"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareIndexMember, 'tushare_index_member', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexMember, 'tushare_index_member',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_member", config)
         TuShareBase.__init__(self, "index_member", config, 5000)
         self.api = TushareAPI(config)
@@ -162,7 +163,7 @@ setattr(IndexMember, 'default_limit', default_limit_ext)
 setattr(IndexMember, 'default_cron_express', default_cron_express_ext)
 setattr(IndexMember, 'default_order_by', default_order_by_ext)
 setattr(IndexMember, 'prepare', prepare_ext)
-setattr(IndexMember, 'tushare_parameters', tushare_parameters_ext)
+setattr(IndexMember, 'query_parameters', query_parameters_ext)
 setattr(IndexMember, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

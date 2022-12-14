@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ggt_monthly_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -36,7 +37,7 @@ class TushareGgtMonthly(Base):
     total_sell_vol = Column(Float, comment='总卖出成交笔数（万笔）')
 
 
-class GgtMonthly(BaseDao, TuShareBase, DataProcess):
+class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -56,8 +57,8 @@ class GgtMonthly(BaseDao, TuShareBase, DataProcess):
             "month", "day_buy_amt", "day_buy_vol", "day_sell_amt", "day_sell_vol", "total_buy_amt", "total_buy_vol",
             "total_sell_amt", "total_sell_vol"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "ggt_monthly", config)
         TuShareBase.__init__(self, "ggt_monthly", config, 120)
         self.api = TushareAPI(config)
@@ -177,7 +178,7 @@ setattr(GgtMonthly, 'default_limit', default_limit_ext)
 setattr(GgtMonthly, 'default_cron_express', default_cron_express_ext)
 setattr(GgtMonthly, 'default_order_by', default_order_by_ext)
 setattr(GgtMonthly, 'prepare', prepare_ext)
-setattr(GgtMonthly, 'tushare_parameters', tushare_parameters_ext)
+setattr(GgtMonthly, 'query_parameters', query_parameters_ext)
 setattr(GgtMonthly, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

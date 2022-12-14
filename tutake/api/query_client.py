@@ -4,6 +4,7 @@ from functools import partial
 import tushare
 
 from tutake.api.ts.tushare_api import TushareAPI
+from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import file_dir
 
@@ -35,11 +36,36 @@ class TushareQuery:
         return partial(self.query, name)
 
 
+class XueQiuQuery:
+    def __init__(self, config):
+        self.config = config
+        self.api = XueQiuAPI(config)
+
+    def query(self, api_name, fields='', **kwargs):
+        api = self.api.__getattr__(api_name)
+        method = getattr(api, api_name)
+        if method is not None:
+            return method(fields, **kwargs)
+        return None
+
+    def __getattr__(self, name: str):
+        if name.startswith("_"):
+            return self.api.__getattr__(name[1:])
+        return partial(self.query, name)
+
+
 def pro_api(config_file_path) -> TushareQuery:
     config = __config_from_file(config_file_path)
     if not config:
         raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
     return TushareQuery(config)
+
+
+def xueqiu(config_file_path) -> XueQiuQuery:
+    config = __config_from_file(config_file_path)
+    if not config:
+        raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
+    return XueQiuQuery(config)
 
 
 def __config_from_file(config_file_path):

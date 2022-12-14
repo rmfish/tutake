@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.anns_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -35,7 +36,7 @@ class TushareAnns(Base):
     filepath = Column(String, comment='pdf原文')
 
 
-class Anns(BaseDao, TuShareBase, DataProcess):
+class Anns(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -52,8 +53,8 @@ class Anns(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_anns', query_fields, entity_fields,
-                         config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_anns', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "anns", config)
         TuShareBase.__init__(self, "anns", config, 5000)
         self.api = TushareAPI(config)
@@ -165,7 +166,7 @@ setattr(Anns, 'default_limit', default_limit_ext)
 setattr(Anns, 'default_cron_express', default_cron_express_ext)
 setattr(Anns, 'default_order_by', default_order_by_ext)
 setattr(Anns, 'prepare', prepare_ext)
-setattr(Anns, 'tushare_parameters', tushare_parameters_ext)
+setattr(Anns, 'query_parameters', query_parameters_ext)
 setattr(Anns, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

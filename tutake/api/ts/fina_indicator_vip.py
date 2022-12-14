@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fina_indicator_vip_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -194,7 +195,7 @@ class TushareFinaIndicatorVip(Base):
     update_flag = Column(String, index=True, comment='更新标识')
 
 
-class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
+class FinaIndicatorVip(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -238,8 +239,8 @@ class FinaIndicatorVip(BaseDao, TuShareBase, DataProcess):
             "tr_yoy", "or_yoy", "q_gr_yoy", "q_gr_qoq", "q_sales_yoy", "q_sales_qoq", "q_op_yoy", "q_op_qoq",
             "q_profit_yoy", "q_profit_qoq", "q_netprofit_yoy", "q_netprofit_qoq", "equity_yoy", "rd_exp", "update_flag"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
-                         query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fina_indicator_vip", config)
         TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -1161,7 +1162,7 @@ setattr(FinaIndicatorVip, 'default_limit', default_limit_ext)
 setattr(FinaIndicatorVip, 'default_cron_express', default_cron_express_ext)
 setattr(FinaIndicatorVip, 'default_order_by', default_order_by_ext)
 setattr(FinaIndicatorVip, 'prepare', prepare_ext)
-setattr(FinaIndicatorVip, 'tushare_parameters', tushare_parameters_ext)
+setattr(FinaIndicatorVip, 'query_parameters', query_parameters_ext)
 setattr(FinaIndicatorVip, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

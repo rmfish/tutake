@@ -1119,7 +1119,7 @@ setattr(Balancesheet, 'default_limit', default_limit_ext)
 setattr(Balancesheet, 'default_cron_express', default_cron_express_ext)
 setattr(Balancesheet, 'default_order_by', default_order_by_ext)
 setattr(Balancesheet, 'prepare', prepare_ext)
-setattr(Balancesheet, 'tushare_parameters', tushare_parameters_ext)
+setattr(Balancesheet, 'tushare_parameters', query_parameters_ext)
 setattr(Balancesheet, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

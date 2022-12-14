@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_daily_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -38,7 +39,7 @@ class TushareIndexDaily(Base):
     amount = Column(Float, comment='None')
 
 
-class IndexDaily(BaseDao, TuShareBase, DataProcess):
+class IndexDaily(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -57,8 +58,8 @@ class IndexDaily(BaseDao, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "index_daily", config)
         TuShareBase.__init__(self, "index_daily", config, 5000)
         self.api = TushareAPI(config)
@@ -189,7 +190,7 @@ setattr(IndexDaily, 'default_limit', default_limit_ext)
 setattr(IndexDaily, 'default_cron_express', default_cron_express_ext)
 setattr(IndexDaily, 'default_order_by', default_order_by_ext)
 setattr(IndexDaily, 'prepare', prepare_ext)
-setattr(IndexDaily, 'tushare_parameters', tushare_parameters_ext)
+setattr(IndexDaily, 'query_parameters', query_parameters_ext)
 setattr(IndexDaily, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

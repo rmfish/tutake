@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.moneyflow_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -48,7 +49,7 @@ class TushareMoneyflow(Base):
     trade_count = Column(Integer, comment='交易笔数')
 
 
-class Moneyflow(BaseDao, TuShareBase, DataProcess):
+class Moneyflow(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -70,8 +71,8 @@ class Moneyflow(BaseDao, TuShareBase, DataProcess):
             "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
             "net_mf_amount", "trade_count"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "moneyflow", config)
         TuShareBase.__init__(self, "moneyflow", config, 2000)
         self.api = TushareAPI(config)
@@ -252,7 +253,7 @@ setattr(Moneyflow, 'default_limit', default_limit_ext)
 setattr(Moneyflow, 'default_cron_express', default_cron_express_ext)
 setattr(Moneyflow, 'default_order_by', default_order_by_ext)
 setattr(Moneyflow, 'prepare', prepare_ext)
-setattr(Moneyflow, 'tushare_parameters', tushare_parameters_ext)
+setattr(Moneyflow, 'query_parameters', query_parameters_ext)
 setattr(Moneyflow, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':

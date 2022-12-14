@@ -1,0 +1,105 @@
+{
+  "database": "xueqiu",
+  "default_limit": "1000",
+  "desc": "热门的股票ETF数据 热门类型（etf_query: 热门ETF, etf_1h:1小时热门ETF, etf_follow:热门关注ETF, stock_query:热门股票, stock_increase: 热门股票飙升, stock_comment:热评股票, stock_follow：热门关注股票, cube:热门组合）",
+  "id": 10000,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "热门类型",
+      "must": "Y",
+      "name": "hot_type"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "str",
+      "desc": "最大行数",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "name": "hot_stock",
+  "order_by": "trade_date,rank",
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TYPE",
+      "data_type": "str",
+      "desc": "热门类型（etf_query: 热门ETF, etf_1h:1小时热门ETF, etf_follow:热门关注ETF, stock_query:热门股票, stock_increase: 热门股票飙升, stock_comment:热评股票, stock_follow：热门关注股票, cube:热门组合）",
+      "must": "Y",
+      "name": "hot_type"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "VALUE",
+      "data_type": "float",
+      "desc": "数值",
+      "must": "Y",
+      "name": "value"
+    },
+    {
+      "column": "INCREMENT",
+      "data_type": "float",
+      "desc": "数值增加或减少",
+      "must": "Y",
+      "name": "increment"
+    },
+    {
+      "column": "RANK",
+      "data_type": "int",
+      "desc": "排名",
+      "must": "Y",
+      "name": "rank"
+    }
+  ],
+  "title": "热门股票"
+}

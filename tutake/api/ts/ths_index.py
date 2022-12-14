@@ -12,10 +12,11 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
+from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ths_index_ext import *
-from tutake.api.ts.base_dao import BaseDao, Base
+from tutake.api.ts.tushare_dao import TushareDAO
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -33,7 +34,7 @@ class TushareThsIndex(Base):
     type = Column(String, index=True, comment='N概念指数S特色指数')
 
 
-class ThsIndex(BaseDao, TuShareBase, DataProcess):
+class ThsIndex(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -50,8 +51,8 @@ class ThsIndex(BaseDao, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'exchange', 'type', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
-        BaseDao.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
-                         entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
+                            entity_fields, config)
         DataProcess.__init__(self, "ths_index", config)
         TuShareBase.__init__(self, "ths_index", config, 5000)
         self.api = TushareAPI(config)
@@ -156,7 +157,7 @@ setattr(ThsIndex, 'default_limit', default_limit_ext)
 setattr(ThsIndex, 'default_cron_express', default_cron_express_ext)
 setattr(ThsIndex, 'default_order_by', default_order_by_ext)
 setattr(ThsIndex, 'prepare', prepare_ext)
-setattr(ThsIndex, 'tushare_parameters', tushare_parameters_ext)
+setattr(ThsIndex, 'query_parameters', query_parameters_ext)
 setattr(ThsIndex, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
