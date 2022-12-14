@@ -11,7 +11,7 @@ from apscheduler.triggers.cron import CronTrigger
 
 from tutake.api.process import DataProcess
 from tutake.api.process_bar import process
-from tutake.api.process_report import ProcessReportContainer, ProcessType, ProcessReport
+from tutake.api.process_report import ProcessReportContainer, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
@@ -22,7 +22,7 @@ def process_api(config_path):
     config = __config_from_file(config_path)
     if not config:
         raise Exception(f"Config file {config_path} is not exists, pls check it.")
-    return TushareProcessTask(config)
+    return TushareProcess(config)
 
 
 def task_api(config_path):
@@ -103,10 +103,10 @@ class TushareProcessTask:
     def _finish_task_report(self, job_id, report: ProcessReport):
         self.report_container.save_report(report)
 
-    def _do_process(self, apis, process_type: ProcessType = ProcessType.INCREASE):
+    def _do_process(self, apis):
         def __process(_job_id, _api):
             if _api is not None:
-                report = _api.process(process_type)
+                report = _api.process()
                 self._finish_task_report(_job_id, report)
                 return report
             else:
@@ -147,12 +147,8 @@ class TushareProcessTask:
     def get_results(self, job_id) -> [ProcessReport]:
         return self.report_container.get_reports(job_id)
 
-    def add_job(self, job_id, api_name, **kwargs):
-        if kwargs.get('process_type'):
-            args = [api_name, kwargs.get('process_type')]
-        else:
-            args = [api_name]
-        self._scheduler.add_job(self._do_process, args=args, id=job_id, name=job_id, **kwargs)
+    def add_job(self, job_id, api, **kwargs):
+        self._scheduler.add_job(self._do_process, args=[api], id=job_id, name=job_id, **kwargs)
 
     def start(self, now=False):
         try:
@@ -168,8 +164,8 @@ class TushareProcessTask:
         except (Exception, KeyboardInterrupt) as err:
             self.logger.error(f"Exit with {type(err).__name__} {err}")
 
-    def __getattr__(self, name):
-        return partial(self.add_job, name)
+    # def __getattr__(self, name):
+    #     return partial(self.add_job, name)
 
 
 class TushareProcess:
@@ -177,10 +173,10 @@ class TushareProcess:
         self.api = TushareAPI(config)
         self.config = config
 
-    def process(self, api_name, process_type: ProcessType = ProcessType.INCREASE):
+    def process(self, api_name):
         api = self.api.__getattr__(api_name)
         if api is not None:
-            return api.process(process_type)
+            return api.process()
         else:
             return None
 

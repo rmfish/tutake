@@ -3,7 +3,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from tutake.api.process_bar import process, finish_task
-from tutake.api.process_report import ProcessReport, ProcessType, ActionResult, ProcessException, ProcessReportContainer
+from tutake.api.process_report import ProcessReport, ActionResult, ProcessException, ProcessReportContainer
 
 
 class DataProcess:
@@ -17,7 +17,7 @@ class DataProcess:
     def name(self):
         return self.name
 
-    def process(self, process_type: ProcessType = ProcessType.INCREASE):
+    def process(self):
         pass
 
     def default_cron_express(self) -> str:
@@ -30,41 +30,41 @@ class DataProcess:
         """
         return ()
 
-    def prepare(self, process_type: ProcessType):
+    def prepare(self):
         """
         同步历史数据准备工作
         """
 
-    def query_parameters(self, process_type: ProcessType):
+    def query_parameters(self):
         """
         同步历史数据调用的参数
         :return: list(dict)
         """
         return [{}]
 
-    def param_loop_process(self, process_type: ProcessType, **params):
+    def param_loop_process(self, **params):
         """
         每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
         """
         return params
 
-    def _process(self, process_type: ProcessType, fetch_and_append) -> ProcessReport:
+    def _process(self, fetch_and_append) -> ProcessReport:
         """
         同步历史数据
         :return:
         """
-        # self.logger.info(f"Start {self.entities.__name__} {process_type} process.")
-        process.console.log(f"Start {self.entities.__name__} {process_type} process.")
-        report = self._report_container.create_process_report("tushare_%s" % self.name, self.name, process_type,
+        # self.logger.info(f"Start {self.entities.__name__} process.")
+        process.console.log(f"Start {self.entities.__name__} process.")
+        report = self._report_container.create_process_report("tushare_%s" % self.name, self.name,
                                                               self.logger)
-        self.prepare(process_type)
-        params = self.query_parameters(process_type)
+        self.prepare()
+        params = self.query_parameters()
         if params:
             report.set_exec_params(params)
 
             def action(param) -> ActionResult:
                 start = time.time()
-                new_param = self.param_loop_process(process_type, **param)
+                new_param = self.param_loop_process(**param)
                 if new_param is None:
                     return ActionResult(start, time.time(), param, new_param, status='Skip')
                 try:
@@ -99,5 +99,5 @@ class DataProcess:
             finish_task(task_id)
         report = report.close()
         process.console.log(
-            f"Finished {self.entities.__name__} {process_type} process. it takes {report.process_time()}s")
+            f"Finished {self.entities.__name__} process. it takes {report.process_time()}s")
         return report

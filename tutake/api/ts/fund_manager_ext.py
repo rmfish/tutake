@@ -4,7 +4,6 @@ Tushare fund_manager接口
 数据接口-公募基金-基金经理  https://tushare.pro/document/2?doc_id=208
 """
 
-from tutake.api.process_report import ProcessType
 from tutake.api.ts.date_utils import day_by_day_params
 
 
@@ -26,25 +25,25 @@ def default_limit_ext(self) -> str:
     return "50000"
 
 
-def prepare_ext(self, process_type: ProcessType):
+def prepare_ext(self):
     """
     同步历史数据准备工作
     """
 
 
-def query_parameters_ext(self, process_type: ProcessType):
+def query_parameters_ext(self):
     """
     同步历史数据调用的参数
     :return: list(dict)
     """
     cnt = self.count()
     if cnt > 0:
-        return day_by_day_params(self, process_type, "20000222", "ann_date")
+        return day_by_day_params(self, "20000222", "ann_date")
     else:
         return [{}]
 
 
-def param_loop_process_ext(self, process_type: ProcessType, **params):
+def param_loop_process_ext(self, **params):
     """
     每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
     """

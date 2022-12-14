@@ -1,7 +1,6 @@
 """
 获取备用行情，包括特定的行情指标。量比、换手率、成交量、流通市值、强弱度(%)...
 """
-from tutake.api.process_report import ProcessType
 from tutake.api.ts.date_utils import start_end_step_params
 
 
@@ -17,19 +16,19 @@ def default_limit_ext(self):
     return '5000'
 
 
-def prepare_ext(self, process_type: ProcessType):
+def prepare_ext(self):
     """
     同步历史数据准备工作
     :return:
     """
 
 
-def query_parameters_ext(self, process_type: ProcessType):
+def query_parameters_ext(self):
     """
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return start_end_step_params(self, process_type, step=3, start_date='20170614')
+    return start_end_step_params(self, step=3, start_date='20170614')
     # import pendulum
     # start = pendulum.parse('20170614')
     # now = pendulum.now()
@@ -40,7 +39,7 @@ def query_parameters_ext(self, process_type: ProcessType):
     # return params
 
 
-def param_loop_process_ext(self, process_type: ProcessType, **params):
+def param_loop_process_ext(self, **params):
     """
     每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
     """

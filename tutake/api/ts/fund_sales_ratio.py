@@ -103,12 +103,12 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType = ProcessType.INCREASE):
+    def process(self):
         """
         同步历史数据
         :return:
         """
-        return super()._process(process_type, self.fetch_and_append)
+        return super()._process(self.fetch_and_append)
 
     def fetch_and_append(self, **kwargs):
         """

@@ -1,13 +1,12 @@
 import json
 import uuid
-from enum import Enum
 
 import pendulum
 from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.process_bar import process
 from tutake.api.base_dao import Base
+from tutake.api.process_bar import process
 
 
 class TaskReport(Base):
@@ -22,11 +21,6 @@ class TaskReport(Base):
     status = Column(String, comment='任务状态')
     params = Column(String, comment='任务状态')
     task = Column(String, comment='任务状态')
-
-
-class ProcessType(str, Enum):
-    HISTORY = 'HISTORY'  # 同步历史数据
-    INCREASE = 'INCREASE'  # 同步增量数据
 
 
 class ProcessPercent(object):
@@ -93,11 +87,10 @@ class ActionResult(object):
 
 class ProcessReport:
 
-    def __init__(self, _id, _name, _process_type: ProcessType, _logger):
+    def __init__(self, _id, _name, _logger):
         self.percent = ProcessPercent(0)
         self.name = _name
         self._id = _id
-        self.process_type = _process_type
         self.start_time = pendulum.now()
         self.end_time = pendulum.now()
         self.params = None
@@ -112,7 +105,7 @@ class ProcessReport:
 
     def to_dict(self):
         result = self.result_summary()
-        return {"id": self._id, "name": self.name, "process_type": self.process_type,
+        return {"id": self._id, "name": self.name,
                 "start_time": self.start_time.format("YYYY-MM-DD HH:mm:ss"),
                 "end_time": self.end_time.format("YYYY-MM-DD HH:mm:ss"),
                 "cost_second": self.process_time(), "records": result[0],
@@ -127,8 +120,8 @@ class ProcessReport:
         return json.dumps(self.to_dict(), sort_keys=True)
 
     def __str__(self):
-        return '''===ReportSummary===\nProcess: {} {}\nTime: {} ~ {}\nCost: {}s\nTaskInfo: {}\nParams: {}\nActionInfos: {}\n'''.format(
-            self.name, self.process_type, self.start_time.format("YYYY-MM-DD HH:mm:ss"),
+        return '''===ReportSummary===\nProcess: {} \nTime: {} ~ {}\nCost: {}s\nTaskInfo: {}\nParams: {}\nActionInfos: {}\n'''.format(
+            self.name, self.start_time.format("YYYY-MM-DD HH:mm:ss"),
             self.end_time.format("HH:mm:ss"),
             self.process_time(),
             self.process_summary_str(),
@@ -276,8 +269,8 @@ class ProcessReportContainer(object):
         if reports:
             reports.remove(report)
 
-    def create_process_report(self, _id, name, process_type: ProcessType, logger) -> ProcessReport:
-        report = ProcessReport(_id, name, process_type, logger)
+    def create_process_report(self, _id, name, logger) -> ProcessReport:
+        report = ProcessReport(_id, name, logger)
         self._add_report(report)
         report.start()
         return report
@@ -295,7 +288,7 @@ class ProcessReportContainer(object):
 
         for r in rows:
             obj = r.__dict__
-            task_report = ProcessReport(obj.get('job_id'), obj.get('name'), obj.get('process_type'), None)
+            task_report = ProcessReport(obj.get('job_id'), obj.get('name'), None)
             task_report.repeat_task = obj.get('repeat_task')
             task_report.total_task = obj.get('total_task')
             task_report.status = obj.get('status')
@@ -318,7 +311,6 @@ class ProcessReportContainer(object):
             task_report = TaskReport()
             task_report.job_id = report.get_id()
             task_report.name = report.name
-            task_report.process_type = report.process_type
             task_report.total_task = report.total_task
             task_report.repeat_task = report.repeat_task
             task_report.status = report.status

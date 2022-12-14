@@ -61,7 +61,7 @@ class {{title_name}}(BaseDao, XueQiuBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self, process_type: ProcessType = ProcessType.INCREASE):
+    def process(self):
         """
         同步历史数据
         :return:

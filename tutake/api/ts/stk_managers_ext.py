@@ -1,4 +1,3 @@
-from tutake.api.process_report import ProcessType
 from tutake.api.ts.date_utils import start_end_step_params
 
 
@@ -14,7 +13,7 @@ def default_limit_ext(self):
     return '4000'
 
 
-def prepare_ext(self, process_type: ProcessType):
+def prepare_ext(self):
     """
     同步历史数据准备工作
     :return:
@@ -22,15 +21,15 @@ def prepare_ext(self, process_type: ProcessType):
     # self.delete_all()
 
 
-def query_parameters_ext(self, process_type: ProcessType):
+def query_parameters_ext(self):
     """
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return start_end_step_params(self, process_type, start_date='20191221', step=30, date_col='ann_date')
+    return start_end_step_params(self, start_date='20191221', step=30, date_col='ann_date')
 
 
-def param_loop_process_ext(self, process_type: ProcessType, **params):
+def param_loop_process_ext(self, **params):
     """
     每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
     """
