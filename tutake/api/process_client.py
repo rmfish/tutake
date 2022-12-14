@@ -77,6 +77,11 @@ class TushareProcessTask:
                 cron = configs.get(api.name)
                 if cron is None:  # 配置cron为空的代表跳过不执行
                     continue
+            elif api.type in configs.keys():
+                cron = configs.get(api.type)
+                if cron is None:  # 配置cron为空的代表跳过不执行
+                    continue
+
             if cron:
                 self.add_job(f"tutake_{api.name}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
             else:

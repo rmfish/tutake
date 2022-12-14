@@ -7,6 +7,7 @@ from tutake.api.ts.tushare_api import TushareAPI
 class DailyFull(DataProcess):
     def __init__(self, config):
         self.api = TushareAPI(config)
+        self.type = "tushare"
         DataProcess.__init__(self, "daily_full", config)
 
     def daily_full(self, fields='', **kwargs):

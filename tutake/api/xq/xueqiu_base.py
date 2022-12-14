@@ -72,6 +72,7 @@ class XueQiuSession(object):
 class XueQiuBase(object):
     def __init__(self, api_name, config):
         self.name = api_name
+        self.type = 'xueqiu'
         self.session = XueQiuSession()
 
     def index_valuation_request(self, **kwargs):

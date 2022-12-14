@@ -124,6 +124,7 @@ class TushareTokenPool(object):
 
 class TuShareBase(object):
     def __init__(self, api_name, config, token_integral=120):
+        self.type = 'tushare'
         tushare_token = config.get_tushare_token()
         if tushare_token:
             self.t_api = TushareClient(tushare_token)
