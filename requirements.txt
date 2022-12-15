@@ -7,3 +7,7 @@ SQLAlchemy==1.4.42
 tushare==1.2.85
 yapf==0.32.0
 apscheduler~=3.9.1.post1
+pathlib~=1.0.1
+pytz~=2022.6
+setuptools~=65.5.0
+rich~=12.6.0
