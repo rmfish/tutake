@@ -9,7 +9,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from tutake.api.process import DataProcess
 from tutake.api.process_bar import process
 from tutake.api.process_report import ProcessReportContainer, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
@@ -36,6 +35,15 @@ def __config_from_file(config_file_path):
     if not os.path.exists(config_file_path):
         return None
     return TutakeConfig(file_dir(config_file_path), os.path.basename(config_file_path))
+
+
+class Task(object):
+    def __init__(self, _name, _type):
+        self.name = _name
+        self.type = _type
+
+    def default_cron_express(self):
+        return ''
 
 
 class TushareProcessTask:
@@ -67,30 +75,31 @@ class TushareProcessTask:
         for i in config_tasks:
             configs = {**configs, **i}
         default_cron = configs.get('default') or "10 0,6,21 * * *"
-        apis = self._get_all_api()
+        tasks = self._get_all_task()
         default_schedule = []
-        for api in apis:
+        for task in tasks:
             cron = ""
-            if api:
-                cron = api.default_cron_express()
-            if api.name in configs.keys():
-                cron = configs.get(api.name)
+            if task:
+                cron = task.default_cron_express()
+            if task.name in configs.keys():
+                cron = configs.get(task.name)
                 if cron is None:  # 配置cron为空的代表跳过不执行
                     continue
-            elif api.type in configs.keys():
-                cron = configs.get(api.type)
+            elif task.type in configs.keys():
+                cron = configs.get(task.type)
                 if cron is None:  # 配置cron为空的代表跳过不执行
                     continue
 
             if cron:
-                self.add_job(f"tutake_{api.name}", api, trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
+                self.add_job(f"tutake_{task.name}", task,
+                             trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
             else:
-                default_schedule.append(api)
+                default_schedule.append(task)
         if len(default_schedule) > 0:
             self.add_job("default_schedule", default_schedule,
                          trigger=CronTrigger.from_crontab(default_cron, timezone=self.timezone))
 
-    def _get_all_api(self):
+    def _get_all_task(self) -> [Task]:
         tushare_api = TushareAPI(self.config)
         xq_api = XueQiuAPI(self.config)
         apis = []
@@ -103,10 +112,10 @@ class TushareProcessTask:
     def _finish_task_report(self, job_id, report: ProcessReport):
         self.report_container.save_report(report)
 
-    def _do_process(self, apis):
-        def __process(_job_id, _api):
-            if _api is not None:
-                report = _api.process()
+    def _do_process(self, tasks):
+        def __process(_job_id, _task):
+            if _task is not None:
+                report = _task.process()
                 self._finish_task_report(_job_id, report)
                 return report
             else:
@@ -115,12 +124,12 @@ class TushareProcessTask:
         start = time.time()
         reports = []
         self._start_process()
-        if isinstance(apis, DataProcess):
-            reports.append(__process(f"tutake_{apis.name}", apis))
-        elif isinstance(apis, Sequence):
-            for api in apis:
+        if isinstance(tasks, Task):
+            reports.append(__process(f"tutake_{tasks.name}", tasks))
+        elif isinstance(tasks, Sequence):
+            for task in tasks:
                 try:
-                    reports.append(__process(f"tutake_{api.name}", api))
+                    reports.append(__process(f"tutake_{task.name}", task))
                 except Exception as err:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue

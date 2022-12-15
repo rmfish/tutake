@@ -5,6 +5,7 @@ import pandas as pd
 import pendulum
 import requests
 
+from tutake.api.process_client import Task
 from tutake.api.symbol import XueQiuSymbol
 from tutake.utils.singleton import Singleton
 
@@ -69,10 +70,10 @@ class XueQiuSession(object):
         return self._get_session(url, refresh).get(url)
 
 
-class XueQiuBase(object):
+class XueQiuBase(Task):
     def __init__(self, api_name, config):
+        super().__init__(api_name, 'xueqiu')
         self.name = api_name
-        self.type = 'xueqiu'
         self.session = XueQiuSession()
 
     def index_valuation_request(self, **kwargs):

@@ -20,9 +20,6 @@ class DataProcess:
     def process(self):
         pass
 
-    def default_cron_express(self) -> str:
-        return ""
-
     def api_token_limit(self) -> (int, int):
         """
         接口的限制

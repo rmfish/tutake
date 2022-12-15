@@ -9,6 +9,7 @@ import pandas as pd
 import requests
 import tushare as ts
 
+from tutake.api.process_client import Task
 from tutake.utils.config import TUSHARE_TOKENS_KEY
 from tutake.utils.utils import end_of_day
 
@@ -122,9 +123,9 @@ class TushareTokenPool(object):
             return None
 
 
-class TuShareBase(object):
+class TuShareBase(Task):
     def __init__(self, api_name, config, token_integral=120):
-        self.type = 'tushare'
+        super().__init__(api_name, "tushare")
         tushare_token = config.get_tushare_token()
         if tushare_token:
             self.t_api = TushareClient(tushare_token)
