@@ -59,7 +59,10 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_moneyflow.db'),
-                                    connect_args={'check_same_thread': False})
+                                    connect_args={
+                                        'check_same_thread': False,
+                                        'timeout': config.get_sqlite_timeout()
+                                    })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareMoneyflow.__table__.create(bind=self.engine, checkfirst=True)

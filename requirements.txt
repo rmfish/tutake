@@ -1,13 +1,13 @@
 Jinja2==3.1.2
-pandas==1.5.1
+pandas==1.5.2
 pendulum==2.1.2
 PyYAML==6.0
 requests==2.28.1
-SQLAlchemy==1.4.42
-tushare==1.2.85
+SQLAlchemy==1.4.45
+tushare==1.2.89
 yapf==0.32.0
 apscheduler~=3.9.1.post1
 pathlib~=1.0.1
 pytz~=2022.6
-setuptools~=65.5.0
+setuptools==65.6.3
 rich~=12.6.0

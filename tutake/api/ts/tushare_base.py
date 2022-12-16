@@ -10,7 +10,7 @@ import requests
 import tushare as ts
 
 from tutake.api.process_client import Task
-from tutake.utils.config import TUSHARE_TOKENS_KEY
+from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig
 from tutake.utils.utils import end_of_day
 
 
@@ -89,6 +89,16 @@ def _baseline_score(i):
         return 0, i
     else:
         return -1, i
+
+
+def check_token(config: TutakeConfig):
+    config_tokens = config.get_config(TUSHARE_TOKENS_KEY)
+    for level in config_tokens.keys():
+        tokens = config_tokens.get(level)
+        for token in tokens:
+            val = _baseline_score(token)
+            if val[0] != level:
+                print(f"Check failed. {token} expect:{level} actual:{val[0]}")
 
 
 def _test_token(path):
@@ -275,7 +285,10 @@ class TushareTokenQueue:
 
 
 if __name__ == '__main__':
-    _test_token("/Users/rmfish/Documents/Projects/PycharmProjects/tutake/tmp/token2.txt")
+    config = TutakeConfig("/Users/rmfish/Documents/Projects/PycharmProjects/tutake")
+    check_token(config)
+
+    # _test_token("/Users/rmfish/Documents/Projects/PycharmProjects/tutake/tmp/token2.txt")
     # tokens = [TushareClient(i, time.time() - 5000) for i in ["123", "345"]]
     # queue = TushareTokenQueue(tokens)
     # print(queue)

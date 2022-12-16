@@ -198,3 +198,8 @@ class BaseDao(object):
         return {"table_name": self.table_name, "columns": self.columns_meta(),
                 "default_order_by": self.default_order_by(),
                 "default_limit": self.default_limit()}
+
+    def uniq_check(self, columns):
+        group = ','.join(columns)
+        sql = "select " + group + " from {table} group by " + group + "  have count(*)>1"
+        return self.sql(sql)

@@ -1,5 +1,6 @@
 import logging
 import os.path
+from os.path import dirname
 from pathlib import Path
 
 import yaml
@@ -83,15 +84,21 @@ TUSHARE_META_DIR_KEY = "tushare.meta.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
 TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
+TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY = 'tutake.sqlite.timeout'
 
 
 class TutakeConfig(object):
 
-    def __init__(self, path=None, config_name="config.yml"):
-        self.config_dir = path or project_root()
-        self.config_file = f'{self.config_dir}/{config_name}'
-        if not os.path.exists(self.config_file):
-            self.config_file = None
+    def __init__(self, config_file):
+        if config_file and os.path.isdir(config_file):
+            config_file = f'{config_file}/config.yml'
+        if config_file and not os.path.exists(config_file):
+            config_file = f'{project_root()}/config.yml'
+            if os.path.exists(config_file):
+                print(f"Tutake config file is None or not exists. use default configfile. {config_file}")
+            else:
+                raise Exception(f"Tutake config file is None or not exists. pls set it.")
+        self.config_file = config_file
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
 
@@ -165,7 +172,7 @@ class TutakeConfig(object):
         db_name = 'tushare_stock_basic.db'
         if dir_name == 'meta':
             db_name = 'tushare_meta.db'
-        _dir = "%s/%s" % (self.config_dir, dir_name)
+        _dir = "%s/%s" % (dirname(self.config_file), dir_name)
         if os.path.exists("%s/%s" % (_dir, db_name)):
             return _dir
         else:
@@ -184,6 +191,9 @@ class TutakeConfig(object):
     @staticmethod
     def __set(config: DotConfig, k, v):
         return config.set(k, v)
+
+    def get_sqlite_timeout(self):
+        return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)
 
     def get_data_sqlite_driver_url(self, data_file=None):
         url = self.require_config(TUTAKE_SQLITE_DRIVER_URL_KEY)

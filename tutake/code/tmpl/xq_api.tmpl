@@ -23,8 +23,8 @@ class XueQiuAPI(object):
         apis = [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         return apis
 
-    def instance_from_name(self, name, config):
-        {% for api in apis %}if name == '{{api.name}}':
+    def instance_from_name(self, name, config):{% for api in apis %}
+        if name == '{{api.name}}':
             {{api.name}}_module = import_module("tutake.api.xq.{{api.name}}")
             clazz = getattr({{api.name}}_module, "{{api.title_name}}")
             return clazz(config){% endfor %}

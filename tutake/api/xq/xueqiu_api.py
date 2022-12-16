@@ -24,7 +24,6 @@ class XueQiuAPI(object):
         return apis
 
     def instance_from_name(self, name, config):
-
         if name == 'index_valuation':
             index_valuation_module = import_module("tutake.api.xq.index_valuation")
             clazz = getattr(index_valuation_module, "IndexValuation")

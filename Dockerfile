@@ -1,13 +1,18 @@
 # syntax=docker/dockerfile:1
-FROM python:3.10-alpine
+FROM python:3.9-alpine
 
-WORKDIR /python-docker
+RUN sed -i "s/dl-cdn.alpinelinux.org/mirrors.cloud.tencent.com/g" /etc/apk/repositories
+WORKDIR /tutake
+RUN apk add --update --no-cache gcc make automake gcc g++ python3-dev cython freetype-dev
+ENV PYTHONPATH=/usr/lib/python3.9/site-packages
+
+RUN addgroup -S tutake && adduser -u 1000 -S tutake -G tutake
+RUN mkdir -p /tutake/data & chown -R tutake /tutake
+USER tutake
 
 COPY requirements.txt requirements.txt
-RUN pip3 install -r requirements.txt
-
+RUN pip3 install -i https://mirrors.cloud.tencent.com/pypi/simple -r requirements.txt
 COPY . .
-
 ENTRYPOINT [ "python" ]
 
 CMD ["main.py" ]

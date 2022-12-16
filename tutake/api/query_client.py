@@ -1,4 +1,3 @@
-import os
 from functools import partial
 
 import tushare
@@ -6,7 +5,6 @@ import tushare
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
-from tutake.utils.utils import file_dir
 
 
 class TushareQuery:
@@ -55,23 +53,17 @@ class XueQiuQuery:
 
 
 def pro_api(config_file_path) -> TushareQuery:
-    config = __config_from_file(config_file_path)
+    config = TutakeConfig(config_file_path)
     if not config:
         raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
     return TushareQuery(config)
 
 
 def xueqiu(config_file_path) -> XueQiuQuery:
-    config = __config_from_file(config_file_path)
+    config = TutakeConfig(config_file_path)
     if not config:
         raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
     return XueQiuQuery(config)
-
-
-def __config_from_file(config_file_path):
-    if not os.path.exists(config_file_path):
-        return None
-    return TutakeConfig(file_dir(config_file_path), os.path.basename(config_file_path))
 
 
 def pro_bar(api: TushareQuery, ts_code='', start_date='', end_date='', freq='D', asset='E', exchange='', adj=None,

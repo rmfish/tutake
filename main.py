@@ -1,5 +1,4 @@
-from tutake import task_api
+import tutake as tt
 
 if __name__ == '__main__':
-    task = task_api("./config.yml")
-    task.start(True)  # 如果设置为True,则立即开始执行
+    tt.task_api("./config.yml").start(True)
