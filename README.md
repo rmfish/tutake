@@ -52,7 +52,7 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import file_dir
 
 if __name__ == '__main__':
-    task = task_api(TutakeConfig(file_dir(__file__)))
+    task = task_api("./config.yml")
     task.start(True)  # 如果设置为True,则立即开始执行 
 ```
 
@@ -63,7 +63,7 @@ if __name__ == '__main__':
 import tutake
 
 if __name__ == '__main__':
-    api = tutake.pro_api(data_dir='/xxx/data_dir')
+    api = tutake.pro_api("./config.yml")
     print(api.daily())
 ```
 显示查询结果：
@@ -89,8 +89,7 @@ if __name__ == '__main__':
 import tutake
 
 if __name__ == '__main__':
-    api = tutake.pro_api(
-        data_dir='/xxx/data_dir')
+    api = tutake.pro_api("./config.yml")
     print(tutake.pro_bar(api, ts_code='000002.SZ', adj='qfq'))
 ```
 

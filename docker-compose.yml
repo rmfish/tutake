@@ -5,6 +5,5 @@ services:
     user: '1000'
     volumes:
       - /etc/localtime:/etc/localtime
-      - /home/ubuntu/tutake-data:/tutake/data
       - ./main.py:/tutake/main.py
-      - ./config-pro.yml:/tutake/config.yml
+      - ./config.yml:/tutake/config.yml
