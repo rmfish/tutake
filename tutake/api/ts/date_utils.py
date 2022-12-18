@@ -57,15 +57,15 @@ def start_end_step_params(self, start_date: str = "19990104", step=7, date_col='
     date_format = 'YYYYMMDD'
     start_date = pendulum.parse(start_date)
     dates = []
-    min_date = self.min(date_col)
-    if min_date:
-        end_date = pendulum.parse(min_date).add(days=-1)
-        while end_date >= start_date:
-            start_date = end_date.add(days=-step)
-            dates.append(
-                {"start_date": start_date.format(date_format), "end_date": end_date.format(date_format)})
-            end_date = start_date.add(days=-1)
-        return dates
+    max_date = self.max(date_col)
+    if max_date:
+        start_date = pendulum.parse(max_date).add(days=1)
+    while start_date <= pendulum.now():
+        end_date = start_date.add(days=step)
+        dates.append(
+            {"start_date": start_date.format(date_format), "end_date": end_date.format(date_format)})
+        start_date = end_date.add(days=1)
+    return dates
 
 
 def quarter_params(self, start_period: str = "19901231", date_col="f_ann_date"):

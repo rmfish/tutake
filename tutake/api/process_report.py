@@ -199,27 +199,27 @@ class ProcessReport:
         else:
             self.task.append(result)
         self.percent.finish()
-        if result.status == 'Skip':
-            self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
-        if result.status == 'Failed':
-            # print(result.err)
-            process.console.log(f"{self.name} Throw exception with param: {result.params} err:{result.err}")
-            # self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
-        elif result.status == 'Success':
-            if self.percent.is_step_percent():
-                process.console.log(
-                    f"({self.name}-{self.get_process_percent()[1]}) Fetch and append data, cnt is {result.cnt} param is {result.new_params}")
-                # self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-                #                                                                                  self.get_process_percent()[
-                #                                                                                      1],
-                #                                                                                  result.cnt,
-                #                                                                                  result.new_params))
-            # else:
-            #     self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
-            #                                                                                       self.get_process_percent()[
-            #                                                                                           1],
-            #                                                                                       result.cnt,
-            #                                                                                       result.new_params))
+        if self.logger:
+            if result.status == 'Skip':
+                self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
+            if result.status == 'Failed':
+                self.logger.log(f"{self.name} Throw exception with param: {result.params} err:{result.err}")
+                # self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))
+            elif result.status == 'Success':
+                if self.percent.is_step_percent():
+                    self.logger.log(
+                        f"({self.name}-{self.get_process_percent()[1]}) Fetch and append data, cnt is {result.cnt} param is {result.new_params}")
+                    # self.logger.info("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+                    #                                                                                  self.get_process_percent()[
+                    #                                                                                      1],
+                    #                                                                                  result.cnt,
+                    #                                                                                  result.new_params))
+                # else:
+                #     self.logger.debug("[{}-{}] Fetch and append data, cnt is {} . param is {}".format(self.name,
+                #                                                                                       self.get_process_percent()[
+                #                                                                                           1],
+                #                                                                                       result.cnt,
+                #                                                                                       result.new_params))
         if result and result.err:
             if isinstance(result.err, ProcessException):
                 return False
