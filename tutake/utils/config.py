@@ -6,7 +6,7 @@ from pathlib import Path
 import yaml
 
 from tutake.utils.logger import setup_logging
-from tutake.utils.utils import project_root, file_dir
+from tutake.utils.utils import project_root, file_dir, realpath
 
 
 class DotConfig(dict):
@@ -107,10 +107,14 @@ class TutakeConfig(object):
         确认必须的配置项
         :return:
         """
-        data_dir = self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data')
+        data_dir = realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data'))
+        if not os.path.exists(data_dir):
+            os.makedirs(data_dir)
         self.set_tutake_data_dir(data_dir)
 
-        meta_dir = self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta')
+        meta_dir = realpath(self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta'))
+        if not os.path.exists(meta_dir):
+            os.makedirs(meta_dir)
         self.set_tutake_meta_dir(meta_dir)
 
         self.logger_config_file = self._get_logger_config()

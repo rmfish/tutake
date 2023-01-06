@@ -23,6 +23,8 @@ def realpath(file):
     :param file:
     :return:
     """
+    if file.startswith("~"):
+        return os.path.expanduser(file)
     return os.path.realpath(file)
 
 

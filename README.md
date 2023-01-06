@@ -37,9 +37,47 @@ tushare:
   token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
 ```
 
-具体的api的使用，可以直接参考代码 <a href="main.py">main.py</a>
+具体的api的使用，可以直接参考代码 <a href="main.py">main.py</a>，包含下面的所有演示的代码
 
-### Step2 下载股票列表
+### Step2 快速上手
+同步股票列表数据到本地，并查询股票列表
+```python
+import tutake as tt
+
+if __name__ == '__main__':
+    tutake = tt.Tutake("./config.yml")
+    print("========同步股票数据========")
+    tutake.process_api().stock_basic()
+    print("========查询股票数据========")
+    print(tutake.tushare_api().stock_basic())
+```
+```python
+========同步股票数据========
+[20:43:29] Start TushareStockBasic process.                                                                                              process.py:54
+2023-01-06 20:43:29,834 - api.tushare.stock_basic - WARNING - Delete all data of tushare_stock_basic
+[20:43:31] (stock_basic-33.33%) Fetch and append data, cnt is 5068 param is {'list_status': 'L'}                                 process_report.py:214
+           (stock_basic-66.67%) Fetch and append data, cnt is 192 param is {'list_status': 'D'}                                  process_report.py:214
+           (stock_basic-100.00%) Fetch and append data, cnt is 0 param is {'list_status': 'P'}                                   process_report.py:214
+           Finished TushareStockBasic process. it takes 1.219354s                                                                       process.py:100
+========查询股票数据========
+        ts_code  symbol      name  area  ... list_status list_date delist_date is_hs
+0     000001.SZ  000001      平安银行    深圳  ...           L  19910403        None     S
+1     000002.SZ  000002       万科A    深圳  ...           L  19910129        None     S
+2     000003.SZ  000003  PT金田A(退)  None  ...           D  19910703    20020614     N
+3     000004.SZ  000004      ST国华    深圳  ...           L  19910114        None     N
+4     000005.SZ  000005      ST星源    深圳  ...           L  19901210        None     N
+...         ...     ...       ...   ...  ...         ...       ...         ...   ...
+5255  873223.BJ  873223      荣亿精密  None  ...           L  20220609        None     N
+5256  873305.BJ  873305      九菱科技  None  ...           L  20221221        None     N
+5257  873339.BJ  873339      恒太照明  None  ...           L  20221117        None     N
+5258  873527.BJ  873527       夜光明  None  ...           L  20221027        None     N
+5259  T00018.SH  T00018   上港集箱(退)  None  ...           D  20000719    20061020     N
+
+[5260 rows x 15 columns]
+```
+
+
+### Step3 下载股票列表
 执行main函数，开始同步下载数据
 
 ```python
@@ -47,13 +85,16 @@ import tutake as tt
 
 if __name__ == '__main__':
     tutake = tt.Tutake("./config.yml")
-
+    
+    #后面两个的demo接口数据量很大，耗时很长，可以先尝试小数据量的接口，比如stock_basic
+    tutake.process_api().stock_basic()  
+    
     # 通过以下的方式进行数据的同步，两种方式均可以同步数据
-    tutake.task_api().start(True)  # 启动全量的数据同步任务
-    tutake.process_api().daily()  # 单个接口的数据同步
+    tutake.task_api().start(True)  # 启动全量的数据同步任务，第一次执行的耗时非常长
+    tutake.process_api().daily()  # 单个接口的数据同步，daily的数据量比较大
 ```
 
-### Step3 查询数据
+### Step4 查询数据
 下载完数据就可以从本地查询数据:
 
 ```python
@@ -70,7 +111,7 @@ if __name__ == '__main__':
 ['adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly', 'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share', 'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global', 'daily_full']
 ```
 
-查询000002.SZ的daily数据：
+同步数据后，就可以查询`000002.SZ`的`daily`数据：
 ```python
 import tutake as tt
 
@@ -98,7 +139,7 @@ if __name__ == '__main__':
 [6000 rows x 11 columns]
 ```
 
-使用pro_bar接口获取更复杂的数据，例如获得000002.SZ的后复权数据：
+使用`pro_bar`接口获取更复杂的数据，例如获得`000002.SZ`的后复权数据：
 ```python
 import tutake as tt
 
@@ -164,7 +205,7 @@ if __name__ == '__main__':
 {'table_name': 'tushare_daily', 'columns': [{'name': 'ts_code', 'type': 'String', 'comment': '股票代码'}, {'name': 'trade_date', 'type': 'String', 'comment': '交易日期'}, {'name': 'open', 'type': 'Float', 'comment': '开盘价'}, {'name': 'high', 'type': 'Float', 'comment': '最高价'}, {'name': 'low', 'type': 'Float', 'comment': '最低价'}, {'name': 'close', 'type': 'Float', 'comment': '收盘价'}, {'name': 'pre_close', 'type': 'Float', 'comment': '昨收价'}, {'name': 'change', 'type': 'Float', 'comment': '涨跌额'}, {'name': 'pct_chg', 'type': 'Float', 'comment': '涨跌幅'}, {'name': 'vol', 'type': 'Float', 'comment': '成交量'}, {'name': 'amount', 'type': 'Float', 'comment': '成交额'}], 'default_order_by': 'trade_date,ts_code', 'default_limit': '6000'}
 ```
 
-而外还有雪球的一些接口支持：
+额外还有雪球的一些接口支持：
 ```python
 import tutake as tt
 
@@ -178,14 +219,20 @@ if __name__ == '__main__':
 
 ```
 ```python
-    ts_code trade_date  open  high  ...  change  pct_chg        vol      amount
-0  002198.SZ   20221230  6.39  6.57  ...    0.12   1.8750  101579.12   65646.164
-1  002199.SZ   20221230  6.36  6.43  ...    0.10   1.5898   38684.00   24640.014
-2  002194.SZ   20221230  9.13  9.26  ...    0.11   1.2088  101101.41   92895.425
-3  002181.SZ   20221230  5.28  5.52  ...    0.15   2.8249  547665.70  297495.407
-4  002195.SZ   20221230  1.99  2.02  ...    0.03   1.5152  444728.72   89088.620
+        ts_code trade_date  name  ttype  ...      pb     roe   yeild  eva_type
+0    399986.SZ   20221213  中证银行      3  ...  0.5364  0.1178  0.0569       low
+1    000015.SH   20221213  上证红利      2  ...  0.5871  0.1203  0.0713       low
+2    CSIH30269   20221213  红利低波      2  ...  0.5873  0.1198  0.0690       low
+3     SPACEVCP   20221213  标普价值      2  ...  0.5266  0.1011  0.0585       low
+4    000922.SH   20221213  中证红利      2  ...  0.6340  0.1181  0.0643       low
+..         ...        ...   ...    ...  ...     ...     ...     ...       ...
+763  CSI931079   20230106  5G通讯      3  ...  2.7255  0.1181  0.0127    unsort
+764   HKHSSCNE   20230106   新经济      2  ...  3.1623  0.1097  0.0087    unsort
+765  CSI931087   20230106  科技龙头      3  ...  4.7646  0.1417  0.0062    unsort
+766  000688.SH   20230106  科创50      1  ...  4.4710  0.1058  0.0039    unsort
+767   HKHSTECH   20230106  恒生科技      3  ...  2.9211  0.0556  0.0044    unsort
 
-[5 rows x 11 columns]
+[768 rows x 12 columns]
 ```
 
 ## 说明

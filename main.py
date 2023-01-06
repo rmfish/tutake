@@ -1,11 +1,19 @@
 import tutake as tt
 
-if __name__ == '__main__':
-    tutake = tt.Tutake("./config.yml")
 
+def quick_start():
+    tutake = tt.Tutake("./config.yml")
+    print("========同步股票数据========")
+    tutake.process_api().stock_basic()
+    print("========查询股票数据========")
+    print(tutake.tushare_api().stock_basic())
+
+
+def complete():
+    tutake = tt.Tutake("./config.yml")
     # 通过以下的方式进行数据的同步，两种方式均可以同步数据
-    tutake.task_api().start(True)  # 启动全量的数据同步任务
     tutake.process_api().daily()  # 单个接口的数据同步
+    tutake.task_api().start(True)  # 启动全量的数据同步任务
 
     # 通过以下的方式进行数据的查询
     ts_api = tutake.tushare_api()
@@ -19,3 +27,9 @@ if __name__ == '__main__':
     print(xq_api.apis())  # 雪球所有支持的api
     print(xq_api.index_valuation())  # 指数的每日估值
     print(xq_api._index_valuation.meta())  # 指数的每日估值元数据
+
+
+if __name__ == '__main__':
+    quick_start()
+    # complete的接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
+    # complete(tutake)
