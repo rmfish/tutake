@@ -24,17 +24,31 @@ clone 代码后复制配置文件 `config-default.yml` -> `config.yml`
 需要配置两个参数：
 
 ```yaml
-#执行时需要将这个文件复制为 config.yml
+#执行时需要将这个文件调整为 config.yml
 tutake:
   data:
     dir: ~/.tutake/data  #单独指定数据的目录
   scheduler:
-    tasks:
-      - default: 10 0,11,21 * * *
+    tasks:  #配置每个任务的定时任务，使用crontab的参数，具体的配置参考下方注释或者上网查询
+      - xueqiu: 0 10 * * *  #代表xueqiu的所有接口都用这个cron参数
+      - default: 5 0 * * *  #default代表没有指定的任务都默认用这个cron参数
       - stock_basic: 0 0,11,21 * * *
+      - fund_basic: 0 0,11,21 * * *
+      - index_basic: 0 0,11,21 * * *
+      - anns:   #如果cron参数为空,代表这个任务不执行
+
+      # *    *    *    *    *
+      # -    -    -    -    -
+      # |    |    |    |    |
+      # |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+      # |    |    |    +---------- month (1 - 12) OR jan,feb,mar,apr ...
+      # |    |    +--------------- day of month (1 - 31)
+      # |    +-------------------- hour (0 - 23)
+      # +------------------------- minute (0 - 59)
 
 tushare:
   token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
+
 ```
 
 具体的api的使用，可以直接参考代码 <a href="main.py">main.py</a>，包含下面的所有演示的代码
