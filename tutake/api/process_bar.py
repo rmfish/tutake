@@ -1,3 +1,4 @@
+from rich import reconfigure
 from rich.progress import Progress, TextColumn, BarColumn, TimeRemainingColumn, TimeElapsedColumn, Task, SpinnerColumn, \
     MofNCompleteColumn, ProgressColumn
 from rich.text import Text
@@ -21,7 +22,7 @@ process = Progress(TextColumn("[progress.description]{task.description}"), Spinn
                    TextColumn("[progress.percentage]{task.percentage:>3.0f}%"), TimeRemainingColumn(),
                    TimeElapsedColumn(), TaskCntColumn('record_cnt'), TaskCntColumn('success_cnt'),
                    TaskCntColumn('skip_cnt'), TaskCntColumn('failed_cnt'))
-
+reconfigure(width=150)
 _task_array = []
 _max_task_size = 5
 

@@ -6,7 +6,6 @@ from sqlalchemy import create_engine, Column, Integer, String, desc
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import Base
-from tutake.api.process_bar import process
 
 
 class TaskReport(Base):
@@ -200,8 +199,13 @@ class ProcessReport:
             self.task.append(result)
         self.percent.finish()
         if self.logger:
-            if result.status == 'Skip':
-                self.logger.debug("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
+            # if result.status == 'Skip':
+            #     if len(self.params) > 10:
+            #         self.logger.log(
+            #             "[{}] Skip exec param: {} and {} more".format(self.get_process_percent(), self.params[:10],
+            #                                                           len(self.params)))
+            #     else:
+            #         self.logger.log("[{}] Skip exec param: {}".format(self.get_process_percent(), self.params))
             if result.status == 'Failed':
                 self.logger.log(f"{self.name} Throw exception with param: {result.params} err:{result.err}")
                 # self.logger.error("Throw exception with param: {} err:{}".format(result.params, result.err))

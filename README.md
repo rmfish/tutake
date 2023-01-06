@@ -37,185 +37,156 @@ tushare:
   token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
 ```
 
-### Step2 下载股票列表
+具体的api的使用，可以直接参考代码 <a href="main.py">main.py</a>
 
-可以参考 <a href="main.py">main.py</a>
+### Step2 下载股票列表
 执行main函数，开始同步下载数据
 
 ```python
-from tutake import task_api
+import tutake as tt
 
 if __name__ == '__main__':
-    task = task_api("./config.yml")
-    task.start(True)  # 如果设置为True,则立即开始执行 
+    tutake = tt.Tutake("./config.yml")
+
+    # 通过以下的方式进行数据的同步，两种方式均可以同步数据
+    tutake.task_api().start(True)  # 启动全量的数据同步任务
+    tutake.process_api().daily()  # 单个接口的数据同步
 ```
 
 ### Step3 查询数据
 下载完数据就可以从本地查询数据:
 
 ```python
-import tutake
+import tutake as tt
 
 if __name__ == '__main__':
-    api = tutake.pro_api("./config.yml")
-    print(api.daily())
+    tutake = tt.Tutake("./config.yml")
+    # 通过以下的方式进行数据的查询
+    ts_api = tutake.tushare_api()
+    print(ts_api.apis())  # 所有支持的api
 ```
-显示查询结果：
+显示支持的apis：
 ```python
-        ts_code trade_date    open    high  ...  change   pct_chg      vol   amount
-0     600601.SH   19901219  185.30  185.30  ...  184.30  18430.00     50.0     37.0
-1     600602.SH   19901219  365.70  384.00  ...  383.00  38300.00   1160.0    443.0
-2     600656.SH   19901219    2.60    2.60  ...    1.60    160.00     50.0     13.0
-3     600601.SH   19901220  185.30  194.60  ...    9.30      5.02     21.0     16.0
-4     600602.SH   19901220  403.20  403.20  ...   19.20      5.00    149.0     60.0
-...         ...        ...     ...     ...  ...     ...       ...      ...      ...
-5995  000004.SZ   19920817   27.75   28.60  ...    0.10      0.36    872.0  12210.0
-5996  000006.SZ   19920817   54.85   56.50  ...    1.50      2.77    307.0   8586.0
-5997  000007.SZ   19920817   35.05   35.05  ...    0.75      2.23    278.0   4799.0
-5998  000008.SZ   19920817   24.50   25.50  ...    0.50      2.08    210.0   2609.0
-5999  000009.SZ   19920817   30.75   32.65  ...    1.10      3.59  27951.0  89526.0
+['adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly', 'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share', 'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global', 'daily_full']
+```
+
+查询000002.SZ的daily数据：
+```python
+import tutake as tt
+
+if __name__ == '__main__':
+    tutake = tt.Tutake("./config.yml")
+    # 通过以下的方式进行数据的查询
+    ts_api = tutake.tushare_api()
+    print(ts_api.daily(ts_code='000002.SZ'))  # 查询000002.SZ每日数据
+```
+
+```python
+        ts_code trade_date   open  ...  pct_chg         vol        amount
+0     000002.SZ   19910129  14.58  ...  1358.00        3.00  2.200000e+01
+1     000002.SZ   19910130  14.51  ...    -0.48       17.00  1.230000e+02
+2     000002.SZ   19910204  14.66  ...     0.48       56.00  4.100000e+02
+3     000002.SZ   19910205  14.73  ...     0.48       29.00  2.130000e+02
+4     000002.SZ   19910206  14.80  ...     0.48       29.00  2.150000e+02
+...         ...        ...    ...  ...      ...         ...           ...
+5995  000002.SZ   20160824  24.40  ...    -2.87  1470675.59  3.561540e+06
+5996  000002.SZ   20160825  23.50  ...    -1.88  1821374.91  4.234199e+06
+5997  000002.SZ   20160826  23.59  ...    -2.76  1200024.09  2.780659e+06
+5998  000002.SZ   20160829  22.86  ...     0.09   782446.19  1.796321e+06
+5999  000002.SZ   20160830  22.95  ...    -1.09   909262.53  2.072873e+06
 
 [6000 rows x 11 columns]
 ```
 
-使用pro_bar接口获取更复杂的数据，例如获得000002.SZ的前复权数据：
+使用pro_bar接口获取更复杂的数据，例如获得000002.SZ的后复权数据：
 ```python
-import tutake
+import tutake as tt
 
 if __name__ == '__main__':
-    api = tutake.pro_api("./config.yml")
-    print(tutake.pro_bar(api, ts_code='000002.SZ', adj='qfq'))
+    tutake = tt.Tutake("./config.yml")
+    # 通过以下的方式进行数据的查询
+    ts_api = tutake.tushare_api()
+    print(ts_api.pro_bar(ts_code='000002.SZ', adj='hfq'))  # 查询000002.SZ的后复权数据
 ```
-
 ```python
-        ts_code trade_date     open  ...    pct_chg         vol        amount
-0     000002.SZ   19910129   0.5819  ...  1358.3960        3.00  2.200000e+01
-1     000002.SZ   19910130   0.5791  ...    -0.4812       17.00  1.230000e+02
-2     000002.SZ   19910204   0.5851  ...     0.4809       56.00  4.100000e+02
-3     000002.SZ   19910205   0.5879  ...     0.4786       29.00  2.130000e+02
-4     000002.SZ   19910206   0.5907  ...     0.4763       29.00  2.150000e+02
-...         ...        ...      ...  ...        ...         ...           ...
-5995  000002.SZ   20160824  18.7467  ...    -2.8745  1470675.59  3.561540e+06
-5996  000002.SZ   20160825  18.0553  ...    -1.8756  1821374.91  4.234199e+06
-5997  000002.SZ   20160826  18.1244  ...    -2.7613  1200024.09  2.780659e+06
-5998  000002.SZ   20160829  17.5636  ...     0.0876   782446.19  1.796321e+06
-5999  000002.SZ   20160830  17.6327  ...    -1.0914   909262.53  2.072873e+06
+        ts_code trade_date       open  ...    pct_chg         vol        amount
+0     000002.SZ   19910129   100.5728  ...  1357.9994        3.00  2.200000e+01
+1     000002.SZ   19910130   100.0900  ...    -0.4801       17.00  1.230000e+02
+2     000002.SZ   19910204   101.1247  ...     0.4798       56.00  4.100000e+02
+3     000002.SZ   19910205   101.6075  ...     0.4774       29.00  2.130000e+02
+4     000002.SZ   19910206   102.0904  ...     0.4753       29.00  2.150000e+02
+...         ...        ...        ...  ...        ...         ...           ...
+5995  000002.SZ   20160824  3239.8808  ...    -2.8745  1470675.59  3.561540e+06
+5996  000002.SZ   20160825  3120.3770  ...    -1.8758  1821374.91  4.234199e+06
+5997  000002.SZ   20160826  3132.3274  ...    -2.7613  1200024.09  2.780659e+06
+5998  000002.SZ   20160829  3035.3965  ...     0.0874   782446.19  1.796321e+06
+5999  000002.SZ   20160830  3047.3469  ...    -1.0912   909262.53  2.072873e+06
 
 [6000 rows x 11 columns]
 ```
 
-#### 原生查询
+原生sql查询
+
 一些特殊场景下需要需要更多维度的查询，所以也支持使用sql查询。
-只需要通过接口前加上_就可以，比如股票基本信息`stock_basic`接口可以用`_stock_basic`来访问，
-具体可以参考 <a href="test/query_test.py">query_test.py</a>
+只需要通过接口前加上_就可以，比如股票日数据`daily`接口可以用`_daily`来访问
 ```python
-# query_test.py
-def sql_query(self):
-    """
-        查询上市和停市的股票数量 可以使用{table}占位符
-    """
-    print(self.api._stock_basic.sql("select list_status,count(*) cnt from {table}  group by list_status"))
-```
+import tutake as tt
 
-查询结果：
+if __name__ == '__main__':
+    tutake = tt.Tutake("./config.yml")
+    # 通过以下的方式进行数据的查询
+    ts_api = tutake.tushare_api()
+    print(ts_api._daily.sql("select * from {table} where trade_date='20221230' and close>open limit 5"))  # 通过sql直接查询数据
+```
 ```python
-  list_status   cnt
-0           D   192
-1           L  5008
+    ts_code trade_date  open  high  ...  change  pct_chg        vol      amount
+0  002198.SZ   20221230  6.39  6.57  ...    0.12   1.8750  101579.12   65646.164
+1  002199.SZ   20221230  6.36  6.43  ...    0.10   1.5898   38684.00   24640.014
+2  002194.SZ   20221230  9.13  9.26  ...    0.11   1.2088  101101.41   92895.425
+3  002181.SZ   20221230  5.28  5.52  ...    0.15   2.8249  547665.70  297495.407
+4  002195.SZ   20221230  1.99  2.02  ...    0.03   1.5152  444728.72   89088.620
+
+[5 rows x 11 columns]
 ```
 
 也可以查看接口的元数据：
 ```python
-# query_test.py
-def meta_query(self):
-    print(self.api._stock_basic.meta())
+import tutake as tt
+
+if __name__ == '__main__':
+    tutake = tt.Tutake("./config.yml")
+    # 通过以下的方式进行数据的查询
+    ts_api = tutake.tushare_api()
+    print(ts_api._daily.meta())  # 查看接口元数据
 ```
 结果如下：
 ```json lines
-{
-  "table_name": "tushare_stock_basic",
-  "columns": [
-    {
-      "name": "ts_code",
-      "type": "String",
-      "comment": "TS代码"
-    },
-    {
-      "name": "symbol",
-      "type": "String",
-      "comment": "股票代码"
-    },
-    {
-      "name": "name",
-      "type": "String",
-      "comment": "股票名称"
-    },
-    {
-      "name": "area",
-      "type": "String",
-      "comment": "地域"
-    },
-    {
-      "name": "industry",
-      "type": "String",
-      "comment": "所属行业"
-    },
-    {
-      "name": "fullname",
-      "type": "String",
-      "comment": "股票全称"
-    },
-    {
-      "name": "enname",
-      "type": "String",
-      "comment": "英文全称"
-    },
-    {
-      "name": "cnspell",
-      "type": "String",
-      "comment": "拼音缩写"
-    },
-    {
-      "name": "market",
-      "type": "String",
-      "comment": "市场类型"
-    },
-    {
-      "name": "exchange",
-      "type": "String",
-      "comment": "交易所代码"
-    },
-    {
-      "name": "curr_type",
-      "type": "String",
-      "comment": "交易货币"
-    },
-    {
-      "name": "list_status",
-      "type": "String",
-      "comment": "上市状态 L上市 D退市 P暂停上市"
-    },
-    {
-      "name": "list_date",
-      "type": "String",
-      "comment": "上市日期"
-    },
-    {
-      "name": "delist_date",
-      "type": "String",
-      "comment": "退市日期"
-    },
-    {
-      "name": "is_hs",
-      "type": "String",
-      "comment": "是否沪深港通标的，N否 H沪股通 S深股通"
-    }
-  ],
-  "default_order_by": "ts_code",
-  "default_limit": ""
-}
+{'table_name': 'tushare_daily', 'columns': [{'name': 'ts_code', 'type': 'String', 'comment': '股票代码'}, {'name': 'trade_date', 'type': 'String', 'comment': '交易日期'}, {'name': 'open', 'type': 'Float', 'comment': '开盘价'}, {'name': 'high', 'type': 'Float', 'comment': '最高价'}, {'name': 'low', 'type': 'Float', 'comment': '最低价'}, {'name': 'close', 'type': 'Float', 'comment': '收盘价'}, {'name': 'pre_close', 'type': 'Float', 'comment': '昨收价'}, {'name': 'change', 'type': 'Float', 'comment': '涨跌额'}, {'name': 'pct_chg', 'type': 'Float', 'comment': '涨跌幅'}, {'name': 'vol', 'type': 'Float', 'comment': '成交量'}, {'name': 'amount', 'type': 'Float', 'comment': '成交额'}], 'default_order_by': 'trade_date,ts_code', 'default_limit': '6000'}
 ```
 
+而外还有雪球的一些接口支持：
+```python
+import tutake as tt
+
+if __name__ == '__main__':
+    tutake = tt.Tutake("./config.yml")
+
+    xq_api = tutake.xueqiu_api()
+    print(xq_api.apis())  # 雪球所有支持的api
+    print(xq_api.index_valuation())  # 指数的每日估值
+    print(xq_api._index_valuation.meta())  # 指数的每日估值元数据
+
+```
+```python
+    ts_code trade_date  open  high  ...  change  pct_chg        vol      amount
+0  002198.SZ   20221230  6.39  6.57  ...    0.12   1.8750  101579.12   65646.164
+1  002199.SZ   20221230  6.36  6.43  ...    0.10   1.5898   38684.00   24640.014
+2  002194.SZ   20221230  9.13  9.26  ...    0.11   1.2088  101101.41   92895.425
+3  002181.SZ   20221230  5.28  5.52  ...    0.15   2.8249  547665.70  297495.407
+4  002195.SZ   20221230  1.99  2.02  ...    0.03   1.5152  444728.72   89088.620
+
+[5 rows x 11 columns]
+```
 
 ## 说明
 因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，

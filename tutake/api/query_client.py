@@ -4,7 +4,6 @@ import tushare
 
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
-from tutake.utils.config import TutakeConfig
 
 
 class TushareQuery:
@@ -16,10 +15,10 @@ class TushareQuery:
         self.api = TushareAPI(config)
 
     def query(self, api_name, fields='', **kwargs):
-        api = self.api.__getattr__(api_name)
-        if api is None:
+        _api = self.api.__getattr__(api_name)
+        if _api is None:
             return self.fail_over(api_name, fields, **kwargs)
-        method = getattr(api, api_name)
+        method = getattr(_api, api_name)
         if method is not None:
             return method(fields, **kwargs)
         return None
@@ -27,6 +26,19 @@ class TushareQuery:
     def fail_over(self, api_name, fields='', **kwargs):
         if self.tushare is not None:
             return self.tushare.query(api_name, fields, **kwargs)
+
+    def apis(self):
+        """
+        获取支持的所有api
+        :return:
+        """
+        return self.api.all_apis()
+
+    def pro_bar(self, ts_code='', start_date='', end_date='', freq='D', asset='E', exchange='', adj=None,
+                ma=[], factors=None, adjfactor=False, offset=None, limit=None, contract_type=''):
+        return tushare.pro_bar(ts_code, self, start_date, end_date, freq, asset, exchange, adj, ma, factors, adjfactor,
+                               offset,
+                               limit, contract_type)
 
     def __getattr__(self, name: str):
         if name.startswith("_"):
@@ -51,23 +63,9 @@ class XueQiuQuery:
             return self.api.__getattr__(name[1:])
         return partial(self.query, name)
 
-
-def pro_api(config_file_path) -> TushareQuery:
-    config = TutakeConfig(config_file_path)
-    if not config:
-        raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
-    return TushareQuery(config)
-
-
-def xueqiu(config_file_path) -> XueQiuQuery:
-    config = TutakeConfig(config_file_path)
-    if not config:
-        raise Exception(f"Config file {config_file_path} is not exists, pls check it.")
-    return XueQiuQuery(config)
-
-
-def pro_bar(api: TushareQuery, ts_code='', start_date='', end_date='', freq='D', asset='E', exchange='', adj=None,
-            ma=[], factors=None, adjfactor=False, offset=None, limit=None, contract_type=''):
-    return tushare.pro_bar(ts_code, api, start_date, end_date, freq, asset, exchange, adj, ma, factors, adjfactor,
-                           offset,
-                           limit, contract_type)
+    def apis(self):
+        """
+        获取支持的所有api
+        :return:
+        """
+        return self.api.all_apis()

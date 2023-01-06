@@ -15,20 +15,6 @@ from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
 
 
-def process_api(config_path):
-    config = TutakeConfig(config_path)
-    if not config:
-        raise Exception(f"Config file {config_path} is not exists, pls check it.")
-    return TushareProcess(config)
-
-
-def task_api(config_path):
-    config = TutakeConfig(config_path)
-    if not config:
-        raise Exception(f"Config file {config_path} is not exists, pls check it.")
-    return TushareProcessTask(config)
-
-
 class Task(object):
     def __init__(self, _name, _type):
         self.name = _name

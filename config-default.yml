@@ -3,10 +3,22 @@ tutake:
   data:
     dir: ~/.tutake/data  #单独指定数据的目录
   scheduler:
-    background: False
-    tasks:
-      - default: 10 0,11,21 * * *
+    tasks:  #配置每个任务的定时任务，使用crontab的参数，具体的配置参考下方注释或者上网查询
+      - xueqiu: 0 10 * * *  #代表xueqiu的所有接口都用这个cron参数
+      - default: 5 0 * * *  #default代表没有指定的任务都默认用这个cron参数
       - stock_basic: 0 0,11,21 * * *
+      - fund_basic: 0 0,11,21 * * *
+      - index_basic: 0 0,11,21 * * *
+      - anns:   #如果cron参数为空,代表这个任务不执行
+
+      # *    *    *    *    *
+      # -    -    -    -    -
+      # |    |    |    |    |
+      # |    |    |    |    +----- day of week (0 - 7) (Sunday=0 or 7) OR sun,mon,tue,wed,thu,fri,sat
+      # |    |    |    +---------- month (1 - 12) OR jan,feb,mar,apr ...
+      # |    |    +--------------- day of month (1 - 31)
+      # |    +-------------------- hour (0 - 23)
+      # +------------------------- minute (0 - 59)
 
 tushare:
   token: #tushare api 的token，如果需要获取所有的数据，需要5000以上的积分
