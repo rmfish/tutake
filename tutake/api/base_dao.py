@@ -163,12 +163,13 @@ class BaseDao(object):
     def direct_query(self, fields: str = None, filter_criterion=None, filter_by: dict = None,
                      order_by: str = None, limit: int = None, offset: int = None):
         start = time.time()
+        query = None
         if filter_criterion is not None:
             query = self.session_factory().query(self.entities).filter(filter_criterion)
-        elif filter_by:
-            query = self.session_factory().query(self.entities).filter_by(**filter_by)
         else:
             query = self.session_factory().query(self.entities)
+        if filter_by:
+            query = self.session_factory().query(self.entities).filter_by(**filter_by)
         if fields:
             query_fields = self._get_query_fields(fields)
             query = query.with_entities(*query_fields)

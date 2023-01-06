@@ -28,11 +28,7 @@ clone 代码后复制配置文件 `config-default.yml` -> `config.yml`
 tutake:
   data:
     dir: ~/.tutake/data  #单独指定数据的目录
-  process:
-    thread_cnt: 10
   scheduler:
-    timezone: Asia/Shanghai
-    background: False
     tasks:
       - default: 10 0,11,21 * * *
       - stock_basic: 0 0,11,21 * * *

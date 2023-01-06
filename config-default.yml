@@ -2,12 +2,7 @@
 tutake:
   data:
     dir: ~/.tutake/data  #单独指定数据的目录
-  process:
-    thread_cnt: 10
-  logging:
-    config_file: ts_logger.yml
   scheduler:
-    timezone: Asia/Shanghai
     background: False
     tasks:
       - default: 10 0,11,21 * * *

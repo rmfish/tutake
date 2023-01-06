@@ -1,12 +1,12 @@
 import logging
 import os.path
-from os.path import dirname
+from os.path import dirname, abspath, join
 from pathlib import Path
 
 import yaml
 
 from tutake.utils.logger import setup_logging
-from tutake.utils.utils import project_root, file, file_dir
+from tutake.utils.utils import project_root, file_dir
 
 
 class DotConfig(dict):
@@ -82,7 +82,7 @@ DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a020
 TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"
 TUSHARE_META_DIR_KEY = "tushare.meta.dir"
 TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
-TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logging.config_file'
+TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logger.config_file'
 TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
 TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY = 'tutake.sqlite.timeout'
 
@@ -113,7 +113,7 @@ class TutakeConfig(object):
         meta_dir = self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta')
         self.set_tutake_meta_dir(meta_dir)
 
-        self.logger_config_file = self._init_logger_config()
+        self.logger_config_file = self._get_logger_config()
         if self.logger_config_file:
             setup_logging(self.logger_config_file)
 
@@ -219,11 +219,11 @@ class TutakeConfig(object):
                 return tokens[next(iter(tokens))]
         return token
 
-    def _init_logger_config(self):
+    def _get_logger_config(self):
         logger_config_path = self.get_config(TUTAKE_LOGGING_CONFIG_KEY)
-        if logger_config_path and not str(logger_config_path).startswith("/"):
-            logger_config_path = file(self.config_dir, logger_config_path)
-
+        if logger_config_path and not os.path.isabs(logger_config_path):
+            # 如果日志配置文件是相对路径，转换成绝对路径
+            logger_config_path = join(abspath(dirname(self.config_file)), logger_config_path)
         if not logger_config_path or not os.path.exists(logger_config_path):
             logging.warning(
                 f"Logger config file is not config or not exists. {logger_config_path}")
