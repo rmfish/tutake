@@ -1,4 +1,5 @@
 import json
+import logging
 import uuid
 
 import pendulum
@@ -55,6 +56,13 @@ class ProcessException(Exception):
         self.cause = cause
 
 
+class CriticalException(Exception):
+    def __init__(self, msg: str, cause: Exception = None):  # real signature unknown
+        super().__init__(msg, cause)
+        self.msg = msg
+        self.cause = cause
+
+
 class ActionResult(object):
 
     def __init__(self, start, end, params, new_params=None, cnt: int = 0, err: Exception = None,
@@ -88,6 +96,7 @@ class ProcessReport:
 
     def __init__(self, _id, _name, _logger):
         self.percent = ProcessPercent(0)
+        self.original_name = _name
         self.name = _name
         self._id = _id
         self.start_time = pendulum.now()
@@ -97,6 +106,7 @@ class ProcessReport:
         self.logger = _logger
         self.total_task = 0
         self.repeat_task = 0
+        self.repeat_cnt = 0
         self.status = 'Waiting'
 
     def get_id(self):
@@ -167,9 +177,9 @@ class ProcessReport:
         self.status = 'RUNNING'
         return self
 
-    def close(self):
+    def close(self, status='SUCCESS'):
         self.end_time = pendulum.now()
-        self.status = 'SUCCESS'
+        self.status = status
         return self
 
     def process_time(self):
@@ -226,7 +236,7 @@ class ProcessReport:
                 #                                                                                       result.new_params))
         if result and result.err:
             if isinstance(result.err, ProcessException):
-                return False
+                return isinstance(result.err.cause, CriticalException)
             elif isinstance(result.err, Exception):
                 self.status = 'CRITICAL_FAILED'
                 return True
@@ -236,11 +246,11 @@ class ProcessReport:
     def repeat(self):
         params = [r.get_params() for r in self.task if r.is_process_error()]
         if params and len(params) > 0:
-            self.name = "{}_r".format(self.name)
+            self.repeat_cnt += 1
+            self.name = f"{self.original_name}_r[{self.repeat_cnt}]"
             self.status = 'FAILED_OVER_RUNNING'
             for p in params:
                 p["uuid"] = uuid.uuid1()
-
             return params
         return None
 
@@ -254,6 +264,7 @@ class ProcessReportContainer(object):
         return cls.instance
 
     def __init__(self, config):
+        self.config = config
         self.running_reports = dict()
         engine = create_engine(config.get_data_sqlite_driver_url('tutake.db'),
                                connect_args={"check_same_thread": False})

@@ -10,6 +10,7 @@ import requests
 import tushare as ts
 
 from tutake.api.process_client import Task
+from tutake.api.process_report import CriticalException
 from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig
 from tutake.utils.utils import end_of_day
 
@@ -140,6 +141,7 @@ class TuShareBase(Task):
         if tushare_token:
             self.t_api = TushareClient(tushare_token)
         tushare_tokens = config.get_config(TUSHARE_TOKENS_KEY)
+        self.client_queue = None
         if tushare_tokens and len(tushare_tokens) > 1:
             clients = []
             for t in tushare_tokens:
@@ -165,7 +167,8 @@ class TuShareBase(Task):
                         print(
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
-                    elif str(err).startswith("抱歉，您没有访问该接口的权限"):
+                    elif str(err).startswith("抱歉，您没有访问该接口的权限") or str(err).startswith(
+                            "抱歉，您输入的TOKEN无效！"):
                         self.client_queue.alive(client, time.time() + 4294967.0)
                         print(
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
@@ -173,9 +176,20 @@ class TuShareBase(Task):
                     else:
                         raise err
             else:
-                raise Exception(f"None useful ts token to query {api}")
+                raise CriticalException(f"None useful ts token to query {api}")
         elif self.t_api:
-            return self.t_api.query(api, fields, **kwargs)
+            try:
+                return self.t_api.query(api, fields, **kwargs)
+            except Exception as err:
+                if str(err).startswith("抱歉，您每分钟最多访问该接口"):
+                    self.logger.debug(f"Flow limit {api}, sleep 60 seconds and retry")
+                    time.sleep(60)
+                    return self.tushare_query(api, fields, **kwargs)
+                if str(err).startswith("抱歉，您输入的TOKEN无效！"):
+                    self.logger.debug(f"Error token {api}, {err}")
+                    raise CriticalException(f"Error token {api}", err)
+                else:
+                    raise err
 
 
 class TushareClient:
