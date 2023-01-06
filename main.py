@@ -29,7 +29,17 @@ def complete():
     print(xq_api._index_valuation.meta())  # 指数的每日估值元数据
 
 
+def cron_task():
+    tutake = tt.Tutake("./config.yml")
+    tutake.task_api().start(True)  # 启动全量的数据同步任务
+
+
 if __name__ == '__main__':
-    quick_start()
-    # complete的接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
+    # 可以查看这个接口入门
+    # quick_start()
+
+    # 全量的演示代码都在complete接口，但这个接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
     # complete(tutake)
+
+    # 正式部署使用时，用这个接口
+    cron_task()
