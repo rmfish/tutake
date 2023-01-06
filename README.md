@@ -5,7 +5,7 @@ Take data from Tushare, respect Tushare!
 1. 支持定时自动化的下载tushare数据，保证数据的同步
 2. 支持本地的数据查询，性能和效率更高（当前使用sqlite,后续计划支持多类型数据库）
 3. 支持原生的查询，分析的维度更灵活（sql还是很强大的）
-4. 支持接口的扩展，常用的数据组合接口可以通过扩展的方式统一调用
+4. 支持接口的扩展，常用的数据组合接口可以通过扩展的方式统一调用(目前增加了雪球热榜的接口)
 
 ## 背景
 
@@ -44,8 +44,6 @@ tushare:
 
 ```python
 from tutake import task_api
-from tutake.utils.config import TutakeConfig
-from tutake.utils.utils import file_dir
 
 if __name__ == '__main__':
     task = task_api("./config.yml")
