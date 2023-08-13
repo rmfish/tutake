@@ -1,0 +1,97 @@
+{
+  "database": "stock",
+  "default_limit": null,
+  "desc": "获取小佩数据动量因子数据，可以获取股票动能评级数据，包括最新及过去历史数据",
+  "id": 300,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    }
+  ],
+  "is_ready": 1,
+  "integral_required": 5000,
+  "name": "stock_mx",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "MX_GRADE",
+      "data_type": "int",
+      "desc": "动能评级，综合动能指标后分成4个评等，1(高)、2(中)、3(低)、4(弱)。高：周、月、季、半年趋势方向一致，整体看多；中：周、月、季、半年趋势方向不一致，但整体偏多；低：周、月、季、半年趋势方向不一致，但整体偏多；弱：周、月、季、半年趋势方向一致，整体看空",
+      "must": "Y",
+      "name": "mx_grade"
+    },
+    {
+      "column": "COM_STOCK",
+      "data_type": "str",
+      "desc": "行业轮动指标",
+      "must": "Y",
+      "name": "com_stock"
+    },
+    {
+      "column": "EVD_V",
+      "data_type": "str",
+      "desc": "速度指标，衡量该个股股价变化的速度",
+      "must": "Y",
+      "name": "evd_v"
+    },
+    {
+      "column": "ZT_SUM_Z",
+      "data_type": "str",
+      "desc": "极值，短期均线离差值",
+      "must": "Y",
+      "name": "zt_sum_z"
+    },
+    {
+      "column": "WMA250_Z",
+      "data_type": "str",
+      "desc": "偏离指标，中期均线偏离度指标",
+      "must": "Y",
+      "name": "wma250_z"
+    }
+  ],
+  "parent_id": 2,
+  "path": [
+    [
+      2,
+      "数据接口"
+    ]
+  ],
+  "title": "动能因子",
+  "validations": []
+}

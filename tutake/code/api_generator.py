@@ -136,7 +136,7 @@ class CodeGenerator(object):
         api_names = ['daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
                      'balancesheet_vip',
                      'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily',
-                     'ths_member', 'anns', 'trade_cal']
+                     'ths_member', 'anns', 'trade_cal', 'stock_vx', 'stock_mx']
         index_api = ['index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
                      'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info',
                      'ths_daily', 'ths_member', 'ci_daily']
