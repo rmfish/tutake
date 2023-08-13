@@ -5,7 +5,6 @@ from pathlib import Path
 
 import yaml
 
-from sqlite_rx.client import SQLiteClient
 from tutake.utils.logger import setup_logging
 from tutake.utils.utils import project_root, file_dir, realpath
 
@@ -203,8 +202,12 @@ class TutakeConfig(object):
         if self._sqlite_client is not None:
             return self._sqlite_client
         if self.get_config(TUTAKE_DATA_SERVER_KEY, None) is not None:
-            self._sqlite_client = SQLiteClient(self.get_config(TUTAKE_DATA_SERVER_KEY))
-            return self._sqlite_client
+            try:
+                from sqlite_rx.client import SQLiteClient
+                self._sqlite_client = SQLiteClient(self.get_config(TUTAKE_DATA_SERVER_KEY))
+                return self._sqlite_client
+            except:
+                return None
         return None
 
     def is_read_only(self):
@@ -234,7 +237,7 @@ class TutakeConfig(object):
         if token is None:
             tokens = self.get_config(TUSHARE_TOKENS_KEY)
             if tokens:
-                return tokens[next(iter(tokens))]
+                return tokens[next(iter(tokens))][0]
         return token
 
     def _get_logger_config(self):

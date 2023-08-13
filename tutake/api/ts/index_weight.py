@@ -157,10 +157,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.index_weight(index_code='000905.SH'))
-    # print(pro.index_weight(trade_date='20050415'))
-    # print(pro.index_weight(trade_date='20230811'))
-    #
+    print(pro.index_weight())
+
     api = IndexWeight(config)
     api.process()    # 同步增量数据
     print(api.index_weight())    # 数据查询接口

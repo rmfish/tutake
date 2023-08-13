@@ -201,9 +201,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.index_weekly(trade_date='19910704'))
-    # print(pro.index_weekly(trade_date='19910705',start_date='19910101',end_date='20000101'))
+    print(pro.index_weekly())
 
     api = IndexWeekly(config)
-    # api.process()    # 同步增量数据
+    api.process()    # 同步增量数据
     print(api.index_weekly())    # 数据查询接口

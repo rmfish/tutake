@@ -22,14 +22,14 @@ class TushareAPI(object):
     def all_apis(self):
         apis = [
             'adj_factor', 'stock_company', 'daily', 'moneyflow', 'bak_daily', 'namechange', 'fund_basic', 'monthly',
-            'moneyflow_hsgt', 'stk_rewards', 'hs_const', 'bak_basic', 'suspend_d', 'weekly', 'stock_basic', 'new_share',
-            'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
-            'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip',
-            'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager',
-            'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily',
-            'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-            'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info', 'ths_daily',
-            'ths_member'
+            'moneyflow_hsgt', 'stock_mx', 'stk_rewards', 'stock_vx', 'hs_const', 'bak_basic', 'suspend_d', 'weekly',
+            'stock_basic', 'new_share', 'stk_managers', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10',
+            'ggt_monthly', 'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
+            'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'stock_vx', 'stock_mx', 'fund_adj',
+            'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio', 'fund_sales_ratio',
+            'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily', 'index_dailybasic',
+            'index_classify', 'index_member', 'ths_index', 'index_global', 'index_weekly', 'index_monthly',
+            'index_weight', 'daily_info', 'sz_daily_info', 'ths_daily', 'ths_member'
         ]
         apis.extend(['daily_full'])
         return apis
@@ -78,9 +78,17 @@ class TushareAPI(object):
             moneyflow_hsgt_module = import_module("tutake.api.ts.moneyflow_hsgt")
             clazz = getattr(moneyflow_hsgt_module, "MoneyflowHsgt")
             return clazz(config)
+        if name == 'stock_mx':
+            stock_mx_module = import_module("tutake.api.ts.stock_mx")
+            clazz = getattr(stock_mx_module, "StockMx")
+            return clazz(config)
         if name == 'stk_rewards':
             stk_rewards_module = import_module("tutake.api.ts.stk_rewards")
             clazz = getattr(stk_rewards_module, "StkRewards")
+            return clazz(config)
+        if name == 'stock_vx':
+            stock_vx_module = import_module("tutake.api.ts.stock_vx")
+            clazz = getattr(stock_vx_module, "StockVx")
             return clazz(config)
         if name == 'hs_const':
             hs_const_module = import_module("tutake.api.ts.hs_const")
@@ -173,6 +181,14 @@ class TushareAPI(object):
         if name == 'trade_cal':
             trade_cal_module = import_module("tutake.api.ts.trade_cal")
             clazz = getattr(trade_cal_module, "TradeCal")
+            return clazz(config)
+        if name == 'stock_vx':
+            stock_vx_module = import_module("tutake.api.ts.stock_vx")
+            clazz = getattr(stock_vx_module, "StockVx")
+            return clazz(config)
+        if name == 'stock_mx':
+            stock_mx_module = import_module("tutake.api.ts.stock_mx")
+            clazz = getattr(stock_mx_module, "StockMx")
             return clazz(config)
         if name == 'fund_adj':
             fund_adj_module = import_module("tutake.api.ts.fund_adj")

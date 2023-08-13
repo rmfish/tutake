@@ -28,6 +28,18 @@
       "desc": "结束日期",
       "must": "N",
       "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "str",
+      "desc": "最大行数",
+      "must": "N",
+      "name": "limit"
     }
   ],
   "is_ready": 1,

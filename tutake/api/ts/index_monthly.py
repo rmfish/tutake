@@ -200,8 +200,8 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
-    # pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.index_monthly())
+    pro = ts.pro_api(config.get_tushare_token())
+    print(pro.index_monthly())
 
     api = IndexMonthly(config)
     api.process()    # 同步增量数据

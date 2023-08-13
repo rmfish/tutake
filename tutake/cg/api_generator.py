@@ -7,7 +7,7 @@ import jinja2
 import pendulum
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.tushare_api import JsonConfigApi
+from tutake.cg.tushare_api import JsonConfigApi
 from tutake.utils.utils import file_dir
 
 logger = logging.getLogger("api.generate")

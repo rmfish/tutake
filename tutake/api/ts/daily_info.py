@@ -229,7 +229,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.daily_info())
+    print(pro.daily_info())
 
     api = DailyInfo(config)
     api.process()    # 同步增量数据

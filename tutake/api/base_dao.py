@@ -7,7 +7,6 @@ from pandas import DataFrame
 from sqlalchemy import text
 from sqlalchemy.orm import load_only, declarative_base, sessionmaker
 
-from sqlite_rx.client import SQLiteDatabaseClient
 from tutake.utils.config import TutakeConfig
 
 Base = declarative_base()
@@ -32,7 +31,11 @@ class BaseDao(object):
 
     def _init_remote_database_client(self):
         if self._sqlite_client is not None:
-            self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
+            try:
+                from sqlite_rx.client import SQLiteDatabaseClient
+                self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
+            except:
+                self._sqlite_database_client = None
         else:
             self._sqlite_database_client = None
 
