@@ -42,7 +42,7 @@
             "name": "offset"
         }
     ],
-    "integral_required": 800,
+    "integral_required": 2000,
     "is_ready": null,
     "name": "index_weight",
     "order_by": null,

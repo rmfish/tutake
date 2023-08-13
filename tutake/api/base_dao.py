@@ -3,6 +3,7 @@ import time
 from operator import and_
 
 import pandas as pd
+from pandas import DataFrame
 from sqlalchemy import text
 from sqlalchemy.orm import load_only, declarative_base, sessionmaker
 
@@ -13,16 +14,30 @@ Base = declarative_base()
 
 class BaseDao(object):
 
-    def __init__(self, engine, session_factory: sessionmaker, entities, table_name, query_fields, entity_fields,
+    def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
+                 entity_fields,
                  config: TutakeConfig):
         self.engine = engine
         self.entities = entities
         self.session_factory: sessionmaker = session_factory
+        self.database = database
         self.table_name = table_name
         self.query_fields = query_fields
         self.entity_fields = entity_fields
         self.logger = logging.getLogger('dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
+        self._sqlite_client = config.get_sqlite_client()
+        self._init_remote_database_client()
+
+    def _init_remote_database_client(self):
+        if self._sqlite_client is not None:
+            try:
+                from sqlite_rx.client import SQLiteDatabaseClient
+                self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
+            except:
+                self._sqlite_database_client = None
+        else:
+            self._sqlite_database_client = None
 
     def columns_meta(self):
         pass
@@ -172,7 +187,7 @@ class BaseDao(object):
             if query:
                 query = query.filter_by(**filter_by)
             else:
-                query = self.session_factory().query(self.entities).filter_by(**filter_by)                 
+                query = self.session_factory().query(self.entities).filter_by(**filter_by)
         if fields:
             query_fields = self._get_query_fields(fields)
             query = query.with_entities(*query_fields)
@@ -182,17 +197,27 @@ class BaseDao(object):
             query = query.limit(limit)
         if offset:
             query = query.offset(offset)
-        df = pd.read_sql(query.statement, query.session.bind)
+        sql = query.statement.compile(compile_kwargs={"literal_binds": True})
+        df = self._query_dataframe(sql, query)
         df = df.drop(['id'], axis=1, errors='ignore')
         self.logger.debug(
             "Finished {} query, it costs {}s".format(self.entities.__name__, time.time() - start))
         return df
 
+    def _query_dataframe(self, sql, query):
+        if self._sqlite_database_client is None:
+            return pd.read_sql(sql, query.session.bind)
+        else:
+            sql = str(sql)
+            print(sql)
+            result = self._sqlite_database_client.execute(sql)
+            return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
+
     def sql(self, sql):
         start = time.time()
         query = self.session_factory().query(self.entities)
         sql = sql.format(table=self.table_name)
-        df = pd.read_sql(sql, query.session.bind)
+        df = self._query_dataframe(sql, query)
         df = df.drop(['id'], axis=1, errors='ignore')
         self.logger.debug(
             "Finished {} query, sql is {} it costs {}s".format(self.entities.__name__, sql, time.time() - start))

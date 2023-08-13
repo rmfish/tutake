@@ -10,3 +10,5 @@ __pycache__/
 /dist
 /tutake.egg-info
 run.sh
+tushare_token.py
+docker/docker-config.yml

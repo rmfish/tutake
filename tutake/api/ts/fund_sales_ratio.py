@@ -54,8 +54,8 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['年份', 'limit', 'offset']
         entity_fields = ["year", "bank", "sec_comp", "fund_comp", "indep_comp", "rests"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio.db',
+                            'tushare_fund_sales_ratio', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_sales_ratio", config)
         TuShareBase.__init__(self, "fund_sales_ratio", config, 5000)
         self.api = TushareAPI(config)

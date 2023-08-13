@@ -26,7 +26,7 @@ setuptools.setup(
         "tushare==1.2.85",
         "apscheduler~=3.9.1.post1"
     ],
-    extras_require={"tutake.code": ["yapf==0.32.0", "Jinja2==3.1.2"]},
+    extras_require={"tutake.cg": ["yapf==0.32.0", "Jinja2==3.1.2"]},
     packages=setuptools.find_packages(exclude=("test",)),
     package_data={'tutake.utils': ['*']},
     classifiers=[

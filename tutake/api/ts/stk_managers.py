@@ -63,8 +63,8 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "name", "gender", "lev", "title", "edu", "national", "birthday", "begin_date",
             "end_date", "resume"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk_managers',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk_managers.db',
+                            'tushare_stk_managers', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stk_managers", config)
         TuShareBase.__init__(self, "stk_managers", config, 5000)
         self.api = TushareAPI(config)

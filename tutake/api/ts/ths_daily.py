@@ -67,8 +67,8 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "avg_price", "change", "pct_change",
             "vol", "turnover_rate", "total_mv", "float_mv", "pe_ttm", "pb_mrq"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths_daily', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths_daily.db',
+                            'tushare_ths_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
         self.api = TushareAPI(config)

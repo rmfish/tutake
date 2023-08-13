@@ -46,7 +46,7 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
-        TushareDAO.__init__(self, self.engine, session_factory, {{entity_name}}, '{{table_name}}', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, {{entity_name}}, '{{database}}.db', '{{table_name}}', query_fields, entity_fields, config)
         DataProcess.__init__(self,"{{name}}", config)
         TuShareBase.__init__(self,"{{name}}", config, {{integral_required or 120}})
         self.api = TushareAPI(config)

@@ -52,8 +52,8 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'suspend_type', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_suspend_d', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_suspend_d.db',
+                            'tushare_suspend_d', query_fields, entity_fields, config)
         DataProcess.__init__(self, "suspend_d", config)
         TuShareBase.__init__(self, "suspend_d", config, 120)
         self.api = TushareAPI(config)

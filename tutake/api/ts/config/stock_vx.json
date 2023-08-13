@@ -1,0 +1,179 @@
+{
+  "database": "stock",
+  "default_limit": null,
+  "desc": "小沛估值因子",
+  "id": 303,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "str",
+      "desc": "最大行数",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "is_ready": 1,
+  "integral_required": 5000,
+  "name": "stock_vx",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "LEVEL1",
+      "data_type": "str",
+      "desc": "4评级：1(便宜)、2(合理)、3(贵)、4(很贵)",
+      "must": "Y",
+      "name": "level1"
+    },
+    {
+      "column": "LEVEL2",
+      "data_type": "str",
+      "desc": "8评级：1,2(便宜)、3,4(合理)、5,6(贵)、7,8(很贵)",
+      "must": "Y",
+      "name": "level2"
+    },
+    {
+      "column": "VX_LIFE_V_L4",
+      "data_type": "str",
+      "desc": "估值长优4条线，根据level1的评级，公司上市后每一天的估值评级平均",
+      "must": "Y",
+      "name": "vx_life_v_l4"
+    },
+    {
+      "column": "VX_3EXCELLENT_V_L4",
+      "data_type": "str",
+      "desc": "估值3优4条线，根据level1的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标",
+      "must": "Y",
+      "name": "vx_3excellent_v_l4"
+    },
+    {
+      "column": "VX_PAST_5Q_AVG_L4",
+      "data_type": "str",
+      "desc": "估值4条线近5季平均，根据level1的评级，最近五季度估值评级平均",
+      "must": "Y",
+      "name": "vx_past_5q_avg_l4"
+    },
+    {
+      "column": "VX_GROW_WORSE_V_L4",
+      "data_type": "str",
+      "desc": "估值进退步-估值4条线,根据level1的评级，最新的估值评级与最近5Q平均的比",
+      "must": "Y",
+      "name": "vx_grow_worse_v_l4"
+    },
+    {
+      "column": "VX_LIFE_V_L8",
+      "data_type": "str",
+      "desc": "估值长优8条线,根据level2的评级，公司上市后每一季度的估值评级平均",
+      "must": "Y",
+      "name": "vx_life_v_l8"
+    },
+    {
+      "column": "VX_3EXCELLENT_V_L8",
+      "data_type": "str",
+      "desc": "估值3优8条线,根据level2的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标",
+      "must": "Y",
+      "name": "vx_3excellent_v_l8"
+    },
+    {
+      "column": "VX_PAST_5Q_AVG_L8",
+      "data_type": "str",
+      "desc": "估值8条线近5季平均,根据level2的评级，最近五季度估值评级平均",
+      "must": "Y",
+      "name": "vx_past_5q_avg_l8"
+    },
+    {
+      "column": "VX_GROW_WORSE_V_L8",
+      "data_type": "str",
+      "desc": "估值进退步-估值8条线,根据level2的评级，最新的估值评级与最近5Q平均的比较",
+      "must": "Y",
+      "name": "vx_grow_worse_v_l8"
+    },
+    {
+      "column": "VXX",
+      "data_type": "str",
+      "desc": "个股最新估值与亚洲同类股票相较后的标准差，按因子排序，数值越大代表估值越贵",
+      "must": "Y",
+      "name": "vxx"
+    },
+    {
+      "column": "VS",
+      "data_type": "str",
+      "desc": "个股最新估值与亚洲同类股票自己相较后的标准差，按因子排序，数值越大代表估值越贵",
+      "must": "Y",
+      "name": "vs"
+    },
+    {
+      "column": "VZ11",
+      "data_type": "str",
+      "desc": "个股最新估值与亚洲同类股票主行业相较后的标准差，按因子排序，数值越大代表估值越贵",
+      "must": "Y",
+      "name": "vz11"
+    },
+    {
+      "column": "VZ24",
+      "data_type": "str",
+      "desc": "个股最新估值与亚洲同类股票次行业相较后的标准差，按因子排序，数值越大代表估值越贵",
+      "must": "Y",
+      "name": "vz24"
+    },
+    {
+      "column": "VZ_LMS",
+      "data_type": "str",
+      "desc": "个股最新估值与亚洲同类股票市值分类相较后的标准差，按因子排序，数值越大代表估值越贵",
+      "must": "Y",
+      "name": "vz_lms"
+    }
+  ],
+  "parent_id": 2,
+  "path": [
+    [
+      2,
+      "数据接口"
+    ]
+  ],
+  "title": "估值因子",
+  "validations": []
+}

@@ -60,8 +60,8 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
             "month", "day_buy_amt", "day_buy_vol", "day_sell_amt", "day_sell_vol", "total_buy_amt", "total_buy_vol",
             "total_sell_amt", "total_sell_vol"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly.db',
+                            'tushare_ggt_monthly', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_monthly", config)
         TuShareBase.__init__(self, "ggt_monthly", config, 120)
         self.api = TushareAPI(config)

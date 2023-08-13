@@ -59,8 +59,8 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
             "ts_code", "trade_date", "name", "ttype", "pe", "pe_percentile", "peg", "pb_percentile", "pb", "roe",
             "yeild", "eva_type"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, XueqiuIndexValuation, 'xueqiu_index_valuation',
-                         query_fields, entity_fields, config)
+        BaseDao.__init__(self, self.engine, session_factory, XueqiuIndexValuation, 'xueqiu.db',
+                         'xueqiu_index_valuation', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_valuation", config)
         XueQiuBase.__init__(self, "index_valuation", config)
 

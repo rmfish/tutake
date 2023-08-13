@@ -63,8 +63,8 @@ class NewShare(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "sub_code", "name", "ipo_date", "issue_date", "amount", "market_amount", "price", "pe",
             "limit_amount", "funds", "ballot"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_new_share', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareNewShare, 'tushare_basic_data.db',
+                            'tushare_new_share', query_fields, entity_fields, config)
         DataProcess.__init__(self, "new_share", config)
         TuShareBase.__init__(self, "new_share", config, 120)
         self.api = TushareAPI(config)

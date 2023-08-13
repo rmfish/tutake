@@ -63,8 +63,8 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
             "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDailybasic, 'tushare_index_dailybasic.db',
+                            'tushare_index_dailybasic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_dailybasic", config)
         TuShareBase.__init__(self, "index_dailybasic", config, 5000)
         self.api = TushareAPI(config)

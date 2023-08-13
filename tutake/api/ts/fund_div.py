@@ -69,8 +69,8 @@ class FundDiv(TushareDAO, TuShareBase, DataProcess):
             "earpay_date", "net_ex_date", "div_cash", "base_unit", "ear_distr", "ear_amount", "account_date",
             "base_year", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDiv, 'tushare_fund_div.db',
+                            'tushare_fund_div', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_div", config)
         TuShareBase.__init__(self, "fund_div", config, 800)
         self.api = TushareAPI(config)

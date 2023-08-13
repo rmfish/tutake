@@ -7,8 +7,8 @@ import jinja2
 import pendulum
 from yapf.yapflib.yapf_api import FormatCode
 
-from tutake.code.tushare_api import JsonConfigApi
-from tutake.utils.utils import file_dir, realpath
+from tutake.cg.tushare_api import JsonConfigApi
+from tutake.utils.utils import file_dir
 
 logger = logging.getLogger("api.generate")
 
@@ -136,9 +136,10 @@ class CodeGenerator(object):
         api_names = ['daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
                      'balancesheet_vip',
                      'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily',
-                     'ths_member', 'anns', 'trade_cal']
+                     'ths_member', 'anns', 'trade_cal', 'stock_vx', 'stock_mx']
         index_api = ['index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-                     'index_global']
+                     'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info',
+                     'ths_daily', 'ths_member', 'ci_daily']
         fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
                     'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
         api_names.extend(fund_api)
@@ -169,7 +170,7 @@ if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     current_dir = file_dir(__file__)
     generator = CodeGenerator(pathlib.PurePath(current_dir, "tmpl"),
-                              realpath(pathlib.PurePath(current_dir, "..", "api")))
+                              pathlib.PurePath(current_dir, "..", "api"))
     generator.tushare_code_generate()
     generator.xueqiu_code_generate()
     # print()

@@ -61,8 +61,8 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "pre_close", "open", "high", "low", "close", "change", "pct_chg", "vol", "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDaily, 'tushare_fund_daily', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDaily, 'tushare_fund_daily.db',
+                            'tushare_fund_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_daily", config)
         TuShareBase.__init__(self, "fund_daily", config, 5000)
         self.api = TushareAPI(config)

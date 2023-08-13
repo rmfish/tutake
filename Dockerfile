@@ -12,7 +12,7 @@ USER tutake
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -i https://mirrors.cloud.tencent.com/pypi/simple -r requirements.txt
-COPY ./tutake ./main.py ./requirements.txt ./ts_logger.yml ./
-ENTRYPOINT [ "python" ]
-
-CMD ["main.py" ]
+ENV TZ="Asia/Shanghai"
+COPY ./tutake ./tutake
+COPY ./ts_logger.yml ./entrypoint.py ./
+COPY ./docker/docker-config.yml ./config.yml

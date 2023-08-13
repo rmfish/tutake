@@ -58,8 +58,8 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund_portfolio.db',
+                            'tushare_fund_portfolio', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.api = TushareAPI(config)

@@ -68,8 +68,8 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
             "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtTop10, 'tushare_ggt_top10', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtTop10, 'tushare_ggt_top10.db',
+                            'tushare_ggt_top10', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_top10", config)
         TuShareBase.__init__(self, "ggt_top10", config, 5000)
         self.api = TushareAPI(config)

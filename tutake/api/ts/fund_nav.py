@@ -61,8 +61,8 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
             "adj_nav", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund_nav.db',
+                            'tushare_fund_nav', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_nav", config)
         TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.api = TushareAPI(config)

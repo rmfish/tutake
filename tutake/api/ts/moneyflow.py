@@ -74,8 +74,8 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
             "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
             "net_mf_amount", "trade_count"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow.db',
+                            'tushare_moneyflow', query_fields, entity_fields, config)
         DataProcess.__init__(self, "moneyflow", config)
         TuShareBase.__init__(self, "moneyflow", config, 2000)
         self.api = TushareAPI(config)

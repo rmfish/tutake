@@ -63,8 +63,8 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "open", "close", "high", "low", "pre_close", "change", "pct_chg", "swing", "vol",
             "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexGlobal, 'tushare_index_global',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexGlobal, 'tushare_index_global.db',
+                            'tushare_index_global', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_global", config)
         TuShareBase.__init__(self, "index_global", config, 120)
         self.api = TushareAPI(config)

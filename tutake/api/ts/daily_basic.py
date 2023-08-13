@@ -71,8 +71,8 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv", "circ_mv",
             "limit_status"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic.db',
+                            'tushare_daily_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "daily_basic", config)
         TuShareBase.__init__(self, "daily_basic", config, 2000)
         self.api = TushareAPI(config)

@@ -5,5 +5,6 @@ services:
     user: '1000'
     volumes:
       - /etc/localtime:/etc/localtime
-      - ./main.py:/tutake/main.py
-      - ./config.yml:/tutake/config.yml
+      - ./docker/docker-config.yml:/tutake/config.yml
+      - /home/ubuntu/tutake-data:/tutake/data
+    entrypoint: [ 'python','entrypoint.py' ]

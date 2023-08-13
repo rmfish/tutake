@@ -55,8 +55,8 @@ class ThsMember(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'code', 'limit', 'offset']
         entity_fields = ["ts_code", "code", "name", "weight", "in_date", "out_date", "is_new"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsMember, 'tushare_ths_member', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsMember, 'tushare_ths_member.db',
+                            'tushare_ths_member', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_member", config)
         TuShareBase.__init__(self, "ths_member", config, 5000)
         self.api = TushareAPI(config)
