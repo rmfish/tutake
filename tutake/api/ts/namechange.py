@@ -54,8 +54,8 @@ class Namechange(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "start_date", "end_date", "ann_date", "change_reason"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_namechange', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_basic_data.db',
+                            'tushare_namechange', query_fields, entity_fields, config)
         DataProcess.__init__(self, "namechange", config)
         TuShareBase.__init__(self, "namechange", config, 120)
         self.api = TushareAPI(config)

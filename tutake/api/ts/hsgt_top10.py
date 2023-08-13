@@ -62,8 +62,8 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
             "trade_date", "ts_code", "name", "close", "change", "rank", "market_type", "amount", "net_amount", "buy",
             "sell"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareHsgtTop10, 'tushare_hsgt_top10.db',
+                            'tushare_hsgt_top10', query_fields, entity_fields, config)
         DataProcess.__init__(self, "hsgt_top10", config)
         TuShareBase.__init__(self, "hsgt_top10", config, 120)
         self.api = TushareAPI(config)

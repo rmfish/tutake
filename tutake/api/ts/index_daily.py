@@ -61,8 +61,8 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index_daily.db',
+                            'tushare_index_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_daily", config)
         TuShareBase.__init__(self, "index_daily", config, 5000)
         self.api = TushareAPI(config)

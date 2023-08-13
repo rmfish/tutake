@@ -55,8 +55,8 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "end_date", "name", "title", "reward", "hold_vol"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk_rewards', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk_rewards.db',
+                            'tushare_stk_rewards', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stk_rewards", config)
         TuShareBase.__init__(self, "stk_rewards", config, 5000)
         self.api = TushareAPI(config)

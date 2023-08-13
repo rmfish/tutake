@@ -8,6 +8,10 @@ from tutake.api.process_report import ProcessReport, ActionResult, ProcessExcept
 
 
 class DataProcess:
+    """
+    获取保存数据的核心类，用以实现获取数据到保存数据的过程，封装了中间的限流、异常、重试、日志、多线程等的一些处理步骤，每个具体的接口都继承这个类，
+    在每个具体的实现类中实现获取数据和保存的具体操作
+    """
 
     def __init__(self, name, config):
         self.logger = logging.getLogger('api.tushare.%s' % name)

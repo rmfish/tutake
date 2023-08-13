@@ -68,8 +68,8 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province", "city",
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock_company',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_basic_data.db',
+                            'tushare_stock_company', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)
         self.api = TushareAPI(config)

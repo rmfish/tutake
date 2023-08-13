@@ -56,8 +56,8 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
 
         query_fields = ['ts_code', 'hot_type', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "hot_type", "name", "value", "increment", "rank"]
-        BaseDao.__init__(self, self.engine, session_factory, XueqiuHotStock, 'xueqiu_hot_stock', query_fields,
-                         entity_fields, config)
+        BaseDao.__init__(self, self.engine, session_factory, XueqiuHotStock, 'xueqiu.db', 'xueqiu_hot_stock',
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "hot_stock", config)
         XueQiuBase.__init__(self, "hot_stock", config)
 

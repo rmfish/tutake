@@ -54,8 +54,8 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market', 'fund_type', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "fd_share", "total_share", "fund_type", "market"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundShare, 'tushare_fund_share', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundShare, 'tushare_fund_share.db',
+                            'tushare_fund_share', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_share", config)
         TuShareBase.__init__(self, "fund_share", config, 5000)
         self.api = TushareAPI(config)

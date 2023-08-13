@@ -5,6 +5,7 @@ from pathlib import Path
 
 import yaml
 
+from sqlite_rx.client import SQLiteClient
 from tutake.utils.logger import setup_logging
 from tutake.utils.utils import project_root, file_dir, realpath
 
@@ -76,6 +77,7 @@ class DotConfig(dict):
 
 TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
+TUTAKE_DATA_SERVER_KEY = "tutake.data.server"
 TUSHARE_TOKEN_KEY = "tushare.token"
 TUSHARE_TOKENS_KEY = "tushare.tokens"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
@@ -101,6 +103,7 @@ class TutakeConfig(object):
         self.config_file = config_file
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
+        self._sqlite_client = None
 
     def _default_config(self):
         """
@@ -195,6 +198,17 @@ class TutakeConfig(object):
     @staticmethod
     def __set(config: DotConfig, k, v):
         return config.set(k, v)
+
+    def get_sqlite_client(self):
+        if self._sqlite_client is not None:
+            return self._sqlite_client
+        if self.get_config(TUTAKE_DATA_SERVER_KEY, None) is not None:
+            self._sqlite_client = SQLiteClient(self.get_config(TUTAKE_DATA_SERVER_KEY))
+            return self._sqlite_client
+        return None
+
+    def is_read_only(self):
+        return self.get_sqlite_client() is not None
 
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)

@@ -64,8 +64,8 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic.db',
+                            'tushare_index_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.api = TushareAPI(config)

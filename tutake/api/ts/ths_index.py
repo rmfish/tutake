@@ -54,8 +54,8 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'exchange', 'type', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index.db',
+                            'tushare_ths_index', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_index", config)
         TuShareBase.__init__(self, "ths_index", config, 5000)
         self.api = TushareAPI(config)

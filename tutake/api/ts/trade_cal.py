@@ -52,8 +52,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareTradeCal, 'tushare_trade_cal.db',
+                            'tushare_trade_cal', query_fields, entity_fields, config)
         DataProcess.__init__(self, "trade_cal", config)
         TuShareBase.__init__(self, "trade_cal", config, 600)
         self.api = TushareAPI(config)

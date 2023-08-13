@@ -167,8 +167,8 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
             "credit_impa_loss", "net_expo_hedging_benefits", "oth_impair_loss_assets", "total_opcost",
             "amodcost_fin_assets", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_income_vip', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_income_vip.db',
+                            'tushare_income_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "income_vip", config)
         TuShareBase.__init__(self, "income_vip", config, 5000)
         self.api = TushareAPI(config)

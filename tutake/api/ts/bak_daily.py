@@ -84,8 +84,8 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
             "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
             "interval_3", "interval_6"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily.db',
+                            'tushare_bak_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "bak_daily", config)
         TuShareBase.__init__(self, "bak_daily", config, 120)
         self.api = TushareAPI(config)

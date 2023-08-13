@@ -65,8 +65,8 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
             "curr_type", "list_status", "list_date", "delist_date", "is_hs"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockBasic, 'tushare_stock_basic', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockBasic, 'tushare_basic_data.db',
+                            'tushare_stock_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_basic", config)
         TuShareBase.__init__(self, "stock_basic", config, 120)
         self.api = TushareAPI(config)

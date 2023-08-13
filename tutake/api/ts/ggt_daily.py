@@ -53,8 +53,8 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily.db',
+                            'tushare_ggt_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_daily", config)
         TuShareBase.__init__(self, "ggt_daily", config, 5000)
         self.api = TushareAPI(config)

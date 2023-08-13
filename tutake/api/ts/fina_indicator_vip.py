@@ -242,8 +242,9 @@ class FinaIndicatorVip(TushareDAO, TuShareBase, DataProcess):
             "tr_yoy", "or_yoy", "q_gr_yoy", "q_gr_qoq", "q_sales_yoy", "q_sales_qoq", "q_op_yoy", "q_op_qoq",
             "q_profit_yoy", "q_profit_qoq", "q_netprofit_yoy", "q_netprofit_qoq", "equity_yoy", "rd_exp", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_fina_indicator_vip',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip,
+                            'tushare_fina_indicator_vip.db', 'tushare_fina_indicator_vip', query_fields, entity_fields,
+                            config)
         DataProcess.__init__(self, "fina_indicator_vip", config)
         TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
         self.api = TushareAPI(config)

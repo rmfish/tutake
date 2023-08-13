@@ -53,8 +53,8 @@ class HsConst(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['hs_type', 'is_new', 'limit', 'offset']
         entity_fields = ["ts_code", "hs_type", "in_date", "out_date", "is_new"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_hs_const', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareHsConst, 'tushare_basic_data.db',
+                            'tushare_hs_const', query_fields, entity_fields, config)
         DataProcess.__init__(self, "hs_const", config)
         TuShareBase.__init__(self, "hs_const", config, 120)
         self.api = TushareAPI(config)

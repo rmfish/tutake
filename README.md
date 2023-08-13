@@ -249,6 +249,18 @@ if __name__ == '__main__':
 [768 rows x 12 columns]
 ```
 
+### Other
+因为sqlite不支持C/S结构，为了能方便本地访问测试，又不需要同步数据到本地，所以可以在服务器上假设一个sqlite代理服务`https://github.com/rmfish/sqlite_rx`
+本地安装依赖：
+```
+pip install 'sqlite_rx @ git+git://github.com/rmfish/sqlite_rx.git@main#egg=sqlite_rx'
+```
+并添加配置项：
+```
+tushare.data.server: tcp://xxx.xxx:5000
+```
+__注意添加这个配置后就不支持读写本地文件__
+
 ## 说明
 因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，
 目前调试的接口是按照个人需要生成的，还有很多接口没有生成，如果有需要的可以留言，或者阅读代码自行添加。目前的接口基本覆盖了股票、基金、指数、期货相关的接口

@@ -61,8 +61,8 @@ class Weekly(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareWeekly, 'tushare_weekly', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareWeekly, 'tushare_weekly.db', 'tushare_weekly',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "weekly", config)
         TuShareBase.__init__(self, "weekly", config, 600)
         self.api = TushareAPI(config)

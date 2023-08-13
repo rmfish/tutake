@@ -77,8 +77,8 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
             "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate",
             "market"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund_basic.db',
+                            'tushare_fund_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_basic", config)
         TuShareBase.__init__(self, "fund_basic", config, 5000)
         self.api = TushareAPI(config)

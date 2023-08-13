@@ -70,8 +70,8 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
             "chairman", "manager", "reg_capital", "setup_date", "end_date", "employees", "main_business", "org_code",
             "credit_code"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundCompany, 'tushare_fund_company',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundCompany, 'tushare_fund_company.db',
+                            'tushare_fund_company', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_company", config)
         TuShareBase.__init__(self, "fund_company", config, 1500)
         self.api = TushareAPI(config)

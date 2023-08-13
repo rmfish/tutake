@@ -6,9 +6,10 @@ from tutake.utils.config import TutakeConfig
 
 class TushareDAO(BaseDao):
 
-    def __init__(self, engine, session_factory: sessionmaker, entities, table_name, query_fields, entity_fields,
+    def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
+                 entity_fields,
                  config: TutakeConfig):
-        super().__init__(engine, session_factory, entities, table_name, query_fields, entity_fields, config)
+        super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields, config)
 
     def default_time_range(self) -> ():
         if self.table_name == 'tushare_trade_cal':

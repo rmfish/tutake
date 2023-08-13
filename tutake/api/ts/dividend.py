@@ -69,8 +69,8 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             "cash_div_tax", "record_date", "ex_date", "pay_date", "div_listdate", "imp_ann_date", "base_date",
             "base_share", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_dividend', query_fields,
-                            entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_dividend.db',
+                            'tushare_dividend', query_fields, entity_fields, config)
         DataProcess.__init__(self, "dividend", config)
         TuShareBase.__init__(self, "dividend", config, 800)
         self.api = TushareAPI(config)

@@ -237,8 +237,8 @@ class BalancesheetVip(TushareDAO, TuShareBase, DataProcess):
             "long_pay_total", "debt_invest", "oth_debt_invest", "oth_eq_invest", "oth_illiq_fin_assets",
             "oth_eq_ppbond", "receiv_financing", "use_right_assets", "lease_liab", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip.db',
+                            'tushare_balancesheet_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "balancesheet_vip", config)
         TuShareBase.__init__(self, "balancesheet_vip", config, 5000)
         self.api = TushareAPI(config)

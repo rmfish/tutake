@@ -55,8 +55,8 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt.db',
+                            'tushare_moneyflow_hsgt', query_fields, entity_fields, config)
         DataProcess.__init__(self, "moneyflow_hsgt", config)
         TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)
         self.api = TushareAPI(config)

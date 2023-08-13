@@ -169,7 +169,7 @@ if __name__ == '__main__':
     logger.setLevel(logging.DEBUG)
     current_dir = file_dir(__file__)
     generator = CodeGenerator(pathlib.PurePath(current_dir, "tmpl"),
-                              realpath(pathlib.PurePath(current_dir, "..", "api")))
+                              pathlib.PurePath(current_dir, "..", "api"))
     generator.tushare_code_generate()
     generator.xueqiu_code_generate()
     # print()
