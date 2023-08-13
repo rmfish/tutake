@@ -33,6 +33,8 @@ class BaseDao(object):
     def _init_remote_database_client(self):
         if self._sqlite_client is not None:
             self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
+        else:
+            self._sqlite_database_client = None
 
     def columns_meta(self):
         pass

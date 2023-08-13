@@ -4,6 +4,7 @@
     "desc": "获取交易所股票交易统计，包括各板块明细",
     "id": 215,
     "if_exists": null,
+    "integral_required": 5000,
     "inputs": [
         {
             "data_type": "str",
