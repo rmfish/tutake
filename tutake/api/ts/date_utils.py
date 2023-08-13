@@ -38,6 +38,25 @@ def day_by_day_params(self, start_date, date_column="ann_date"):
     return params
 
 
+def m_by_m_params(self, start_date, end_of_month=True, date_column="trade_date"):
+    params = []
+    start_date = pendulum.parse(start_date)
+    end_date = pendulum.now()
+    max_date = self.max(date_column)
+    if max_date:
+        max_date = pendulum.parse(max_date)
+    else:
+        max_date = start_date
+    while max_date.diff(end_date, abs=False).days > 0:
+        max_date = max_date.add(months=1)
+        if end_of_month:
+            max_date = max_date.last_of("month")
+        else:
+            max_date = max_date.start_of("month")
+        params.append({date_column: max_date.format("YYYYMMDD")})
+    return params
+
+
 def q_by_q_params(self, start_date, date_column="ann_date"):
     params = []
     start_date = pendulum.parse(start_date)
