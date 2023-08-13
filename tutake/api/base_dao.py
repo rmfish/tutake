@@ -169,7 +169,10 @@ class BaseDao(object):
         else:
             query = self.session_factory().query(self.entities)
         if filter_by:
-            query = self.session_factory().query(self.entities).filter_by(**filter_by)
+            if query:
+                query = query.filter_by(**filter_by)
+            else:
+                query = self.session_factory().query(self.entities).filter_by(**filter_by)                 
         if fields:
             query_fields = self._get_query_fields(fields)
             query = query.with_entities(*query_fields)
