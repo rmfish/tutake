@@ -179,7 +179,10 @@ class BaseDao(object):
         else:
             query = self.session_factory().query(self.entities)
         if filter_by:
-            query = self.session_factory().query(self.entities).filter_by(**filter_by)
+            if query:
+                query = query.filter_by(**filter_by)
+            else:
+                query = self.session_factory().query(self.entities).filter_by(**filter_by)
         if fields:
             query_fields = self._get_query_fields(fields)
             query = query.with_entities(*query_fields)
@@ -200,7 +203,9 @@ class BaseDao(object):
         if self._sqlite_database_client is None:
             return pd.read_sql(sql, query.session.bind)
         else:
-            result = self._sqlite_database_client.execute(str(sql))
+            sql = str(sql)
+            print(sql)
+            result = self._sqlite_database_client.execute(sql)
             return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
 
     def sql(self, sql):

@@ -42,6 +42,7 @@
             "name": "offset"
         }
     ],
+    "integral_required": 5000,
     "is_ready": null,
     "name": "sz_daily_info",
     "order_by": null,
@@ -76,7 +77,7 @@
         },
         {
             "column": "VOL",
-            "data_type": null,
+            "data_type": "float",
             "desc": "成交量",
             "must": "Y",
             "name": "vol"

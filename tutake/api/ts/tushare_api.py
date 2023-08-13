@@ -28,7 +28,8 @@ class TushareAPI(object):
             'ths_daily', 'ths_member', 'anns', 'trade_cal', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager',
             'fund_nav', 'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily',
             'index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
-            'index_global'
+            'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info', 'ths_daily',
+            'ths_member'
         ]
         apis.extend(['daily_full'])
         return apis
@@ -240,6 +241,34 @@ class TushareAPI(object):
         if name == 'index_global':
             index_global_module = import_module("tutake.api.ts.index_global")
             clazz = getattr(index_global_module, "IndexGlobal")
+            return clazz(config)
+        if name == 'index_weekly':
+            index_weekly_module = import_module("tutake.api.ts.index_weekly")
+            clazz = getattr(index_weekly_module, "IndexWeekly")
+            return clazz(config)
+        if name == 'index_monthly':
+            index_monthly_module = import_module("tutake.api.ts.index_monthly")
+            clazz = getattr(index_monthly_module, "IndexMonthly")
+            return clazz(config)
+        if name == 'index_weight':
+            index_weight_module = import_module("tutake.api.ts.index_weight")
+            clazz = getattr(index_weight_module, "IndexWeight")
+            return clazz(config)
+        if name == 'daily_info':
+            daily_info_module = import_module("tutake.api.ts.daily_info")
+            clazz = getattr(daily_info_module, "DailyInfo")
+            return clazz(config)
+        if name == 'sz_daily_info':
+            sz_daily_info_module = import_module("tutake.api.ts.sz_daily_info")
+            clazz = getattr(sz_daily_info_module, "SzDailyInfo")
+            return clazz(config)
+        if name == 'ths_daily':
+            ths_daily_module = import_module("tutake.api.ts.ths_daily")
+            clazz = getattr(ths_daily_module, "ThsDaily")
+            return clazz(config)
+        if name == 'ths_member':
+            ths_member_module = import_module("tutake.api.ts.ths_member")
+            clazz = getattr(ths_member_module, "ThsMember")
             return clazz(config)
         else:
             instance = self._instance_from_name(name, config)
