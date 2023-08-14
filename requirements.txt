@@ -1,7 +1,7 @@
 Jinja2==3.1.2
 pandas==1.5.2
 pendulum==2.1.2
-PyYAML==6.0
+PyYAML==6.0.1
 requests==2.28.1
 SQLAlchemy==1.4.45
 tushare==1.2.89

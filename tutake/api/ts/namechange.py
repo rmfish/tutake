@@ -43,7 +43,7 @@ class Namechange(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_basic_data.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -54,7 +54,7 @@ class Namechange(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "start_date", "end_date", "ann_date", "change_reason"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_basic_data.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareNamechange, 'tushare_stock.db',
                             'tushare_namechange', query_fields, entity_fields, config)
         DataProcess.__init__(self, "namechange", config)
         TuShareBase.__init__(self, "namechange", config, 120)

@@ -32,7 +32,7 @@ class BaseDao(object):
     def _init_remote_database_client(self):
         if self._sqlite_client is not None:
             try:
-                from sqlite_rx.client import SQLiteDatabaseClient
+                from tutake.remote.client import SQLiteDatabaseClient
                 self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
             except:
                 self._sqlite_database_client = None

@@ -1,6 +1,7 @@
 from functools import partial
 
 import tushare
+from pandas import DataFrame
 
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
@@ -14,7 +15,7 @@ class TushareQuery:
         self.config = config
         self.api = TushareAPI(config)
 
-    def query(self, api_name, fields='', **kwargs):
+    def query(self, api_name, fields='', **kwargs) -> DataFrame:
         _api = self.api.__getattr__(api_name)
         if _api is None:
             return self.fail_over(api_name, fields, **kwargs)

@@ -196,9 +196,9 @@ if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
-    pro = ts.pro_api(config.get_tushare_token())
-    print(pro.daily())
+    # pro = ts.pro_api(config.get_tushare_token())
+    # print(pro.daily())
 
     api = Daily(config)
-    api.process()    # 同步增量数据
+    # api.process()    # 同步增量数据
     print(api.daily())    # 数据查询接口

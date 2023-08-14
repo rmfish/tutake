@@ -7,6 +7,8 @@ Tushare monthly接口
 
 @author: rmfish
 """
+import sys
+
 import pandas as pd
 import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine

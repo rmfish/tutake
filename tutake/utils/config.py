@@ -203,7 +203,7 @@ class TutakeConfig(object):
             return self._sqlite_client
         if self.get_config(TUTAKE_DATA_SERVER_KEY, None) is not None:
             try:
-                from sqlite_rx.client import SQLiteClient
+                from tutake.remote.client import SQLiteClient
                 self._sqlite_client = SQLiteClient(self.get_config(TUTAKE_DATA_SERVER_KEY))
                 return self._sqlite_client
             except:
