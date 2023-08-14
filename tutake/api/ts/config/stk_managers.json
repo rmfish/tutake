@@ -1,4 +1,5 @@
 {
+    "database": "tushare_stk",
     "default_limit": "4000",
     "desc": "上市公司管理层",
     "id": 193,

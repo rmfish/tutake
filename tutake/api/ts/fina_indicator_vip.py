@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fina_indicator_vip_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -204,11 +204,11 @@ class FinaIndicatorVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_fina_indicator_vip.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFinaIndicatorVip.__table__.create(bind=self.engine, checkfirst=True)
@@ -242,9 +242,8 @@ class FinaIndicatorVip(TushareDAO, TuShareBase, DataProcess):
             "tr_yoy", "or_yoy", "q_gr_yoy", "q_gr_qoq", "q_sales_yoy", "q_sales_qoq", "q_op_yoy", "q_op_qoq",
             "q_profit_yoy", "q_profit_qoq", "q_netprofit_yoy", "q_netprofit_qoq", "equity_yoy", "rd_exp", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip,
-                            'tushare_fina_indicator_vip.db', 'tushare_fina_indicator_vip', query_fields, entity_fields,
-                            config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, 'tushare_report.db',
+                            'tushare_fina_indicator_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fina_indicator_vip", config)
         TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
         self.api = TushareAPI(config)

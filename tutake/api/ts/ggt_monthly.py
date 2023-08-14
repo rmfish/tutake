@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ggt_monthly_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -46,11 +46,11 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_ggt_monthly.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ggt.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareGgtMonthly.__table__.create(bind=self.engine, checkfirst=True)
@@ -60,7 +60,7 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
             "month", "day_buy_amt", "day_buy_vol", "day_sell_amt", "day_sell_vol", "total_buy_amt", "total_buy_vol",
             "total_sell_amt", "total_sell_vol"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt_monthly.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt.db',
                             'tushare_ggt_monthly', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_monthly", config)
         TuShareBase.__init__(self, "ggt_monthly", config, 120)

@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.express_vip_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -69,11 +69,11 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_express_vip.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareExpressVip.__table__.create(bind=self.engine, checkfirst=True)
@@ -86,7 +86,7 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
             "op_last_year", "tp_last_year", "np_last_year", "eps_last_year", "open_net_assets", "open_bps",
             "perf_summary", "is_audit", "remark"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareExpressVip, 'tushare_express_vip.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareExpressVip, 'tushare_report.db',
                             'tushare_express_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "express_vip", config)
         TuShareBase.__init__(self, "express_vip", config, 5000)

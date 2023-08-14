@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.dividend_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -54,11 +54,11 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_dividend.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareDividend.__table__.create(bind=self.engine, checkfirst=True)
@@ -69,7 +69,7 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             "cash_div_tax", "record_date", "ex_date", "pay_date", "div_listdate", "imp_ann_date", "base_date",
             "base_share", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_dividend.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_report.db',
                             'tushare_dividend', query_fields, entity_fields, config)
         DataProcess.__init__(self, "dividend", config)
         TuShareBase.__init__(self, "dividend", config, 800)

@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_stock",
     "default_limit": null,
     "desc": "获取股票停复牌信息",
     "id": 31,

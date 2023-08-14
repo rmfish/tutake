@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_ths",
     "default_limit": "3000",
     "desc": "获取同花顺板块指数行情。",
     "id": 260,

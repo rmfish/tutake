@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.bak_basic_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -61,11 +61,11 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_bak_basic.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareBakBasic.__table__.create(bind=self.engine, checkfirst=True)
@@ -76,7 +76,7 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_bak_basic.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_stock.db',
                             'tushare_bak_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)

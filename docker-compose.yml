@@ -7,4 +7,5 @@ services:
       - /etc/localtime:/etc/localtime
       - ./docker/docker-config.yml:/tutake/config.yml
       - /home/ubuntu/tutake-data:/tutake/data
+      - /home/ubuntu/docker/tutake/tutake:/tutake/tutake
     entrypoint: [ 'python','entrypoint.py' ]

@@ -142,8 +142,10 @@ class CodeGenerator(object):
                      'ths_daily', 'ths_member', 'ci_daily']
         fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
                     'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
+        macroeconomic_api = ['cn_cpi', 'cn_gdp', 'cn_m', 'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr', 'us_trcr']
         api_names.extend(fund_api)
         api_names.extend(index_api)
+        api_names.extend(macroeconomic_api)
         for n in api_names:
             api = api_loader.get_api_by_name(n)
             if api:

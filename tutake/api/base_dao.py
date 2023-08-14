@@ -32,7 +32,7 @@ class BaseDao(object):
     def _init_remote_database_client(self):
         if self._sqlite_client is not None:
             try:
-                from sqlite_rx.client import SQLiteDatabaseClient
+                from tutake.remote.client import SQLiteDatabaseClient
                 self._sqlite_database_client = SQLiteDatabaseClient(self.database, self._sqlite_client)
             except:
                 self._sqlite_database_client = None
@@ -209,9 +209,10 @@ class BaseDao(object):
             return pd.read_sql(sql, query.session.bind)
         else:
             sql = str(sql)
-            print(sql)
             result = self._sqlite_database_client.execute(sql)
-            return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
+            if result.get('items') is not None and result.get('keys') is not None:
+                return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
+            return DataFrame()
 
     def sql(self, sql):
         start = time.time()

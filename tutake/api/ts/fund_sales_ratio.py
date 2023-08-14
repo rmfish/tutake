@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_sales_ratio_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -43,18 +43,18 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_fund_sales_ratio.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundSalesRatio.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['年份', 'limit', 'offset']
         entity_fields = ["year", "bank", "sec_comp", "fund_comp", "indep_comp", "rests"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund_sales_ratio.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesRatio, 'tushare_fund.db',
                             'tushare_fund_sales_ratio', query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_sales_ratio", config)
         TuShareBase.__init__(self, "fund_sales_ratio", config, 5000)

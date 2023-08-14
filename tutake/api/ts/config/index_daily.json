@@ -1,4 +1,5 @@
 {
+    "database": "tushare_index",
     "default_query": "ts_code='000001.SH'",
     "desc": "指数日线行情,每日15~17点更新",
     "id": 155,

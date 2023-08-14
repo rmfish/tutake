@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_fund",
     "default_limit": "2000",
     "desc": "获取基金规模数据，包含上海和深圳ETF基金",
     "id": 207,

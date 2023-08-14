@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.ths_index_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -43,19 +43,19 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_ths_index.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ths.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareThsIndex.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'exchange', 'type', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths_index.db',
-                            'tushare_ths_index', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths.db', 'tushare_ths_index',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_index", config)
         TuShareBase.__init__(self, "ths_index", config, 5000)
         self.api = TushareAPI(config)

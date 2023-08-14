@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_cb",
     "default_limit": null,
     "desc": "获取可转债基本信息",
     "id": 185,

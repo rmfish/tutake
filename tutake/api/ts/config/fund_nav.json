@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_fund",
     "default_limit": null,
     "default_query": "nav_date='20221111'",
     "desc": "获取公募基金净值数据",

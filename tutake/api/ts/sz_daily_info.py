@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.sz_daily_info_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -46,11 +46,11 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_sz_daily_info.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareSzDailyInfo.__table__.create(bind=self.engine, checkfirst=True)
@@ -59,7 +59,7 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "trade_date", "ts_code", "count", "amount", "vol", "total_share", "total_mv", "float_share", "float_mv"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareSzDailyInfo, 'tushare_sz_daily_info.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareSzDailyInfo, 'tushare_stock.db',
                             'tushare_sz_daily_info', query_fields, entity_fields, config)
         DataProcess.__init__(self, "sz_daily_info", config)
         TuShareBase.__init__(self, "sz_daily_info", config, 5000)

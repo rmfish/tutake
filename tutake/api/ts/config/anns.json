@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_report",
     "default_limit": null,
     "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
     "id": 176,

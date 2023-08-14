@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.stock_company_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -54,11 +54,11 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_basic_data.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareStockCompany.__table__.create(bind=self.engine, checkfirst=True)
@@ -68,7 +68,7 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province", "city",
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_basic_data.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock.db',
                             'tushare_stock_company', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)

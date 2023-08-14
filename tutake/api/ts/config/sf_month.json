@@ -1,0 +1,102 @@
+{
+    "database": "tushare_macroeconomic",
+    "default_limit": "2000",
+    "desc": "获取月度社会融资数据",
+    "id": 310,
+    "integral_required": 2000,
+    "if_exists": null,
+    "inputs": [
+        {
+            "data_type": "str",
+            "desc": "月度（202001表示，2020年1月）",
+            "must": "N",
+            "name": "m"
+        },
+        {
+            "data_type": "str",
+            "desc": "开始月度",
+            "must": "N",
+            "name": "start_m"
+        },
+        {
+            "data_type": "str",
+            "desc": "结束月度",
+            "must": "N",
+            "name": "end_m"
+        },
+        {
+            "data_type": "int",
+            "desc": "单次返回数据长度",
+            "must": "N",
+            "name": "limit"
+        },
+        {
+            "data_type": "int",
+            "desc": "请求数据的开始位移量",
+            "must": "N",
+            "name": "offset"
+        }
+    ],
+    "is_ready": null,
+    "name": "sf_month",
+    "order_by": null,
+    "outputs": [
+        {
+            "column": "MONTH",
+            "data_type": "str",
+            "desc": "月份YYYYMM",
+            "must": "Y",
+            "name": "month"
+        },
+        {
+            "column": "INC_MONTH",
+            "data_type": "float",
+            "desc": "社融增量当月值(亿元)",
+            "must": "Y",
+            "name": "inc_month"
+        },
+        {
+            "column": "M0_YOY",
+            "data_type": "float",
+            "desc": "社融增量累计值(亿元)",
+            "must": "Y",
+            "name": "inc_cumval"
+        },
+        {
+            "column": "M0_MOM",
+            "data_type": "float",
+            "desc": "社融增量期末值(亿元)",
+            "must": "Y",
+            "name": "stk_endval"
+        }
+    ],
+    "parent_id": 241,
+    "path": [
+        [
+            2,
+            "数据接口"
+        ],
+        [
+            147,
+            "宏观经济"
+        ],
+        [
+            224,
+            "国内宏观"
+        ],
+        [
+            240,
+            "金融"
+        ],
+        [
+            241,
+            "货币供应量"
+        ],
+        [
+            310,
+            "社融数据（月）"
+        ]
+    ],
+    "title": "社融数据（月）",
+    "validations": []
+}

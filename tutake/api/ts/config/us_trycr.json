@@ -1,8 +1,9 @@
 {
-    "database": null,
+    "database": "tushare_macroeconomic",
     "default_limit": "2000",
     "desc": "获取美国国债实际收益率曲线利率数据",
     "id": 220,
+    "integral_required": 120,
     "if_exists": null,
     "inputs": [
         {

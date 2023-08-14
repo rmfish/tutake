@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.balancesheet_vip_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -195,11 +195,11 @@ class BalancesheetVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_balancesheet_vip.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareBalancesheetVip.__table__.create(bind=self.engine, checkfirst=True)
@@ -237,7 +237,7 @@ class BalancesheetVip(TushareDAO, TuShareBase, DataProcess):
             "long_pay_total", "debt_invest", "oth_debt_invest", "oth_eq_invest", "oth_illiq_fin_assets",
             "oth_eq_ppbond", "receiv_financing", "use_right_assets", "lease_liab", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_balancesheet_vip.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBalancesheetVip, 'tushare_report.db',
                             'tushare_balancesheet_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "balancesheet_vip", config)
         TuShareBase.__init__(self, "balancesheet_vip", config, 5000)

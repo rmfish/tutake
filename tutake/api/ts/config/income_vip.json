@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_report",
     "default_limit": null,
     "desc": "获取上市公司财务利润表数据",
     "id": 3300,
