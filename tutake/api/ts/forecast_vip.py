@@ -50,7 +50,7 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_forecast_vip.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -64,7 +64,7 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_forecast_vip.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_report.db',
                             'tushare_forecast_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "forecast_vip", config)
         TuShareBase.__init__(self, "forecast_vip", config, 5000)

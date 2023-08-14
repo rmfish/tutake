@@ -135,7 +135,7 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_income_vip.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -167,7 +167,7 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
             "credit_impa_loss", "net_expo_hedging_benefits", "oth_impair_loss_assets", "total_opcost",
             "amodcost_fin_assets", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_income_vip.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_report.db',
                             'tushare_income_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "income_vip", config)
         TuShareBase.__init__(self, "income_vip", config, 5000)

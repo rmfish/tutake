@@ -134,7 +134,7 @@ class CashflowVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_cashflow_vip.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -170,7 +170,7 @@ class CashflowVip(TushareDAO, TuShareBase, DataProcess):
             "net_cash_rece_sec", "credit_impa_loss", "use_right_asset_dep", "oth_loss_asset", "end_bal_cash",
             "beg_bal_cash", "end_bal_cash_equ", "beg_bal_cash_equ", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareCashflowVip, 'tushare_cashflow_vip.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCashflowVip, 'tushare_report.db',
                             'tushare_cashflow_vip', query_fields, entity_fields, config)
         DataProcess.__init__(self, "cashflow_vip", config)
         TuShareBase.__init__(self, "cashflow_vip", config, 5000)
