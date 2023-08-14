@@ -41,7 +41,7 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_suspend_d.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -52,7 +52,7 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'suspend_type', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_suspend_d.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareSuspendD, 'tushare_stock.db',
                             'tushare_suspend_d', query_fields, entity_fields, config)
         DataProcess.__init__(self, "suspend_d", config)
         TuShareBase.__init__(self, "suspend_d", config, 120)

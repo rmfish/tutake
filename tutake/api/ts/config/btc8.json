@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_digital_currency",
     "default_limit": null,
     "desc": "",
     "id": 71,

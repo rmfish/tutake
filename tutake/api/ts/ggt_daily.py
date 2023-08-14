@@ -42,7 +42,7 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ggt_daily.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ggt.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -53,7 +53,7 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtDaily, 'tushare_ggt_daily.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtDaily, 'tushare_ggt.db',
                             'tushare_ggt_daily', query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_daily", config)
         TuShareBase.__init__(self, "ggt_daily", config, 5000)

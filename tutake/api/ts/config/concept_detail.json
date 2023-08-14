@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_stock",
     "default_limit": null,
     "desc": "获取概念股分类明细数据,本接口数据以停止更新，请转移到同花顺概念接口",
     "id": 126,

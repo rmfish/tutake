@@ -44,7 +44,7 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_moneyflow_hsgt.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_moneyflow.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -55,7 +55,7 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow_hsgt.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, 'tushare_moneyflow.db',
                             'tushare_moneyflow_hsgt', query_fields, entity_fields, config)
         DataProcess.__init__(self, "moneyflow_hsgt", config)
         TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)

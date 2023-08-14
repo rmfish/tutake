@@ -45,7 +45,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_anns.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -56,7 +56,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_anns.db', 'tushare_anns',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_report.db', 'tushare_anns',
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "anns", config)
         TuShareBase.__init__(self, "anns", config, 5000)

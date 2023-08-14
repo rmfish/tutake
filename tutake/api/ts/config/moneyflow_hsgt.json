@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_moneyflow",
     "default_limit": "300",
     "default_query": "trade_date='20221118'",
     "desc": "获取沪股通、深股通、港股通每日资金流向数据",

@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_stk",
     "default_limit": null,
     "desc": "获取股票账户开户数据，统计周期为一周，此数据官方已经停止更新。",
     "id": 164,

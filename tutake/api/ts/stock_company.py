@@ -54,7 +54,7 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_basic_data.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -68,7 +68,7 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province", "city",
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_basic_data.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock.db',
                             'tushare_stock_company', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)

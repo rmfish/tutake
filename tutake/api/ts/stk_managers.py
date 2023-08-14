@@ -49,7 +49,7 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stk_managers.db'),
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stk.db'),
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -63,7 +63,7 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "name", "gender", "lev", "title", "edu", "national", "birthday", "begin_date",
             "end_date", "resume"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk_managers.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk.db',
                             'tushare_stk_managers', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stk_managers", config)
         TuShareBase.__init__(self, "stk_managers", config, 5000)

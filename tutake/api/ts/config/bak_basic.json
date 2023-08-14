@@ -1,5 +1,5 @@
 {
-    "database": "",
+    "database": "tushare_stock",
     "default_limit": "5000",
     "desc": "获取备用基础列表，数据从2016年开始",
     "id": 262,
