@@ -209,9 +209,10 @@ class BaseDao(object):
             return pd.read_sql(sql, query.session.bind)
         else:
             sql = str(sql)
-            print(sql)
             result = self._sqlite_database_client.execute(sql)
-            return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
+            if result.get('items') is not None and result.get('keys') is not None:
+                return DataFrame.from_records(result['items'], columns=result['keys'], coerce_float=True)
+            return DataFrame()
 
     def sql(self, sql):
         start = time.time()

@@ -29,7 +29,8 @@ class TushareAPI(object):
             'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio', 'fund_sales_ratio',
             'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily', 'index_dailybasic',
             'index_classify', 'index_member', 'ths_index', 'index_global', 'index_weekly', 'index_monthly',
-            'index_weight', 'daily_info', 'sz_daily_info', 'ths_daily', 'ths_member'
+            'index_weight', 'daily_info', 'sz_daily_info', 'ths_daily', 'ths_member', 'cn_cpi', 'cn_gdp', 'cn_m',
+            'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr'
         ]
         apis.extend(['daily_full'])
         return apis
@@ -285,6 +286,42 @@ class TushareAPI(object):
         if name == 'ths_member':
             ths_member_module = import_module("tutake.api.ts.ths_member")
             clazz = getattr(ths_member_module, "ThsMember")
+            return clazz(config)
+        if name == 'cn_cpi':
+            cn_cpi_module = import_module("tutake.api.ts.cn_cpi")
+            clazz = getattr(cn_cpi_module, "CnCpi")
+            return clazz(config)
+        if name == 'cn_gdp':
+            cn_gdp_module = import_module("tutake.api.ts.cn_gdp")
+            clazz = getattr(cn_gdp_module, "CnGdp")
+            return clazz(config)
+        if name == 'cn_m':
+            cn_m_module = import_module("tutake.api.ts.cn_m")
+            clazz = getattr(cn_m_module, "CnM")
+            return clazz(config)
+        if name == 'cn_ppi':
+            cn_ppi_module = import_module("tutake.api.ts.cn_ppi")
+            clazz = getattr(cn_ppi_module, "CnPpi")
+            return clazz(config)
+        if name == 'sf_month':
+            sf_month_module = import_module("tutake.api.ts.sf_month")
+            clazz = getattr(sf_month_module, "SfMonth")
+            return clazz(config)
+        if name == 'us_tbr':
+            us_tbr_module = import_module("tutake.api.ts.us_tbr")
+            clazz = getattr(us_tbr_module, "UsTbr")
+            return clazz(config)
+        if name == 'us_tltr':
+            us_tltr_module = import_module("tutake.api.ts.us_tltr")
+            clazz = getattr(us_tltr_module, "UsTltr")
+            return clazz(config)
+        if name == 'us_trltr':
+            us_trltr_module = import_module("tutake.api.ts.us_trltr")
+            clazz = getattr(us_trltr_module, "UsTrltr")
+            return clazz(config)
+        if name == 'us_trycr':
+            us_trycr_module = import_module("tutake.api.ts.us_trycr")
+            clazz = getattr(us_trycr_module, "UsTrycr")
             return clazz(config)
         else:
             instance = self._instance_from_name(name, config)

@@ -35,8 +35,16 @@ class TushareDAO(BaseDao):
             return 'start_date', 'end_date', self.entities.nav_date
         elif self.table_name in ['tushare_stk_managers', 'tushare_namechange', 'tushare_anns']:
             return 'start_date', 'end_date', self.entities.ann_date
+        elif self.table_name in ['tushare_cn_cpi', 'tushare_cn_m', 'tushare_cn_ppi', 'tushare_sf_month']:
+            return 'start_m', 'end_m', self.entities.month
+        elif self.table_name in ['tushare_cn_gdp']:
+            return 'start_q', 'end_q', self.entities.quarter
+        elif self.table_name in ['tushare_us_tbr', 'tushare_us_tltr', 'tushare_us_trltr', 'tushare_us_trycr']:
+            return 'start_date', 'end_date', self.entities.date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date
         elif 'start_month' in self.query_fields:
             return 'start_month', 'end_month', self.entities.month
+        elif 'start_m' in self.query_fields:
+            return 'start_m', 'end_m', self.entities.month
         return None
