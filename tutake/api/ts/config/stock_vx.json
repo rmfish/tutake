@@ -1,5 +1,5 @@
 {
-  "database": "stock",
+  "database": "tushare_xiaopei",
   "default_limit": null,
   "desc": "小沛估值因子",
   "id": 303,

@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.index_basic_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -50,11 +50,11 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_index_basic.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexBasic.__table__.create(bind=self.engine, checkfirst=True)
@@ -64,7 +64,7 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index_basic.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index.db',
                             'tushare_index_basic', query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)

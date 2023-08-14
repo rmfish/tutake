@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_index",
     "default_limit": "8000",
     "desc": "获取指数基础信息。",
     "id": 94,

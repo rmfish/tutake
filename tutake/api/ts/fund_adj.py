@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.fund_adj_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -41,19 +41,19 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_fund_adj.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundAdj.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "adj_factor", "discount_rate"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundAdj, 'tushare_fund_adj.db',
-                            'tushare_fund_adj', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundAdj, 'tushare_fund.db', 'tushare_fund_adj',
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_adj", config)
         TuShareBase.__init__(self, "fund_adj", config, 5000)
         self.api = TushareAPI(config)

@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_fund",
     "default_limit": null,
     "desc": "获取基金复权因子，用于计算基金复权行情，每日17点更新",
     "id": 199,

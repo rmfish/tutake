@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_index",
     "default_limit": null,
     "desc": "获取各类指数成分和权重，月度数据 。",
     "id": 96,

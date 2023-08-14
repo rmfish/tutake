@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_index",
     "default_limit": "4000",
     "desc": "获取国际主要指数日线行情",
     "id": 211,

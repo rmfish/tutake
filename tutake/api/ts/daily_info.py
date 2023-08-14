@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.daily_info_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -51,11 +51,11 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_daily_info.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareDailyInfo.__table__.create(bind=self.engine, checkfirst=True)
@@ -65,7 +65,7 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
             "trade_date", "ts_code", "ts_name", "com_count", "total_share", "float_share", "total_mv", "float_mv",
             "amount", "vol", "trans_count", "pe", "tr", "exchange"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyInfo, 'tushare_daily_info.db',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyInfo, 'tushare_stock.db',
                             'tushare_daily_info', query_fields, entity_fields, config)
         DataProcess.__init__(self, "daily_info", config)
         TuShareBase.__init__(self, "daily_info", config, 5000)

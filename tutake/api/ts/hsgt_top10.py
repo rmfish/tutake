@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.hsgt_top10_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -48,11 +48,11 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('tushare_hsgt_top10.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_hsgt_top10.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareHsgtTop10.__table__.create(bind=self.engine, checkfirst=True)

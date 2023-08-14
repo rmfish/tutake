@@ -1,7 +1,18 @@
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao
 from tutake.utils.config import TutakeConfig
+
+engine_pool = {}
+
+
+def create_shared_engine(url: str, **connect_args):
+    engine = engine_pool.get(url)
+    if engine is None:
+        engine = create_engine(url, **connect_args)
+        engine_pool[url] = engine
+    return engine
 
 
 class TushareDAO(BaseDao):

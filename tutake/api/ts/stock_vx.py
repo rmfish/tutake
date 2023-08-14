@@ -16,7 +16,7 @@ from tutake.api.base_dao import Base
 from tutake.api.process import DataProcess
 from tutake.api.process_report import ProcessException
 from tutake.api.ts.stock_vx_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
@@ -56,11 +56,11 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('stock.db'),
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_xiaopei.db'),
+                                           connect_args={
+                                               'check_same_thread': False,
+                                               'timeout': config.get_sqlite_timeout()
+                                           })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareStockVx.__table__.create(bind=self.engine, checkfirst=True)
@@ -71,8 +71,8 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
             "vx_grow_worse_v_l4", "vx_life_v_l8", "vx_3excellent_v_l8", "vx_past_5q_avg_l8", "vx_grow_worse_v_l8",
             "vxx", "vs", "vz11", "vz24", "vz_lms"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockVx, 'stock.db', 'tushare_stock_vx',
-                            query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockVx, 'tushare_xiaopei.db',
+                            'tushare_stock_vx', query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_vx", config)
         TuShareBase.__init__(self, "stock_vx", config, 5000)
         self.api = TushareAPI(config)
@@ -241,7 +241,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.stock_vx(trade_date='20140106'))
+    print(pro.stock_vx())
 
     api = StockVx(config)
     api.process()    # 同步增量数据
