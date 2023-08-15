@@ -191,5 +191,5 @@ if __name__ == '__main__':
     print(pro.cn_m())
 
     api = CnM(config)
-    api.process()    # 同步增量数据
-    print(api.cn_m())    # 数据查询接口
+    # api.process()    # 同步增量数据
+    print(api.cn_m(start_m="201001"))    # 数据查询接口
