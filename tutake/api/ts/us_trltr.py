@@ -145,8 +145,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.us_trltr(start_date="19980101", end_date="20020101"))
+    print(pro.us_trltr(start_date="19980101", end_date="20200101"))
 
     api = UsTrltr(config)
-    api.process()    # 同步增量数据
-    print(api.us_trltr())    # 数据查询接口
+    # api.process()    # 同步增量数据
+    print(api.us_trltr(start_date="19980101", end_date="20200101"))    # 数据查询接口

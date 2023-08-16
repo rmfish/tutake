@@ -185,5 +185,5 @@ if __name__ == '__main__':
     print(pro.cn_gdp())
 
     api = CnGdp(config)
-    api.process()    # 同步增量数据
+    # api.process()    # 同步增量数据
     print(api.cn_gdp())    # 数据查询接口

@@ -212,5 +212,5 @@ if __name__ == '__main__':
     print(pro.cn_cpi())
 
     api = CnCpi(config)
-    api.process()    # 同步增量数据
+    # api.process()    # 同步增量数据
     print(api.cn_cpi())    # 数据查询接口

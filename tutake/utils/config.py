@@ -2,6 +2,7 @@ import logging
 import os.path
 from os.path import dirname, abspath, join
 from pathlib import Path
+from urllib.parse import urlparse
 
 import yaml
 
@@ -76,7 +77,8 @@ class DotConfig(dict):
 
 TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
-TUTAKE_DATA_SERVER_KEY = "tutake.data.server"
+TUTAKE_REMOTE_SERVER_KEY = "tutake.remote.address"
+TUTAKE_SERVER_PORT_KEY = "tutake.server.port"
 TUSHARE_TOKEN_KEY = "tushare.token"
 TUSHARE_TOKENS_KEY = "tushare.tokens"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
@@ -102,7 +104,7 @@ class TutakeConfig(object):
         self.config_file = config_file
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
-        self._sqlite_client = None
+        self._remote_client = None
 
     def _default_config(self):
         """
@@ -198,20 +200,14 @@ class TutakeConfig(object):
     def __set(config: DotConfig, k, v):
         return config.set(k, v)
 
-    def get_sqlite_client(self):
-        if self._sqlite_client is not None:
-            return self._sqlite_client
-        if self.get_config(TUTAKE_DATA_SERVER_KEY, None) is not None:
-            try:
-                from tutake.remote.client import SQLiteClient
-                self._sqlite_client = SQLiteClient(self.get_config(TUTAKE_DATA_SERVER_KEY))
-                return self._sqlite_client
-            except:
-                return None
+    def get_remote_address(self):
+        address = self.get_config(TUTAKE_REMOTE_SERVER_KEY, None)
+        if address is not None:
+            url_parts = urlparse(address)
+            hostname = url_parts.hostname
+            port = url_parts.port
+            return (hostname, port)
         return None
-
-    def is_read_only(self):
-        return self.get_sqlite_client() is not None
 
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)

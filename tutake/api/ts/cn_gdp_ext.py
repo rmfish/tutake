@@ -13,7 +13,7 @@ def default_order_by_ext(self) -> str:
     """
     查询时默认的排序
     """
-    return ''
+    return 'quarter desc'
 
 
 def default_limit_ext(self) -> str:
