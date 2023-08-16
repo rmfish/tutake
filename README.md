@@ -6,6 +6,7 @@ Take data from Tushare, respect Tushare!
 2. 支持本地的数据查询，性能和效率更高（当前使用sqlite,后续计划支持多类型数据库）
 3. 支持原生的查询，分析的维度更灵活（sql还是很强大的）
 4. 支持接口的扩展，常用的数据组合接口可以通过扩展的方式统一调用(目前增加了雪球热榜的接口)
+5. 支持架设数据私服，提供私有化的数据服务
 
 ## 背景
 
@@ -215,7 +216,7 @@ if __name__ == '__main__':
     print(ts_api._daily.meta())  # 查看接口元数据
 ```
 结果如下：
-```json lines
+```json
 {'table_name': 'tushare_daily', 'columns': [{'name': 'ts_code', 'type': 'String', 'comment': '股票代码'}, {'name': 'trade_date', 'type': 'String', 'comment': '交易日期'}, {'name': 'open', 'type': 'Float', 'comment': '开盘价'}, {'name': 'high', 'type': 'Float', 'comment': '最高价'}, {'name': 'low', 'type': 'Float', 'comment': '最低价'}, {'name': 'close', 'type': 'Float', 'comment': '收盘价'}, {'name': 'pre_close', 'type': 'Float', 'comment': '昨收价'}, {'name': 'change', 'type': 'Float', 'comment': '涨跌额'}, {'name': 'pct_chg', 'type': 'Float', 'comment': '涨跌幅'}, {'name': 'vol', 'type': 'Float', 'comment': '成交量'}, {'name': 'amount', 'type': 'Float', 'comment': '成交额'}], 'default_order_by': 'trade_date,ts_code', 'default_limit': '6000'}
 ```
 
@@ -249,17 +250,22 @@ if __name__ == '__main__':
 [768 rows x 12 columns]
 ```
 
-### Other
-因为sqlite不支持C/S结构，为了能方便本地访问测试，又不需要同步数据到本地，所以可以在服务器上假设一个sqlite代理服务`https://github.com/rmfish/sqlite_rx`
-本地安装依赖：
-```
-pip install 'sqlite_rx @ git+git://github.com/rmfish/sqlite_rx.git@main#egg=sqlite_rx'
-```
+### 架设私服
+因为sqlite不支持C/S结构，为了能方便本地访问测试，又不需要同步数据到本地，所以可以在服务器上假设一个Tutake代理服务
 并添加配置项：
+```yaml
+tushare.remote.server: tcp://xxx.xxx:5000
 ```
-tushare.data.server: tcp://xxx.xxx:5000
+如果要启动私服数据服务：
+添加配置：
+```yaml
+tushare.server.port: 5000
 ```
-__注意添加这个配置后就不支持读写本地文件__
+并启动远程服务
+```python
+RemoteServer(tutake).start(True)
+```
+
 
 ## 说明
 因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，
