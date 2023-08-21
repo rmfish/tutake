@@ -26,7 +26,7 @@ from tutake.utils.utils import project_root
 class TushareTradeCal(Base):
     __tablename__ = "tushare_trade_cal"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange = Column(String, index=True, comment='交易所 SSE上交所 SZSE深交所')
+    exchange = Column(String, index=True, comment='交易所 SSE上交所,SZSE深交所,CFFEX 中金所,SHFE 上期所,CZCE 郑商所,DCE 大商所,INE 上能源')
     cal_date = Column(String, index=True, comment='日历日期')
     is_open = Column(String, index=True, comment='是否交易 0休市 1交易')
     pretrade_date = Column(String, comment='上一个交易日')
@@ -166,8 +166,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.trade_cal())
+    print(pro.trade_cal(exchange='INE'))
 
-    api = TradeCal(config)
-    api.process()    # 同步增量数据
-    print(api.trade_cal())    # 数据查询接口
+    # api = TradeCal(config)
+    # api.process()    # 同步增量数据
+    # print(api.trade_cal())    # 数据查询接口

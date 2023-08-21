@@ -1,5 +1,3 @@
-
-
 def default_cron_express_ext(self) -> str:
     return ""
 
@@ -25,7 +23,8 @@ def query_parameters_ext(self):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return [{}]
+    return [{'exchange': 'SSE'}, {'exchange': 'SZSE'}, {'exchange': 'CFFEX'}, {'exchange': 'SHFE'},
+            {'exchange': 'CZCE'}, {'exchange': 'DCE'}, {'exchange': 'INE'}]
 
 
 def param_loop_process_ext(self, **params):
