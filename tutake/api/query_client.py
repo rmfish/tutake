@@ -5,7 +5,7 @@ from pandas import DataFrame
 
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
-from tutake.remote.client import RemoteClient
+from tutake.remote.client import TutakeClient
 
 
 class TushareQuery:
@@ -21,12 +21,11 @@ class TushareQuery:
     def _init_remote_client(self):
         remote_address = self.config.get_remote_address()
         if remote_address is not None:
-            self._remote_client = RemoteClient(remote_address[0], remote_address[1])
+            self._remote_client = TutakeClient(remote_address)
 
     def query(self, api_name, fields='', **kwargs) -> DataFrame:
         if self._remote_client is not None:
-            return self._remote_client.query(
-                {"namespace": "tushare", "api_name": api_name, 'fields': fields, 'kwargs': kwargs})
+            return self._remote_client.query(namespace="tushare", api_name=api_name, fields=fields, **kwargs)
         _api = self.api.__getattr__(api_name)
         if _api is None:
             return self.fail_over(api_name, fields, **kwargs)
@@ -65,8 +64,7 @@ class XueQiuQuery:
 
     def query(self, api_name, fields='', **kwargs):
         if self._remote_client is not None:
-            return self._remote_client.query(
-                {"namespace": "xueqiu", "api_name": api_name, 'fields': fields, 'kwargs': kwargs})
+            return self._remote_client.query(namespace="xueqiu", api_name=api_name, fields=fields, **kwargs)
         api = self.api.__getattr__(api_name)
         method = getattr(api, api_name)
         if method is not None:

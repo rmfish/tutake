@@ -12,7 +12,9 @@ USER tutake
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -i https://mirrors.cloud.tencent.com/pypi/simple -r requirements.txt
+RUN pip3 install -i https://mirrors.cloud.tencent.com/pypi/simple pyzmq tornado
 ENV TZ="Asia/Shanghai"
+EXPOSE 5000/tcp
 COPY ./tutake ./tutake
 COPY ./ts_logger.yml ./entrypoint.py ./
 COPY ./docker/docker-config.yml ./config.yml

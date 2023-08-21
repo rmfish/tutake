@@ -3,6 +3,8 @@ services:
   tutake:
     build: .
     user: '1000'
+    ports:
+      - "49191:5000"
     volumes:
       - /etc/localtime:/etc/localtime
       - ./docker/docker-config.yml:/tutake/config.yml

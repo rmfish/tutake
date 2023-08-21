@@ -2,7 +2,6 @@ import logging
 import os.path
 from os.path import dirname, abspath, join
 from pathlib import Path
-from urllib.parse import urlparse
 
 import yaml
 
@@ -201,13 +200,13 @@ class TutakeConfig(object):
         return config.set(k, v)
 
     def get_remote_address(self):
-        address = self.get_config(TUTAKE_REMOTE_SERVER_KEY, None)
-        if address is not None:
-            url_parts = urlparse(address)
-            hostname = url_parts.hostname
-            port = url_parts.port
-            return (hostname, port)
-        return None
+        return self.get_config(TUTAKE_REMOTE_SERVER_KEY, None)
+        # if address is not None:
+        #     url_parts = urlparse(address)
+        #     hostname = url_parts.hostname
+        #     port = url_parts.port
+        #     return (hostname, port)
+        # return None
 
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)
