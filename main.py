@@ -43,9 +43,9 @@ def cron_task():
 
 if __name__ == '__main__':
     # 可以查看这个接口入门
-    quick_start()
+    # quick_start()
 
-    #remote_query()
+    remote_query()
 
     # 全量的演示代码都在complete接口，但这个接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
     # complete(tutake)

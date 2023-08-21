@@ -86,6 +86,9 @@ class BaseDao(object):
     def default_time_range(self) -> ():
         return None
 
+    def filter_process(self, filter_criterion, filter_by):
+        return filter_criterion, filter_by
+
     def _get_time_criterion_filter(self, **kwargs):
         time_range_query = self.default_time_range()
         criterion = None
@@ -157,6 +160,7 @@ class BaseDao(object):
             for key in kwargs.keys()
             if key in self.query_fields and key in self.entity_fields and key is not None and kwargs[key] != ''
         }
+        filter_criterion, filter_by = self.filter_process(filter_criterion, filter_by)
         order_by = self._get_order_by(**kwargs)
         limit = self._get_query_limit(**kwargs)
         offset = self._get_query_offset(**kwargs)

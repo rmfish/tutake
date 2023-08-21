@@ -10,4 +10,5 @@ services:
       - ./docker/docker-config.yml:/tutake/config.yml
       - /home/ubuntu/tutake-data:/tutake/data
       - /home/ubuntu/docker/tutake/tutake:/tutake/tutake
+      - ./entrypoint.py:/tutake/entrypoint.py
     entrypoint: [ 'python','entrypoint.py' ]

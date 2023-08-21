@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao
@@ -21,6 +21,18 @@ class TushareDAO(BaseDao):
                  entity_fields,
                  config: TutakeConfig):
         super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields, config)
+
+    def filter_process(self, filter_criterion, filter_by):
+        if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly']:
+            ts_code = filter_by.get("ts_code")
+            if ts_code is not None and "," in ts_code:
+                codes = ts_code.split(",")
+                if filter_criterion is None:
+                    filter_criterion = self.entities.in_(codes)
+                else:
+                    filter_criterion = and_(self.entities.ts_code.in_(codes), filter_criterion)
+                del filter_by['ts_code']
+        return filter_criterion, filter_by
 
     def default_time_range(self) -> ():
         if self.table_name == 'tushare_trade_cal':
