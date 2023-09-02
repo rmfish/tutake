@@ -110,7 +110,7 @@ class BaseDao(object):
         return None
 
     def _get_query_limit(self, **kwargs):
-        limit = 2000000  # 默认20000条 避免导致数据库压力过大
+        limit = 10000000  # 默认200000000条 避免导致数据库压力过大
         if kwargs.get('limit') and str(kwargs.get('limit')).isnumeric():
             input_limit = int(kwargs.get('limit'))
             if input_limit < limit:
