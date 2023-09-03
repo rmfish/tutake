@@ -11,9 +11,17 @@ handlers:
     stream: ext://sys.stdout
 loggers:
   tutake:
-    level: DEBUG
+    level: INFO
     handlers: [ console ]
     propagate: False
+#  tutake.process.percent:
+#    level: DEBUG
+#    handlers: [ console ]
+#    propagate: False
+#  tutake.dao:
+#    level: DEBUG
+#    handlers: [ console ]
+#    propagate: False
   api:
     level: INFO
     handlers: [ console ]

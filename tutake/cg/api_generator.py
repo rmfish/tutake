@@ -84,7 +84,12 @@ class CodeGenerator(object):
 
             api_config['title_name'] = "{}".format(api_config['name'].replace('_', ' ').title().replace(' ', ''))
             api_config['entity_name'] = f"{prefix.capitalize()}{api_config['title_name']}"
-
+            must_output_fields = [o['name'] for o in api['outputs'] if o['must'] == 'Y']
+            output_fields = [o['name'] for o in api['outputs']]
+            if len(must_output_fields) != len(output_fields):
+                api_config['default_fields'] = ','.join(must_output_fields)
+            else:
+                api_config['default_fields'] = ''
             self.set_index(api_config)
             self.generate_order_by(api_config)
             if api_tmpl:
@@ -130,8 +135,10 @@ class CodeGenerator(object):
         api_ext_tmpl = self.env.get_template('tushare_api_ext.tmpl')
         dao_tmpl = self.env.get_template('ts_api.tmpl')
         api_params = []
+        generated = []
         for i in apis:
             api_params.append(self.generate_api_code(i, "tushare", "ts", api_tmpl, api_ext_tmpl))
+            generated.append(i)
 
         api_names = ['daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
                      'balancesheet_vip',
@@ -142,16 +149,16 @@ class CodeGenerator(object):
                      'ths_daily', 'ths_member', 'ci_daily']
         fund_api = ['fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
                     'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily']
-        macroeconomic_api = ['cn_cpi', 'cn_gdp', 'cn_m', 'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr', 'us_trcr']
+        macroeconomic_api = ['cn_cpi', 'cn_gdp', 'cn_m', 'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr',
+                             'us_trycr', 'us_trcr']
         api_names.extend(fund_api)
         api_names.extend(index_api)
         api_names.extend(macroeconomic_api)
         for n in api_names:
             api = api_loader.get_api_by_name(n)
-            if api:
+            if api and api not in generated:
                 api_params.append(self.generate_api_code(api, "tushare", "ts", api_tmpl, api_ext_tmpl))
-                apis.append(api)
-
+                generated.append(api)
         self.render_code(code_dir, "tushare_api", dao_tmpl.render({"apis": api_params}))
 
     def xueqiu_code_generate(self):

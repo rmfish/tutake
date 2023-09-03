@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.bak_daily_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -68,7 +67,10 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_bak_daily.db'),
+        self.table_name = "tushare_bak_daily"
+        self.database = 'tushare_bak_daily.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -84,8 +86,8 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
             "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
             "interval_3", "interval_6"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, 'tushare_bak_daily.db',
-                            'tushare_bak_daily', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "bak_daily", config)
         TuShareBase.__init__(self, "bak_daily", config, 120)
         self.api = TushareAPI(config)
@@ -229,37 +231,37 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
         | limit(str):   最大行数
         
         :return: DataFrame
-         ts_code(str)  股票代码
-         trade_date(str)  交易日期
-         name(str)  股票名称
-         pct_change(float)  涨跌幅
-         close(float)  收盘价
-         change(float)  涨跌额
-         open(float)  开盘价
-         high(float)  最高价
-         low(float)  最低价
-         pre_close(float)  昨收价
-         vol_ratio(float)  量比
-         turn_over(float)  换手率
-         swing(float)  振幅
-         vol(float)  成交量
-         amount(float)  成交额
-         selling(float)  外盘
-         buying(float)  内盘
-         total_share(float)  总股本(万)
-         float_share(float)  流通股本(万)
-         pe(float)  市盈(动)
-         industry(str)  所属行业
-         area(str)  所属地域
-         float_mv(float)  流通市值
-         total_mv(float)  总市值
-         avg_price(float)  平均价
-         strength(float)  强弱度(%)
-         activity(float)  活跃度(%)
-         avg_turnover(float)  笔换手
-         attack(float)  攻击波(%)
-         interval_3(float)  近3月涨幅
-         interval_6(float)  近6月涨幅
+         ts_code(str)  股票代码 Y
+         trade_date(str)  交易日期 Y
+         name(str)  股票名称 Y
+         pct_change(float)  涨跌幅 Y
+         close(float)  收盘价 Y
+         change(float)  涨跌额 Y
+         open(float)  开盘价 Y
+         high(float)  最高价 Y
+         low(float)  最低价 Y
+         pre_close(float)  昨收价 Y
+         vol_ratio(float)  量比 Y
+         turn_over(float)  换手率 Y
+         swing(float)  振幅 Y
+         vol(float)  成交量 Y
+         amount(float)  成交额 Y
+         selling(float)  外盘 Y
+         buying(float)  内盘 Y
+         total_share(float)  总股本(万) Y
+         float_share(float)  流通股本(万) Y
+         pe(float)  市盈(动) Y
+         industry(str)  所属行业 Y
+         area(str)  所属地域 Y
+         float_mv(float)  流通市值 Y
+         total_mv(float)  总市值 Y
+         avg_price(float)  平均价 Y
+         strength(float)  强弱度(%) Y
+         activity(float)  活跃度(%) Y
+         avg_turnover(float)  笔换手 Y
+         attack(float)  攻击波(%) Y
+         interval_3(float)  近3月涨幅 Y
+         interval_6(float)  近6月涨幅 Y
         
         """
         return super().query(fields, **kwargs)
@@ -269,7 +271,7 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -294,22 +296,19 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.bak_daily with args: {}".format(kwargs))
-                res = self.tushare_query('bak_daily', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_bak_daily',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('bak_daily', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(BakDaily, 'default_limit', default_limit_ext)

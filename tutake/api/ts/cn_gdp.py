@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.cn_gdp_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -46,7 +45,10 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_cn_gdp"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -57,8 +59,8 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['q', 'start_q', 'end_q', 'limit', 'offset']
         entity_fields = ["quarter", "gdp", "gdp_yoy", "pi", "pi_yoy", "si", "si_yoy", "ti", "ti_yoy"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareCnGdp, 'tushare_macroeconomic.db',
-                            'tushare_cn_gdp', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCnGdp, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "cn_gdp", config)
         TuShareBase.__init__(self, "cn_gdp", config, 600)
         self.api = TushareAPI(config)
@@ -113,15 +115,15 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         quarter(str)  季度
-         gdp(float)  GDP累计值（亿元）
-         gdp_yoy(float)  当季同比增速（%）
-         pi(float)  第一产业累计值（亿元）
-         pi_yoy(float)  第一产业同比增速（%）
-         si(float)  第二产业累计值（亿元）
-         si_yoy(float)  第二产业同比增速（%）
-         ti(float)  第三产业累计值（亿元）
-         ti_yoy(float)  第三产业同比增速（%）
+         quarter(str)  季度 Y
+         gdp(float)  GDP累计值（亿元） Y
+         gdp_yoy(float)  当季同比增速（%） Y
+         pi(float)  第一产业累计值（亿元） Y
+         pi_yoy(float)  第一产业同比增速（%） Y
+         si(float)  第二产业累计值（亿元） Y
+         si_yoy(float)  第二产业同比增速（%） Y
+         ti(float)  第三产业累计值（亿元） Y
+         ti_yoy(float)  第三产业同比增速（%） Y
         
         """
         return super().query(fields, **kwargs)
@@ -131,7 +133,7 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -156,18 +158,19 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_gdp with args: {}".format(kwargs))
-                res = self.tushare_query('cn_gdp', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_cn_gdp', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('cn_gdp', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(CnGdp, 'default_limit', default_limit_ext)
@@ -185,5 +188,5 @@ if __name__ == '__main__':
     print(pro.cn_gdp())
 
     api = CnGdp(config)
-    # api.process()    # 同步增量数据
+    api.process()    # 同步增量数据
     print(api.cn_gdp())    # 数据查询接口

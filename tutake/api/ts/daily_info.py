@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.daily_info_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -51,7 +50,10 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+        self.table_name = "tushare_daily_info"
+        self.database = 'tushare_stock.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -65,8 +67,8 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
             "trade_date", "ts_code", "ts_name", "com_count", "total_share", "float_share", "total_mv", "float_mv",
             "amount", "vol", "trans_count", "pe", "tr", "exchange"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyInfo, 'tushare_stock.db',
-                            'tushare_daily_info', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyInfo, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "daily_info", config)
         TuShareBase.__init__(self, "daily_info", config, 5000)
         self.api = TushareAPI(config)
@@ -143,20 +145,20 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         trade_date(str)  交易日期
-         ts_code(str)  市场代码
-         ts_name(str)  市场名称
-         com_count(int)  挂牌数
-         total_share(float)  总股本（亿股）
-         float_share(float)  流通股本（亿股）
-         total_mv(float)  总市值（亿元）
-         float_mv(float)  流通市值（亿元）
-         amount(float)  交易金额（亿元）
-         vol(float)  成交量（亿股）
-         trans_count(int)  成交笔数（万笔）
-         pe(float)  平均市盈率
-         tr(float)  换手率（％）
-         exchange(str)  交易所
+         trade_date(str)  交易日期 Y
+         ts_code(str)  市场代码 Y
+         ts_name(str)  市场名称 Y
+         com_count(int)  挂牌数 Y
+         total_share(float)  总股本（亿股） Y
+         float_share(float)  流通股本（亿股） Y
+         total_mv(float)  总市值（亿元） Y
+         float_mv(float)  流通市值（亿元） Y
+         amount(float)  交易金额（亿元） Y
+         vol(float)  成交量（亿股） Y
+         trans_count(int)  成交笔数（万笔） Y
+         pe(float)  平均市盈率 Y
+         tr(float)  换手率（％） Y
+         exchange(str)  交易所 Y
         
         """
         return super().query(fields, **kwargs)
@@ -166,7 +168,7 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -199,22 +201,19 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.daily_info with args: {}".format(kwargs))
-                res = self.tushare_query('daily_info', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_daily_info',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('daily_info', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(DailyInfo, 'default_limit', default_limit_ext)

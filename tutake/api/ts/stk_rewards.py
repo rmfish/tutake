@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stk_rewards_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -44,7 +43,10 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stk.db'),
+        self.table_name = "tushare_stk_rewards"
+        self.database = 'tushare_stk.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -55,8 +57,8 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "end_date", "name", "title", "reward", "hold_vol"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStkRewards, 'tushare_stk.db',
-                            'tushare_stk_rewards', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkRewards, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stk_rewards", config)
         TuShareBase.__init__(self, "stk_rewards", config, 5000)
         self.api = TushareAPI(config)
@@ -102,13 +104,13 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         ann_date(str)  公告日期
-         end_date(str)  报告期
-         name(str)  姓名
-         title(str)  职务
-         reward(float)  报酬
-         hold_vol(float)  持股数
+         ts_code(str)  TS股票代码 Y
+         ann_date(str)  公告日期 Y
+         end_date(str)  报告期 Y
+         name(str)  姓名 Y
+         title(str)  职务 Y
+         reward(float)  报酬 Y
+         hold_vol(float)  持股数 Y
         
         """
         return super().query(fields, **kwargs)
@@ -118,7 +120,7 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -143,22 +145,19 @@ class StkRewards(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stk_rewards with args: {}".format(kwargs))
-                res = self.tushare_query('stk_rewards', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stk_rewards',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stk_rewards', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StkRewards, 'default_limit', default_limit_ext)

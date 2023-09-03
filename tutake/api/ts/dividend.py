@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.dividend_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -54,7 +53,10 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+        self.table_name = "tushare_dividend"
+        self.database = 'tushare_report.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -69,8 +71,8 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             "cash_div_tax", "record_date", "ex_date", "pay_date", "div_listdate", "imp_ann_date", "base_date",
             "base_share", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, 'tushare_report.db',
-                            'tushare_dividend', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "dividend", config)
         TuShareBase.__init__(self, "dividend", config, 800)
         self.api = TushareAPI(config)
@@ -146,7 +148,10 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             "comment": "是否变更过（1表示变更）"
         }]
 
-    def dividend(self, fields='', **kwargs):
+    def dividend(
+            self,
+            fields='ts_code,end_date,ann_date,div_proc,stk_div,stk_bo_rate,stk_co_rate,cash_div,cash_div_tax,record_date,ex_date,pay_date,div_listdate,imp_ann_date',
+            **kwargs):
         """
         分红送股数据
         | Arguments:
@@ -160,23 +165,23 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         end_date(str)  分送年度
-         ann_date(str)  预案公告日（董事会）
-         div_proc(str)  实施进度
-         stk_div(float)  每股送转
-         stk_bo_rate(float)  每股送股比例
-         stk_co_rate(float)  每股转增比例
-         cash_div(float)  每股分红（税后）
-         cash_div_tax(float)  每股分红（税前）
-         record_date(str)  股权登记日
-         ex_date(str)  除权除息日
-         pay_date(str)  派息日
-         div_listdate(str)  红股上市日
-         imp_ann_date(str)  实施公告日
-         base_date(str)  基准日
-         base_share(float)  实施基准股本（万）
-         update_flag(str)  是否变更过（1表示变更）
+         ts_code(str)  TS代码 Y
+         end_date(str)  分送年度 Y
+         ann_date(str)  预案公告日（董事会） Y
+         div_proc(str)  实施进度 Y
+         stk_div(float)  每股送转 Y
+         stk_bo_rate(float)  每股送股比例 Y
+         stk_co_rate(float)  每股转增比例 Y
+         cash_div(float)  每股分红（税后） Y
+         cash_div_tax(float)  每股分红（税前） Y
+         record_date(str)  股权登记日 Y
+         ex_date(str)  除权除息日 Y
+         pay_date(str)  派息日 Y
+         div_listdate(str)  红股上市日 Y
+         imp_ann_date(str)  实施公告日 Y
+         base_date(str)  基准日 N
+         base_share(float)  实施基准股本（万） N
+         update_flag(str)  是否变更过（1表示变更） N
         
         """
         return super().query(fields, **kwargs)
@@ -186,7 +191,7 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -220,22 +225,19 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.dividend with args: {}".format(kwargs))
-                res = self.tushare_query('dividend', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_dividend',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('dividend', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(Dividend, 'default_limit', default_limit_ext)

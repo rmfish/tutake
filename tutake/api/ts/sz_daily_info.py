@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.sz_daily_info_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -46,7 +45,10 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+        self.table_name = "tushare_sz_daily_info"
+        self.database = 'tushare_stock.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -59,8 +61,8 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "trade_date", "ts_code", "count", "amount", "vol", "total_share", "total_mv", "float_share", "float_mv"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareSzDailyInfo, 'tushare_stock.db',
-                            'tushare_sz_daily_info', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareSzDailyInfo, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "sz_daily_info", config)
         TuShareBase.__init__(self, "sz_daily_info", config, 5000)
         self.api = TushareAPI(config)
@@ -116,15 +118,15 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         trade_date(str)  
-         ts_code(str)  市场类型
-         count(int)  股票个数
-         amount(float)  成交金额
-         vol(float)  成交量
-         total_share(float)  总股本
-         total_mv(float)  总市值
-         float_share(float)  流通股票
-         float_mv(float)  流通市值
+         trade_date(str)   Y
+         ts_code(str)  市场类型 Y
+         count(int)  股票个数 Y
+         amount(float)  成交金额 Y
+         vol(float)  成交量 Y
+         total_share(float)  总股本 Y
+         total_mv(float)  总市值 Y
+         float_share(float)  流通股票 Y
+         float_mv(float)  流通市值 Y
         
         """
         return super().query(fields, **kwargs)
@@ -134,7 +136,7 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -159,22 +161,19 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.sz_daily_info with args: {}".format(kwargs))
-                res = self.tushare_query('sz_daily_info', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_sz_daily_info',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('sz_daily_info', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(SzDailyInfo, 'default_limit', default_limit_ext)

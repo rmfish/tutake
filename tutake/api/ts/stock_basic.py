@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stock_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -51,7 +50,10 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+        self.table_name = "tushare_stock_basic"
+        self.database = 'tushare_stock.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -65,8 +67,8 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
             "curr_type", "list_status", "list_date", "delist_date", "is_hs"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockBasic, 'tushare_stock.db',
-                            'tushare_stock_basic', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockBasic, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_basic", config)
         TuShareBase.__init__(self, "stock_basic", config, 120)
         self.api = TushareAPI(config)
@@ -134,7 +136,7 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             "comment": "是否沪深港通标的，N否 H沪股通 S深股通"
         }]
 
-    def stock_basic(self, fields='', **kwargs):
+    def stock_basic(self, fields='ts_code,symbol,name,area,industry,market,list_date', **kwargs):
         """
         获取基础信息数据，包括股票代码、名称、上市日期、退市日期等
         | Arguments:
@@ -148,21 +150,21 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         symbol(str)  股票代码
-         name(str)  股票名称
-         area(str)  地域
-         industry(str)  所属行业
-         fullname(str)  股票全称
-         enname(str)  英文全称
-         cnspell(str)  拼音缩写
-         market(str)  市场类型
-         exchange(str)  交易所代码
-         curr_type(str)  交易货币
-         list_status(str)  上市状态 L上市 D退市 P暂停上市
-         list_date(str)  上市日期
-         delist_date(str)  退市日期
-         is_hs(str)  是否沪深港通标的，N否 H沪股通 S深股通
+         ts_code(str)  TS代码 Y
+         symbol(str)  股票代码 Y
+         name(str)  股票名称 Y
+         area(str)  地域 Y
+         industry(str)  所属行业 Y
+         fullname(str)  股票全称 N
+         enname(str)  英文全称 N
+         cnspell(str)  拼音缩写 N
+         market(str)  市场类型 Y
+         exchange(str)  交易所代码 N
+         curr_type(str)  交易货币 N
+         list_status(str)  上市状态 L上市 D退市 P暂停上市 N
+         list_date(str)  上市日期 Y
+         delist_date(str)  退市日期 N
+         is_hs(str)  是否沪深港通标的，N否 H沪股通 S深股通 N
         
         """
         return super().query(fields, **kwargs)
@@ -172,7 +174,7 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -206,22 +208,19 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_basic with args: {}".format(kwargs))
-                res = self.tushare_query('stock_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stock_basic',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stock_basic', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StockBasic, 'default_limit', default_limit_ext)

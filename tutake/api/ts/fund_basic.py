@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -61,7 +60,10 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_basic"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -77,8 +79,8 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
             "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate",
             "market"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, 'tushare_fund.db',
-                            'tushare_fund_basic', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_basic", config)
         TuShareBase.__init__(self, "fund_basic", config, 5000)
         self.api = TushareAPI(config)
@@ -199,31 +201,31 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
         | name(str):   
         
         :return: DataFrame
-         ts_code(str)  基金代码
-         name(str)  简称
-         management(str)  管理人
-         custodian(str)  托管人
-         fund_type(str)  投资类型
-         found_date(str)  成立日期
-         due_date(str)  到期日期
-         list_date(str)  上市时间
-         issue_date(str)  发行日期
-         delist_date(str)  退市日期
-         issue_amount(float)  发行份额(亿份)
-         m_fee(float)  管理费
-         c_fee(float)  托管费
-         duration_year(float)  存续期
-         p_value(float)  面值
-         min_amount(float)  起点金额(万元)
-         exp_return(float)  预期收益率
-         benchmark(str)  业绩比较基准
-         status(str)  存续状态D摘牌 I发行 L已上市
-         invest_type(str)  投资风格
-         type(str)  基金类型
-         trustee(str)  受托人
-         purc_startdate(str)  日常申购起始日
-         redm_startdate(str)  日常赎回起始日
-         market(str)  E场内O场外
+         ts_code(str)  基金代码 Y
+         name(str)  简称 Y
+         management(str)  管理人 Y
+         custodian(str)  托管人 Y
+         fund_type(str)  投资类型 Y
+         found_date(str)  成立日期 Y
+         due_date(str)  到期日期 Y
+         list_date(str)  上市时间 Y
+         issue_date(str)  发行日期 Y
+         delist_date(str)  退市日期 Y
+         issue_amount(float)  发行份额(亿份) Y
+         m_fee(float)  管理费 Y
+         c_fee(float)  托管费 Y
+         duration_year(float)  存续期 Y
+         p_value(float)  面值 Y
+         min_amount(float)  起点金额(万元) Y
+         exp_return(float)  预期收益率 Y
+         benchmark(str)  业绩比较基准 Y
+         status(str)  存续状态D摘牌 I发行 L已上市 Y
+         invest_type(str)  投资风格 Y
+         type(str)  基金类型 Y
+         trustee(str)  受托人 Y
+         purc_startdate(str)  日常申购起始日 Y
+         redm_startdate(str)  日常赎回起始日 Y
+         market(str)  E场内O场外 Y
         
         """
         return super().query(fields, **kwargs)
@@ -233,7 +235,7 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -266,22 +268,19 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_basic with args: {}".format(kwargs))
-                res = self.tushare_query('fund_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_basic',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_basic', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundBasic, 'default_limit', default_limit_ext)

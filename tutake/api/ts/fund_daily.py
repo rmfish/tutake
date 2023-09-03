@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_daily_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -48,7 +47,10 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_daily"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -61,8 +63,8 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "pre_close", "open", "high", "low", "close", "change", "pct_chg", "vol", "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDaily, 'tushare_fund.db',
-                            'tushare_fund_daily', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundDaily, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_daily", config)
         TuShareBase.__init__(self, "fund_daily", config, 5000)
         self.api = TushareAPI(config)
@@ -126,17 +128,17 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         trade_date(str)  交易日期
-         pre_close(float)  昨收盘价(元)
-         open(float)  开盘价(元)
-         high(float)  最高价(元)
-         low(float)  最低价(元)
-         close(float)  收盘价(元)
-         change(float)  涨跌(元)
-         pct_chg(float)  涨跌幅(%)
-         vol(float)  成交量(手)
-         amount(float)  成交金额(千元)
+         ts_code(str)  TS代码 Y
+         trade_date(str)  交易日期 Y
+         pre_close(float)  昨收盘价(元) Y
+         open(float)  开盘价(元) Y
+         high(float)  最高价(元) Y
+         low(float)  最低价(元) Y
+         close(float)  收盘价(元) Y
+         change(float)  涨跌(元) Y
+         pct_chg(float)  涨跌幅(%) Y
+         vol(float)  成交量(手) Y
+         amount(float)  成交金额(千元) Y
         
         """
         return super().query(fields, **kwargs)
@@ -146,7 +148,7 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -171,22 +173,19 @@ class FundDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_daily with args: {}".format(kwargs))
-                res = self.tushare_query('fund_daily', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_daily',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_daily', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundDaily, 'default_limit', default_limit_ext)

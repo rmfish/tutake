@@ -46,5 +46,10 @@ def end_of_day(timezone="Asia/Shanghai"):
     return start_of_day(timezone) + timedelta(1)
 
 
+def chunks(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 if __name__ == "__main__":
     print(file(project_root(), "utils.py"))

@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_member_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -44,7 +43,10 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_member"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -55,8 +57,8 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['index_code', 'is_new', 'ts_code', 'limit', 'offset']
         entity_fields = ["index_code", "index_name", "con_code", "con_name", "in_date", "out_date", "is_new"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexMember, 'tushare_index.db',
-                            'tushare_index_member', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexMember, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_member", config)
         TuShareBase.__init__(self, "index_member", config, 5000)
         self.api = TushareAPI(config)
@@ -92,7 +94,7 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
             "comment": "是否最新Y是N否"
         }]
 
-    def index_member(self, fields='', **kwargs):
+    def index_member(self, fields='index_code,con_code,in_date,out_date,is_new', **kwargs):
         """
         申万行业成分构成
         | Arguments:
@@ -103,13 +105,13 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         index_code(str)  指数代码
-         index_name(str)  指数名称
-         con_code(str)  成分股票代码
-         con_name(str)  成分股票名称
-         in_date(str)  纳入日期
-         out_date(str)  剔除日期
-         is_new(str)  是否最新Y是N否
+         index_code(str)  指数代码 Y
+         index_name(str)  指数名称 N
+         con_code(str)  成分股票代码 Y
+         con_name(str)  成分股票名称 N
+         in_date(str)  纳入日期 Y
+         out_date(str)  剔除日期 Y
+         is_new(str)  是否最新Y是N否 Y
         
         """
         return super().query(fields, **kwargs)
@@ -119,7 +121,7 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -144,22 +146,19 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_member with args: {}".format(kwargs))
-                res = self.tushare_query('index_member', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_member',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_member', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexMember, 'default_limit', default_limit_ext)

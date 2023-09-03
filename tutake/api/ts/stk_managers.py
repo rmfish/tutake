@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stk_managers_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -49,7 +48,10 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stk.db'),
+        self.table_name = "tushare_stk_managers"
+        self.database = 'tushare_stk.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -63,8 +65,8 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "name", "gender", "lev", "title", "edu", "national", "birthday", "begin_date",
             "end_date", "resume"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, 'tushare_stk.db',
-                            'tushare_stk_managers', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkManagers, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stk_managers", config)
         TuShareBase.__init__(self, "stk_managers", config, 5000)
         self.api = TushareAPI(config)
@@ -120,7 +122,9 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
             "comment": "个人简历"
         }]
 
-    def stk_managers(self, fields='', **kwargs):
+    def stk_managers(self,
+                     fields='ts_code,ann_date,name,gender,lev,title,edu,national,birthday,begin_date,end_date',
+                     **kwargs):
         """
         上市公司管理层
         | Arguments:
@@ -132,18 +136,18 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         ann_date(str)  公告日期
-         name(str)  姓名
-         gender(str)  性别
-         lev(str)  岗位类别
-         title(str)  岗位
-         edu(str)  学历
-         national(str)  国籍
-         birthday(str)  出生年份
-         begin_date(str)  上任日期
-         end_date(str)  离任日期
-         resume(str)  个人简历
+         ts_code(str)  TS股票代码 Y
+         ann_date(str)  公告日期 Y
+         name(str)  姓名 Y
+         gender(str)  性别 Y
+         lev(str)  岗位类别 Y
+         title(str)  岗位 Y
+         edu(str)  学历 Y
+         national(str)  国籍 Y
+         birthday(str)  出生年份 Y
+         begin_date(str)  上任日期 Y
+         end_date(str)  离任日期 Y
+         resume(str)  个人简历 N
         
         """
         return super().query(fields, **kwargs)
@@ -153,7 +157,7 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -178,22 +182,19 @@ class StkManagers(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stk_managers with args: {}".format(kwargs))
-                res = self.tushare_query('stk_managers', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stk_managers',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stk_managers', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StkManagers, 'default_limit', default_limit_ext)

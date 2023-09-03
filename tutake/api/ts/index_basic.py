@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -50,7 +49,10 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_basic"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -64,8 +66,8 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, 'tushare_index.db',
-                            'tushare_index_basic', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.api = TushareAPI(config)
@@ -125,7 +127,7 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             "comment": "终止日期"
         }]
 
-    def index_basic(self, fields='', **kwargs):
+    def index_basic(self, fields='ts_code,name,market,publisher,category,base_date,base_point,list_date', **kwargs):
         """
         获取指数基础信息。
         | Arguments:
@@ -138,19 +140,19 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         name(str)  简称
-         fullname(str)  指数全称
-         market(str)  市场
-         publisher(str)  发布方
-         index_type(str)  指数风格
-         category(str)  指数类别
-         base_date(str)  基期
-         base_point(float)  基点
-         list_date(str)  发布日期
-         weight_rule(str)  加权方式
-         desc(str)  描述
-         exp_date(str)  终止日期
+         ts_code(str)  TS代码 Y
+         name(str)  简称 Y
+         fullname(str)  指数全称 N
+         market(str)  市场 Y
+         publisher(str)  发布方 Y
+         index_type(str)  指数风格 N
+         category(str)  指数类别 Y
+         base_date(str)  基期 Y
+         base_point(float)  基点 Y
+         list_date(str)  发布日期 Y
+         weight_rule(str)  加权方式 N
+         desc(str)  描述 N
+         exp_date(str)  终止日期 N
         
         """
         return super().query(fields, **kwargs)
@@ -160,7 +162,7 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -193,22 +195,19 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_basic with args: {}".format(kwargs))
-                res = self.tushare_query('index_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_basic',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_basic', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexBasic, 'default_limit', default_limit_ext)

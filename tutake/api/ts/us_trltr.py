@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.us_trltr_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -39,7 +38,10 @@ class UsTrltr(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_us_trltr"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -50,8 +52,8 @@ class UsTrltr(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['date', 'start_date', 'end_date', 'fields', 'limit', 'offset']
         entity_fields = ["date", "ltr_avg"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTrltr, 'tushare_macroeconomic.db',
-                            'tushare_us_trltr', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTrltr, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "us_trltr", config)
         TuShareBase.__init__(self, "us_trltr", config, 120)
         self.api = TushareAPI(config)
@@ -79,8 +81,8 @@ class UsTrltr(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         date(str)  日期
-         ltr_avg(float)  实际平均利率LT Real Average (10> Yrs)
+         date(str)  日期 Y
+         ltr_avg(float)  实际平均利率LT Real Average (10> Yrs) Y
         
         """
         return super().query(fields, **kwargs)
@@ -90,7 +92,7 @@ class UsTrltr(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -115,22 +117,19 @@ class UsTrltr(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.us_trltr with args: {}".format(kwargs))
-                res = self.tushare_query('us_trltr', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_us_trltr',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('us_trltr', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(UsTrltr, 'default_limit', default_limit_ext)
@@ -145,8 +144,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.us_trltr(start_date="19980101", end_date="20200101"))
+    print(pro.us_trltr())
 
     api = UsTrltr(config)
-    # api.process()    # 同步增量数据
-    print(api.us_trltr(start_date="19980101", end_date="20200101"))    # 数据查询接口
+    api.process()    # 同步增量数据
+    print(api.us_trltr())    # 数据查询接口

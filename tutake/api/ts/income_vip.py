@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.income_vip_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -135,7 +134,10 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+        self.table_name = "tushare_income_vip"
+        self.database = 'tushare_report.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -167,8 +169,8 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
             "credit_impa_loss", "net_expo_hedging_benefits", "oth_impair_loss_assets", "total_opcost",
             "amodcost_fin_assets", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, 'tushare_report.db',
-                            'tushare_income_vip', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIncomeVip, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "income_vip", config)
         TuShareBase.__init__(self, "income_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -555,7 +557,10 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
             "comment": "更新标识"
         }]
 
-    def income_vip(self, fields='', **kwargs):
+    def income_vip(
+            self,
+            fields='ts_code,ann_date,f_ann_date,end_date,report_type,comp_type,end_type,basic_eps,diluted_eps,total_revenue,revenue,int_income,prem_earned,comm_income,n_commis_income,n_oth_income,n_oth_b_income,prem_income,out_prem,une_prem_reser,reins_income,n_sec_tb_income,n_sec_uw_income,n_asset_mg_income,oth_b_income,fv_value_chg_gain,invest_income,ass_invest_income,forex_gain,total_cogs,oper_cost,int_exp,comm_exp,biz_tax_surchg,sell_exp,admin_exp,fin_exp,assets_impair_loss,prem_refund,compens_payout,reser_insur_liab,div_payt,reins_exp,oper_exp,compens_payout_refu,insur_reser_refu,reins_cost_refund,other_bus_cost,operate_profit,non_oper_income,non_oper_exp,nca_disploss,total_profit,income_tax,n_income,n_income_attr_p,minority_gain,oth_compr_income,t_compr_income,compr_inc_attr_p,compr_inc_attr_m_s,ebit,ebitda,insurance_exp,undist_profit,distable_profit,rd_exp,fin_exp_int_exp,fin_exp_int_inc,transfer_surplus_rese,transfer_housing_imprest,transfer_oth,adj_lossgain,withdra_legal_surplus,withdra_legal_pubfund,withdra_biz_devfund,withdra_rese_fund,withdra_oth_ersu,workers_welfare,distr_profit_shrhder,prfshare_payable_dvd,comshare_payable_dvd,capit_comstock_div,continued_net_profit,update_flag',
+            **kwargs):
         """
         获取上市公司财务利润表数据
         | Arguments:
@@ -573,100 +578,100 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         ann_date(str)  公告日期
-         f_ann_date(str)  实际公告日期
-         end_date(str)  报告期
-         report_type(str)  报告类型 1合并报表 2单季合并 3调整单季合并表 4调整合并报表 5调整前合并报表 6母公司报表 7母公司单季表 8 母公司调整单季表 9母公司调整表 10母公司调整前报表 11调整前合并报表 12母公司调整前报表
-         comp_type(str)  公司类型(1一般工商业2银行3保险4证券)
-         end_type(str)  报告期类型
-         basic_eps(float)  基本每股收益
-         diluted_eps(float)  稀释每股收益
-         total_revenue(float)  营业总收入
-         revenue(float)  营业收入
-         int_income(float)  利息收入
-         prem_earned(float)  已赚保费
-         comm_income(float)  手续费及佣金收入
-         n_commis_income(float)  手续费及佣金净收入
-         n_oth_income(float)  其他经营净收益
-         n_oth_b_income(float)  加:其他业务净收益
-         prem_income(float)  保险业务收入
-         out_prem(float)  减:分出保费
-         une_prem_reser(float)  提取未到期责任准备金
-         reins_income(float)  其中:分保费收入
-         n_sec_tb_income(float)  代理买卖证券业务净收入
-         n_sec_uw_income(float)  证券承销业务净收入
-         n_asset_mg_income(float)  受托客户资产管理业务净收入
-         oth_b_income(float)  其他业务收入
-         fv_value_chg_gain(float)  加:公允价值变动净收益
-         invest_income(float)  加:投资净收益
-         ass_invest_income(float)  其中:对联营企业和合营企业的投资收益
-         forex_gain(float)  加:汇兑净收益
-         total_cogs(float)  营业总成本
-         oper_cost(float)  减:营业成本
-         int_exp(float)  减:利息支出
-         comm_exp(float)  减:手续费及佣金支出
-         biz_tax_surchg(float)  减:营业税金及附加
-         sell_exp(float)  减:销售费用
-         admin_exp(float)  减:管理费用
-         fin_exp(float)  减:财务费用
-         assets_impair_loss(float)  减:资产减值损失
-         prem_refund(float)  退保金
-         compens_payout(float)  赔付总支出
-         reser_insur_liab(float)  提取保险责任准备金
-         div_payt(float)  保户红利支出
-         reins_exp(float)  分保费用
-         oper_exp(float)  营业支出
-         compens_payout_refu(float)  减:摊回赔付支出
-         insur_reser_refu(float)  减:摊回保险责任准备金
-         reins_cost_refund(float)  减:摊回分保费用
-         other_bus_cost(float)  其他业务成本
-         operate_profit(float)  营业利润
-         non_oper_income(float)  加:营业外收入
-         non_oper_exp(float)  减:营业外支出
-         nca_disploss(float)  其中:减:非流动资产处置净损失
-         total_profit(float)  利润总额
-         income_tax(float)  所得税费用
-         n_income(float)  净利润(含少数股东损益)
-         n_income_attr_p(float)  净利润(不含少数股东损益)
-         minority_gain(float)  少数股东损益
-         oth_compr_income(float)  其他综合收益
-         t_compr_income(float)  综合收益总额
-         compr_inc_attr_p(float)  归属于母公司(或股东)的综合收益总额
-         compr_inc_attr_m_s(float)  归属于少数股东的综合收益总额
-         ebit(float)  息税前利润
-         ebitda(float)  息税折旧摊销前利润
-         insurance_exp(float)  保险业务支出
-         undist_profit(float)  年初未分配利润
-         distable_profit(float)  可分配利润
-         rd_exp(float)  研发费用
-         fin_exp_int_exp(float)  财务费用:利息费用
-         fin_exp_int_inc(float)  财务费用:利息收入
-         transfer_surplus_rese(float)  盈余公积转入
-         transfer_housing_imprest(float)  住房周转金转入
-         transfer_oth(float)  其他转入
-         adj_lossgain(float)  调整以前年度损益
-         withdra_legal_surplus(float)  提取法定盈余公积
-         withdra_legal_pubfund(float)  提取法定公益金
-         withdra_biz_devfund(float)  提取企业发展基金
-         withdra_rese_fund(float)  提取储备基金
-         withdra_oth_ersu(float)  提取任意盈余公积金
-         workers_welfare(float)  职工奖金福利
-         distr_profit_shrhder(float)  可供股东分配的利润
-         prfshare_payable_dvd(float)  应付优先股股利
-         comshare_payable_dvd(float)  应付普通股股利
-         capit_comstock_div(float)  转作股本的普通股股利
-         net_after_nr_lp_correct(float)  扣除非经常性损益后的净利润（更正前）
-         oth_income(float)  其他收益
-         asset_disp_income(float)  资产处置收益
-         continued_net_profit(float)  持续经营净利润
-         end_net_profit(float)  终止经营净利润
-         credit_impa_loss(float)  信用减值损失
-         net_expo_hedging_benefits(float)  净敞口套期收益
-         oth_impair_loss_assets(float)  其他资产减值损失
-         total_opcost(float)  营业总成本2
-         amodcost_fin_assets(float)  以摊余成本计量的金融资产终止确认收益
-         update_flag(str)  更新标识
+         ts_code(str)  TS代码 Y
+         ann_date(str)  公告日期 Y
+         f_ann_date(str)  实际公告日期 Y
+         end_date(str)  报告期 Y
+         report_type(str)  报告类型 1合并报表 2单季合并 3调整单季合并表 4调整合并报表 5调整前合并报表 6母公司报表 7母公司单季表 8 母公司调整单季表 9母公司调整表 10母公司调整前报表 11调整前合并报表 12母公司调整前报表 Y
+         comp_type(str)  公司类型(1一般工商业2银行3保险4证券) Y
+         end_type(str)  报告期类型 Y
+         basic_eps(float)  基本每股收益 Y
+         diluted_eps(float)  稀释每股收益 Y
+         total_revenue(float)  营业总收入 Y
+         revenue(float)  营业收入 Y
+         int_income(float)  利息收入 Y
+         prem_earned(float)  已赚保费 Y
+         comm_income(float)  手续费及佣金收入 Y
+         n_commis_income(float)  手续费及佣金净收入 Y
+         n_oth_income(float)  其他经营净收益 Y
+         n_oth_b_income(float)  加:其他业务净收益 Y
+         prem_income(float)  保险业务收入 Y
+         out_prem(float)  减:分出保费 Y
+         une_prem_reser(float)  提取未到期责任准备金 Y
+         reins_income(float)  其中:分保费收入 Y
+         n_sec_tb_income(float)  代理买卖证券业务净收入 Y
+         n_sec_uw_income(float)  证券承销业务净收入 Y
+         n_asset_mg_income(float)  受托客户资产管理业务净收入 Y
+         oth_b_income(float)  其他业务收入 Y
+         fv_value_chg_gain(float)  加:公允价值变动净收益 Y
+         invest_income(float)  加:投资净收益 Y
+         ass_invest_income(float)  其中:对联营企业和合营企业的投资收益 Y
+         forex_gain(float)  加:汇兑净收益 Y
+         total_cogs(float)  营业总成本 Y
+         oper_cost(float)  减:营业成本 Y
+         int_exp(float)  减:利息支出 Y
+         comm_exp(float)  减:手续费及佣金支出 Y
+         biz_tax_surchg(float)  减:营业税金及附加 Y
+         sell_exp(float)  减:销售费用 Y
+         admin_exp(float)  减:管理费用 Y
+         fin_exp(float)  减:财务费用 Y
+         assets_impair_loss(float)  减:资产减值损失 Y
+         prem_refund(float)  退保金 Y
+         compens_payout(float)  赔付总支出 Y
+         reser_insur_liab(float)  提取保险责任准备金 Y
+         div_payt(float)  保户红利支出 Y
+         reins_exp(float)  分保费用 Y
+         oper_exp(float)  营业支出 Y
+         compens_payout_refu(float)  减:摊回赔付支出 Y
+         insur_reser_refu(float)  减:摊回保险责任准备金 Y
+         reins_cost_refund(float)  减:摊回分保费用 Y
+         other_bus_cost(float)  其他业务成本 Y
+         operate_profit(float)  营业利润 Y
+         non_oper_income(float)  加:营业外收入 Y
+         non_oper_exp(float)  减:营业外支出 Y
+         nca_disploss(float)  其中:减:非流动资产处置净损失 Y
+         total_profit(float)  利润总额 Y
+         income_tax(float)  所得税费用 Y
+         n_income(float)  净利润(含少数股东损益) Y
+         n_income_attr_p(float)  净利润(不含少数股东损益) Y
+         minority_gain(float)  少数股东损益 Y
+         oth_compr_income(float)  其他综合收益 Y
+         t_compr_income(float)  综合收益总额 Y
+         compr_inc_attr_p(float)  归属于母公司(或股东)的综合收益总额 Y
+         compr_inc_attr_m_s(float)  归属于少数股东的综合收益总额 Y
+         ebit(float)  息税前利润 Y
+         ebitda(float)  息税折旧摊销前利润 Y
+         insurance_exp(float)  保险业务支出 Y
+         undist_profit(float)  年初未分配利润 Y
+         distable_profit(float)  可分配利润 Y
+         rd_exp(float)  研发费用 Y
+         fin_exp_int_exp(float)  财务费用:利息费用 Y
+         fin_exp_int_inc(float)  财务费用:利息收入 Y
+         transfer_surplus_rese(float)  盈余公积转入 Y
+         transfer_housing_imprest(float)  住房周转金转入 Y
+         transfer_oth(float)  其他转入 Y
+         adj_lossgain(float)  调整以前年度损益 Y
+         withdra_legal_surplus(float)  提取法定盈余公积 Y
+         withdra_legal_pubfund(float)  提取法定公益金 Y
+         withdra_biz_devfund(float)  提取企业发展基金 Y
+         withdra_rese_fund(float)  提取储备基金 Y
+         withdra_oth_ersu(float)  提取任意盈余公积金 Y
+         workers_welfare(float)  职工奖金福利 Y
+         distr_profit_shrhder(float)  可供股东分配的利润 Y
+         prfshare_payable_dvd(float)  应付优先股股利 Y
+         comshare_payable_dvd(float)  应付普通股股利 Y
+         capit_comstock_div(float)  转作股本的普通股股利 Y
+         net_after_nr_lp_correct(float)  扣除非经常性损益后的净利润（更正前） N
+         oth_income(float)  其他收益 N
+         asset_disp_income(float)  资产处置收益 N
+         continued_net_profit(float)  持续经营净利润 Y
+         end_net_profit(float)  终止经营净利润 N
+         credit_impa_loss(float)  信用减值损失 N
+         net_expo_hedging_benefits(float)  净敞口套期收益 N
+         oth_impair_loss_assets(float)  其他资产减值损失 N
+         total_opcost(float)  营业总成本2 N
+         amodcost_fin_assets(float)  以摊余成本计量的金融资产终止确认收益 N
+         update_flag(str)  更新标识 Y
         
         """
         return super().query(fields, **kwargs)
@@ -676,7 +681,7 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -714,22 +719,19 @@ class IncomeVip(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.income_vip with args: {}".format(kwargs))
-                res = self.tushare_query('income_vip', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_income_vip',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('income_vip', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IncomeVip, 'default_limit', default_limit_ext)

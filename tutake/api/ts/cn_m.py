@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.cn_m_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -47,7 +46,10 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_cn_m"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -58,7 +60,7 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['m', 'start_m', 'end_m', 'limit', 'offset']
         entity_fields = ["month", "m0", "m0_yoy", "m0_mom", "m1", "m1_yoy", "m1_mom", "m2", "m2_yoy", "m2_mom"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareCnM, 'tushare_macroeconomic.db', 'tushare_cn_m',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCnM, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "cn_m", config)
         TuShareBase.__init__(self, "cn_m", config, 600)
@@ -118,16 +120,16 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         month(str)  月份YYYYMM
-         m0(float)  M0（亿元）
-         m0_yoy(float)  M0同比（%）
-         m0_mom(float)  M0环比（%）
-         m1(float)  M1（亿元）
-         m1_yoy(float)  M1同比（%）
-         m1_mom(float)  M1环比（%）
-         m2(float)  M2（亿元）
-         m2_yoy(float)  M2同比（%）
-         m2_mom(float)  M2环比（%）
+         month(str)  月份YYYYMM Y
+         m0(float)  M0（亿元） Y
+         m0_yoy(float)  M0同比（%） Y
+         m0_mom(float)  M0环比（%） Y
+         m1(float)  M1（亿元） Y
+         m1_yoy(float)  M1同比（%） Y
+         m1_mom(float)  M1环比（%） Y
+         m2(float)  M2（亿元） Y
+         m2_yoy(float)  M2同比（%） Y
+         m2_mom(float)  M2环比（%） Y
         
         """
         return super().query(fields, **kwargs)
@@ -137,7 +139,7 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -162,18 +164,19 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_m with args: {}".format(kwargs))
-                res = self.tushare_query('cn_m', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_cn_m', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('cn_m', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(CnM, 'default_limit', default_limit_ext)
@@ -191,5 +194,5 @@ if __name__ == '__main__':
     print(pro.cn_m())
 
     api = CnM(config)
-    # api.process()    # 同步增量数据
-    print(api.cn_m(start_m="201001"))    # 数据查询接口
+    api.process()    # 同步增量数据
+    print(api.cn_m())    # 数据查询接口

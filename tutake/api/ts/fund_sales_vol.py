@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_sales_vol_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -43,7 +42,10 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_sales_vol"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -54,8 +56,8 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['year', 'quarter', 'name', 'limit', 'offset']
         entity_fields = ["year", "quarter", "inst_name", "fund_scale", "scale", "rank"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesVol, 'tushare_fund.db',
-                            'tushare_fund_sales_vol', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundSalesVol, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_sales_vol", config)
         TuShareBase.__init__(self, "fund_sales_vol", config, 2000)
         self.api = TushareAPI(config)
@@ -98,12 +100,12 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         year(int)  年度
-         quarter(str)  季度
-         inst_name(str)  销售机构
-         fund_scale(float)  股票+混合公募基金保有规模（亿元）
-         scale(float)  非货币市场公募基金保有规模(亿元)
-         rank(int)  排名
+         year(int)  年度 Y
+         quarter(str)  季度 Y
+         inst_name(str)  销售机构 Y
+         fund_scale(float)  股票+混合公募基金保有规模（亿元） Y
+         scale(float)  非货币市场公募基金保有规模(亿元) Y
+         rank(int)  排名 Y
         
         """
         return super().query(fields, **kwargs)
@@ -113,7 +115,7 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -138,22 +140,19 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_sales_vol with args: {}".format(kwargs))
-                res = self.tushare_query('fund_sales_vol', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_sales_vol',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_sales_vol', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundSalesVol, 'default_limit', default_limit_ext)

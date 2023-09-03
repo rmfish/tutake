@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.ggt_monthly_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -46,7 +45,10 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ggt.db'),
+        self.table_name = "tushare_ggt_monthly"
+        self.database = 'tushare_ggt.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -60,8 +62,8 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
             "month", "day_buy_amt", "day_buy_vol", "day_sell_amt", "day_sell_vol", "total_buy_amt", "total_buy_vol",
             "total_sell_amt", "total_sell_vol"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, 'tushare_ggt.db',
-                            'tushare_ggt_monthly', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtMonthly, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_monthly", config)
         TuShareBase.__init__(self, "ggt_monthly", config, 120)
         self.api = TushareAPI(config)
@@ -116,15 +118,15 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         month(str)  交易日期
-         day_buy_amt(float)  当月日均买入成交金额（亿元）
-         day_buy_vol(float)  当月日均买入成交笔数（万笔）
-         day_sell_amt(float)  当月日均卖出成交金额（亿元）
-         day_sell_vol(float)  当月日均卖出成交笔数（万笔）
-         total_buy_amt(float)  总买入成交金额（亿元）
-         total_buy_vol(float)  总买入成交笔数（万笔）
-         total_sell_amt(float)  总卖出成交金额（亿元）
-         total_sell_vol(float)  总卖出成交笔数（万笔）
+         month(str)  交易日期 Y
+         day_buy_amt(float)  当月日均买入成交金额（亿元） Y
+         day_buy_vol(float)  当月日均买入成交笔数（万笔） Y
+         day_sell_amt(float)  当月日均卖出成交金额（亿元） Y
+         day_sell_vol(float)  当月日均卖出成交笔数（万笔） Y
+         total_buy_amt(float)  总买入成交金额（亿元） Y
+         total_buy_vol(float)  总买入成交笔数（万笔） Y
+         total_sell_amt(float)  总卖出成交金额（亿元） Y
+         total_sell_vol(float)  总卖出成交笔数（万笔） Y
         
         """
         return super().query(fields, **kwargs)
@@ -134,7 +136,7 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -159,22 +161,19 @@ class GgtMonthly(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ggt_monthly with args: {}".format(kwargs))
-                res = self.tushare_query('ggt_monthly', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ggt_monthly',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('ggt_monthly', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(GgtMonthly, 'default_limit', default_limit_ext)

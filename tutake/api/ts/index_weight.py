@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_weight_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -41,7 +40,10 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_weight"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -52,8 +54,8 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['index_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["index_code", "con_code", "trade_date", "weight"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexWeight, 'tushare_index.db',
-                            'tushare_index_weight', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexWeight, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_weight", config)
         TuShareBase.__init__(self, "index_weight", config, 2000)
         self.api = TushareAPI(config)
@@ -89,10 +91,10 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         index_code(str)  指数代码
-         con_code(str)  成分代码
-         trade_date(str)  交易日期
-         weight(float)  权重
+         index_code(str)  指数代码 Y
+         con_code(str)  成分代码 Y
+         trade_date(str)  交易日期 Y
+         weight(float)  权重 Y
         
         """
         return super().query(fields, **kwargs)
@@ -102,7 +104,7 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -127,22 +129,19 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_weight with args: {}".format(kwargs))
-                res = self.tushare_query('index_weight', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_weight',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_weight', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexWeight, 'default_limit', default_limit_ext)

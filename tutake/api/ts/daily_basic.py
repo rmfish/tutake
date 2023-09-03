@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.daily_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -56,7 +55,10 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_daily_basic.db'),
+        self.table_name = "tushare_daily_basic"
+        self.database = 'tushare_daily_basic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -71,8 +73,8 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv", "circ_mv",
             "limit_status"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, 'tushare_daily_basic.db',
-                            'tushare_daily_basic', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "daily_basic", config)
         TuShareBase.__init__(self, "daily_basic", config, 2000)
         self.api = TushareAPI(config)
@@ -156,7 +158,10 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             "comment": "涨跌停状态"
         }]
 
-    def daily_basic(self, fields='', **kwargs):
+    def daily_basic(
+            self,
+            fields='ts_code,trade_date,close,turnover_rate,turnover_rate_f,volume_ratio,pe,pe_ttm,pb,ps,ps_ttm,dv_ratio,dv_ttm,total_share,float_share,free_share,total_mv,circ_mv',
+            **kwargs):
         """
         交易日每日15点～17点之间,获取全部股票每日重要的基本面指标，可用于选股分析、报表展示等。
         | Arguments:
@@ -168,25 +173,25 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         trade_date(str)  交易日期
-         close(number)  当日收盘价
-         turnover_rate(number)  换手率
-         turnover_rate_f(number)  换手率(自由流通股)
-         volume_ratio(number)  量比
-         pe(number)  市盈率（总市值/净利润）
-         pe_ttm(number)  市盈率（TTM）
-         pb(number)  市净率（总市值/净资产）
-         ps(number)  市销率
-         ps_ttm(number)  市销率（TTM）
-         dv_ratio(number)  股息率（%）
-         dv_ttm(number)  股息率（TTM） （%）
-         total_share(number)  总股本
-         float_share(number)  流通股本
-         free_share(number)  自由流通股本
-         total_mv(number)  总市值
-         circ_mv(number)  流通市值
-         limit_status(int)  涨跌停状态
+         ts_code(str)  TS股票代码 Y
+         trade_date(str)  交易日期 Y
+         close(number)  当日收盘价 Y
+         turnover_rate(number)  换手率 Y
+         turnover_rate_f(number)  换手率(自由流通股) Y
+         volume_ratio(number)  量比 Y
+         pe(number)  市盈率（总市值/净利润） Y
+         pe_ttm(number)  市盈率（TTM） Y
+         pb(number)  市净率（总市值/净资产） Y
+         ps(number)  市销率 Y
+         ps_ttm(number)  市销率（TTM） Y
+         dv_ratio(number)  股息率（%） Y
+         dv_ttm(number)  股息率（TTM） （%） Y
+         total_share(number)  总股本 Y
+         float_share(number)  流通股本 Y
+         free_share(number)  自由流通股本 Y
+         total_mv(number)  总市值 Y
+         circ_mv(number)  流通市值 Y
+         limit_status(int)  涨跌停状态 N
         
         """
         return super().query(fields, **kwargs)
@@ -196,7 +201,7 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -221,22 +226,19 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.daily_basic with args: {}".format(kwargs))
-                res = self.tushare_query('daily_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_daily_basic',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('daily_basic', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(DailyBasic, 'default_limit', default_limit_ext)

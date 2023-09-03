@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.bak_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -61,7 +60,10 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+        self.table_name = "tushare_bak_basic"
+        self.database = 'tushare_stock.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -76,8 +78,8 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, 'tushare_stock.db',
-                            'tushare_bak_basic', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)
         self.api = TushareAPI(config)
@@ -191,30 +193,30 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         trade_date(str)  交易日期
-         ts_code(str)  TS股票代码
-         name(str)  股票名称
-         industry(str)  行业
-         area(str)  地域
-         pe(float)  市盈率（动）
-         float_share(float)  流通股本（万）
-         total_share(float)  总股本（万）
-         total_assets(float)  总资产（万）
-         liquid_assets(float)  流动资产（万）
-         fixed_assets(float)  固定资产（万）
-         reserved(float)  公积金
-         reserved_pershare(float)  每股公积金
-         eps(float)  每股收益
-         bvps(float)  每股净资产
-         pb(float)  市净率
-         list_date(str)  上市日期
-         undp(float)  未分配利润
-         per_undp(float)  每股未分配利润
-         rev_yoy(float)  收入同比（%）
-         profit_yoy(float)  利润同比（%）
-         gpr(float)  毛利率（%）
-         npr(float)  净利润率（%）
-         holder_num(int)  股东人数
+         trade_date(str)  交易日期 Y
+         ts_code(str)  TS股票代码 Y
+         name(str)  股票名称 Y
+         industry(str)  行业 Y
+         area(str)  地域 Y
+         pe(float)  市盈率（动） Y
+         float_share(float)  流通股本（万） Y
+         total_share(float)  总股本（万） Y
+         total_assets(float)  总资产（万） Y
+         liquid_assets(float)  流动资产（万） Y
+         fixed_assets(float)  固定资产（万） Y
+         reserved(float)  公积金 Y
+         reserved_pershare(float)  每股公积金 Y
+         eps(float)  每股收益 Y
+         bvps(float)  每股净资产 Y
+         pb(float)  市净率 Y
+         list_date(str)  上市日期 Y
+         undp(float)  未分配利润 Y
+         per_undp(float)  每股未分配利润 Y
+         rev_yoy(float)  收入同比（%） Y
+         profit_yoy(float)  利润同比（%） Y
+         gpr(float)  毛利率（%） Y
+         npr(float)  净利润率（%） Y
+         holder_num(int)  股东人数 Y
         
         """
         return super().query(fields, **kwargs)
@@ -224,7 +226,7 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -249,22 +251,19 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))
-                res = self.tushare_query('bak_basic', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_bak_basic',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('bak_basic', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(BakBasic, 'default_limit', default_limit_ext)

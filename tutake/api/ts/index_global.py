@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_global_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -49,7 +48,10 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_global"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -63,8 +65,8 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "open", "close", "high", "low", "pre_close", "change", "pct_chg", "swing", "vol",
             "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexGlobal, 'tushare_index.db',
-                            'tushare_index_global', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexGlobal, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_global", config)
         TuShareBase.__init__(self, "index_global", config, 120)
         self.api = TushareAPI(config)
@@ -120,7 +122,9 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             "comment": "成交额"
         }]
 
-    def index_global(self, fields='', **kwargs):
+    def index_global(self,
+                     fields='ts_code,trade_date,open,close,high,low,pre_close,change,pct_chg,swing,vol',
+                     **kwargs):
         """
         获取国际主要指数日线行情
         | Arguments:
@@ -132,18 +136,18 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS指数代码
-         trade_date(str)  交易日
-         open(float)  开盘点位
-         close(float)  收盘点位
-         high(float)  最高点位
-         low(float)  最低点位
-         pre_close(float)  昨日收盘点
-         change(float)  涨跌点位
-         pct_chg(float)  涨跌幅
-         swing(float)  振幅
-         vol(float)  成交量
-         amount(float)  成交额
+         ts_code(str)  TS指数代码 Y
+         trade_date(str)  交易日 Y
+         open(float)  开盘点位 Y
+         close(float)  收盘点位 Y
+         high(float)  最高点位 Y
+         low(float)  最低点位 Y
+         pre_close(float)  昨日收盘点 Y
+         change(float)  涨跌点位 Y
+         pct_chg(float)  涨跌幅 Y
+         swing(float)  振幅 Y
+         vol(float)  成交量 Y
+         amount(float)  成交额 N
         
         """
         return super().query(fields, **kwargs)
@@ -153,7 +157,7 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -178,22 +182,19 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_global with args: {}".format(kwargs))
-                res = self.tushare_query('index_global', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_global',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_global', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexGlobal, 'default_limit', default_limit_ext)

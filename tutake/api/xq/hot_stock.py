@@ -10,9 +10,8 @@ import pandas as pd
 from sqlalchemy import Integer, String, Float, Boolean, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import BaseDao, Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records, BaseDao
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.xq.hot_stock_ext import *
 from tutake.api.xq.xueqiu_base import XueQiuBase
 from tutake.utils.config import TutakeConfig
@@ -45,7 +44,10 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('xueqiu.db'),
+        self.table_name = "xueqiu_hot_stock"
+        self.database = 'xueqiu.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_engine(self.database_url,
                                     connect_args={
                                         'check_same_thread': False,
                                         'timeout': config.get_sqlite_timeout()
@@ -56,7 +58,7 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
 
         query_fields = ['ts_code', 'hot_type', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "hot_type", "name", "value", "increment", "rank"]
-        BaseDao.__init__(self, self.engine, session_factory, XueqiuHotStock, 'xueqiu.db', 'xueqiu_hot_stock',
+        BaseDao.__init__(self, self.engine, session_factory, XueqiuHotStock, self.database, self.table_name,
                          query_fields, entity_fields, config)
         DataProcess.__init__(self, "hot_stock", config)
         XueQiuBase.__init__(self, "hot_stock", config)
@@ -124,7 +126,7 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -190,3 +192,4 @@ if __name__ == '__main__':
     api = HotStock(config)
     api.process()    # 同步增量数据
     print(api.hot_stock())    # 数据查询接口
+    print(api.sql("select distinct(trade_date) from {table}"))

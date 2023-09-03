@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stock_vx_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -56,7 +55,10 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_xiaopei.db'),
+        self.table_name = "tushare_stock_vx"
+        self.database = 'tushare_xiaopei.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -71,8 +73,8 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
             "vx_grow_worse_v_l4", "vx_life_v_l8", "vx_3excellent_v_l8", "vx_past_5q_avg_l8", "vx_grow_worse_v_l8",
             "vxx", "vs", "vz11", "vz24", "vz_lms"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockVx, 'tushare_xiaopei.db',
-                            'tushare_stock_vx', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockVx, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_vx", config)
         TuShareBase.__init__(self, "stock_vx", config, 5000)
         self.api = TushareAPI(config)
@@ -160,23 +162,23 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         | limit(str):   最大行数
         
         :return: DataFrame
-         trade_date(str)  交易日期
-         ts_code(str)  股票代码
-         level1(str)  4评级：1(便宜)、2(合理)、3(贵)、4(很贵)
-         level2(str)  8评级：1,2(便宜)、3,4(合理)、5,6(贵)、7,8(很贵)
-         vx_life_v_l4(str)  估值长优4条线，根据level1的评级，公司上市后每一天的估值评级平均
-         vx_3excellent_v_l4(str)  估值3优4条线，根据level1的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标
-         vx_past_5q_avg_l4(str)  估值4条线近5季平均，根据level1的评级，最近五季度估值评级平均
-         vx_grow_worse_v_l4(str)  估值进退步-估值4条线,根据level1的评级，最新的估值评级与最近5Q平均的比
-         vx_life_v_l8(str)  估值长优8条线,根据level2的评级，公司上市后每一季度的估值评级平均
-         vx_3excellent_v_l8(str)  估值3优8条线,根据level2的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标
-         vx_past_5q_avg_l8(str)  估值8条线近5季平均,根据level2的评级，最近五季度估值评级平均
-         vx_grow_worse_v_l8(str)  估值进退步-估值8条线,根据level2的评级，最新的估值评级与最近5Q平均的比较
-         vxx(str)  个股最新估值与亚洲同类股票相较后的标准差，按因子排序，数值越大代表估值越贵
-         vs(str)  个股最新估值与亚洲同类股票自己相较后的标准差，按因子排序，数值越大代表估值越贵
-         vz11(str)  个股最新估值与亚洲同类股票主行业相较后的标准差，按因子排序，数值越大代表估值越贵
-         vz24(str)  个股最新估值与亚洲同类股票次行业相较后的标准差，按因子排序，数值越大代表估值越贵
-         vz_lms(str)  个股最新估值与亚洲同类股票市值分类相较后的标准差，按因子排序，数值越大代表估值越贵
+         trade_date(str)  交易日期 Y
+         ts_code(str)  股票代码 Y
+         level1(str)  4评级：1(便宜)、2(合理)、3(贵)、4(很贵) Y
+         level2(str)  8评级：1,2(便宜)、3,4(合理)、5,6(贵)、7,8(很贵) Y
+         vx_life_v_l4(str)  估值长优4条线，根据level1的评级，公司上市后每一天的估值评级平均 Y
+         vx_3excellent_v_l4(str)  估值3优4条线，根据level1的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标 Y
+         vx_past_5q_avg_l4(str)  估值4条线近5季平均，根据level1的评级，最近五季度估值评级平均 Y
+         vx_grow_worse_v_l4(str)  估值进退步-估值4条线,根据level1的评级，最新的估值评级与最近5Q平均的比 Y
+         vx_life_v_l8(str)  估值长优8条线,根据level2的评级，公司上市后每一季度的估值评级平均 Y
+         vx_3excellent_v_l8(str)  估值3优8条线,根据level2的评级，最新季度的估值评级、近5季度的估值评级平均、上市后的估值评级平均，短中长的估值评级再取一次平均形成三优指标 Y
+         vx_past_5q_avg_l8(str)  估值8条线近5季平均,根据level2的评级，最近五季度估值评级平均 Y
+         vx_grow_worse_v_l8(str)  估值进退步-估值8条线,根据level2的评级，最新的估值评级与最近5Q平均的比较 Y
+         vxx(str)  个股最新估值与亚洲同类股票相较后的标准差，按因子排序，数值越大代表估值越贵 Y
+         vs(str)  个股最新估值与亚洲同类股票自己相较后的标准差，按因子排序，数值越大代表估值越贵 Y
+         vz11(str)  个股最新估值与亚洲同类股票主行业相较后的标准差，按因子排序，数值越大代表估值越贵 Y
+         vz24(str)  个股最新估值与亚洲同类股票次行业相较后的标准差，按因子排序，数值越大代表估值越贵 Y
+         vz_lms(str)  个股最新估值与亚洲同类股票市值分类相较后的标准差，按因子排序，数值越大代表估值越贵 Y
         
         """
         return super().query(fields, **kwargs)
@@ -186,7 +188,7 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -211,22 +213,19 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_vx with args: {}".format(kwargs))
-                res = self.tushare_query('stock_vx', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stock_vx',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stock_vx', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StockVx, 'default_limit', default_limit_ext)
@@ -241,8 +240,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.stock_vx())
+    # print(pro.stock_vx())
 
     api = StockVx(config)
-    api.process()    # 同步增量数据
-    print(api.stock_vx())    # 数据查询接口
+    print(api.process())    # 同步增量数据
+    # print(api.stock_vx())    # 数据查询接口

@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.anns_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -45,7 +44,10 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+        self.table_name = "tushare_anns"
+        self.database = 'tushare_report.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -56,7 +58,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
         entity_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, 'tushare_report.db', 'tushare_anns',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "anns", config)
         TuShareBase.__init__(self, "anns", config, 5000)
@@ -97,7 +99,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
             "comment": "pdf原文"
         }]
 
-    def anns(self, fields='', **kwargs):
+    def anns(self, fields='ts_code,ann_date,title,content', **kwargs):
         """
         获取上市公司公告数据及原文文本，数据从2000年开始。
         | Arguments:
@@ -109,14 +111,14 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  股票代码
-         ann_date(str)  公告日期
-         ann_type(str)  公告类型
-         title(str)  公告标题
-         content(str)  公告内容
-         pub_time(str)  公告发布时间
-         src_url(str)  pdf原文URL
-         filepath(str)  pdf原文
+         ts_code(str)  股票代码 Y
+         ann_date(str)  公告日期 Y
+         ann_type(str)  公告类型 N
+         title(str)  公告标题 Y
+         content(str)  公告内容 Y
+         pub_time(str)  公告发布时间 N
+         src_url(str)  pdf原文URL N
+         filepath(str)  pdf原文 N
         
         """
         return super().query(fields, **kwargs)
@@ -126,7 +128,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -151,18 +153,19 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.anns with args: {}".format(kwargs))
-                res = self.tushare_query('anns', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_anns', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('anns', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(Anns, 'default_limit', default_limit_ext)

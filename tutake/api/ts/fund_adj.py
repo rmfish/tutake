@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_adj_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -41,7 +40,10 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_adj"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -52,7 +54,7 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "adj_factor", "discount_rate"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundAdj, 'tushare_fund.db', 'tushare_fund_adj',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundAdj, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_adj", config)
         TuShareBase.__init__(self, "fund_adj", config, 5000)
@@ -77,7 +79,7 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
             "comment": "贴水率（%）"
         }]
 
-    def fund_adj(self, fields='', **kwargs):
+    def fund_adj(self, fields='ts_code,trade_date,adj_factor', **kwargs):
         """
         获取基金复权因子，用于计算基金复权行情，每日17点更新
         | Arguments:
@@ -89,10 +91,10 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
         | limit(str):   最大行数
         
         :return: DataFrame
-         ts_code(str)  ts基金代码
-         trade_date(str)  交易日期
-         adj_factor(float)  复权因子
-         discount_rate(float)  贴水率（%）
+         ts_code(str)  ts基金代码 Y
+         trade_date(str)  交易日期 Y
+         adj_factor(float)  复权因子 Y
+         discount_rate(float)  贴水率（%） N
         
         """
         return super().query(fields, **kwargs)
@@ -102,7 +104,7 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -127,22 +129,19 @@ class FundAdj(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_adj with args: {}".format(kwargs))
-                res = self.tushare_query('fund_adj', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_adj',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_adj', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundAdj, 'default_limit', default_limit_ext)

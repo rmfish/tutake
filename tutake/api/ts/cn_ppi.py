@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.cn_ppi_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -68,7 +67,10 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_cn_ppi"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -85,8 +87,8 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
             "ppi_cg_adu_mom", "ppi_cg_dcg_mom", "ppi_accu", "ppi_mp_accu", "ppi_mp_qm_accu", "ppi_mp_rm_accu",
             "ppi_mp_p_accu", "ppi_cg_accu", "ppi_cg_f_accu", "ppi_cg_c_accu", "ppi_cg_adu_accu", "ppi_cg_dcg_accu"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareCnPpi, 'tushare_macroeconomic.db',
-                            'tushare_cn_ppi', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCnPpi, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "cn_ppi", config)
         TuShareBase.__init__(self, "cn_ppi", config, 600)
         self.api = TushareAPI(config)
@@ -229,37 +231,37 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         month(str)  月份YYYYMM
-         ppi_yoy(float)  PPI：全部工业品：当月同比
-         ppi_mp_yoy(float)  PPI：生产资料：当月同比
-         ppi_mp_qm_yoy(float)  PPI：生产资料：采掘业：当月同比
-         ppi_mp_rm_yoy(float)  PPI：生产资料：原料业：当月同比
-         ppi_mp_p_yoy(float)  PPI：生产资料：加工业：当月同比
-         ppi_cg_yoy(float)  PPI：生活资料：当月同比
-         ppi_cg_f_yoy(float)  PPI：生活资料：食品类：当月同比
-         ppi_cg_c_yoy(float)  PPI：生活资料：衣着类：当月同比
-         ppi_cg_adu_yoy(float)  PPI：生活资料：一般日用品类：当月同比
-         ppi_cg_dcg_yoy(float)  PPI：生活资料：耐用消费品类：当月同比
-         ppi_mom(float)  PPI：全部工业品：环比
-         ppi_mp_mom(float)  PPI：生产资料：环比
-         ppi_mp_qm_mom(float)  PPI：生产资料：采掘业：环比
-         ppi_mp_rm_mom(float)  PPI：生产资料：原料业：环比
-         ppi_mp_p_mom(float)  PPI：生产资料：加工业：环比
-         ppi_cg_mom(float)  PPI：生活资料：环比
-         ppi_cg_f_mom(float)  PPI：生活资料：食品类：环比
-         ppi_cg_c_mom(float)  PPI：生活资料：衣着类：环比
-         ppi_cg_adu_mom(float)  PPI：生活资料：一般日用品类：环比
-         ppi_cg_dcg_mom(float)  PPI：生活资料：耐用消费品类：环比
-         ppi_accu(float)  PPI：全部工业品：累计同比
-         ppi_mp_accu(float)  PPI：生产资料：累计同比
-         ppi_mp_qm_accu(float)  PPI：生产资料：采掘业：累计同比
-         ppi_mp_rm_accu(float)  PPI：生产资料：原料业：累计同比
-         ppi_mp_p_accu(float)  PPI：生产资料：加工业：累计同比
-         ppi_cg_accu(float)  PPI：生活资料：累计同比
-         ppi_cg_f_accu(float)  PPI：生活资料：食品类：累计同比
-         ppi_cg_c_accu(float)  PPI：生活资料：衣着类：累计同比
-         ppi_cg_adu_accu(float)  PPI：生活资料：一般日用品类：累计同比
-         ppi_cg_dcg_accu(float)  PPI：生活资料：耐用消费品类：累计同比
+         month(str)  月份YYYYMM Y
+         ppi_yoy(float)  PPI：全部工业品：当月同比 Y
+         ppi_mp_yoy(float)  PPI：生产资料：当月同比 Y
+         ppi_mp_qm_yoy(float)  PPI：生产资料：采掘业：当月同比 Y
+         ppi_mp_rm_yoy(float)  PPI：生产资料：原料业：当月同比 Y
+         ppi_mp_p_yoy(float)  PPI：生产资料：加工业：当月同比 Y
+         ppi_cg_yoy(float)  PPI：生活资料：当月同比 Y
+         ppi_cg_f_yoy(float)  PPI：生活资料：食品类：当月同比 Y
+         ppi_cg_c_yoy(float)  PPI：生活资料：衣着类：当月同比 Y
+         ppi_cg_adu_yoy(float)  PPI：生活资料：一般日用品类：当月同比 Y
+         ppi_cg_dcg_yoy(float)  PPI：生活资料：耐用消费品类：当月同比 Y
+         ppi_mom(float)  PPI：全部工业品：环比 Y
+         ppi_mp_mom(float)  PPI：生产资料：环比 Y
+         ppi_mp_qm_mom(float)  PPI：生产资料：采掘业：环比 Y
+         ppi_mp_rm_mom(float)  PPI：生产资料：原料业：环比 Y
+         ppi_mp_p_mom(float)  PPI：生产资料：加工业：环比 Y
+         ppi_cg_mom(float)  PPI：生活资料：环比 Y
+         ppi_cg_f_mom(float)  PPI：生活资料：食品类：环比 Y
+         ppi_cg_c_mom(float)  PPI：生活资料：衣着类：环比 Y
+         ppi_cg_adu_mom(float)  PPI：生活资料：一般日用品类：环比 Y
+         ppi_cg_dcg_mom(float)  PPI：生活资料：耐用消费品类：环比 Y
+         ppi_accu(float)  PPI：全部工业品：累计同比 Y
+         ppi_mp_accu(float)  PPI：生产资料：累计同比 Y
+         ppi_mp_qm_accu(float)  PPI：生产资料：采掘业：累计同比 Y
+         ppi_mp_rm_accu(float)  PPI：生产资料：原料业：累计同比 Y
+         ppi_mp_p_accu(float)  PPI：生产资料：加工业：累计同比 Y
+         ppi_cg_accu(float)  PPI：生活资料：累计同比 Y
+         ppi_cg_f_accu(float)  PPI：生活资料：食品类：累计同比 Y
+         ppi_cg_c_accu(float)  PPI：生活资料：衣着类：累计同比 Y
+         ppi_cg_adu_accu(float)  PPI：生活资料：一般日用品类：累计同比 Y
+         ppi_cg_dcg_accu(float)  PPI：生活资料：耐用消费品类：累计同比 Y
         
         """
         return super().query(fields, **kwargs)
@@ -269,7 +271,7 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -294,18 +296,19 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_ppi with args: {}".format(kwargs))
-                res = self.tushare_query('cn_ppi', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_cn_ppi', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('cn_ppi', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(CnPpi, 'default_limit', default_limit_ext)

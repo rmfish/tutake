@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.ggt_top10_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -54,7 +53,10 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ggt.db'),
+        self.table_name = "tushare_ggt_top10"
+        self.database = 'tushare_ggt.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -68,7 +70,7 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
             "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtTop10, 'tushare_ggt.db', 'tushare_ggt_top10',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareGgtTop10, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "ggt_top10", config)
         TuShareBase.__init__(self, "ggt_top10", config, 5000)
@@ -158,23 +160,23 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         trade_date(str)  交易日期
-         ts_code(str)  股票代码
-         name(str)  股票名称
-         close(float)  收盘价
-         p_change(float)  涨跌幅
-         rank(str)  资金排名
-         market_type(str)  市场类型 2：港股通（沪） 4：港股通（深）
-         amount(float)  累计成交金额
-         net_amount(float)  净买入金额
-         sh_amount(float)  沪市成交金额
-         sh_net_amount(float)  沪市净买入金额
-         sh_buy(float)  沪市买入金额
-         sh_sell(float)  沪市卖出金额
-         sz_amount(float)  深市成交金额
-         sz_net_amount(float)  深市净买入金额
-         sz_buy(float)  深市买入金额
-         sz_sell(float)  深市卖出金额
+         trade_date(str)  交易日期 Y
+         ts_code(str)  股票代码 Y
+         name(str)  股票名称 Y
+         close(float)  收盘价 Y
+         p_change(float)  涨跌幅 Y
+         rank(str)  资金排名 Y
+         market_type(str)  市场类型 2：港股通（沪） 4：港股通（深） Y
+         amount(float)  累计成交金额 Y
+         net_amount(float)  净买入金额 Y
+         sh_amount(float)  沪市成交金额 Y
+         sh_net_amount(float)  沪市净买入金额 Y
+         sh_buy(float)  沪市买入金额 Y
+         sh_sell(float)  沪市卖出金额 Y
+         sz_amount(float)  深市成交金额 Y
+         sz_net_amount(float)  深市净买入金额 Y
+         sz_buy(float)  深市买入金额 Y
+         sz_sell(float)  深市卖出金额 Y
         
         """
         return super().query(fields, **kwargs)
@@ -184,7 +186,7 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -217,22 +219,19 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ggt_top10 with args: {}".format(kwargs))
-                res = self.tushare_query('ggt_top10', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ggt_top10',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('ggt_top10', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(GgtTop10, 'default_limit', default_limit_ext)

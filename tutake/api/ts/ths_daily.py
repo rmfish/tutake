@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.ths_daily_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -53,7 +52,10 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ths.db'),
+        self.table_name = "tushare_ths_daily"
+        self.database = 'tushare_ths.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -67,7 +69,7 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "avg_price", "change", "pct_change",
             "vol", "turnover_rate", "total_mv", "float_mv", "pe_ttm", "pb_mrq"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsDaily, 'tushare_ths.db', 'tushare_ths_daily',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsDaily, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_daily", config)
         TuShareBase.__init__(self, "ths_daily", config, 120)
@@ -140,7 +142,10 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
             "comment": "PB MRQ"
         }]
 
-    def ths_daily(self, fields='', **kwargs):
+    def ths_daily(
+            self,
+            fields='ts_code,trade_date,close,open,high,low,pre_close,avg_price,change,pct_change,vol,turnover_rate',
+            **kwargs):
         """
         获取同花顺板块指数行情。
         | Arguments:
@@ -152,22 +157,22 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS指数代码
-         trade_date(str)  交易日
-         close(float)  收盘点位
-         open(float)  开盘点位
-         high(float)  最高点位
-         low(float)  最低点位
-         pre_close(float)  昨日收盘点
-         avg_price(float)  平均点位
-         change(float)  涨跌点位
-         pct_change(float)  涨跌幅
-         vol(float)  成交量
-         turnover_rate(float)  换手率
-         total_mv(float)  总市值
-         float_mv(float)  流通市值
-         pe_ttm(float)  PE TTM
-         pb_mrq(float)  PB MRQ
+         ts_code(str)  TS指数代码 Y
+         trade_date(str)  交易日 Y
+         close(float)  收盘点位 Y
+         open(float)  开盘点位 Y
+         high(float)  最高点位 Y
+         low(float)  最低点位 Y
+         pre_close(float)  昨日收盘点 Y
+         avg_price(float)  平均点位 Y
+         change(float)  涨跌点位 Y
+         pct_change(float)  涨跌幅 Y
+         vol(float)  成交量 Y
+         turnover_rate(float)  换手率 Y
+         total_mv(float)  总市值 N
+         float_mv(float)  流通市值 N
+         pe_ttm(float)  PE TTM N
+         pb_mrq(float)  PB MRQ N
         
         """
         return super().query(fields, **kwargs)
@@ -177,7 +182,7 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -202,22 +207,19 @@ class ThsDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ths_daily with args: {}".format(kwargs))
-                res = self.tushare_query('ths_daily', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ths_daily',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('ths_daily', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(ThsDaily, 'default_limit', default_limit_ext)

@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.us_trycr_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -43,7 +42,10 @@ class UsTrycr(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_us_trycr"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -54,8 +56,8 @@ class UsTrycr(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['date', 'start_date', 'end_date', 'fields', 'limit', 'offset']
         entity_fields = ["date", "y5", "y7", "y10", "y20", "y30"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTrycr, 'tushare_macroeconomic.db',
-                            'tushare_us_trycr', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTrycr, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "us_trycr", config)
         TuShareBase.__init__(self, "us_trycr", config, 120)
         self.api = TushareAPI(config)
@@ -99,12 +101,12 @@ class UsTrycr(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         date(str)  日期
-         y5(float)  5年期
-         y7(float)  7年期
-         y10(float)  10年期
-         y20(float)  20年期
-         y30(float)  30年期
+         date(str)  日期 Y
+         y5(float)  5年期 Y
+         y7(float)  7年期 Y
+         y10(float)  10年期 Y
+         y20(float)  20年期 Y
+         y30(float)  30年期 Y
         
         """
         return super().query(fields, **kwargs)
@@ -114,7 +116,7 @@ class UsTrycr(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -139,22 +141,19 @@ class UsTrycr(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.us_trycr with args: {}".format(kwargs))
-                res = self.tushare_query('us_trycr', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_us_trycr',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('us_trycr', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(UsTrycr, 'default_limit', default_limit_ext)
@@ -169,7 +168,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.us_trycr(start_date="19980101", end_date="20030102"))
+    print(pro.us_trycr())
 
     api = UsTrycr(config)
     api.process()    # 同步增量数据

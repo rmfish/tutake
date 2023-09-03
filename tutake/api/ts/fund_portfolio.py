@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_portfolio_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -45,7 +44,10 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_portfolio"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -58,8 +60,8 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, 'tushare_fund.db',
-                            'tushare_fund_portfolio', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.api = TushareAPI(config)
@@ -112,14 +114,14 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS基金代码
-         ann_date(str)  公告日期
-         end_date(str)  截止日期
-         symbol(str)  股票代码
-         mkv(float)  持有股票市值(元)
-         amount(float)  持有股票数量（股）
-         stk_mkv_ratio(float)  占股票市值比
-         stk_float_ratio(float)  占流通股本比例
+         ts_code(str)  TS基金代码 Y
+         ann_date(str)  公告日期 Y
+         end_date(str)  截止日期 Y
+         symbol(str)  股票代码 Y
+         mkv(float)  持有股票市值(元) Y
+         amount(float)  持有股票数量（股） Y
+         stk_mkv_ratio(float)  占股票市值比 Y
+         stk_float_ratio(float)  占流通股本比例 Y
         
         """
         return super().query(fields, **kwargs)
@@ -129,7 +131,7 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -162,22 +164,19 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_portfolio with args: {}".format(kwargs))
-                res = self.tushare_query('fund_portfolio', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_portfolio',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_portfolio', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundPortfolio, 'default_limit', default_limit_ext)

@@ -9,16 +9,15 @@ Tushare us_tbr接口
 """
 import pandas as pd
 import tushare as ts
-from sqlalchemy import Integer, String, Float, Column
+from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
+from tutake.api.ts.us_tbr_ext import *
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
-from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
-from tutake.api.ts.us_tbr_ext import *
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
@@ -48,7 +47,10 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_us_tbr"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -61,8 +63,8 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "date", "w4_bd", "w4_ce", "w8_bd", "w8_ce", "w13_bd", "w13_ce", "w26_bd", "w26_ce", "w52_bd", "w52_ce"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTbr, 'tushare_macroeconomic.db',
-                            'tushare_us_tbr', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareUsTbr, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "us_tbr", config)
         TuShareBase.__init__(self, "us_tbr", config, 120)
         self.api = TushareAPI(config)
@@ -126,17 +128,17 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         date(str)  日期
-         w4_bd(float)  4周银行折现收益率
-         w4_ce(float)  4周票面利率
-         w8_bd(float)  8周银行折现收益率
-         w8_ce(float)  8周票面利率
-         w13_bd(float)  13周银行折现收益率
-         w13_ce(float)  13周票面利率
-         w26_bd(float)  26周银行折现收益率
-         w26_ce(float)  26周票面利率
-         w52_bd(float)  52周银行折现收益率
-         w52_ce(float)  52周票面利率
+         date(str)  日期 Y
+         w4_bd(float)  4周银行折现收益率 Y
+         w4_ce(float)  4周票面利率 Y
+         w8_bd(float)  8周银行折现收益率 Y
+         w8_ce(float)  8周票面利率 Y
+         w13_bd(float)  13周银行折现收益率 Y
+         w13_ce(float)  13周票面利率 Y
+         w26_bd(float)  26周银行折现收益率 Y
+         w26_ce(float)  26周票面利率 Y
+         w52_bd(float)  52周银行折现收益率 Y
+         w52_ce(float)  52周票面利率 Y
         
         """
         return super().query(fields, **kwargs)
@@ -146,7 +148,7 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -171,18 +173,19 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.us_tbr with args: {}".format(kwargs))
-                res = self.tushare_query('us_tbr', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_us_tbr', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('us_tbr', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(UsTbr, 'default_limit', default_limit_ext)
@@ -193,12 +196,12 @@ setattr(UsTbr, 'query_parameters', query_parameters_ext)
 setattr(UsTbr, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.us_tbr(start_date="20000101", end_date="20050101"))
+    print(pro.us_tbr())
 
     api = UsTbr(config)
-    api.process()  # 同步增量数据
-    print(api.us_tbr())  # 数据查询接口
+    api.process()    # 同步增量数据
+    print(api.us_tbr())    # 数据查询接口
