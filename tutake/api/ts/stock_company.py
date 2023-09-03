@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stock_company_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -54,7 +53,10 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_stock.db'),
+        self.table_name = "tushare_stock_company"
+        self.database = 'tushare_stock.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -68,8 +70,8 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "exchange", "chairman", "manager", "secretary", "reg_capital", "setup_date", "province", "city",
             "introduction", "website", "email", "office", "ann_date", "business_scope", "employees", "main_business"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, 'tushare_stock.db',
-                            'tushare_stock_company', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockCompany, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_company", config)
         TuShareBase.__init__(self, "stock_company", config, 120)
         self.api = TushareAPI(config)
@@ -145,7 +147,10 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             "comment": "主要业务及产品"
         }]
 
-    def stock_company(self, fields='', **kwargs):
+    def stock_company(
+            self,
+            fields='ts_code,exchange,chairman,manager,secretary,reg_capital,setup_date,province,city,website,email,employees',
+            **kwargs):
         """
         获取上市公司基础信息
         | Arguments:
@@ -156,23 +161,23 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  股票代码
-         exchange(str)  交易所代码SSE上交所 SZSE深交所
-         chairman(str)  法人代表
-         manager(str)  总经理
-         secretary(str)  董秘
-         reg_capital(float)  注册资本
-         setup_date(str)  注册日期
-         province(str)  所在省份
-         city(str)  所在城市
-         introduction(str)  公司介绍
-         website(str)  公司主页
-         email(str)  电子邮件
-         office(str)  办公室
-         ann_date(str)  公告日期
-         business_scope(str)  经营范围
-         employees(int)  员工人数
-         main_business(str)  主要业务及产品
+         ts_code(str)  股票代码 Y
+         exchange(str)  交易所代码SSE上交所 SZSE深交所 Y
+         chairman(str)  法人代表 Y
+         manager(str)  总经理 Y
+         secretary(str)  董秘 Y
+         reg_capital(float)  注册资本 Y
+         setup_date(str)  注册日期 Y
+         province(str)  所在省份 Y
+         city(str)  所在城市 Y
+         introduction(str)  公司介绍 N
+         website(str)  公司主页 Y
+         email(str)  电子邮件 Y
+         office(str)  办公室 N
+         ann_date(str)  公告日期 N
+         business_scope(str)  经营范围 N
+         employees(int)  员工人数 Y
+         main_business(str)  主要业务及产品 N
         
         """
         return super().query(fields, **kwargs)
@@ -182,7 +187,7 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -207,22 +212,19 @@ class StockCompany(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_company with args: {}".format(kwargs))
-                res = self.tushare_query('stock_company', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stock_company',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stock_company', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StockCompany, 'default_limit', default_limit_ext)

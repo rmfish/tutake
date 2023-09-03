@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.cn_cpi_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -50,7 +49,10 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_macroeconomic.db'),
+        self.table_name = "tushare_cn_cpi"
+        self.database = 'tushare_macroeconomic.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -64,8 +66,8 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
             "month", "nt_val", "nt_yoy", "nt_mom", "nt_accu", "town_val", "town_yoy", "town_mom", "town_accu",
             "cnt_val", "cnt_yoy", "cnt_mom", "cnt_accu"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareCnCpi, 'tushare_macroeconomic.db',
-                            'tushare_cn_cpi', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCnCpi, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "cn_cpi", config)
         TuShareBase.__init__(self, "cn_cpi", config, 600)
         self.api = TushareAPI(config)
@@ -136,19 +138,19 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         month(str)  月份YYYYMM
-         nt_val(float)  全国当月至
-         nt_yoy(float)  全国同比（%）
-         nt_mom(float)  全国环比（%）
-         nt_accu(float)  全国累计值
-         town_val(float)  城市当值月
-         town_yoy(float)  城市同比（%）
-         town_mom(float)  城市环比（%）
-         town_accu(float)  城市累计值
-         cnt_val(float)  农村当月值
-         cnt_yoy(float)  农村同比（%）
-         cnt_mom(float)  农村环比（%）
-         cnt_accu(float)  农村累计值
+         month(str)  月份YYYYMM Y
+         nt_val(float)  全国当月至 Y
+         nt_yoy(float)  全国同比（%） Y
+         nt_mom(float)  全国环比（%） Y
+         nt_accu(float)  全国累计值 Y
+         town_val(float)  城市当值月 Y
+         town_yoy(float)  城市同比（%） Y
+         town_mom(float)  城市环比（%） Y
+         town_accu(float)  城市累计值 Y
+         cnt_val(float)  农村当月值 Y
+         cnt_yoy(float)  农村同比（%） Y
+         cnt_mom(float)  农村环比（%） Y
+         cnt_accu(float)  农村累计值 Y
         
         """
         return super().query(fields, **kwargs)
@@ -158,7 +160,7 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -183,18 +185,19 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_cpi with args: {}".format(kwargs))
-                res = self.tushare_query('cn_cpi', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_cn_cpi', con=self.engine, if_exists='append', index=False, index_label=['ts_code'])
-                return res
+                return self.tushare_query('cn_cpi', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(CnCpi, 'default_limit', default_limit_ext)
@@ -212,5 +215,5 @@ if __name__ == '__main__':
     print(pro.cn_cpi())
 
     api = CnCpi(config)
-    # api.process()    # 同步增量数据
+    api.process()    # 同步增量数据
     print(api.cn_cpi())    # 数据查询接口

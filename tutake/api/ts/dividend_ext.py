@@ -1,6 +1,7 @@
 """
 分红送股数据
 """
+from tutake.api.ts.date_utils import day_by_day_params
 
 
 def default_cron_express_ext(self) -> str:
@@ -25,7 +26,7 @@ def prepare_ext(self):
     """
     同步历史数据准备工作
     """
-    self.delete_all()
+    # self.delete_all()
 
 
 def query_parameters_ext(self):
@@ -33,7 +34,7 @@ def query_parameters_ext(self):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return self.api.stock_basic.column_data(['ts_code'])
+    return day_by_day_params(self, "19910316")
 
 
 def param_loop_process_ext(self, **params):

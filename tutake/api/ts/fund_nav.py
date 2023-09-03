@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_nav_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -47,7 +46,10 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_nav"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -61,7 +63,7 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
             "adj_nav", "update_flag"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, 'tushare_fund.db', 'tushare_fund_nav',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_nav", config)
         TuShareBase.__init__(self, "fund_nav", config, 5000)
@@ -123,16 +125,16 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
         | end_date(str):   净值结束日期
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         ann_date(str)  公告日期
-         nav_date(str)  截止日期
-         unit_nav(float)  单位净值
-         accum_nav(float)  累计净值
-         accum_div(float)  累计分红
-         net_asset(float)  资产净值
-         total_netasset(float)  合计资产净值
-         adj_nav(float)  复权单位净值
-         update_flag(str)  更新标识
+         ts_code(str)  TS代码 Y
+         ann_date(str)  公告日期 Y
+         nav_date(str)  截止日期 Y
+         unit_nav(float)  单位净值 Y
+         accum_nav(float)  累计净值 Y
+         accum_div(float)  累计分红 Y
+         net_asset(float)  资产净值 Y
+         total_netasset(float)  合计资产净值 Y
+         adj_nav(float)  复权单位净值 Y
+         update_flag(str)  更新标识 Y
         
         """
         return super().query(fields, **kwargs)
@@ -142,7 +144,7 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -175,22 +177,19 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_nav with args: {}".format(kwargs))
-                res = self.tushare_query('fund_nav', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_nav',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_nav', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundNav, 'default_limit', default_limit_ext)

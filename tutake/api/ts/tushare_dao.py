@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao
+from tutake.api.ts.tushare_base import Records
 from tutake.utils.config import TutakeConfig
 
 engine_pool = {}
@@ -21,6 +22,7 @@ class TushareDAO(BaseDao):
                  entity_fields,
                  config: TutakeConfig):
         super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields, config)
+        self.records = Records()
 
     def filter_process(self, filter_criterion, filter_by):
         if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly']:

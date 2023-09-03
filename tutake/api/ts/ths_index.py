@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.ths_index_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -43,7 +42,10 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_ths.db'),
+        self.table_name = "tushare_ths_index"
+        self.database = 'tushare_ths.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -54,7 +56,7 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'exchange', 'type', 'limit', 'offset']
         entity_fields = ["ts_code", "name", "count", "exchange", "list_date", "type"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, 'tushare_ths.db', 'tushare_ths_index',
+        TushareDAO.__init__(self, self.engine, session_factory, TushareThsIndex, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "ths_index", config)
         TuShareBase.__init__(self, "ths_index", config, 5000)
@@ -98,12 +100,12 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  代码
-         name(str)  名称
-         count(int)  成分个数
-         exchange(str)  交易所
-         list_date(str)  上市日期
-         type(str)  N概念指数S特色指数
+         ts_code(str)  代码 Y
+         name(str)  名称 Y
+         count(int)  成分个数 Y
+         exchange(str)  交易所 Y
+         list_date(str)  上市日期 Y
+         type(str)  N概念指数S特色指数 Y
         
         """
         return super().query(fields, **kwargs)
@@ -113,7 +115,7 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -138,22 +140,19 @@ class ThsIndex(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ths_index with args: {}".format(kwargs))
-                res = self.tushare_query('ths_index', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_ths_index',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('ths_index', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(ThsIndex, 'default_limit', default_limit_ext)

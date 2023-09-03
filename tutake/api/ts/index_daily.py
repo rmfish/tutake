@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_daily_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -48,7 +47,10 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_daily"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -61,8 +63,8 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDaily, 'tushare_index.db',
-                            'tushare_index_daily', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDaily, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_daily", config)
         TuShareBase.__init__(self, "index_daily", config, 5000)
         self.api = TushareAPI(config)
@@ -126,17 +128,17 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  None
-         trade_date(datetime)  None
-         close(float)  None
-         open(float)  None
-         high(float)  None
-         low(float)  None
-         pre_close(float)  None
-         change(float)  None
-         pct_chg(float)  None
-         vol(float)  None
-         amount(float)  None
+         ts_code(str)  None Y
+         trade_date(datetime)  None Y
+         close(float)  None Y
+         open(float)  None Y
+         high(float)  None Y
+         low(float)  None Y
+         pre_close(float)  None Y
+         change(float)  None Y
+         pct_chg(float)  None Y
+         vol(float)  None Y
+         amount(float)  None Y
         
         """
         return super().query(fields, **kwargs)
@@ -146,7 +148,7 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -171,22 +173,19 @@ class IndexDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_daily with args: {}".format(kwargs))
-                res = self.tushare_query('index_daily', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_daily',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_daily', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexDaily, 'default_limit', default_limit_ext)

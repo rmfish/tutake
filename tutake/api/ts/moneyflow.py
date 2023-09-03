@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.moneyflow_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -58,7 +57,10 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_moneyflow.db'),
+        self.table_name = "tushare_moneyflow"
+        self.database = 'tushare_moneyflow.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -74,8 +76,8 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
             "sell_lg_amount", "buy_elg_vol", "buy_elg_amount", "sell_elg_vol", "sell_elg_amount", "net_mf_vol",
             "net_mf_amount", "trade_count"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflow, 'tushare_moneyflow.db',
-                            'tushare_moneyflow', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflow, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "moneyflow", config)
         TuShareBase.__init__(self, "moneyflow", config, 2000)
         self.api = TushareAPI(config)
@@ -167,7 +169,10 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
             "comment": "交易笔数"
         }]
 
-    def moneyflow(self, fields='', **kwargs):
+    def moneyflow(
+            self,
+            fields='ts_code,trade_date,buy_sm_vol,buy_sm_amount,sell_sm_vol,sell_sm_amount,buy_md_vol,buy_md_amount,sell_md_vol,sell_md_amount,buy_lg_vol,buy_lg_amount,sell_lg_vol,sell_lg_amount,buy_elg_vol,buy_elg_amount,sell_elg_vol,sell_elg_amount,net_mf_vol,net_mf_amount',
+            **kwargs):
         """
         获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向，每日晚19点更新
         | Arguments:
@@ -179,27 +184,27 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS代码
-         trade_date(str)  交易日期
-         buy_sm_vol(int)  小单买入量（手）
-         buy_sm_amount(float)  小单买入金额（万元）
-         sell_sm_vol(int)  小单卖出量（手）
-         sell_sm_amount(float)  小单卖出金额（万元）
-         buy_md_vol(int)  中单买入量（手）
-         buy_md_amount(float)  中单买入金额（万元）
-         sell_md_vol(int)  中单卖出量（手）
-         sell_md_amount(float)  中单卖出金额（万元）
-         buy_lg_vol(int)  大单买入量（手）
-         buy_lg_amount(float)  大单买入金额（万元）
-         sell_lg_vol(int)  大单卖出量（手）
-         sell_lg_amount(float)  大单卖出金额（万元）
-         buy_elg_vol(int)  特大单买入量（手）
-         buy_elg_amount(float)  特大单买入金额（万元）
-         sell_elg_vol(int)  特大单卖出量（手）
-         sell_elg_amount(float)  特大单卖出金额（万元）
-         net_mf_vol(int)  净流入量（手）
-         net_mf_amount(float)  净流入额（万元）
-         trade_count(int)  交易笔数
+         ts_code(str)  TS代码 Y
+         trade_date(str)  交易日期 Y
+         buy_sm_vol(int)  小单买入量（手） Y
+         buy_sm_amount(float)  小单买入金额（万元） Y
+         sell_sm_vol(int)  小单卖出量（手） Y
+         sell_sm_amount(float)  小单卖出金额（万元） Y
+         buy_md_vol(int)  中单买入量（手） Y
+         buy_md_amount(float)  中单买入金额（万元） Y
+         sell_md_vol(int)  中单卖出量（手） Y
+         sell_md_amount(float)  中单卖出金额（万元） Y
+         buy_lg_vol(int)  大单买入量（手） Y
+         buy_lg_amount(float)  大单买入金额（万元） Y
+         sell_lg_vol(int)  大单卖出量（手） Y
+         sell_lg_amount(float)  大单卖出金额（万元） Y
+         buy_elg_vol(int)  特大单买入量（手） Y
+         buy_elg_amount(float)  特大单买入金额（万元） Y
+         sell_elg_vol(int)  特大单卖出量（手） Y
+         sell_elg_amount(float)  特大单卖出金额（万元） Y
+         net_mf_vol(int)  净流入量（手） Y
+         net_mf_amount(float)  净流入额（万元） Y
+         trade_count(int)  交易笔数 N
         
         """
         return super().query(fields, **kwargs)
@@ -209,7 +214,7 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -234,22 +239,19 @@ class Moneyflow(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.moneyflow with args: {}".format(kwargs))
-                res = self.tushare_query('moneyflow', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_moneyflow',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('moneyflow', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(Moneyflow, 'default_limit', default_limit_ext)

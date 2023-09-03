@@ -10,4 +10,4 @@ apscheduler~=3.9.1.post1
 pathlib~=1.0.1
 pytz~=2022.6
 setuptools==65.6.3
-rich~=12.6.0
+ordered-enum==0.0.8

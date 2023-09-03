@@ -1,9 +1,13 @@
 import logging
+import pickle
+import sqlite3
+import threading
 import time
 from operator import and_
+from sqlite3 import Connection
 
 import pandas as pd
-from sqlalchemy import text
+from sqlalchemy import text, create_engine
 from sqlalchemy.orm import load_only, declarative_base, sessionmaker
 
 from tutake.utils.config import TutakeConfig
@@ -23,7 +27,7 @@ class BaseDao(object):
         self.table_name = table_name
         self.query_fields = query_fields
         self.entity_fields = entity_fields
-        self.logger = logging.getLogger('dao.base.{}'.format(table_name))
+        self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
 
     def columns_meta(self):
@@ -33,6 +37,12 @@ class BaseDao(object):
         self.logger.warning("Delete all data of {}".format(self.table_name))
         session = self.session_factory()
         session.query(self.entities).delete()
+        session.commit()
+
+    def delete_by(self, **kwargs):
+        self.logger.warning("Delete data from {} by {}".format(self.table_name, kwargs))
+        session = self.session_factory()
+        session.query(self.entities).filter_by(**kwargs).delete()
         session.commit()
 
     def get_ident(self, ident):
@@ -197,12 +207,14 @@ class BaseDao(object):
     def sql(self, sql):
         start = time.time()
         query = self.session_factory().query(self.entities)
-        sql = sql.format(table=self.table_name)
-        df = pd.read_sql(sql, query.session.bind)
-        df = df.drop(['id'], axis=1, errors='ignore')
-        self.logger.debug(
-            "Finished {} query, sql is {} it costs {}s".format(self.entities.__name__, sql, time.time() - start))
-        return df
+        sql = sql.format(table=self.table_name).strip()
+        if sql.split(" ")[0].upper().startswith("SELECT"):
+            df = pd.read_sql(sql, query.session.bind)
+            df = df.drop(['id'], axis=1, errors='ignore')
+            self.logger.debug(
+                "Finished {} query, sql is {} it costs {}s".format(self.entities.__name__, sql, time.time() - start))
+            return df
+        return pd.DataFrame()
 
     def meta(self):
         return {"table_name": self.table_name, "columns": self.columns_meta(),
@@ -213,3 +225,81 @@ class BaseDao(object):
         group = ','.join(columns)
         sql = "select " + group + " from {table} group by " + group + "  have count(*)>1"
         return self.sql(sql)
+
+
+class Records:
+    def __init__(self, fields=None, items=None):
+        self.fields = fields
+        if items is None:
+            self.items = []
+        else:
+            self.items = items
+
+    def data_frame(self):
+        return pd.DataFrame(self.items, columns=self.fields)
+
+    def size(self):
+        if self.items is None:
+            return 0
+        else:
+            return len(self.items)
+
+    def append(self, records):
+        if self.fields is None:
+            self.fields = records.fields
+        self.items = self.items + records.items
+
+
+class BatchWriter:
+
+    def __init__(self, engine, table: str):
+        self.records = Records()
+        self.engine = engine
+        self.table = table
+        self.shared_resource_lock = threading.Lock()
+        self.conn: Connection = None
+        self.logger = logging.getLogger('tutake.dao.writer.{}'.format(table))
+        self.database = self.engine.url.database.split("/")[-1]
+
+    def start(self):
+        if self.conn is None:
+            self.conn = sqlite3.connect(self.engine.url.database)
+        # self.conn.execute('''PRAGMA synchronous = OFF''')
+
+    def rollback(self):
+        if self.conn:
+            self.logger.warning(f"Rollback all {self.table} records of writers.")
+            self.conn.rollback()
+            self.conn.close()
+            self.conn = None
+
+    def commit(self):
+        if self.conn:
+            self.flush()
+            self.conn.commit()
+            self.conn.close()
+            self.conn = None
+
+    def add_records(self, records: Records):
+        self.records.append(records)
+        if self.records.size() > 500000:
+            self.flush()
+
+    def flush(self):
+        self.shared_resource_lock.acquire()
+        records = self.records
+        self.records = Records()
+        self.shared_resource_lock.release()
+        size = records.size()
+        if size > 0:
+            t = time.time()
+            sql = "insert or ignore into {}({}) values ({})".format(self.table, ','.join(records.fields),
+                                                                    ','.join(["?" for _ in
+                                                                              range(len(records.fields))]))
+            if self.conn is None:
+                self.start()
+            self.conn.executemany(sql, records.items)
+
+            self.logger.debug("Save {} records to table {} in {}, costs {}s".format(size, self.table,
+                                                                                    self.database,
+                                                                                    '%.4f' % (time.time() - t)))

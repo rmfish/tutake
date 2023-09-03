@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.forecast_vip_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -50,7 +49,10 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+        self.table_name = "tushare_forecast_vip"
+        self.database = 'tushare_report.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -64,8 +66,8 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareForecastVip, 'tushare_report.db',
-                            'tushare_forecast_vip', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareForecastVip, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "forecast_vip", config)
         TuShareBase.__init__(self, "forecast_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -125,7 +127,10 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             "comment": "业绩变动原因"
         }]
 
-    def forecast_vip(self, fields='', **kwargs):
+    def forecast_vip(
+            self,
+            fields='ts_code,ann_date,end_date,type,p_change_min,p_change_max,net_profit_min,net_profit_max,last_parent_net,first_ann_date,summary,change_reason',
+            **kwargs):
         """
         获取业绩预告数据
         | Arguments:
@@ -139,19 +144,19 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         ann_date(str)  公告日期
-         end_date(str)  报告期
-         type(str)  业绩预告类型
-         p_change_min(float)  预告净利润变动幅度下限（%）
-         p_change_max(float)  预告净利润变动幅度上限（%）
-         net_profit_min(float)  预告净利润下限（万元）
-         net_profit_max(float)  预告净利润上限（万元）
-         last_parent_net(float)  上年同期归属母公司净利润
-         notice_times(int)  公布次数
-         first_ann_date(str)  首次公告日
-         summary(str)  业绩预告摘要
-         change_reason(str)  业绩变动原因
+         ts_code(str)  TS股票代码 Y
+         ann_date(str)  公告日期 Y
+         end_date(str)  报告期 Y
+         type(str)  业绩预告类型 Y
+         p_change_min(float)  预告净利润变动幅度下限（%） Y
+         p_change_max(float)  预告净利润变动幅度上限（%） Y
+         net_profit_min(float)  预告净利润下限（万元） Y
+         net_profit_max(float)  预告净利润上限（万元） Y
+         last_parent_net(float)  上年同期归属母公司净利润 Y
+         notice_times(int)  公布次数 N
+         first_ann_date(str)  首次公告日 Y
+         summary(str)  业绩预告摘要 Y
+         change_reason(str)  业绩变动原因 Y
         
         """
         return super().query(fields, **kwargs)
@@ -161,7 +166,7 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -195,22 +200,19 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.forecast_vip with args: {}".format(kwargs))
-                res = self.tushare_query('forecast_vip', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_forecast_vip',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('forecast_vip', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(ForecastVip, 'default_limit', default_limit_ext)

@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_classify_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -44,7 +43,10 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_index.db'),
+        self.table_name = "tushare_index_classify"
+        self.database = 'tushare_index.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -55,8 +57,8 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['index_code', 'level', 'src', 'parent_code', 'limit', 'offset']
         entity_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexClassify, 'tushare_index.db',
-                            'tushare_index_classify', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareIndexClassify, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_classify", config)
         TuShareBase.__init__(self, "index_classify", config, 2000)
         self.api = TushareAPI(config)
@@ -92,7 +94,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
             "comment": "行业分类（SW申万）"
         }]
 
-    def index_classify(self, fields='', **kwargs):
+    def index_classify(self, fields='index_code,industry_name,level,industry_code,is_pub,parent_code', **kwargs):
         """
         获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息
         | Arguments:
@@ -104,13 +106,13 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         index_code(str)  指数代码
-         industry_name(str)  行业名称
-         level(str)  行业名称
-         industry_code(str)  行业代码
-         is_pub(str)  是否发布指数
-         parent_code(str)  父级代码
-         src(str)  行业分类（SW申万）
+         index_code(str)  指数代码 Y
+         industry_name(str)  行业名称 Y
+         level(str)  行业名称 Y
+         industry_code(str)  行业代码 Y
+         is_pub(str)  是否发布指数 Y
+         parent_code(str)  父级代码 Y
+         src(str)  行业分类（SW申万） N
         
         """
         return super().query(fields, **kwargs)
@@ -120,7 +122,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -145,22 +147,19 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_classify with args: {}".format(kwargs))
-                res = self.tushare_query('index_classify', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_index_classify',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('index_classify', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(IndexClassify, 'default_limit', default_limit_ext)

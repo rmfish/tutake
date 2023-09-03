@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_share_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -43,7 +42,10 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_fund.db'),
+        self.table_name = "tushare_fund_share"
+        self.database = 'tushare_fund.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -54,8 +56,8 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market', 'fund_type', 'limit', 'offset']
         entity_fields = ["ts_code", "trade_date", "fd_share", "total_share", "fund_type", "market"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareFundShare, 'tushare_fund.db',
-                            'tushare_fund_share', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareFundShare, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "fund_share", config)
         TuShareBase.__init__(self, "fund_share", config, 5000)
         self.api = TushareAPI(config)
@@ -87,7 +89,7 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
             "comment": "市场"
         }]
 
-    def fund_share(self, fields='', **kwargs):
+    def fund_share(self, fields='ts_code,trade_date,fd_share,fund_type,market', **kwargs):
         """
         获取基金规模数据，包含上海和深圳ETF基金
         | Arguments:
@@ -101,12 +103,12 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  基金代码
-         trade_date(str)  交易（变动）日期
-         fd_share(float)  基金份额（万）
-         total_share(float)  合计份额（万）
-         fund_type(str)  基金类型
-         market(str)  市场
+         ts_code(str)  基金代码 Y
+         trade_date(str)  交易（变动）日期 Y
+         fd_share(float)  基金份额（万） Y
+         total_share(float)  合计份额（万） N
+         fund_type(str)  基金类型 Y
+         market(str)  市场 Y
         
         """
         return super().query(fields, **kwargs)
@@ -116,7 +118,7 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -150,22 +152,19 @@ class FundShare(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_share with args: {}".format(kwargs))
-                res = self.tushare_query('fund_share', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_fund_share',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('fund_share', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(FundShare, 'default_limit', default_limit_ext)

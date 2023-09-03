@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.express_vip_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -69,7 +68,10 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_report.db'),
+        self.table_name = "tushare_express_vip"
+        self.database = 'tushare_report.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -86,8 +88,8 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
             "op_last_year", "tp_last_year", "np_last_year", "eps_last_year", "open_net_assets", "open_bps",
             "perf_summary", "is_audit", "remark"
         ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareExpressVip, 'tushare_report.db',
-                            'tushare_express_vip', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareExpressVip, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "express_vip", config)
         TuShareBase.__init__(self, "express_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -223,7 +225,10 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
             "comment": "备注"
         }]
 
-    def express_vip(self, fields='', **kwargs):
+    def express_vip(
+            self,
+            fields='ts_code,ann_date,end_date,revenue,operate_profit,total_profit,n_income,total_assets,total_hldr_eqy_exc_min_int,diluted_eps,diluted_roe,yoy_net_profit,bps,perf_summary',
+            **kwargs):
         """
         获取上市公司业绩快报
         | Arguments:
@@ -236,38 +241,38 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         ts_code(str)  TS股票代码
-         ann_date(str)  公告日期
-         end_date(str)  报告期
-         revenue(float)  营业收入(元)
-         operate_profit(float)  营业利润(元)
-         total_profit(float)  利润总额(元)
-         n_income(float)  净利润(元)
-         total_assets(float)  总资产(元)
-         total_hldr_eqy_exc_min_int(float)  股东权益合计(不含少数股东权益)(元)
-         diluted_eps(float)  每股收益(摊薄)(元)
-         diluted_roe(float)  净资产收益率(摊薄)(%)
-         yoy_net_profit(float)  去年同期修正后净利润
-         bps(float)  每股净资产
-         yoy_sales(float)  同比增长率:营业收入
-         yoy_op(float)  同比增长率:营业利润
-         yoy_tp(float)  同比增长率:利润总额
-         yoy_dedu_np(float)  同比增长率:归属母公司股东的净利润
-         yoy_eps(float)  同比增长率:基本每股收益
-         yoy_roe(float)  同比增减:加权平均净资产收益率
-         growth_assets(float)  比年初增长率:总资产
-         yoy_equity(float)  比年初增长率:归属母公司的股东权益
-         growth_bps(float)  比年初增长率:归属于母公司股东的每股净资产
-         or_last_year(float)  去年同期营业收入
-         op_last_year(float)  去年同期营业利润
-         tp_last_year(float)  去年同期利润总额
-         np_last_year(float)  去年同期净利润
-         eps_last_year(float)  去年同期每股收益
-         open_net_assets(float)  期初净资产
-         open_bps(float)  期初每股净资产
-         perf_summary(str)  业绩简要说明
-         is_audit(int)  是否审计： 1是 0否
-         remark(str)  备注
+         ts_code(str)  TS股票代码 Y
+         ann_date(str)  公告日期 Y
+         end_date(str)  报告期 Y
+         revenue(float)  营业收入(元) Y
+         operate_profit(float)  营业利润(元) Y
+         total_profit(float)  利润总额(元) Y
+         n_income(float)  净利润(元) Y
+         total_assets(float)  总资产(元) Y
+         total_hldr_eqy_exc_min_int(float)  股东权益合计(不含少数股东权益)(元) Y
+         diluted_eps(float)  每股收益(摊薄)(元) Y
+         diluted_roe(float)  净资产收益率(摊薄)(%) Y
+         yoy_net_profit(float)  去年同期修正后净利润 Y
+         bps(float)  每股净资产 Y
+         yoy_sales(float)  同比增长率:营业收入 N
+         yoy_op(float)  同比增长率:营业利润 N
+         yoy_tp(float)  同比增长率:利润总额 N
+         yoy_dedu_np(float)  同比增长率:归属母公司股东的净利润 N
+         yoy_eps(float)  同比增长率:基本每股收益 N
+         yoy_roe(float)  同比增减:加权平均净资产收益率 N
+         growth_assets(float)  比年初增长率:总资产 N
+         yoy_equity(float)  比年初增长率:归属母公司的股东权益 N
+         growth_bps(float)  比年初增长率:归属于母公司股东的每股净资产 N
+         or_last_year(float)  去年同期营业收入 N
+         op_last_year(float)  去年同期营业利润 N
+         tp_last_year(float)  去年同期利润总额 N
+         np_last_year(float)  去年同期净利润 N
+         eps_last_year(float)  去年同期每股收益 N
+         open_net_assets(float)  期初净资产 N
+         open_bps(float)  期初每股净资产 N
+         perf_summary(str)  业绩简要说明 Y
+         is_audit(int)  是否审计： 1是 0否 N
+         remark(str)  备注 N
         
         """
         return super().query(fields, **kwargs)
@@ -277,7 +282,7 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -310,22 +315,19 @@ class ExpressVip(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.express_vip with args: {}".format(kwargs))
-                res = self.tushare_query('express_vip', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_express_vip',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('express_vip', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(ExpressVip, 'default_limit', default_limit_ext)

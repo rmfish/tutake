@@ -11,8 +11,7 @@ from sqlalchemy import Integer, String, Float, Boolean, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao, Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.xq.{{name}}_ext import *
 from tutake.api.xq.xueqiu_base import XueQiuBase
 from tutake.utils.config import TutakeConfig

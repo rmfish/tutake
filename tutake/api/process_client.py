@@ -8,8 +8,8 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
-from tutake.api.process_bar import process
-from tutake.api.process_report import ProcessReportContainer, ProcessReport
+from tutake.api.process import ProcessStatus
+# from tutake.api.process_report import ProcessReportContainer, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
@@ -31,7 +31,6 @@ class TushareProcessTask:
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
         else:
             self._scheduler = BlockingScheduler(timezone=self.timezone)
-        self.report_container = ProcessReportContainer(config)
         self.logger = logging.getLogger("tutake.task")
         self.config = config
         self.started_cnt = 0
@@ -87,52 +86,36 @@ class TushareProcessTask:
             apis.append(xq_api.instance_from_name(i, self.config))
         return apis
 
-    def _finish_task_report(self, job_id, report: ProcessReport):
-        self.report_container.save_report(report)
+    # def _finish_task_report(self, job_id, report: ProcessReport):
+    # self.report_container.save_report(report)
 
     def _do_process(self, tasks):
-        def __process(_job_id, _task):
+        def __process(_job_id, _task) -> ProcessStatus:
             if _task is not None:
-                report = _task.process()
-                self._finish_task_report(_job_id, report)
-                return report
+                return _task.process()
             else:
                 return None
 
         start = time.time()
-        reports = []
-        self._start_process()
+        status_list = []
         if isinstance(tasks, Task):
-            reports.append(__process(f"tutake_{tasks.name}", tasks))
+            status_list.append(__process(f"tutake_{tasks.name}", tasks))
         elif isinstance(tasks, Sequence):
             for task in tasks:
                 try:
-                    reports.append(__process(f"tutake_{task.name}", task))
+                    status_list.append(__process(f"tutake_{task.name}", task))
                 except Exception as err:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue
-        self._end_process()
-        process.console.log(f"Finished {len(reports)} of scheduled tasks, it takes {time.time() - start}s")
-        if reports:
-            process.console.log("Process results summary:")
-            for r in reports:
-                if r:
-                    process.console.log(f"{r.name} {r.process_summary_str()}  cost {r.process_time()}s")
-
-    def _start_process(self):
-        self.started_cnt += 1
-        process.start()
-
-    def _end_process(self):
-        self.started_cnt -= 1
-        if self.started_cnt == 0:
-            process.stop()
+        if status_list:
+            status_list = [x for x in status_list if x is not None]
+            status_list.sort(key=lambda x: (x.status(), x.name))
+            result = '\n|-'.join([str(x) for x in status_list])
+            self.logger.info(
+                f"Finished {len(status_list)} of scheduled tasks, it takes {time.time() - start}s. Tasks details is:\n|-{result}")
 
     def get_scheduler(self):
         return self._scheduler
-
-    def get_results(self, job_id) -> [ProcessReport]:
-        return self.report_container.get_reports(job_id)
 
     def add_job(self, job_id, api, **kwargs):
         self._scheduler.add_job(self._do_process, args=[api], id=job_id, name=job_id, **kwargs)

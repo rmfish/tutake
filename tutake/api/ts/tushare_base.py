@@ -1,4 +1,5 @@
 import json
+import logging
 import random
 import threading
 import time
@@ -8,11 +9,15 @@ from datetime import datetime
 import pandas as pd
 import requests
 import tushare as ts
+from pandas import DataFrame
 
+from tutake.api.base_dao import Records
+from tutake.api.process import CriticalException
 from tutake.api.process_client import Task
-from tutake.api.process_report import CriticalException
 from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig
 from tutake.utils.utils import end_of_day
+
+tushare_logger = logging.getLogger("tutake.tushare")
 
 
 def _is_useful_token(token):
@@ -150,27 +155,27 @@ class TuShareBase(Task):
             self.client_queue = TushareTokenQueue(clients, self.logger)
         # assert self.t_api is not None or self.client_queue is not None, 'Tushare token is required, pls config it in config.yaml'
 
-    def tushare_query(self, api, fields, **kwargs):
+    def tushare_query(self, api, fields, **kwargs) -> Records:
         if self.client_queue:
             client = self.client_queue.get(65)
             if client:
                 try:
-                    return client.query(api, fields, **kwargs)
+                    return client.query_records(api, fields, **kwargs)
                 except Exception as err:
                     if str(err).startswith("抱歉，您每分钟最多访问该接口"):
                         self.client_queue.alive(client, time.time() + 60)
-                        self.logger.debug(
+                        tushare_logger.debug(
                             f"Flow limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您每天最多访问该接口"):
                         self.client_queue.alive(client, end_of_day().timestamp())
-                        print(
+                        tushare_logger.debug(
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您没有访问该接口的权限") or str(err).startswith(
                             "抱歉，您输入的TOKEN无效！"):
                         self.client_queue.alive(client, time.time() + 4294967.0)
-                        print(
+                        tushare_logger.debug(
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     else:
@@ -179,14 +184,14 @@ class TuShareBase(Task):
                 raise CriticalException(f"None useful ts token to query {api}")
         elif self.t_api:
             try:
-                return self.t_api.query(api, fields, **kwargs)
+                return self.t_api.query_records(api, fields, **kwargs)
             except Exception as err:
                 if str(err).startswith("抱歉，您每分钟最多访问该接口"):
-                    self.logger.debug(f"Flow limit {api}, sleep 60 seconds and retry")
+                    tushare_logger.debug(f"Flow limit {api}, sleep 60 seconds and retry")
                     time.sleep(60)
                     return self.tushare_query(api, fields, **kwargs)
                 if str(err).startswith("抱歉，您输入的TOKEN无效！"):
-                    self.logger.debug(f"Error token {api}, {err}")
+                    tushare_logger.debug(f"Error token {api}, {err}")
                     raise CriticalException(f"Error token {api}", err)
                 else:
                     raise err
@@ -202,7 +207,11 @@ class TushareClient:
         self.__token = token
         self.__timeout = 30
 
-    def query(self, api_name, fields='', **kwargs):
+    def query(self, api_name, fields='', **kwargs) -> DataFrame:
+        result = self.query_records(api_name, fields, **kwargs)
+        return pd.DataFrame(result['items'], columns=result['fields'])
+
+    def query_json(self, api_name, fields='', **kwargs):
         req_params = {
             'api_name': api_name,
             'token': self.__token,
@@ -215,12 +224,17 @@ class TushareClient:
             result = json.loads(res.text)
             if result['code'] != 0:
                 raise Exception(result['msg'])
-            data = result['data']
-            columns = data['fields']
-            items = data['items']
-            return pd.DataFrame(items, columns=columns)
+            return result['data']
         else:
-            return pd.DataFrame()
+            return {'items': [], 'fields': []}
+
+    def query_records(self, api_name, fields='', **kwargs) -> Records:
+        res = self.query_json(api_name, fields, **kwargs)
+        if res:
+            items = [tuple(i) for i in res['items']]
+            return Records(res['fields'], items)
+        else:
+            return Records()
 
     def set_alive_time(self, _time):
         self._time = _time

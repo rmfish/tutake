@@ -12,9 +12,8 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base
-from tutake.api.process import DataProcess
-from tutake.api.process_report import ProcessException
+from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stock_mx_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
@@ -48,7 +47,10 @@ class StockMx(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_shared_engine(config.get_data_sqlite_driver_url('tushare_xiaopei.db'),
+        self.table_name = "tushare_stock_mx"
+        self.database = 'tushare_xiaopei.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
                                                'timeout': config.get_sqlite_timeout()
@@ -59,8 +61,8 @@ class StockMx(TushareDAO, TuShareBase, DataProcess):
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "mx_grade", "com_stock", "evd_v", "zt_sum_z", "wma250_z"]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareStockMx, 'tushare_xiaopei.db',
-                            'tushare_stock_mx', query_fields, entity_fields, config)
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStockMx, self.database, self.table_name,
+                            query_fields, entity_fields, config)
         DataProcess.__init__(self, "stock_mx", config)
         TuShareBase.__init__(self, "stock_mx", config, 5000)
         self.api = TushareAPI(config)
@@ -111,13 +113,13 @@ class StockMx(TushareDAO, TuShareBase, DataProcess):
         | limit(str):   最大行数
         
         :return: DataFrame
-         ts_code(str)  股票代码
-         trade_date(str)  交易日期
-         mx_grade(int)  动能评级，综合动能指标后分成4个评等，1(高)、2(中)、3(低)、4(弱)。高：周、月、季、半年趋势方向一致，整体看多；中：周、月、季、半年趋势方向不一致，但整体偏多；低：周、月、季、半年趋势方向不一致，但整体偏多；弱：周、月、季、半年趋势方向一致，整体看空
-         com_stock(str)  行业轮动指标
-         evd_v(str)  速度指标，衡量该个股股价变化的速度
-         zt_sum_z(str)  极值，短期均线离差值
-         wma250_z(str)  偏离指标，中期均线偏离度指标
+         ts_code(str)  股票代码 Y
+         trade_date(str)  交易日期 Y
+         mx_grade(int)  动能评级，综合动能指标后分成4个评等，1(高)、2(中)、3(低)、4(弱)。高：周、月、季、半年趋势方向一致，整体看多；中：周、月、季、半年趋势方向不一致，但整体偏多；低：周、月、季、半年趋势方向不一致，但整体偏多；弱：周、月、季、半年趋势方向一致，整体看空 Y
+         com_stock(str)  行业轮动指标 Y
+         evd_v(str)  速度指标，衡量该个股股价变化的速度 Y
+         zt_sum_z(str)  极值，短期均线离差值 Y
+         wma250_z(str)  偏离指标，中期均线偏离度指标 Y
         
         """
         return super().query(fields, **kwargs)
@@ -127,7 +129,7 @@ class StockMx(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -152,22 +154,19 @@ class StockMx(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_mx with args: {}".format(kwargs))
-                res = self.tushare_query('stock_mx', fields=self.entity_fields, **kwargs)
-                res.to_sql('tushare_stock_mx',
-                           con=self.engine,
-                           if_exists='append',
-                           index=False,
-                           index_label=['ts_code'])
-                return res
+                return self.tushare_query('stock_mx', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
-        df = fetch_save(offset)
-        offset += df.shape[0]
-        while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
-            df = fetch_save(offset)
-            offset += df.shape[0]
-        return offset - init_offset
+        res = fetch_save(offset)
+        size = res.size()
+        offset += size
+        while kwargs['limit'] != "" and size == int(kwargs['limit']):
+            result = fetch_save(offset)
+            size = result.size()
+            offset += size
+            res.append(result)
+        return res
 
 
 setattr(StockMx, 'default_limit', default_limit_ext)
