@@ -203,5 +203,5 @@ if __name__ == '__main__':
     print(pro.monthly(ts_code='000001.SZ'))
 
     api = Monthly(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.monthly(ts_code='000001.SZ'))    # 数据查询接口

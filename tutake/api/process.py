@@ -83,7 +83,9 @@ class ProcessTask:
         return self
 
     def records_cnt(self):
-        if isinstance(self.records, Records):
+        if self.records is None:
+            return 0
+        elif isinstance(self.records, Records):
             return self.records.size()
         else:
             return self.records
@@ -229,7 +231,7 @@ class DataProcess:
                 task_logger.debug(
                     f"Finished {self.entities.__name__} process. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
         except Exception as err:
-            logging.error(err)
+            logging.exception(err)
         return status
 
     def _inner_process(self, process_params, fetch_and_append, status: ProcessStatus, writer: BatchWriter = None,

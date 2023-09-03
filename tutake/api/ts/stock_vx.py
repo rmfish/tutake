@@ -240,8 +240,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.stock_vx())
+    # print(pro.stock_vx())
 
     api = StockVx(config)
-    api.process()    # 同步增量数据
-    print(api.stock_vx())    # 数据查询接口
+    print(api.process())    # 同步增量数据
+    # print(api.stock_vx())    # 数据查询接口
