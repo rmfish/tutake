@@ -10,7 +10,7 @@ import pandas as pd
 from sqlalchemy import Integer, String, Float, Boolean, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import BaseDao, Base
+from tutake.api.base_dao import Base, BatchWriter, Records, BaseDao
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.xq.index_valuation_ext import *
 from tutake.api.xq.xueqiu_base import XueQiuBase
@@ -44,7 +44,10 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.engine = create_engine(config.get_data_sqlite_driver_url('xueqiu.db'),
+        self.table_name = "xueqiu_index_valuation"
+        self.database = 'xueqiu.db'
+        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.engine = create_engine(self.database_url,
                                     connect_args={
                                         'check_same_thread': False,
                                         'timeout': config.get_sqlite_timeout()
@@ -58,8 +61,8 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
             "ts_code", "trade_date", "name", "ttype", "pe", "pe_percentile", "peg", "pb_percentile", "pb", "roe",
             "yeild", "eva_type"
         ]
-        BaseDao.__init__(self, self.engine, session_factory, XueqiuIndexValuation, 'xueqiu.db',
-                         'xueqiu_index_valuation', query_fields, entity_fields, config)
+        BaseDao.__init__(self, self.engine, session_factory, XueqiuIndexValuation, self.database, self.table_name,
+                         query_fields, entity_fields, config)
         DataProcess.__init__(self, "index_valuation", config)
         XueQiuBase.__init__(self, "index_valuation", config)
 
@@ -147,7 +150,7 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
 
     def fetch_and_append(self, **kwargs):
         """
@@ -205,3 +208,4 @@ if __name__ == '__main__':
     api = IndexValuation(config)
     api.process()    # 同步增量数据
     print(api.index_valuation())    # 数据查询接口
+    print(api.sql("select distinct(trade_date) from {table}"))    # 数据查询接口

@@ -74,13 +74,19 @@ class ProcessTask:
         self.run_params = run_params
         return self
 
-    def stop(self, status=ProcessStatusEnum.SUCCESS, records: Records = None, err=None):
+    def stop(self, status=ProcessStatusEnum.SUCCESS, records=None, err=None):
         self.status = status
         self.records = records
         self.err = err
         if err is not None:
             self.status = ProcessStatusEnum.FAILED
         return self
+
+    def records_cnt(self):
+        if isinstance(self.records, Records):
+            return self.records.size()
+        else:
+            return self.records
 
     def is_success(self):
         return self.status == ProcessStatusEnum.SUCCESS
@@ -131,8 +137,7 @@ class ProcessStatus:
             self.skip = self.skip + 1
         else:
             self.task_cnt = self.task_cnt + 1
-        if task.records:
-            self.records_cnt = self.records_cnt + task.records.size()
+        self.records_cnt = self.records_cnt + task.records_cnt()
         self.percent.finish()
         if self.percent.is_step_percent():
             percent_logger.debug(

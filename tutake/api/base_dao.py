@@ -280,10 +280,11 @@ class BatchWriter:
             self.conn.close()
             self.conn = None
 
-    def add_records(self, records: Records):
-        self.records.append(records)
-        if self.records.size() > 500000:
-            self.flush()
+    def add_records(self, records):
+        if isinstance(records, Records):
+            self.records.append(records)
+            if self.records.size() > 500000:
+                self.flush()
 
     def flush(self):
         self.shared_resource_lock.acquire()
