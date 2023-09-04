@@ -1,9 +1,9 @@
 """
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
-Tushare monthly接口
-获取A股月线行情,全部历史，每月更新
-数据接口-沪深股票-行情数据-月线行情  https://tushare.pro/document/2?doc_id=145
+Tushare stk_limit接口
+获取全市场（包含A/B股和基金）每日涨跌停价格，包括涨停价格，跌停价格等，每个交易日8点40左右更新当日股票涨跌停价格。交易日9点更新
+数据接口-沪深股票-行情数据-每日涨跌停价格  https://tushare.pro/document/2?doc_id=183
 
 @author: rmfish
 """
@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import Base, BatchWriter, Records
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.monthly_ext import *
+from tutake.api.ts.stk_limit_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
@@ -22,23 +22,17 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareMonthly(Base):
-    __tablename__ = "tushare_monthly"
+class TushareStkLimit(Base):
+    __tablename__ = "tushare_stk_limit"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    ts_code = Column(String, index=True, comment='')
-    trade_date = Column(String, index=True, comment='')
-    close = Column(Float, comment='')
-    open = Column(Float, comment='')
-    high = Column(Float, comment='')
-    low = Column(Float, comment='')
-    pre_close = Column(Float, comment='')
-    change = Column(Float, comment='')
-    pct_chg = Column(Float, comment='')
-    vol = Column(Float, comment='')
-    amount = Column(Float, comment='')
+    trade_date = Column(String, index=True, comment='交易日期')
+    ts_code = Column(String, index=True, comment='TS股票代码')
+    pre_close = Column(Float, comment='昨日收盘价')
+    up_limit = Column(Float, comment='涨停价')
+    down_limit = Column(Float, comment='跌停价')
 
 
-class Monthly(TushareDAO, TuShareBase, DataProcess):
+class StkLimit(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -47,8 +41,8 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.table_name = "tushare_monthly"
-        self.database = 'tushare_monthly.db'
+        self.table_name = "tushare_stk_limit"
+        self.database = 'tushare_stk.db'
         self.database_url = config.get_data_sqlite_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -57,88 +51,56 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
                                            })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
-        TushareMonthly.__table__.create(bind=self.engine, checkfirst=True)
+        TushareStkLimit.__table__.create(bind=self.engine, checkfirst=True)
 
-        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
-        entity_fields = [
-            "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
-        ]
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMonthly, self.database, self.table_name,
+        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
+        entity_fields = ["trade_date", "ts_code", "pre_close", "up_limit", "down_limit"]
+        TushareDAO.__init__(self, self.engine, session_factory, TushareStkLimit, self.database, self.table_name,
                             query_fields, entity_fields, config)
-        DataProcess.__init__(self, "monthly", config)
-        TuShareBase.__init__(self, "monthly", config, 600)
+        DataProcess.__init__(self, "stk_limit", config)
+        TuShareBase.__init__(self, "stk_limit", config, 2000)
         self.api = TushareAPI(config)
 
     def columns_meta(self):
         return [{
-            "name": "ts_code",
-            "type": "String",
-            "comment": ""
-        }, {
             "name": "trade_date",
             "type": "String",
-            "comment": ""
+            "comment": "交易日期"
         }, {
-            "name": "close",
-            "type": "Float",
-            "comment": ""
-        }, {
-            "name": "open",
-            "type": "Float",
-            "comment": ""
-        }, {
-            "name": "high",
-            "type": "Float",
-            "comment": ""
-        }, {
-            "name": "low",
-            "type": "Float",
-            "comment": ""
+            "name": "ts_code",
+            "type": "String",
+            "comment": "TS股票代码"
         }, {
             "name": "pre_close",
             "type": "Float",
-            "comment": ""
+            "comment": "昨日收盘价"
         }, {
-            "name": "change",
+            "name": "up_limit",
             "type": "Float",
-            "comment": ""
+            "comment": "涨停价"
         }, {
-            "name": "pct_chg",
+            "name": "down_limit",
             "type": "Float",
-            "comment": ""
-        }, {
-            "name": "vol",
-            "type": "Float",
-            "comment": ""
-        }, {
-            "name": "amount",
-            "type": "Float",
-            "comment": ""
+            "comment": "跌停价"
         }]
 
-    def monthly(self, fields='', **kwargs):
+    def stk_limit(self, fields='trade_date,ts_code,up_limit,down_limit', **kwargs):
         """
-        获取A股月线行情,全部历史，每月更新
+        获取全市场（包含A/B股和基金）每日涨跌停价格，包括涨停价格，跌停价格等，每个交易日8点40左右更新当日股票涨跌停价格。交易日9点更新
         | Arguments:
-        | ts_code(str):   TS代码
+        | ts_code(str):   股票代码
         | trade_date(str):   交易日期
         | start_date(str):   开始日期
         | end_date(str):   结束日期
-        | limit(int):   单次返回数据长度
-        | offset(int):   请求数据的开始位移量
+        | offset(int):   开始行数
+        | limit(int):   每页最大条数
         
         :return: DataFrame
-         ts_code(str)   Y
-         trade_date(str)   Y
-         close(float)   Y
-         open(float)   Y
-         high(float)   Y
-         low(float)   Y
-         pre_close(float)   Y
-         change(float)   Y
-         pct_chg(float)   Y
-         vol(float)   Y
-         amount(float)   Y
+         trade_date(str)  交易日期 Y
+         ts_code(str)  TS股票代码 Y
+         pre_close(float)  昨日收盘价 N
+         up_limit(float)  涨停价 Y
+         down_limit(float)  跌停价 Y
         
         """
         return super().query(fields, **kwargs)
@@ -155,7 +117,7 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         获取tushare数据并append到数据库中
         :return: 数量行数
         """
-        init_args = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+        init_args = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -172,8 +134,8 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         def fetch_save(offset_val=0):
             try:
                 kwargs['offset'] = str(offset_val)
-                self.logger.debug("Invoke pro.monthly with args: {}".format(kwargs))
-                return self.tushare_query('monthly', fields=self.entity_fields, **kwargs)
+                self.logger.debug("Invoke pro.stk_limit with args: {}".format(kwargs))
+                return self.tushare_query('stk_limit', fields=self.entity_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -188,20 +150,20 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(Monthly, 'default_limit', default_limit_ext)
-setattr(Monthly, 'default_cron_express', default_cron_express_ext)
-setattr(Monthly, 'default_order_by', default_order_by_ext)
-setattr(Monthly, 'prepare', prepare_ext)
-setattr(Monthly, 'query_parameters', query_parameters_ext)
-setattr(Monthly, 'param_loop_process', param_loop_process_ext)
+setattr(StkLimit, 'default_limit', default_limit_ext)
+setattr(StkLimit, 'default_cron_express', default_cron_express_ext)
+setattr(StkLimit, 'default_order_by', default_order_by_ext)
+setattr(StkLimit, 'prepare', prepare_ext)
+setattr(StkLimit, 'query_parameters', query_parameters_ext)
+setattr(StkLimit, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.monthly(ts_code='000001.SZ'))
+    print(pro.stk_limit())
 
-    api = Monthly(config)
+    api = StkLimit(config)
     api.process()    # 同步增量数据
-    print(api.monthly(ts_code='000001.SZ'))    # 数据查询接口
+    print(api.stk_limit())    # 数据查询接口

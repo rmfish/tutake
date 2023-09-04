@@ -87,18 +87,21 @@ def start_end_step_params(self, start_date: str = "19990104", step=7, date_col='
     return dates
 
 
-def quarter_params(self, start_period: str = "19901231", date_col="f_ann_date"):
+def quarter_params(self, start_period: str = "19901231", date_col="f_ann_date", query_period_col=None):
     """
     基于财报的相关数据，主要使用end_date（财报季），f_ann_date（发表日）数据查询相关的数据
     :param date_col:
     :param start_period: 最早的财报季
+    :param query_period_col: 查询报告期字段
     :param self:
     :return:
     """
     params = []
     str_format = "YYYYMMDD"
     start_record_period = pendulum.parse(start_period)  # 最早的数据记录
-    max_period = self.max("end_date")
+    max_period = self.max(date_col)
+    if query_period_col is None:
+        query_period_col = date_col
     if max_period is None or pendulum.now().diff(
             pendulum.parse(max_period), abs=False).in_months() > 3:
         min_period = self.min("end_date", condition="end_date is not null")
@@ -110,12 +113,16 @@ def quarter_params(self, start_period: str = "19901231", date_col="f_ann_date"):
             params.append({"period": period.format(str_format)})
             period = period.add(months=-3).last_of("quarter")
     else:
-        max_f_ann_date = self.max(date_col)
-        if max_f_ann_date is not None:
-            period = pendulum.parse(max_f_ann_date).add(days=1)
+        if max_period is not None:
+            period = pendulum.parse(max_period).add(months=3)
         else:
             period = start_record_period
         while period.diff(pendulum.now(), False).in_days() > 0:
-            params.append({date_col: period.format(str_format)})
-            period = period.add(days=1)
+            params.append({query_period_col: period.format(str_format)})
+            period = period.add(months=3)
     return params
+
+
+def get_latest_quarter(self):
+    last_quarter_day = pendulum.now().last_of("quarter").add(months=-3).last_of("quarter")
+    return last_quarter_day.format("YYYYMMDD")

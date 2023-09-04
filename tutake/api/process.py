@@ -211,6 +211,13 @@ class DataProcess:
         """
         return params
 
+    def support_manual(self):
+        """
+        是否支持手动启动，部分的任务执行c
+        :return:
+        """
+        return True
+
     def _process(self, fetch_and_append, writer: BatchWriter = None) -> ProcessStatus:
         """
         同步历史数据

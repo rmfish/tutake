@@ -47,7 +47,7 @@ class TushareDAO(BaseDao):
             return 'start_date', 'end_date', self.entities.end_date
         elif self.table_name == 'tushare_fund_nav':
             return 'start_date', 'end_date', self.entities.nav_date
-        elif self.table_name in ['tushare_stk_managers', 'tushare_namechange', 'tushare_anns']:
+        elif self.table_name in ['tushare_stk_managers', 'tushare_namechange', 'tushare_anns', 'tushare_fina_audit']:
             return 'start_date', 'end_date', self.entities.ann_date
         elif self.table_name in ['tushare_cn_cpi', 'tushare_cn_m', 'tushare_cn_ppi', 'tushare_sf_month']:
             return 'start_m', 'end_m', self.entities.month

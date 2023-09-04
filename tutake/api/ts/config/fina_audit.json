@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_report",
     "default_limit": null,
     "desc": "获取上市公司定期财务审计意见数据",
     "id": 80,
@@ -48,7 +48,7 @@
             "name": "offset"
         }
     ],
-    "integral_required": 2000,
+    "integral_required": 500,
     "is_ready": null,
     "name": "fina_audit",
     "order_by": null,

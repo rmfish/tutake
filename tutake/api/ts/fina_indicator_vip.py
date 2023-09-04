@@ -247,7 +247,7 @@ class FinaIndicatorVip(TushareDAO, TuShareBase, DataProcess):
         TushareDAO.__init__(self, self.engine, session_factory, TushareFinaIndicatorVip, self.database, self.table_name,
                             query_fields, entity_fields, config)
         DataProcess.__init__(self, "fina_indicator_vip", config)
-        TuShareBase.__init__(self, "fina_indicator_vip", config, 5000)
+        TuShareBase.__init__(self, "fina_indicator_vip", config, 2000)
         self.api = TushareAPI(config)
 
     def columns_meta(self):

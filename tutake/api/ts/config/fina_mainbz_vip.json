@@ -54,9 +54,9 @@
             "name": "offset"
         }
     ],
-    "integral_required": 2000,
+    "integral_required": 5000,
     "is_ready": null,
-    "name": "fina_mainbz",
+    "name": "fina_mainbz_vip",
     "order_by": null,
     "outputs": [
         {

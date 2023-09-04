@@ -208,4 +208,3 @@ if __name__ == '__main__':
     api = IndexValuation(config)
     api.process()    # 同步增量数据
     print(api.index_valuation())    # 数据查询接口
-    print(api.sql("select distinct(trade_date) from {table}"))    # 数据查询接口
