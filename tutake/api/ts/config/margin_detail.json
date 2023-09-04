@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_stock_market",
     "default_limit": null,
     "desc": "获取沪深两市每日融资融券明细,数据开始于2010年，每日9点更新",
     "id": 59,

@@ -4,6 +4,7 @@
     "desc": "获取上市公司前十大股东数据，包括持有数量和比例等信息。",
     "id": 61,
     "if_exists": null,
+    "integral_required": 5000,
     "inputs": [
         {
             "data_type": "str",

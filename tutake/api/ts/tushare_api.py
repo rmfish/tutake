@@ -26,11 +26,12 @@ class TushareAPI(object):
             'new_share', 'monthly', 'moneyflow', 'adj_factor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10',
             'ggt_monthly', 'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
             'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'stk_limit', 'fina_audit',
-            'fina_mainbz_vip', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav', 'fund_portfolio',
-            'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic', 'index_daily',
-            'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global', 'index_weekly',
-            'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info', 'cn_cpi', 'cn_gdp', 'cn_m', 'cn_ppi',
-            'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr'
+            'fina_mainbz_vip', 'margin', 'margin_detail', 'margin_target', 'top10_holders', 'top10_floatholders',
+            'top_list', 'top_inst', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
+            'fund_portfolio', 'fund_sales_ratio', 'fund_sales_vol', 'fund_share', 'fund_daily', 'index_basic',
+            'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index', 'index_global',
+            'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info', 'cn_cpi', 'cn_gdp', 'cn_m',
+            'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr'
         ]
         apis.extend(['daily_full'])
         return apis
@@ -194,6 +195,34 @@ class TushareAPI(object):
         if name == 'fina_mainbz_vip':
             fina_mainbz_vip_module = import_module("tutake.api.ts.fina_mainbz_vip")
             clazz = getattr(fina_mainbz_vip_module, "FinaMainbzVip")
+            return clazz(config)
+        if name == 'margin':
+            margin_module = import_module("tutake.api.ts.margin")
+            clazz = getattr(margin_module, "Margin")
+            return clazz(config)
+        if name == 'margin_detail':
+            margin_detail_module = import_module("tutake.api.ts.margin_detail")
+            clazz = getattr(margin_detail_module, "MarginDetail")
+            return clazz(config)
+        if name == 'margin_target':
+            margin_target_module = import_module("tutake.api.ts.margin_target")
+            clazz = getattr(margin_target_module, "MarginTarget")
+            return clazz(config)
+        if name == 'top10_holders':
+            top10_holders_module = import_module("tutake.api.ts.top10_holders")
+            clazz = getattr(top10_holders_module, "Top10Holders")
+            return clazz(config)
+        if name == 'top10_floatholders':
+            top10_floatholders_module = import_module("tutake.api.ts.top10_floatholders")
+            clazz = getattr(top10_floatholders_module, "Top10Floatholders")
+            return clazz(config)
+        if name == 'top_list':
+            top_list_module = import_module("tutake.api.ts.top_list")
+            clazz = getattr(top_list_module, "TopList")
+            return clazz(config)
+        if name == 'top_inst':
+            top_inst_module = import_module("tutake.api.ts.top_inst")
+            clazz = getattr(top_inst_module, "TopInst")
             return clazz(config)
         if name == 'fund_adj':
             fund_adj_module = import_module("tutake.api.ts.fund_adj")

@@ -87,6 +87,7 @@ TUTAKE_PROCESS_THREAD_CNT_KEY = 'tutake.process.thread_cnt'
 TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logger.config_file'
 TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
 TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY = 'tutake.sqlite.timeout'
+TUTAKE_PROCESS_FORBIDDEN_CONFIG_KEY = 'tutake.process.forbidden'
 
 
 class TutakeConfig(object):
@@ -207,6 +208,9 @@ class TutakeConfig(object):
         #     port = url_parts.port
         #     return (hostname, port)
         # return None
+
+    def get_process_forbidden(self):
+        return self.get_config(TUTAKE_PROCESS_FORBIDDEN_CONFIG_KEY)
 
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)

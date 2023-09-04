@@ -1,9 +1,10 @@
 {
-    "database": null,
+    "database": "tushare_stock_market",
     "default_limit": "10000",
     "desc": "龙虎榜每日交易明细,数据开始于2005年，每日晚8点更新",
     "id": 106,
     "if_exists": null,
+    "integral_required": 2000,
     "inputs": [
         {
             "data_type": "str",
@@ -30,7 +31,6 @@
             "name": "offset"
         }
     ],
-    "integral_required": 600,
     "is_ready": null,
     "name": "top_list",
     "order_by": null,

@@ -1,7 +1,6 @@
 import logging
 import time
 from collections.abc import Sequence
-from datetime import datetime, timedelta
 from functools import partial
 
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -9,7 +8,6 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
 
 from tutake.api.process import ProcessStatus
-# from tutake.api.process_report import ProcessReportContainer, ProcessReport
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.utils.config import TutakeConfig
@@ -35,8 +33,9 @@ class TushareProcessTask:
         self.config = config
         self.started_cnt = 0
 
-    def _config_schedule_tasks(self):
+    def _api_schedule_config(self):
         """
+        获取所有api的schedule配置
             *    *    *    *    *
             -    -    -    -    -
             |    |    |    |    |
@@ -53,27 +52,47 @@ class TushareProcessTask:
             configs = {**configs, **i}
         default_cron = configs.get('default') or "10 0,6,21 * * *"
         tasks = self._get_all_task()
-        default_schedule = []
+        api_crontabs = []
+        api_schedule = {'default_cron': default_cron, 'apis': api_crontabs}
         for task in tasks:
             cron = ""
+            skip = False
             if task:
                 cron = task.default_cron_express()
             if task.name in configs.keys():
                 cron = configs.get(task.name)
                 if cron is None:  # 配置cron为空的代表跳过不执行
-                    continue
+                    skip = True
             elif task.type in configs.keys():
                 cron = configs.get(task.type)
                 if cron is None:  # 配置cron为空的代表跳过不执行
-                    continue
+                    skip = True
 
-            if cron:
-                self.add_job(f"tutake_{task.name}", task,
-                             trigger=CronTrigger.from_crontab(cron, timezone=self.timezone))
+            if cron is not None and cron != '':
+                api_crontabs.append(
+                    {'api': task.name, 'task': task, 'cron': cron, 'skip': skip, 'group': "seperator"})
             else:
-                default_schedule.append(task)
-        if len(default_schedule) > 0:
-            self.add_job("default_schedule", default_schedule,
+                api_crontabs.append(
+                    {'api': task.name, 'task': task, 'cron': default_cron, 'skip': skip, 'group': "default"})
+        return api_schedule
+
+    def _api_to_jobs(self, schedule_configs):
+        """
+        将api添加到任务中
+        :return:
+        """
+        default_cron = schedule_configs.get('default_cron')
+        api_crontabs = schedule_configs.get('apis')
+        default_crontabs = []
+        for cron in api_crontabs:
+            if not cron["skip"]:
+                if cron["group"] == 'default':
+                    default_crontabs.append(cron['task'])
+                else:
+                    self.add_job(f"tutake_{cron['api']}", cron['task'],
+                                 trigger=CronTrigger.from_crontab(cron['cron'], timezone=self.timezone))
+        if len(default_crontabs) > 0:
+            self.add_job("default_schedule", default_crontabs,
                          trigger=CronTrigger.from_crontab(default_cron, timezone=self.timezone))
 
     def _get_all_task(self) -> [Task]:
@@ -86,13 +105,10 @@ class TushareProcessTask:
             apis.append(xq_api.instance_from_name(i, self.config))
         return apis
 
-    # def _finish_task_report(self, job_id, report: ProcessReport):
-    # self.report_container.save_report(report)
-
-    def _do_process(self, tasks):
+    def _do_process(self, tasks, entrypoint="scheduler"):
         def __process(_job_id, _task) -> ProcessStatus:
             if _task is not None:
-                return _task.process()
+                return _task.process(entrypoint=entrypoint)
             else:
                 return None
 
@@ -122,20 +138,14 @@ class TushareProcessTask:
 
     def start(self, now=False):
         try:
-            self._config_schedule_tasks()
+            schedule_configs = self._api_schedule_config()
             if now:
-                high_priority_job = [job for job in self._scheduler.get_jobs() if job.id != 'default_schedule']
-                default_job = [job for job in self._scheduler.get_jobs() if job.id == 'default_schedule']
-                for job in high_priority_job:
-                    job.modify(next_run_time=datetime.now())
-                for job in default_job:
-                    job.modify(next_run_time=datetime.now() + timedelta(seconds=5))
+                tasks = [api['task'] for api in schedule_configs.get('apis') if not api['skip']]
+                self._do_process(tasks, "manual")
+            self._api_to_jobs(schedule_configs)
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:
             self.logger.error(f"Exit with {type(err).__name__} {err}")
-
-    # def __getattr__(self, name):
-    #     return partial(self.add_job, name)
 
 
 class TushareProcess:

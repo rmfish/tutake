@@ -116,12 +116,12 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -176,5 +176,5 @@ if __name__ == '__main__':
     print(pro.moneyflow_hsgt(trade_date='20221118'))
 
     api = MoneyflowHsgt(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.moneyflow_hsgt(trade_date='20221118'))    # 数据查询接口
