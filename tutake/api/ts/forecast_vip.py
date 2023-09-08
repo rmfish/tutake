@@ -62,12 +62,17 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
         TushareForecastVip.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'type', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
+            "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
+        ]
         entity_fields = [
             "ts_code", "ann_date", "end_date", "type", "p_change_min", "p_change_max", "net_profit_min",
             "net_profit_max", "last_parent_net", "notice_times", "first_ann_date", "summary", "change_reason"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareForecastVip, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "forecast_vip", config)
         TuShareBase.__init__(self, "forecast_vip", config, 5000)
         self.api = TushareAPI(config)
@@ -200,7 +205,7 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.forecast_vip with args: {}".format(kwargs))
-                return self.tushare_query('forecast_vip', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('forecast_vip', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -212,6 +217,7 @@ class ForecastVip(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

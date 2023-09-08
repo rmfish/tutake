@@ -1,28 +1,6 @@
 import pendulum
 
 
-def daily_params_loop(self, **params):
-    """
-    每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
-    """
-    from datetime import datetime, timedelta
-    date_format = '%Y%m%d'
-    if params.get("ts_code"):
-        max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
-        if max_date is None:
-            params['start_date'] = ""
-        elif max_date == datetime.now().strftime(date_format):
-            # 如果已经是最新时间
-            return None
-        else:
-            max_date = datetime.strptime(max_date, date_format)
-            start_date = max_date + timedelta(days=1)
-            params['start_date'] = start_date.strftime(date_format)
-        return params
-    else:
-        return params
-
-
 def day_by_day_params(self, start_date, date_column="ann_date"):
     params = []
     start_date = pendulum.parse(start_date)
@@ -57,22 +35,19 @@ def m_by_m_params(self, start_date, end_of_month=True, date_column="trade_date")
     return params
 
 
-def q_by_q_params(self, start_date, date_column="ann_date"):
-    params = []
-    start_date = pendulum.parse(start_date)
-    end_date = pendulum.now()
-    max_date = self.max(date_column)
-    if max_date:
-        max_date = pendulum.parse(max_date)
-    else:
-        max_date = start_date
-    while max_date.diff(end_date, abs=False).days > 0:
-        max_date = max_date.add(days=1)
-        params.append({date_column: max_date.format("YYYYMMDD")})
-    return params
-
-
 def start_end_step_params(self, start_date: str = "19990104", step=7, date_col='trade_date'):
+    """
+    Build the start_date to end_date params array with day step. e.g.
+    [{"start_date":"20130101","end_date":"20130201"},{"start_date":"20130201","end_date":"20130301"}]
+    The duration of from start_date to end_date is config by the input param of 'step'
+    The actual start_date is determined by start_date param and the time saved in database. If it exists in the database
+    use the max value plus one day as the start_date,else use the input param of 'start_data'
+    :param self:
+    :param start_date: start date
+    :param step: step of day
+    :param date_col: the time col name in database
+    :return:
+    """
     date_format = 'YYYYMMDD'
     start_date = pendulum.parse(start_date)
     dates = []
@@ -124,5 +99,10 @@ def quarter_params(self, start_period: str = "19901231", date_col="f_ann_date", 
 
 
 def get_latest_quarter(self):
+    """
+    
+    :param self:
+    :return:
+    """
     last_quarter_day = pendulum.now().last_of("quarter").add(months=-3).last_of("quarter")
     return last_quarter_day.format("YYYYMMDD")

@@ -66,12 +66,17 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
         TushareGgtTop10.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market_type', 'limit', 'offset']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
+            "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "name", "close", "p_change", "rank", "market_type", "amount", "net_amount",
             "sh_amount", "sh_net_amount", "sh_buy", "sh_sell", "sz_amount", "sz_net_amount", "sz_buy", "sz_sell"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareGgtTop10, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "ggt_top10", config)
         TuShareBase.__init__(self, "ggt_top10", config, 5000)
         self.api = TushareAPI(config)
@@ -219,7 +224,7 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ggt_top10 with args: {}".format(kwargs))
-                return self.tushare_query('ggt_top10', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('ggt_top10', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -231,6 +236,7 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

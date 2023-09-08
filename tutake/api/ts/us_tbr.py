@@ -60,11 +60,15 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
         TushareUsTbr.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['date', 'start_date', 'end_date', 'fields', 'limit', 'offset']
+        self.tushare_fields = [
+            "date", "w4_bd", "w4_ce", "w8_bd", "w8_ce", "w13_bd", "w13_ce", "w26_bd", "w26_ce", "w52_bd", "w52_ce"
+        ]
         entity_fields = [
             "date", "w4_bd", "w4_ce", "w8_bd", "w8_ce", "w13_bd", "w13_ce", "w26_bd", "w26_ce", "w52_bd", "w52_ce"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareUsTbr, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "us_tbr", config)
         TuShareBase.__init__(self, "us_tbr", config, 120)
         self.api = TushareAPI(config)
@@ -173,7 +177,7 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.us_tbr with args: {}".format(kwargs))
-                return self.tushare_query('us_tbr', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('us_tbr', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -185,6 +189,7 @@ class UsTbr(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

@@ -58,9 +58,11 @@ class Margin(TushareDAO, TuShareBase, DataProcess):
         TushareMargin.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'exchange_id', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["trade_date", "exchange_id", "rzye", "rzmre", "rzche", "rqye", "rqmcl", "rzrqye", "rqyl"]
         entity_fields = ["trade_date", "exchange_id", "rzye", "rzmre", "rzche", "rqye", "rqmcl", "rzrqye", "rqyl"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareMargin, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "margin", config)
         TuShareBase.__init__(self, "margin", config, 600)
         self.api = TushareAPI(config)
@@ -159,7 +161,7 @@ class Margin(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.margin with args: {}".format(kwargs))
-                return self.tushare_query('margin', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('margin', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -171,6 +173,7 @@ class Margin(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -182,11 +185,11 @@ setattr(Margin, 'query_parameters', query_parameters_ext)
 setattr(Margin, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.margin(start_date='20100101', end_date="20100331"))
+    print(pro.margin())
 
     api = Margin(config)
     print(api.process())    # 同步增量数据

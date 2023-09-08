@@ -178,7 +178,7 @@ class DataProcess:
     def __init__(self, name, config):
         self.name = name
         self.config = config
-        self.max_repeat = config.get_config("tutake.process.max_repeat", 3)
+        self.max_repeat = config.get_config("tutake.process.max_repeat", 5)
         self.forbidden_config = config.get_process_forbidden()
 
     def name(self):

@@ -1,9 +1,10 @@
 {
-    "database": null,
+    "database": "tushare_stock",
     "default_limit": null,
     "desc": "获取中央结算系统持股汇总数据，覆盖全部历史数据，根据交易所披露时间，当日数据在下一交易日早上9点前完成入库",
     "id": 295,
     "if_exists": null,
+    "integral_required": 5000,
     "inputs": [
         {
             "data_type": "str",
@@ -55,7 +56,7 @@
             "name": "offset"
         }
     ],
-    "is_ready": null,
+    "is_ready": true,
     "name": "ccass_hold",
     "order_by": null,
     "outputs": [

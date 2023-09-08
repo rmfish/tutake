@@ -19,9 +19,9 @@ def create_shared_engine(url: str, **connect_args):
 class TushareDAO(BaseDao):
 
     def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
-                 entity_fields,
-                 config: TutakeConfig):
-        super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields, config)
+                 entity_fields, column_mapping, config: TutakeConfig):
+        super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields,
+                         column_mapping, config)
         self.records = Records()
 
     def filter_process(self, filter_criterion, filter_by):

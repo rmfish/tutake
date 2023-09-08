@@ -64,12 +64,17 @@ class TopList(TushareDAO, TuShareBase, DataProcess):
         TushareTopList.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'ts_code', 'limit', 'offset']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "name", "close", "pct_change", "turnover_rate", "amount", "l_sell", "l_buy",
+            "l_amount", "net_amount", "net_rate", "amount_rate", "float_values", "reason"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "name", "close", "pct_change", "turnover_rate", "amount", "l_sell", "l_buy",
             "l_amount", "net_amount", "net_rate", "amount_rate", "float_values", "reason"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareTopList, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "top_list", config)
         TuShareBase.__init__(self, "top_list", config, 2000)
         self.api = TushareAPI(config)
@@ -196,7 +201,7 @@ class TopList(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.top_list with args: {}".format(kwargs))
-                return self.tushare_query('top_list', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('top_list', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -208,6 +213,7 @@ class TopList(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -223,7 +229,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.top_list())
+    print(pro.top_list())
 
     api = TopList(config)
     print(api.process())    # 同步增量数据

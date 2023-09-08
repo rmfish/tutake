@@ -21,10 +21,11 @@ class TushareAPI(object):
 
     def all_apis(self):
         apis = [
-            'stock_company', 'stk_rewards', 'hs_const', 'stk_managers', 'moneyflow_hsgt', 'namechange', 'stock_vx',
-            'bak_daily', 'suspend_d', 'daily', 'weekly', 'stock_mx', 'bak_basic', 'stock_basic', 'fund_basic',
-            'new_share', 'monthly', 'moneyflow', 'adj_factor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10',
-            'ggt_monthly', 'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
+            'stock_company', 'hk_hold', 'stk_rewards', 'hs_const', 'report_rc', 'stk_managers', 'moneyflow_hsgt',
+            'namechange', 'ccass_hold', 'stock_vx', 'bak_daily', 'suspend_d', 'daily', 'weekly', 'stock_mx',
+            'bak_basic', 'stock_basic', 'ccass_hold_detail', 'fund_basic', 'limit_list_d', 'new_share', 'monthly',
+            'moneyflow', 'adj_factor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly',
+            'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
             'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'stk_limit', 'fina_audit',
             'fina_mainbz_vip', 'margin', 'margin_detail', 'margin_target', 'top10_holders', 'top10_floatholders',
             'top_list', 'top_inst', 'fund_adj', 'fund_company', 'fund_div', 'fund_manager', 'fund_nav',
@@ -48,6 +49,10 @@ class TushareAPI(object):
             stock_company_module = import_module("tutake.api.ts.stock_company")
             clazz = getattr(stock_company_module, "StockCompany")
             return clazz(config)
+        if name == 'hk_hold':
+            hk_hold_module = import_module("tutake.api.ts.hk_hold")
+            clazz = getattr(hk_hold_module, "HkHold")
+            return clazz(config)
         if name == 'stk_rewards':
             stk_rewards_module = import_module("tutake.api.ts.stk_rewards")
             clazz = getattr(stk_rewards_module, "StkRewards")
@@ -55,6 +60,10 @@ class TushareAPI(object):
         if name == 'hs_const':
             hs_const_module = import_module("tutake.api.ts.hs_const")
             clazz = getattr(hs_const_module, "HsConst")
+            return clazz(config)
+        if name == 'report_rc':
+            report_rc_module = import_module("tutake.api.ts.report_rc")
+            clazz = getattr(report_rc_module, "ReportRc")
             return clazz(config)
         if name == 'stk_managers':
             stk_managers_module = import_module("tutake.api.ts.stk_managers")
@@ -67,6 +76,10 @@ class TushareAPI(object):
         if name == 'namechange':
             namechange_module = import_module("tutake.api.ts.namechange")
             clazz = getattr(namechange_module, "Namechange")
+            return clazz(config)
+        if name == 'ccass_hold':
+            ccass_hold_module = import_module("tutake.api.ts.ccass_hold")
+            clazz = getattr(ccass_hold_module, "CcassHold")
             return clazz(config)
         if name == 'stock_vx':
             stock_vx_module = import_module("tutake.api.ts.stock_vx")
@@ -100,9 +113,17 @@ class TushareAPI(object):
             stock_basic_module = import_module("tutake.api.ts.stock_basic")
             clazz = getattr(stock_basic_module, "StockBasic")
             return clazz(config)
+        if name == 'ccass_hold_detail':
+            ccass_hold_detail_module = import_module("tutake.api.ts.ccass_hold_detail")
+            clazz = getattr(ccass_hold_detail_module, "CcassHoldDetail")
+            return clazz(config)
         if name == 'fund_basic':
             fund_basic_module = import_module("tutake.api.ts.fund_basic")
             clazz = getattr(fund_basic_module, "FundBasic")
+            return clazz(config)
+        if name == 'limit_list_d':
+            limit_list_d_module = import_module("tutake.api.ts.limit_list_d")
+            clazz = getattr(limit_list_d_module, "LimitListD")
             return clazz(config)
         if name == 'new_share':
             new_share_module = import_module("tutake.api.ts.new_share")

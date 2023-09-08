@@ -1,9 +1,9 @@
 """
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
-Tushare hsgt_top10接口
-获取沪股通、深股通每日前十大成交股数据
-数据接口-沪深股票-行情数据-沪深股通十大成交股  https://tushare.pro/document/2?doc_id=48
+Tushare ccass_hold_detail接口
+获取中央结算系统机构席位持股明细，数据覆盖全历史，根据交易所披露时间，当日数据在下一交易日早上9点前完成
+数据接口-沪深股票-特色数据-中央结算系统持股明细  https://tushare.pro/document/2?doc_id=274
 
 @author: rmfish
 """
@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import Base, BatchWriter, Records
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.hsgt_top10_ext import *
+from tutake.api.ts.ccass_hold_detail_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
@@ -22,23 +22,19 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareHsgtTop10(Base):
-    __tablename__ = "tushare_hsgt_top10"
+class TushareCcassHoldDetail(Base):
+    __tablename__ = "tushare_ccass_hold_detail"
     id = Column(Integer, primary_key=True, autoincrement=True)
     trade_date = Column(String, index=True, comment='交易日期')
-    ts_code = Column(String, index=True, comment='股票代码')
+    ts_code = Column(String, index=True, comment='股票代号')
     name = Column(String, comment='股票名称')
-    close = Column(Float, comment='收盘价')
-    change = Column(Float, comment='涨跌幅')
-    rank = Column(String, comment='资金排名')
-    market_type = Column(String, index=True, comment='市场类型（1：沪市 3：深市）')
-    amount = Column(Float, comment='成交金额')
-    net_amount = Column(Float, comment='净成交金额')
-    buy = Column(Float, comment='买入金额')
-    sell = Column(Float, comment='卖出金额')
+    col_participant_id = Column(String, comment='参与者编号')
+    col_participant_name = Column(String, comment='机构名称')
+    col_shareholding = Column(String, comment='持股量(股)')
+    col_shareholding_percent = Column(String, comment='占已发行股份/权证/单位百分比(%)')
 
 
-class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
+class CcassHoldDetail(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -47,8 +43,8 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.table_name = "tushare_hsgt_top10"
-        self.database = 'tushare_hsgt_top10.db'
+        self.table_name = "tushare_ccass_hold_detail"
+        self.database = 'tushare_stock.db'
         self.database_url = config.get_data_sqlite_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -57,22 +53,22 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
                                            })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
-        TushareHsgtTop10.__table__.create(bind=self.engine, checkfirst=True)
+        TushareCcassHoldDetail.__table__.create(bind=self.engine, checkfirst=True)
 
-        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'market_type', 'limit', 'offset']
+        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'hk_code', 'limit', 'offset']
         self.tushare_fields = [
-            "trade_date", "ts_code", "name", "close", "change", "rank", "market_type", "amount", "net_amount", "buy",
-            "sell"
+            "trade_date", "ts_code", "name", "col_participant_id", "col_participant_name", "col_shareholding",
+            "col_shareholding_percent"
         ]
         entity_fields = [
-            "trade_date", "ts_code", "name", "close", "change", "rank", "market_type", "amount", "net_amount", "buy",
-            "sell"
+            "trade_date", "ts_code", "name", "col_participant_id", "col_participant_name", "col_shareholding",
+            "col_shareholding_percent"
         ]
         column_mapping = None
-        TushareDAO.__init__(self, self.engine, session_factory, TushareHsgtTop10, self.database, self.table_name,
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCcassHoldDetail, self.database, self.table_name,
                             query_fields, entity_fields, column_mapping, config)
-        DataProcess.__init__(self, "hsgt_top10", config)
-        TuShareBase.__init__(self, "hsgt_top10", config, 120)
+        DataProcess.__init__(self, "ccass_hold_detail", config)
+        TuShareBase.__init__(self, "ccass_hold_detail", config, 5000)
         self.api = TushareAPI(config)
 
     def columns_meta(self):
@@ -83,69 +79,49 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
         }, {
             "name": "ts_code",
             "type": "String",
-            "comment": "股票代码"
+            "comment": "股票代号"
         }, {
             "name": "name",
             "type": "String",
             "comment": "股票名称"
         }, {
-            "name": "close",
-            "type": "Float",
-            "comment": "收盘价"
-        }, {
-            "name": "change",
-            "type": "Float",
-            "comment": "涨跌幅"
-        }, {
-            "name": "rank",
+            "name": "col_participant_id",
             "type": "String",
-            "comment": "资金排名"
+            "comment": "参与者编号"
         }, {
-            "name": "market_type",
+            "name": "col_participant_name",
             "type": "String",
-            "comment": "市场类型（1：沪市 3：深市）"
+            "comment": "机构名称"
         }, {
-            "name": "amount",
-            "type": "Float",
-            "comment": "成交金额"
+            "name": "col_shareholding",
+            "type": "String",
+            "comment": "持股量(股)"
         }, {
-            "name": "net_amount",
-            "type": "Float",
-            "comment": "净成交金额"
-        }, {
-            "name": "buy",
-            "type": "Float",
-            "comment": "买入金额"
-        }, {
-            "name": "sell",
-            "type": "Float",
-            "comment": "卖出金额"
+            "name": "col_shareholding_percent",
+            "type": "String",
+            "comment": "占已发行股份/权证/单位百分比(%)"
         }]
 
-    def hsgt_top10(self, fields='', **kwargs):
+    def ccass_hold_detail(self, fields='', **kwargs):
         """
-        获取沪股通、深股通每日前十大成交股数据
+        获取中央结算系统机构席位持股明细，数据覆盖全历史，根据交易所披露时间，当日数据在下一交易日早上9点前完成
         | Arguments:
         | ts_code(str):   股票代码
         | trade_date(str):   交易日期
         | start_date(str):   开始日期
         | end_date(str):   结束日期
-        | market_type(str):   市场类型（1：沪市 3：深市）
+        | hk_code(str):   港交所股份代码
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
          trade_date(str)  交易日期 Y
-         ts_code(str)  股票代码 Y
+         ts_code(str)  股票代号 Y
          name(str)  股票名称 Y
-         close(float)  收盘价 Y
-         change(float)  涨跌幅 Y
-         rank(str)  资金排名 Y
-         market_type(str)  市场类型（1：沪市 3：深市） Y
-         amount(float)  成交金额 Y
-         net_amount(float)  净成交金额 Y
-         buy(float)  买入金额 Y
-         sell(float)  卖出金额 Y
+         col_participant_id(str)  参与者编号 Y
+         col_participant_name(str)  机构名称 Y
+         col_shareholding(str)  持股量(股) Y
+         col_shareholding_percent(str)  占已发行股份/权证/单位百分比(%) Y
         
         """
         return super().query(fields, **kwargs)
@@ -167,7 +143,7 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
             "trade_date": "",
             "start_date": "",
             "end_date": "",
-            "market_type": "",
+            "hk_code": "",
             "limit": "",
             "offset": ""
         }
@@ -187,8 +163,8 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
         def fetch_save(offset_val=0):
             try:
                 kwargs['offset'] = str(offset_val)
-                self.logger.debug("Invoke pro.hsgt_top10 with args: {}".format(kwargs))
-                return self.tushare_query('hsgt_top10', fields=self.tushare_fields, **kwargs)
+                self.logger.debug("Invoke pro.ccass_hold_detail with args: {}".format(kwargs))
+                return self.tushare_query('ccass_hold_detail', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -204,20 +180,20 @@ class HsgtTop10(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(HsgtTop10, 'default_limit', default_limit_ext)
-setattr(HsgtTop10, 'default_cron_express', default_cron_express_ext)
-setattr(HsgtTop10, 'default_order_by', default_order_by_ext)
-setattr(HsgtTop10, 'prepare', prepare_ext)
-setattr(HsgtTop10, 'query_parameters', query_parameters_ext)
-setattr(HsgtTop10, 'param_loop_process', param_loop_process_ext)
+setattr(CcassHoldDetail, 'default_limit', default_limit_ext)
+setattr(CcassHoldDetail, 'default_cron_express', default_cron_express_ext)
+setattr(CcassHoldDetail, 'default_order_by', default_order_by_ext)
+setattr(CcassHoldDetail, 'prepare', prepare_ext)
+setattr(CcassHoldDetail, 'query_parameters', query_parameters_ext)
+setattr(CcassHoldDetail, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.hsgt_top10())
+    print(pro.ccass_hold_detail())
 
-    api = HsgtTop10(config)
+    api = CcassHoldDetail(config)
     print(api.process())    # 同步增量数据
-    print(api.hsgt_top10())    # 数据查询接口
+    print(api.ccass_hold_detail())    # 数据查询接口

@@ -58,11 +58,15 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
         TushareSzDailyInfo.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'ts_code', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "count", "amount", "vol", "total_share", "total_mv", "float_share", "float_mv"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "count", "amount", "vol", "total_share", "total_mv", "float_share", "float_mv"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareSzDailyInfo, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "sz_daily_info", config)
         TuShareBase.__init__(self, "sz_daily_info", config, 5000)
         self.api = TushareAPI(config)
@@ -161,7 +165,7 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.sz_daily_info with args: {}".format(kwargs))
-                return self.tushare_query('sz_daily_info', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('sz_daily_info', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -173,6 +177,7 @@ class SzDailyInfo(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

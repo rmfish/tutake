@@ -66,13 +66,19 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
         TushareDividend.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'ann_date', 'end_date', 'record_date', 'ex_date', 'imp_ann_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "end_date", "ann_date", "div_proc", "stk_div", "stk_bo_rate", "stk_co_rate", "cash_div",
+            "cash_div_tax", "record_date", "ex_date", "pay_date", "div_listdate", "imp_ann_date", "base_date",
+            "base_share", "update_flag"
+        ]
         entity_fields = [
             "ts_code", "end_date", "ann_date", "div_proc", "stk_div", "stk_bo_rate", "stk_co_rate", "cash_div",
             "cash_div_tax", "record_date", "ex_date", "pay_date", "div_listdate", "imp_ann_date", "base_date",
             "base_share", "update_flag"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareDividend, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "dividend", config)
         TuShareBase.__init__(self, "dividend", config, 800)
         self.api = TushareAPI(config)
@@ -225,7 +231,7 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.dividend with args: {}".format(kwargs))
-                return self.tushare_query('dividend', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('dividend', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -237,6 +243,7 @@ class Dividend(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

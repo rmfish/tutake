@@ -73,14 +73,21 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
         TushareFundBasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'market', 'update_flag', 'offset', 'limit', 'status', 'name']
+        self.tushare_fields = [
+            "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date",
+            "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount",
+            "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate",
+            "market"
+        ]
         entity_fields = [
             "ts_code", "name", "management", "custodian", "fund_type", "found_date", "due_date", "list_date",
             "issue_date", "delist_date", "issue_amount", "m_fee", "c_fee", "duration_year", "p_value", "min_amount",
             "exp_return", "benchmark", "status", "invest_type", "type", "trustee", "purc_startdate", "redm_startdate",
             "market"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareFundBasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "fund_basic", config)
         TuShareBase.__init__(self, "fund_basic", config, 5000)
         self.api = TushareAPI(config)
@@ -268,7 +275,7 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_basic with args: {}".format(kwargs))
-                return self.tushare_query('fund_basic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('fund_basic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -280,6 +287,7 @@ class FundBasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

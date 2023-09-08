@@ -57,11 +57,15 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
         TushareFundPortfolio.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'period', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
+        ]
         entity_fields = [
             "ts_code", "ann_date", "end_date", "symbol", "mkv", "amount", "stk_mkv_ratio", "stk_float_ratio"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareFundPortfolio, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "fund_portfolio", config)
         TuShareBase.__init__(self, "fund_portfolio", config, 5000)
         self.api = TushareAPI(config)
@@ -164,7 +168,7 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_portfolio with args: {}".format(kwargs))
-                return self.tushare_query('fund_portfolio', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('fund_portfolio', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -176,6 +180,7 @@ class FundPortfolio(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

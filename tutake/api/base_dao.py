@@ -18,8 +18,7 @@ Base = declarative_base()
 class BaseDao(object):
 
     def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
-                 entity_fields,
-                 config: TutakeConfig):
+                 entity_fields, column_mapping, config: TutakeConfig):
         self.engine = engine
         self.entities = entities
         self.database = database
@@ -27,6 +26,7 @@ class BaseDao(object):
         self.table_name = table_name
         self.query_fields = query_fields
         self.entity_fields = entity_fields
+        self.column_mapping = column_mapping
         self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
 
@@ -174,7 +174,10 @@ class BaseDao(object):
         order_by = self._get_order_by(**kwargs)
         limit = self._get_query_limit(**kwargs)
         offset = self._get_query_offset(**kwargs)
-        return self.direct_query(fields, filter_criterion, filter_by, order_by, limit, offset)
+        df = self.direct_query(fields, filter_criterion, filter_by, order_by, limit, offset)
+        if self.column_mapping is not None:
+            df.rename(columns=self.column_mapping, inplace=True)
+        return df
 
     def direct_query(self, fields: str = None, filter_criterion=None, filter_by: dict = None,
                      order_by: str = None, limit: int = None, offset: int = None):
@@ -213,6 +216,8 @@ class BaseDao(object):
             df = df.drop(['id'], axis=1, errors='ignore')
             self.logger.debug(
                 "Finished {} query, sql is {} it costs {}s".format(self.entities.__name__, sql, time.time() - start))
+            if self.column_mapping is not None:
+                df.rename(columns=self.column_mapping, inplace=True)
             return df
         return pd.DataFrame()
 

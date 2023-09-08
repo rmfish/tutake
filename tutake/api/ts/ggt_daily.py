@@ -54,9 +54,11 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
         TushareGgtDaily.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
         entity_fields = ["trade_date", "buy_amount", "buy_volume", "sell_amount", "sell_volume"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareGgtDaily, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "ggt_daily", config)
         TuShareBase.__init__(self, "ggt_daily", config, 5000)
         self.api = TushareAPI(config)
@@ -134,7 +136,7 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.ggt_daily with args: {}".format(kwargs))
-                return self.tushare_query('ggt_daily', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('ggt_daily', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -146,6 +148,7 @@ class GgtDaily(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

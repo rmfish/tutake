@@ -59,11 +59,15 @@ class TopInst(TushareDAO, TuShareBase, DataProcess):
         TushareTopInst.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'ts_code', 'limit', 'offset']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "exalter", "buy", "buy_rate", "sell", "sell_rate", "net_buy", "side", "reason"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "exalter", "buy", "buy_rate", "sell", "sell_rate", "net_buy", "side", "reason"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareTopInst, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "top_inst", config)
         TuShareBase.__init__(self, "top_inst", config, 2000)
         self.api = TushareAPI(config)
@@ -165,7 +169,7 @@ class TopInst(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.top_inst with args: {}".format(kwargs))
-                return self.tushare_query('top_inst', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('top_inst', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -177,6 +181,7 @@ class TopInst(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -192,7 +197,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.top_inst())
+    print(pro.top_inst())
 
     api = TopInst(config)
     print(api.process())    # 同步增量数据

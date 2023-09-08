@@ -80,6 +80,13 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
         TushareCnPpi.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['m', 'start_m', 'end_m', 'limit', 'offset']
+        self.tushare_fields = [
+            "month", "ppi_yoy", "ppi_mp_yoy", "ppi_mp_qm_yoy", "ppi_mp_rm_yoy", "ppi_mp_p_yoy", "ppi_cg_yoy",
+            "ppi_cg_f_yoy", "ppi_cg_c_yoy", "ppi_cg_adu_yoy", "ppi_cg_dcg_yoy", "ppi_mom", "ppi_mp_mom",
+            "ppi_mp_qm_mom", "ppi_mp_rm_mom", "ppi_mp_p_mom", "ppi_cg_mom", "ppi_cg_f_mom", "ppi_cg_c_mom",
+            "ppi_cg_adu_mom", "ppi_cg_dcg_mom", "ppi_accu", "ppi_mp_accu", "ppi_mp_qm_accu", "ppi_mp_rm_accu",
+            "ppi_mp_p_accu", "ppi_cg_accu", "ppi_cg_f_accu", "ppi_cg_c_accu", "ppi_cg_adu_accu", "ppi_cg_dcg_accu"
+        ]
         entity_fields = [
             "month", "ppi_yoy", "ppi_mp_yoy", "ppi_mp_qm_yoy", "ppi_mp_rm_yoy", "ppi_mp_p_yoy", "ppi_cg_yoy",
             "ppi_cg_f_yoy", "ppi_cg_c_yoy", "ppi_cg_adu_yoy", "ppi_cg_dcg_yoy", "ppi_mom", "ppi_mp_mom",
@@ -87,8 +94,9 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
             "ppi_cg_adu_mom", "ppi_cg_dcg_mom", "ppi_accu", "ppi_mp_accu", "ppi_mp_qm_accu", "ppi_mp_rm_accu",
             "ppi_mp_p_accu", "ppi_cg_accu", "ppi_cg_f_accu", "ppi_cg_c_accu", "ppi_cg_adu_accu", "ppi_cg_dcg_accu"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareCnPpi, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "cn_ppi", config)
         TuShareBase.__init__(self, "cn_ppi", config, 600)
         self.api = TushareAPI(config)
@@ -296,7 +304,7 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_ppi with args: {}".format(kwargs))
-                return self.tushare_query('cn_ppi', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('cn_ppi', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -308,6 +316,7 @@ class CnPpi(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

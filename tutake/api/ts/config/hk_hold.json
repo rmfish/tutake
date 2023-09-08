@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_stock",
     "default_limit": "3800",
     "desc": "获取沪深港股通持股明细，数据来源港交所。下个交易日8点更新",
     "id": 188,
@@ -55,7 +55,7 @@
         }
     ],
     "integral_required": 2000,
-    "is_ready": null,
+    "is_ready": true,
     "name": "hk_hold",
     "order_by": null,
     "outputs": [
@@ -89,7 +89,7 @@
         },
         {
             "column": "VOL",
-            "data_type": null,
+            "data_type": "int",
             "desc": "持股数量",
             "must": "Y",
             "name": "vol"

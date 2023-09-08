@@ -53,9 +53,11 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
         TushareSuspendD.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'suspend_type', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
         entity_fields = ["ts_code", "trade_date", "suspend_timing", "suspend_type"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareSuspendD, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "suspend_d", config)
         TuShareBase.__init__(self, "suspend_d", config, 120)
         self.api = TushareAPI(config)
@@ -138,7 +140,7 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.suspend_d with args: {}".format(kwargs))
-                return self.tushare_query('suspend_d', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('suspend_d', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -150,6 +152,7 @@ class SuspendD(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

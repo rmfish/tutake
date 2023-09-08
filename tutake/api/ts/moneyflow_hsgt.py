@@ -56,9 +56,11 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
         TushareMoneyflowHsgt.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
         entity_fields = ["trade_date", "ggt_ss", "ggt_sz", "hgt", "sgt", "north_money", "south_money"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareMoneyflowHsgt, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "moneyflow_hsgt", config)
         TuShareBase.__init__(self, "moneyflow_hsgt", config, 120)
         self.api = TushareAPI(config)
@@ -146,7 +148,7 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.moneyflow_hsgt with args: {}".format(kwargs))
-                return self.tushare_query('moneyflow_hsgt', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('moneyflow_hsgt', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -158,6 +160,7 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

@@ -55,9 +55,11 @@ class MarginTarget(TushareDAO, TuShareBase, DataProcess):
         TushareMarginTarget.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'is_new', 'mg_type', 'limit', 'offset']
+        self.tushare_fields = ["ts_code", "mg_type", "is_new", "in_date", "out_date", "ann_date"]
         entity_fields = ["ts_code", "mg_type", "is_new", "in_date", "out_date", "ann_date"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareMarginTarget, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "margin_target", config)
         TuShareBase.__init__(self, "margin_target", config, 5000)
         self.api = TushareAPI(config)
@@ -140,7 +142,7 @@ class MarginTarget(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.margin_target with args: {}".format(kwargs))
-                return self.tushare_query('margin_target', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('margin_target', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -152,6 +154,7 @@ class MarginTarget(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

@@ -54,9 +54,11 @@ class Top10Floatholders(TushareDAO, TuShareBase, DataProcess):
         TushareTop10Floatholders.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'period', 'ann_date', 'start_date', 'end_date', 'offset', 'limit']
+        self.tushare_fields = ["ts_code", "ann_date", "end_date", "holder_name", "hold_amount"]
         entity_fields = ["ts_code", "ann_date", "end_date", "holder_name", "hold_amount"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareTop10Floatholders, self.database,
-                            self.table_name, query_fields, entity_fields, config)
+                            self.table_name, query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "top10_floatholders", config)
         TuShareBase.__init__(self, "top10_floatholders", config, 5000)
         self.api = TushareAPI(config)
@@ -144,7 +146,7 @@ class Top10Floatholders(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.top10_floatholders with args: {}".format(kwargs))
-                return self.tushare_query('top10_floatholders', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('top10_floatholders', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -156,6 +158,7 @@ class Top10Floatholders(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

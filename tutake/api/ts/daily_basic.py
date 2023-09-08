@@ -68,13 +68,19 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
         TushareDailyBasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "trade_date", "close", "turnover_rate", "turnover_rate_f", "volume_ratio", "pe", "pe_ttm", "pb",
+            "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv", "circ_mv",
+            "limit_status"
+        ]
         entity_fields = [
             "ts_code", "trade_date", "close", "turnover_rate", "turnover_rate_f", "volume_ratio", "pe", "pe_ttm", "pb",
             "ps", "ps_ttm", "dv_ratio", "dv_ttm", "total_share", "float_share", "free_share", "total_mv", "circ_mv",
             "limit_status"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareDailyBasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "daily_basic", config)
         TuShareBase.__init__(self, "daily_basic", config, 2000)
         self.api = TushareAPI(config)
@@ -226,7 +232,7 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.daily_basic with args: {}".format(kwargs))
-                return self.tushare_query('daily_basic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('daily_basic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -238,6 +244,7 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

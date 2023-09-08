@@ -84,12 +84,32 @@ class CodeGenerator(object):
 
             api_config['title_name'] = "{}".format(api_config['name'].replace('_', ' ').title().replace(' ', ''))
             api_config['entity_name'] = f"{prefix.capitalize()}{api_config['title_name']}"
-            must_output_fields = [o['name'] for o in api['outputs'] if o['must'] == 'Y']
-            output_fields = [o['name'] for o in api['outputs']]
+            must_output_fields = []
+            output_fields = []
+            column_rename = None
+            for field in api['outputs']:
+                output_fields.append(field['name'])
+                if field['must'] == 'Y':
+                    if field.get('column_name'):
+                        must_output_fields.append(field.get('column_name'))
+                    else:
+                        must_output_fields.append(field.get('name'))
+                if field.get('column_name'):
+                    if column_rename is None:
+                        column_rename = {}
+                    column_rename[field.get('column_name')] = field.get('name')
+
+
+            # [(o.get('column_name') is not None and o['column_name'] or o['name']) for o in api['outputs']
+            #                       if o['must'] == 'Y']
+            # output_fields = [o['name'] for o in api['outputs']]
             if len(must_output_fields) != len(output_fields):
                 api_config['default_fields'] = ','.join(must_output_fields)
             else:
                 api_config['default_fields'] = ''
+            api_config['column_rename'] = column_rename
+            # column_rename = None
+
             self.set_index(api_config)
             self.generate_order_by(api_config)
             if api_tmpl:

@@ -56,9 +56,11 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         TushareIndexClassify.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['index_code', 'level', 'src', 'parent_code', 'limit', 'offset']
+        self.tushare_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
         entity_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareIndexClassify, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "index_classify", config)
         TuShareBase.__init__(self, "index_classify", config, 2000)
         self.api = TushareAPI(config)
@@ -147,7 +149,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_classify with args: {}".format(kwargs))
-                return self.tushare_query('index_classify', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('index_classify', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -159,6 +161,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

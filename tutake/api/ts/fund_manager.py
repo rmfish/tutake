@@ -59,12 +59,17 @@ class FundManager(TushareDAO, TuShareBase, DataProcess):
         TushareFundManager.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'ann_date', 'name', 'offset', 'limit']
+        self.tushare_fields = [
+            "ts_code", "ann_date", "name", "gender", "birth_year", "edu", "nationality", "begin_date", "end_date",
+            "resume"
+        ]
         entity_fields = [
             "ts_code", "ann_date", "name", "gender", "birth_year", "edu", "nationality", "begin_date", "end_date",
             "resume"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareFundManager, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "fund_manager", config)
         TuShareBase.__init__(self, "fund_manager", config, 5000)
         self.api = TushareAPI(config)
@@ -167,7 +172,7 @@ class FundManager(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_manager with args: {}".format(kwargs))
-                return self.tushare_query('fund_manager', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('fund_manager', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -179,6 +184,7 @@ class FundManager(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

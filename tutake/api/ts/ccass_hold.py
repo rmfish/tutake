@@ -1,9 +1,9 @@
 """
 This file is auto generator by CodeGenerator. Don't modify it directly, instead alter tushare_api.tmpl of it.
 
-Tushare trade_cal接口
-获取各大期货交易所交易日历数据，数据开始月1996年1月
-数据接口-期货-期货交易日历  https://tushare.pro/document/2?doc_id=137
+Tushare ccass_hold接口
+获取中央结算系统持股汇总数据，覆盖全部历史数据，根据交易所披露时间，当日数据在下一交易日早上9点前完成入库
+数据接口-沪深股票-特色数据-中央结算系统持股统计  https://tushare.pro/document/2?doc_id=295
 
 @author: rmfish
 """
@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import Base, BatchWriter, Records
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.trade_cal_ext import *
+from tutake.api.ts.ccass_hold_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
@@ -22,16 +22,18 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareTradeCal(Base):
-    __tablename__ = "tushare_trade_cal"
+class TushareCcassHold(Base):
+    __tablename__ = "tushare_ccass_hold"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    exchange = Column(String, index=True, comment='交易所 SSE上交所 SZSE深交所')
-    cal_date = Column(String, index=True, comment='日历日期')
-    is_open = Column(String, index=True, comment='是否交易 0休市 1交易')
-    pretrade_date = Column(String, comment='上一个交易日')
+    trade_date = Column(String, index=True, comment='交易日期')
+    ts_code = Column(String, index=True, comment='股票代号')
+    name = Column(String, comment='股票名称')
+    shareholding = Column(String, comment='于中央结算系统的持股量(股)')
+    hold_nums = Column(String, comment='参与者数目（个）')
+    hold_ratio = Column(String, comment='占于上交所/深交所上市及交易的A股总数的百分比（%）')
 
 
-class TradeCal(TushareDAO, TuShareBase, DataProcess):
+class CcassHold(TushareDAO, TuShareBase, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -40,7 +42,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         return cls.instance
 
     def __init__(self, config):
-        self.table_name = "tushare_trade_cal"
+        self.table_name = "tushare_ccass_hold"
         self.database = 'tushare_stock.db'
         self.database_url = config.get_data_sqlite_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
@@ -50,54 +52,65 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
                                            })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
-        TushareTradeCal.__table__.create(bind=self.engine, checkfirst=True)
+        TushareCcassHold.__table__.create(bind=self.engine, checkfirst=True)
 
-        query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
-        self.tushare_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
-        entity_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
+        query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'type', 'hk_hold', 'limit', 'offset']
+        self.tushare_fields = ["trade_date", "ts_code", "name", "shareholding", "hold_nums", "hold_ratio"]
+        entity_fields = ["trade_date", "ts_code", "name", "shareholding", "hold_nums", "hold_ratio"]
         column_mapping = None
-        TushareDAO.__init__(self, self.engine, session_factory, TushareTradeCal, self.database, self.table_name,
+        TushareDAO.__init__(self, self.engine, session_factory, TushareCcassHold, self.database, self.table_name,
                             query_fields, entity_fields, column_mapping, config)
-        DataProcess.__init__(self, "trade_cal", config)
-        TuShareBase.__init__(self, "trade_cal", config, 600)
+        DataProcess.__init__(self, "ccass_hold", config)
+        TuShareBase.__init__(self, "ccass_hold", config, 5000)
         self.api = TushareAPI(config)
 
     def columns_meta(self):
         return [{
-            "name": "exchange",
+            "name": "trade_date",
             "type": "String",
-            "comment": "交易所 SSE上交所 SZSE深交所"
+            "comment": "交易日期"
         }, {
-            "name": "cal_date",
+            "name": "ts_code",
             "type": "String",
-            "comment": "日历日期"
+            "comment": "股票代号"
         }, {
-            "name": "is_open",
+            "name": "name",
             "type": "String",
-            "comment": "是否交易 0休市 1交易"
+            "comment": "股票名称"
         }, {
-            "name": "pretrade_date",
+            "name": "shareholding",
             "type": "String",
-            "comment": "上一个交易日"
+            "comment": "于中央结算系统的持股量(股)"
+        }, {
+            "name": "hold_nums",
+            "type": "String",
+            "comment": "参与者数目（个）"
+        }, {
+            "name": "hold_ratio",
+            "type": "String",
+            "comment": "占于上交所/深交所上市及交易的A股总数的百分比（%）"
         }]
 
-    def trade_cal(self, fields='', **kwargs):
+    def ccass_hold(self, fields='', **kwargs):
         """
-        获取各大期货交易所交易日历数据，数据开始月1996年1月
+        获取中央结算系统持股汇总数据，覆盖全部历史数据，根据交易所披露时间，当日数据在下一交易日早上9点前完成入库
         | Arguments:
-        | exchange(str):   交易所 SSE上交所 SZSE深交所
-        | cal_date(str):   日历日期
-        | start_date(str):   
-        | end_date(str):   
-        | is_open(str):   是否交易 0休市 1交易
+        | ts_code(str):   股票代码
+        | trade_date(str):   交易日期
+        | start_date(str):   开始日期
+        | end_date(str):   结束日期
+        | type(str):   类型
+        | hk_hold(str):   港交所代码
         | limit(int):   单次返回数据长度
         | offset(int):   请求数据的开始位移量
         
         :return: DataFrame
-         exchange(str)  交易所 SSE上交所 SZSE深交所 Y
-         cal_date(str)  日历日期 Y
-         is_open(str)  是否交易 0休市 1交易 Y
-         pretrade_date(str)  上一个交易日 Y
+         trade_date(str)  交易日期 Y
+         ts_code(str)  股票代号 Y
+         name(str)  股票名称 Y
+         shareholding(str)  于中央结算系统的持股量(股) Y
+         hold_nums(str)  参与者数目（个） Y
+         hold_ratio(str)  占于上交所/深交所上市及交易的A股总数的百分比（%） Y
         
         """
         return super().query(fields, **kwargs)
@@ -115,11 +128,12 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {
-            "exchange": "",
-            "cal_date": "",
+            "ts_code": "",
+            "trade_date": "",
             "start_date": "",
             "end_date": "",
-            "is_open": "",
+            "type": "",
+            "hk_hold": "",
             "limit": "",
             "offset": ""
         }
@@ -139,8 +153,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         def fetch_save(offset_val=0):
             try:
                 kwargs['offset'] = str(offset_val)
-                self.logger.debug("Invoke pro.trade_cal with args: {}".format(kwargs))
-                return self.tushare_query('trade_cal', fields=self.tushare_fields, **kwargs)
+                self.logger.debug("Invoke pro.ccass_hold with args: {}".format(kwargs))
+                return self.tushare_query('ccass_hold', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -156,20 +170,20 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(TradeCal, 'default_limit', default_limit_ext)
-setattr(TradeCal, 'default_cron_express', default_cron_express_ext)
-setattr(TradeCal, 'default_order_by', default_order_by_ext)
-setattr(TradeCal, 'prepare', prepare_ext)
-setattr(TradeCal, 'query_parameters', query_parameters_ext)
-setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
+setattr(CcassHold, 'default_limit', default_limit_ext)
+setattr(CcassHold, 'default_cron_express', default_cron_express_ext)
+setattr(CcassHold, 'default_order_by', default_order_by_ext)
+setattr(CcassHold, 'prepare', prepare_ext)
+setattr(CcassHold, 'query_parameters', query_parameters_ext)
+setattr(CcassHold, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.trade_cal())
+    print(pro.ccass_hold())
 
-    api = TradeCal(config)
+    api = CcassHold(config)
     print(api.process())    # 同步增量数据
-    print(api.trade_cal())    # 数据查询接口
+    print(api.ccass_hold())    # 数据查询接口

@@ -61,12 +61,17 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
         TushareIndexGlobal.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "trade_date", "open", "close", "high", "low", "pre_close", "change", "pct_chg", "swing", "vol",
+            "amount"
+        ]
         entity_fields = [
             "ts_code", "trade_date", "open", "close", "high", "low", "pre_close", "change", "pct_chg", "swing", "vol",
             "amount"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareIndexGlobal, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "index_global", config)
         TuShareBase.__init__(self, "index_global", config, 120)
         self.api = TushareAPI(config)
@@ -182,7 +187,7 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_global with args: {}".format(kwargs))
-                return self.tushare_query('index_global', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('index_global', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -194,6 +199,7 @@ class IndexGlobal(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

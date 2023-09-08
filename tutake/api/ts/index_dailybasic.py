@@ -61,12 +61,17 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
         TushareIndexDailybasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'ts_code', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
+            "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"
+        ]
         entity_fields = [
             "ts_code", "trade_date", "total_mv", "float_mv", "total_share", "float_share", "free_share",
             "turnover_rate", "turnover_rate_f", "pe", "pe_ttm", "pb"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareIndexDailybasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "index_dailybasic", config)
         TuShareBase.__init__(self, "index_dailybasic", config, 5000)
         self.api = TushareAPI(config)
@@ -180,7 +185,7 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_dailybasic with args: {}".format(kwargs))
-                return self.tushare_query('index_dailybasic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('index_dailybasic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -192,6 +197,7 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
