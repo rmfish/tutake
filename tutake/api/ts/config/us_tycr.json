@@ -43,7 +43,7 @@
             "name": "offset"
         }
     ],
-    "is_ready": null,
+    "is_ready": true,
     "name": "us_tycr",
     "order_by": null,
     "outputs": [

@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_macroeconomic",
     "default_limit": "4000",
     "desc": "Shibor报价数据，每日12点更新",
     "id": 150,
@@ -80,98 +80,112 @@
             "data_type": "float",
             "desc": "1周_Bid",
             "must": "Y",
-            "name": "1w_b"
+            "name": "1w_b",
+            "column_name": "t_1w_b"
         },
         {
             "column": "1W_A",
             "data_type": "float",
             "desc": "1周_Ask",
             "must": "Y",
-            "name": "1w_a"
+            "name": "1w_a",
+            "column_name": "t_1w_a"
         },
         {
             "column": "2W_B",
             "data_type": "float",
             "desc": "2周_Bid",
             "must": "Y",
-            "name": "2w_b"
+            "name": "2w_b",
+            "column_name": "t_2w_b"
         },
         {
             "column": "2W_A",
             "data_type": "float",
             "desc": "2周_Ask",
             "must": "Y",
-            "name": "2w_a"
+            "name": "2w_a",
+            "column_name": "t_2w_a"
         },
         {
             "column": "1M_B",
             "data_type": "float",
             "desc": "1月_Bid",
             "must": "Y",
-            "name": "1m_b"
+            "name": "1m_b",
+            "column_name": "t_1m_b"
         },
         {
             "column": "1M_A",
             "data_type": "float",
             "desc": "1月_Ask",
             "must": "Y",
-            "name": "1m_a"
+            "name": "1m_a",
+            "column_name": "t_1m_a"
         },
         {
             "column": "3M_B",
             "data_type": "float",
             "desc": "3月_Bid",
             "must": "Y",
-            "name": "3m_b"
+            "name": "3m_b",
+            "column_name": "t_3m_b"
         },
         {
             "column": "3M_A",
             "data_type": "float",
             "desc": "3月_Ask",
             "must": "Y",
-            "name": "3m_a"
+            "name": "3m_a",
+            "column_name": "t_3m_a"
         },
         {
             "column": "6M_B",
             "data_type": "float",
             "desc": "6月_Bid",
             "must": "Y",
-            "name": "6m_b"
+            "name": "6m_b",
+            "column_name": "t_6m_b"
         },
         {
             "column": "6M_A",
             "data_type": "float",
             "desc": "6月_Ask",
             "must": "Y",
-            "name": "6m_a"
+            "name": "6m_a",
+            "column_name": "t_6m_a"
         },
         {
             "column": "9M_B",
             "data_type": "float",
             "desc": "9月_Bid",
             "must": "Y",
-            "name": "9m_b"
+            "name": "9m_b",
+            "column_name": "t_9m_b"
         },
         {
             "column": "9M_A",
             "data_type": "float",
             "desc": "9月_Ask",
             "must": "Y",
-            "name": "9m_a"
+            "name": "9m_a",
+            "column_name": "t_9m_a"
         },
         {
             "column": "1Y_B",
             "data_type": "float",
             "desc": "1年_Bid",
             "must": "Y",
-            "name": "1y_b"
+            "name": "1y_b",
+            "column_name": "t_1y_b"
         },
         {
             "column": "1Y_A",
             "data_type": "float",
             "desc": "1年_Ask",
             "must": "Y",
-            "name": "1y_a"
+            "name": "1y_a",
+            "column_name": "t_1y_a"
         }
     ],
     "parent_id": 148,

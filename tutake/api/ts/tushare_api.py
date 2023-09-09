@@ -22,9 +22,10 @@ class TushareAPI(object):
     def all_apis(self):
         apis = [
             'stock_company', 'hk_hold', 'stk_rewards', 'hs_const', 'report_rc', 'stk_managers', 'moneyflow_hsgt',
-            'namechange', 'ccass_hold', 'stock_vx', 'bak_daily', 'suspend_d', 'daily', 'weekly', 'stock_mx',
-            'bak_basic', 'stock_basic', 'ccass_hold_detail', 'fund_basic', 'limit_list_d', 'new_share', 'monthly',
-            'moneyflow', 'adj_factor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly',
+            'fx_obasic', 'namechange', 'shibor_lpr', 'ccass_hold', 'stock_vx', 'bak_daily', 'fx_daily', 'suspend_d',
+            'daily', 'weekly', 'libor', 'stock_mx', 'ci_daily', 'wz_index', 'bak_basic', 'stock_basic', 'shibor',
+            'ccass_hold_detail', 'gz_index', 'fund_basic', 'limit_list_d', 'new_share', 'monthly', 'us_tycr',
+            'moneyflow', 'adj_factor', 'hibor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly',
             'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
             'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'stk_limit', 'fina_audit',
             'fina_mainbz_vip', 'margin', 'margin_detail', 'margin_target', 'top10_holders', 'top10_floatholders',
@@ -73,9 +74,17 @@ class TushareAPI(object):
             moneyflow_hsgt_module = import_module("tutake.api.ts.moneyflow_hsgt")
             clazz = getattr(moneyflow_hsgt_module, "MoneyflowHsgt")
             return clazz(config)
+        if name == 'fx_obasic':
+            fx_obasic_module = import_module("tutake.api.ts.fx_obasic")
+            clazz = getattr(fx_obasic_module, "FxObasic")
+            return clazz(config)
         if name == 'namechange':
             namechange_module = import_module("tutake.api.ts.namechange")
             clazz = getattr(namechange_module, "Namechange")
+            return clazz(config)
+        if name == 'shibor_lpr':
+            shibor_lpr_module = import_module("tutake.api.ts.shibor_lpr")
+            clazz = getattr(shibor_lpr_module, "ShiborLpr")
             return clazz(config)
         if name == 'ccass_hold':
             ccass_hold_module = import_module("tutake.api.ts.ccass_hold")
@@ -89,6 +98,10 @@ class TushareAPI(object):
             bak_daily_module = import_module("tutake.api.ts.bak_daily")
             clazz = getattr(bak_daily_module, "BakDaily")
             return clazz(config)
+        if name == 'fx_daily':
+            fx_daily_module = import_module("tutake.api.ts.fx_daily")
+            clazz = getattr(fx_daily_module, "FxDaily")
+            return clazz(config)
         if name == 'suspend_d':
             suspend_d_module = import_module("tutake.api.ts.suspend_d")
             clazz = getattr(suspend_d_module, "SuspendD")
@@ -101,9 +114,21 @@ class TushareAPI(object):
             weekly_module = import_module("tutake.api.ts.weekly")
             clazz = getattr(weekly_module, "Weekly")
             return clazz(config)
+        if name == 'libor':
+            libor_module = import_module("tutake.api.ts.libor")
+            clazz = getattr(libor_module, "Libor")
+            return clazz(config)
         if name == 'stock_mx':
             stock_mx_module = import_module("tutake.api.ts.stock_mx")
             clazz = getattr(stock_mx_module, "StockMx")
+            return clazz(config)
+        if name == 'ci_daily':
+            ci_daily_module = import_module("tutake.api.ts.ci_daily")
+            clazz = getattr(ci_daily_module, "CiDaily")
+            return clazz(config)
+        if name == 'wz_index':
+            wz_index_module = import_module("tutake.api.ts.wz_index")
+            clazz = getattr(wz_index_module, "WzIndex")
             return clazz(config)
         if name == 'bak_basic':
             bak_basic_module = import_module("tutake.api.ts.bak_basic")
@@ -113,9 +138,17 @@ class TushareAPI(object):
             stock_basic_module = import_module("tutake.api.ts.stock_basic")
             clazz = getattr(stock_basic_module, "StockBasic")
             return clazz(config)
+        if name == 'shibor':
+            shibor_module = import_module("tutake.api.ts.shibor")
+            clazz = getattr(shibor_module, "Shibor")
+            return clazz(config)
         if name == 'ccass_hold_detail':
             ccass_hold_detail_module = import_module("tutake.api.ts.ccass_hold_detail")
             clazz = getattr(ccass_hold_detail_module, "CcassHoldDetail")
+            return clazz(config)
+        if name == 'gz_index':
+            gz_index_module = import_module("tutake.api.ts.gz_index")
+            clazz = getattr(gz_index_module, "GzIndex")
             return clazz(config)
         if name == 'fund_basic':
             fund_basic_module = import_module("tutake.api.ts.fund_basic")
@@ -133,6 +166,10 @@ class TushareAPI(object):
             monthly_module = import_module("tutake.api.ts.monthly")
             clazz = getattr(monthly_module, "Monthly")
             return clazz(config)
+        if name == 'us_tycr':
+            us_tycr_module = import_module("tutake.api.ts.us_tycr")
+            clazz = getattr(us_tycr_module, "UsTycr")
+            return clazz(config)
         if name == 'moneyflow':
             moneyflow_module = import_module("tutake.api.ts.moneyflow")
             clazz = getattr(moneyflow_module, "Moneyflow")
@@ -140,6 +177,10 @@ class TushareAPI(object):
         if name == 'adj_factor':
             adj_factor_module = import_module("tutake.api.ts.adj_factor")
             clazz = getattr(adj_factor_module, "AdjFactor")
+            return clazz(config)
+        if name == 'hibor':
+            hibor_module = import_module("tutake.api.ts.hibor")
+            clazz = getattr(hibor_module, "Hibor")
             return clazz(config)
         if name == 'daily_basic':
             daily_basic_module = import_module("tutake.api.ts.daily_basic")
