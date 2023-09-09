@@ -205,7 +205,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.shibor(end_date='20070101'))
+    print(pro.shibor())
 
     api = Shibor(config)
     print(api.process())    # 同步增量数据

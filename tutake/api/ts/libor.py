@@ -200,5 +200,5 @@ if __name__ == '__main__':
     print(pro.libor())
 
     api = Libor(config)
-    # print(api.process())    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.libor())    # 数据查询接口

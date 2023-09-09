@@ -56,7 +56,7 @@ class TushareDAO(BaseDao):
             return 'start_q', 'end_q', self.entities.quarter
         elif self.table_name in ['tushare_us_tbr', 'tushare_us_tltr', 'tushare_us_trltr', 'tushare_us_trycr',
                                  'tushare_us_tycr', 'tushare_gz_index', 'tushare_hibor', 'tushare_libor',
-                                 'tushare_shibor', 'tushare_shibor_lpr','tushare_wz_index']:
+                                 'tushare_shibor', 'tushare_shibor_lpr', 'tushare_wz_index', 'tushare_eco_cal']:
             return 'start_date', 'end_date', self.entities.date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date

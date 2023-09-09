@@ -22,9 +22,9 @@ class TushareAPI(object):
     def all_apis(self):
         apis = [
             'stock_company', 'hk_hold', 'stk_rewards', 'hs_const', 'report_rc', 'stk_managers', 'moneyflow_hsgt',
-            'fx_obasic', 'namechange', 'shibor_lpr', 'ccass_hold', 'stock_vx', 'bak_daily', 'fx_daily', 'suspend_d',
-            'daily', 'weekly', 'libor', 'stock_mx', 'ci_daily', 'wz_index', 'bak_basic', 'stock_basic', 'shibor',
-            'ccass_hold_detail', 'gz_index', 'fund_basic', 'limit_list_d', 'new_share', 'monthly', 'us_tycr',
+            'fx_obasic', 'namechange', 'shibor_lpr', 'ccass_hold', 'stock_vx', 'eco_cal', 'bak_daily', 'fx_daily',
+            'suspend_d', 'daily', 'weekly', 'libor', 'stock_mx', 'ci_daily', 'wz_index', 'bak_basic', 'stock_basic',
+            'shibor', 'ccass_hold_detail', 'gz_index', 'fund_basic', 'limit_list_d', 'new_share', 'monthly', 'us_tycr',
             'moneyflow', 'adj_factor', 'hibor', 'daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly',
             'income_vip', 'balancesheet_vip', 'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend',
             'fina_indicator_vip', 'ths_daily', 'ths_member', 'anns', 'trade_cal', 'stk_limit', 'fina_audit',
@@ -93,6 +93,10 @@ class TushareAPI(object):
         if name == 'stock_vx':
             stock_vx_module = import_module("tutake.api.ts.stock_vx")
             clazz = getattr(stock_vx_module, "StockVx")
+            return clazz(config)
+        if name == 'eco_cal':
+            eco_cal_module = import_module("tutake.api.ts.eco_cal")
+            clazz = getattr(eco_cal_module, "EcoCal")
             return clazz(config)
         if name == 'bak_daily':
             bak_daily_module = import_module("tutake.api.ts.bak_daily")
