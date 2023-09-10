@@ -62,7 +62,7 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
             "yeild", "eva_type"
         ]
         BaseDao.__init__(self, self.engine, session_factory, XueqiuIndexValuation, self.database, self.table_name,
-                         query_fields, entity_fields, config)
+                         query_fields, entity_fields, None, config)
         DataProcess.__init__(self, "index_valuation", config)
         XueQiuBase.__init__(self, "index_valuation", config)
 

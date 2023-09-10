@@ -44,7 +44,7 @@ class {{title_name}}(BaseDao, XueQiuBase, DataProcess):
 
         query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
-        BaseDao.__init__(self, self.engine, session_factory, {{entity_name}}, self.database, self.table_name, query_fields, entity_fields, config)
+        BaseDao.__init__(self, self.engine, session_factory, {{entity_name}}, self.database, self.table_name, query_fields, entity_fields, None, config)
         DataProcess.__init__(self,"{{name}}", config)
         XueQiuBase.__init__(self,"{{name}}", config)
 
