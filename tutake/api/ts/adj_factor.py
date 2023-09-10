@@ -52,9 +52,11 @@ class AdjFactor(TushareDAO, TuShareBase, DataProcess):
         TushareAdjFactor.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["ts_code", "trade_date", "adj_factor"]
         entity_fields = ["ts_code", "trade_date", "adj_factor"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareAdjFactor, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "adj_factor", config)
         TuShareBase.__init__(self, "adj_factor", config, 120)
         self.api = TushareAPI(config)
@@ -93,12 +95,12 @@ class AdjFactor(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -123,7 +125,7 @@ class AdjFactor(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.adj_factor with args: {}".format(kwargs))
-                return self.tushare_query('adj_factor', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('adj_factor', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -135,6 +137,7 @@ class AdjFactor(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -153,5 +156,5 @@ if __name__ == '__main__':
     print(pro.adj_factor())
 
     api = AdjFactor(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.adj_factor())    # 数据查询接口

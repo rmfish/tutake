@@ -57,9 +57,11 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         TushareAnns.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'ann_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
         entity_fields = ["ts_code", "ann_date", "ann_type", "title", "content", "pub_time", "src_url", "filepath"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareAnns, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "anns", config)
         TuShareBase.__init__(self, "anns", config, 5000)
         self.api = TushareAPI(config)
@@ -123,12 +125,12 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -153,7 +155,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.anns with args: {}".format(kwargs))
-                return self.tushare_query('anns', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('anns', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -165,6 +167,7 @@ class Anns(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -183,5 +186,5 @@ if __name__ == '__main__':
     print(pro.anns())
 
     api = Anns(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.anns())    # 数据查询接口

@@ -80,14 +80,21 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
         TushareBakDaily.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
+        self.tushare_fields = [
+            "ts_code", "trade_date", "name", "pct_change", "close", "change", "open", "high", "low", "pre_close",
+            "vol_ratio", "turn_over", "swing", "vol", "amount", "selling", "buying", "total_share", "float_share", "pe",
+            "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
+            "interval_3", "interval_6"
+        ]
         entity_fields = [
             "ts_code", "trade_date", "name", "pct_change", "close", "change", "open", "high", "low", "pre_close",
             "vol_ratio", "turn_over", "swing", "vol", "amount", "selling", "buying", "total_share", "float_share", "pe",
             "industry", "area", "float_mv", "total_mv", "avg_price", "strength", "activity", "avg_turnover", "attack",
             "interval_3", "interval_6"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareBakDaily, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "bak_daily", config)
         TuShareBase.__init__(self, "bak_daily", config, 120)
         self.api = TushareAPI(config)
@@ -266,12 +273,12 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -296,7 +303,7 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.bak_daily with args: {}".format(kwargs))
-                return self.tushare_query('bak_daily', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('bak_daily', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -308,6 +315,7 @@ class BakDaily(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -326,5 +334,5 @@ if __name__ == '__main__':
     print(pro.bak_daily())
 
     api = BakDaily(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.bak_daily())    # 数据查询接口

@@ -59,12 +59,17 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
         TushareFundNav.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'nav_date', 'offset', 'limit', 'market', 'start_date', 'end_date']
+        self.tushare_fields = [
+            "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
+            "adj_nav", "update_flag"
+        ]
         entity_fields = [
             "ts_code", "ann_date", "nav_date", "unit_nav", "accum_nav", "accum_div", "net_asset", "total_netasset",
             "adj_nav", "update_flag"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareFundNav, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "fund_nav", config)
         TuShareBase.__init__(self, "fund_nav", config, 5000)
         self.api = TushareAPI(config)
@@ -139,12 +144,12 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -177,7 +182,7 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_nav with args: {}".format(kwargs))
-                return self.tushare_query('fund_nav', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('fund_nav', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -189,6 +194,7 @@ class FundNav(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -207,5 +213,5 @@ if __name__ == '__main__':
     print(pro.fund_nav(nav_date='20221111'))
 
     api = FundNav(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.fund_nav(nav_date='20221111'))    # 数据查询接口

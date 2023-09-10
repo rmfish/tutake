@@ -58,9 +58,11 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
         TushareCnGdp.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['q', 'start_q', 'end_q', 'limit', 'offset']
+        self.tushare_fields = ["quarter", "gdp", "gdp_yoy", "pi", "pi_yoy", "si", "si_yoy", "ti", "ti_yoy"]
         entity_fields = ["quarter", "gdp", "gdp_yoy", "pi", "pi_yoy", "si", "si_yoy", "ti", "ti_yoy"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareCnGdp, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "cn_gdp", config)
         TuShareBase.__init__(self, "cn_gdp", config, 600)
         self.api = TushareAPI(config)
@@ -128,12 +130,12 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -158,7 +160,7 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_gdp with args: {}".format(kwargs))
-                return self.tushare_query('cn_gdp', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('cn_gdp', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -170,6 +172,7 @@ class CnGdp(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -188,5 +191,5 @@ if __name__ == '__main__':
     print(pro.cn_gdp())
 
     api = CnGdp(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.cn_gdp())    # 数据查询接口

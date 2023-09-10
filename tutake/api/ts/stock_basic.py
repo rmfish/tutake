@@ -63,12 +63,17 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
         TushareStockBasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'name', 'exchange', 'market', 'is_hs', 'list_status', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
+            "curr_type", "list_status", "list_date", "delist_date", "is_hs"
+        ]
         entity_fields = [
             "ts_code", "symbol", "name", "area", "industry", "fullname", "enname", "cnspell", "market", "exchange",
             "curr_type", "list_status", "list_date", "delist_date", "is_hs"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareStockBasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "stock_basic", config)
         TuShareBase.__init__(self, "stock_basic", config, 120)
         self.api = TushareAPI(config)
@@ -169,12 +174,12 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -208,7 +213,7 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_basic with args: {}".format(kwargs))
-                return self.tushare_query('stock_basic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('stock_basic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -220,6 +225,7 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -238,5 +244,5 @@ if __name__ == '__main__':
     print(pro.stock_basic())
 
     api = StockBasic(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.stock_basic())    # 数据查询接口

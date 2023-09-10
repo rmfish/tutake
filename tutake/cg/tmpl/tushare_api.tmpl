@@ -25,7 +25,7 @@ from tutake.utils.utils import project_root
 class {{entity_name}}(Base):
     __tablename__ = "{{table_name}}"
     {% if not exist_primary_key %}id = Column(Integer, primary_key=True , autoincrement=True)
-    {% endif %}{% for output in outputs %}{{output.name}} = Column({{output.data_type|get_sql_type}}{% if output.primary_key %}, primary_key=True{% endif %}{% if output.index %}, index=True{% endif %}, comment='{% autoescape false %}{{output.desc}}{% endautoescape %}')
+    {% endif %}{% for output in outputs %}{% if output.get('column_name') is defined and output.column_name %}{{output.column_name}}{% else %}{{output.name}}{% endif %} = Column({{output.data_type|get_sql_type}}{% if output.primary_key %}, primary_key=True{% endif %}{% if output.index %}, index=True{% endif %}, comment='{% autoescape false %}{{output.desc}}{% endautoescape %}')
     {% endfor %}
 
 
@@ -47,8 +47,10 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         {{entity_name}}.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
-        entity_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
-        TushareDAO.__init__(self, self.engine, session_factory, {{entity_name}}, self.database, self.table_name, query_fields, entity_fields, config)
+        self.tushare_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
+        entity_fields = [{% for output in outputs %}"{% if output.get('column_name') is defined and output.column_name %}{{output.column_name}}{% else %}{{output.name}}{% endif %}"{% if not loop.last %}, {% endif %}{% endfor %}]
+        column_mapping={% if column_rename is defined and column_rename %}{% autoescape false %}{{column_rename}}{% endautoescape %}{% else %}None{% endif %}
+        TushareDAO.__init__(self, self.engine, session_factory, {{entity_name}}, self.database, self.table_name, query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self,"{{name}}", config)
         TuShareBase.__init__(self,"{{name}}", config, {{integral_required or 120}})
         self.api = TushareAPI(config)
@@ -68,12 +70,12 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -100,7 +102,7 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.{{name}} with args: {}".format(kwargs))
-                return self.tushare_query('{{name}}', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('{{name}}', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -112,6 +114,7 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 setattr({{title_name}}, 'default_limit', default_limit_ext)
@@ -131,6 +134,6 @@ if __name__ == '__main__':
 
 
     api = {{title_name}}(config)
-    api.process()  # 同步增量数据
+    print(api.process())  # 同步增量数据
     print(api.{{name}}({% autoescape false %}{{default_query}}{% endautoescape %}))  # 数据查询接口
 

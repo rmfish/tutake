@@ -1,0 +1,144 @@
+{
+  "database": "tushare_index",
+  "default_limit": "4000",
+  "desc": "获取国际主要指数日线行情",
+  "id": 308,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "行业代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": true,
+  "name": "ci_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "ts_code",
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "trade_date",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "open",
+      "data_type": "float",
+      "desc": "开盘点位",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "low",
+      "data_type": "float",
+      "desc": "最低点位",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "high",
+      "data_type": "float",
+      "desc": "最高点位",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "close",
+      "data_type": "float",
+      "desc": "收盘点位",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "pre_close",
+      "data_type": "float",
+      "desc": "昨日收盘点位",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "change",
+      "data_type": "float",
+      "desc": "涨跌点位",
+      "must": "Y",
+      "name": "change"
+    },
+    {
+      "column": "pct_change",
+      "data_type": "float",
+      "desc": "涨跌幅",
+      "must": "Y",
+      "name": "pct_change"
+    },
+    {
+      "column": "vol",
+      "data_type": "float",
+      "desc": "成交量（万股）",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "amount",
+      "data_type": "float",
+      "desc": "成交额（万元）",
+      "must": "Y",
+      "name": "amount"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
+    ],
+    [
+      93,
+      "指数"
+    ],
+    [
+      308,
+      "中信行业指数日行情"
+    ]
+  ],
+  "title": "中信行业指数日行情",
+  "validations": []
+}

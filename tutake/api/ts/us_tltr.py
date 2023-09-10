@@ -53,9 +53,11 @@ class UsTltr(TushareDAO, TuShareBase, DataProcess):
         TushareUsTltr.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['date', 'start_date', 'end_date', 'fields', 'limit', 'offset']
+        self.tushare_fields = ["date", "ltc", "cmt", "e_factor"]
         entity_fields = ["date", "ltc", "cmt", "e_factor"]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareUsTltr, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "us_tltr", config)
         TuShareBase.__init__(self, "us_tltr", config, 120)
         self.api = TushareAPI(config)
@@ -99,12 +101,12 @@ class UsTltr(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -129,7 +131,7 @@ class UsTltr(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.us_tltr with args: {}".format(kwargs))
-                return self.tushare_query('us_tltr', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('us_tltr', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -141,6 +143,7 @@ class UsTltr(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -159,5 +162,5 @@ if __name__ == '__main__':
     print(pro.us_tltr())
 
     api = UsTltr(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.us_tltr())    # 数据查询接口

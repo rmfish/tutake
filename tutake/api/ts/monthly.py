@@ -60,11 +60,15 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         TushareMonthly.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
+        ]
         entity_fields = [
             "ts_code", "trade_date", "close", "open", "high", "low", "pre_close", "change", "pct_chg", "vol", "amount"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareMonthly, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "monthly", config)
         TuShareBase.__init__(self, "monthly", config, 600)
         self.api = TushareAPI(config)
@@ -143,12 +147,12 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -173,7 +177,7 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.monthly with args: {}".format(kwargs))
-                return self.tushare_query('monthly', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('monthly', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -185,6 +189,7 @@ class Monthly(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 

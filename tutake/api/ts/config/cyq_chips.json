@@ -1,9 +1,10 @@
 {
-    "database": null,
+    "database": "tushare_stock",
     "default_limit": null,
     "desc": "获取A股每日的筹码分布情况，提供各价位占比，数据从2010年开始，每天17~18点之间更新当日数据",
     "id": 294,
     "if_exists": null,
+    "integral_required": 5000,
     "inputs": [
         {
             "data_type": "str",

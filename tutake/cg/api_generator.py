@@ -84,12 +84,32 @@ class CodeGenerator(object):
 
             api_config['title_name'] = "{}".format(api_config['name'].replace('_', ' ').title().replace(' ', ''))
             api_config['entity_name'] = f"{prefix.capitalize()}{api_config['title_name']}"
-            must_output_fields = [o['name'] for o in api['outputs'] if o['must'] == 'Y']
-            output_fields = [o['name'] for o in api['outputs']]
+            must_output_fields = []
+            output_fields = []
+            column_rename = None
+            for field in api['outputs']:
+                output_fields.append(field['name'])
+                if field['must'] == 'Y':
+                    if field.get('column_name'):
+                        must_output_fields.append(field.get('column_name'))
+                    else:
+                        must_output_fields.append(field.get('name'))
+                if field.get('column_name'):
+                    if column_rename is None:
+                        column_rename = {}
+                    column_rename[field.get('column_name')] = field.get('name')
+
+
+            # [(o.get('column_name') is not None and o['column_name'] or o['name']) for o in api['outputs']
+            #                       if o['must'] == 'Y']
+            # output_fields = [o['name'] for o in api['outputs']]
             if len(must_output_fields) != len(output_fields):
                 api_config['default_fields'] = ','.join(must_output_fields)
             else:
                 api_config['default_fields'] = ''
+            api_config['column_rename'] = column_rename
+            # column_rename = None
+
             self.set_index(api_config)
             self.generate_order_by(api_config)
             if api_tmpl:
@@ -143,7 +163,9 @@ class CodeGenerator(object):
         api_names = ['daily_basic', 'ggt_daily', 'ggt_top10', 'hsgt_top10', 'ggt_monthly', 'income_vip',
                      'balancesheet_vip',
                      'cashflow_vip', 'forecast_vip', 'express_vip', 'dividend', 'fina_indicator_vip', 'ths_daily',
-                     'ths_member', 'anns', 'trade_cal', 'stock_vx', 'stock_mx']
+                     'ths_member', 'anns', 'trade_cal', 'stock_vx', 'stock_mx', 'stk_limit', 'fina_audit',
+                     'fina_mainbz_vip', 'margin', 'margin_detail', 'margin_target', 'top10_holders',
+                     'top10_floatholders', 'top_list', 'top_inst']
         index_api = ['index_basic', 'index_daily', 'index_dailybasic', 'index_classify', 'index_member', 'ths_index',
                      'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info',
                      'ths_daily', 'ths_member', 'ci_daily']

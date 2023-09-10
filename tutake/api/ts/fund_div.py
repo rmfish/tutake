@@ -66,13 +66,19 @@ class FundDiv(TushareDAO, TuShareBase, DataProcess):
         TushareFundDiv.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ann_date', 'ex_date', 'pay_date', 'ts_code', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "ann_date", "imp_anndate", "base_date", "div_proc", "record_date", "ex_date", "pay_date",
+            "earpay_date", "net_ex_date", "div_cash", "base_unit", "ear_distr", "ear_amount", "account_date",
+            "base_year", "update_flag"
+        ]
         entity_fields = [
             "ts_code", "ann_date", "imp_anndate", "base_date", "div_proc", "record_date", "ex_date", "pay_date",
             "earpay_date", "net_ex_date", "div_cash", "base_unit", "ear_distr", "ear_amount", "account_date",
             "base_year", "update_flag"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareFundDiv, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "fund_div", config)
         TuShareBase.__init__(self, "fund_div", config, 800)
         self.api = TushareAPI(config)
@@ -184,12 +190,12 @@ class FundDiv(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -214,7 +220,7 @@ class FundDiv(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.fund_div with args: {}".format(kwargs))
-                return self.tushare_query('fund_div', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('fund_div', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -226,6 +232,7 @@ class FundDiv(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -244,5 +251,5 @@ if __name__ == '__main__':
     print(pro.fund_div(ts_code='500001.SH'))
 
     api = FundDiv(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.fund_div(ts_code='500001.SH'))    # 数据查询接口

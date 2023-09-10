@@ -68,13 +68,19 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         TushareStockVx.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "level1", "level2", "vx_life_v_l4", "vx_3excellent_v_l4", "vx_past_5q_avg_l4",
+            "vx_grow_worse_v_l4", "vx_life_v_l8", "vx_3excellent_v_l8", "vx_past_5q_avg_l8", "vx_grow_worse_v_l8",
+            "vxx", "vs", "vz11", "vz24", "vz_lms"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "level1", "level2", "vx_life_v_l4", "vx_3excellent_v_l4", "vx_past_5q_avg_l4",
             "vx_grow_worse_v_l4", "vx_life_v_l8", "vx_3excellent_v_l8", "vx_past_5q_avg_l8", "vx_grow_worse_v_l8",
             "vxx", "vs", "vz11", "vz24", "vz_lms"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareStockVx, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "stock_vx", config)
         TuShareBase.__init__(self, "stock_vx", config, 5000)
         self.api = TushareAPI(config)
@@ -183,12 +189,12 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -213,7 +219,7 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.stock_vx with args: {}".format(kwargs))
-                return self.tushare_query('stock_vx', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('stock_vx', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -225,6 +231,7 @@ class StockVx(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -240,8 +247,8 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.stock_vx())
+    print(pro.stock_vx())
 
     api = StockVx(config)
     print(api.process())    # 同步增量数据
-    # print(api.stock_vx())    # 数据查询接口
+    print(api.stock_vx())    # 数据查询接口

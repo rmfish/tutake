@@ -178,12 +178,13 @@ class DataProcess:
     def __init__(self, name, config):
         self.name = name
         self.config = config
-        self.max_repeat = config.get_config("tutake.process.max_repeat", 3)
+        self.max_repeat = config.get_config("tutake.process.max_repeat", 1000)
+        self.forbidden_config = config.get_process_forbidden()
 
     def name(self):
         return self.name
 
-    def process(self) -> ProcessStatus:
+    def process(self, **kwargs) -> ProcessStatus:
         pass
 
     def api_token_limit(self) -> (int, int):
@@ -211,15 +212,27 @@ class DataProcess:
         """
         return params
 
-    def _process(self, fetch_and_append, writer: BatchWriter = None) -> ProcessStatus:
+    def _forbidden_entrypoint(self, entrypoint):
+        if entrypoint is None:
+            entrypoint = "main"
+        if self.forbidden_config.get(entrypoint):
+            return self.name in self.forbidden_config.get(entrypoint)
+        return False
+
+    def _process(self, fetch_and_append, writer: BatchWriter = None, **kwargs) -> ProcessStatus:
         """
         同步历史数据
         :return:
         """
+        entrypoint = kwargs.get("entrypoint")
+        if self._forbidden_entrypoint(entrypoint):
+            task_logger.warning(f"Ignore process {self.name()}. forbidden by {entrypoint} entrypoint")
+            return ProcessStatus(self.name, [])
+
+        start = time.time()
         self.prepare()
         params = self.query_parameters()
         status = ProcessStatus(self.name, params)
-        start = time.time()
         try:
             writer.start()
             status = self._inner_process(params, fetch_and_append, status, writer)

@@ -62,12 +62,17 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         TushareIndexBasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['ts_code', 'market', 'publisher', 'category', 'name', 'limit', 'offset']
+        self.tushare_fields = [
+            "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
+            "list_date", "weight_rule", "desc", "exp_date"
+        ]
         entity_fields = [
             "ts_code", "name", "fullname", "market", "publisher", "index_type", "category", "base_date", "base_point",
             "list_date", "weight_rule", "desc", "exp_date"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareIndexBasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "index_basic", config)
         TuShareBase.__init__(self, "index_basic", config, 200)
         self.api = TushareAPI(config)
@@ -157,12 +162,12 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -195,7 +200,7 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.index_basic with args: {}".format(kwargs))
-                return self.tushare_query('index_basic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('index_basic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -207,6 +212,7 @@ class IndexBasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -225,5 +231,5 @@ if __name__ == '__main__':
     print(pro.index_basic())
 
     api = IndexBasic(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.index_basic())    # 数据查询接口

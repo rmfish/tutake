@@ -19,9 +19,9 @@ def create_shared_engine(url: str, **connect_args):
 class TushareDAO(BaseDao):
 
     def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
-                 entity_fields,
-                 config: TutakeConfig):
-        super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields, config)
+                 entity_fields, column_mapping, config: TutakeConfig):
+        super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields,
+                         column_mapping, config)
         self.records = Records()
 
     def filter_process(self, filter_criterion, filter_by):
@@ -47,13 +47,16 @@ class TushareDAO(BaseDao):
             return 'start_date', 'end_date', self.entities.end_date
         elif self.table_name == 'tushare_fund_nav':
             return 'start_date', 'end_date', self.entities.nav_date
-        elif self.table_name in ['tushare_stk_managers', 'tushare_namechange', 'tushare_anns']:
+        elif self.table_name in ['tushare_stk_managers', 'tushare_namechange', 'tushare_anns', 'tushare_fina_audit',
+                                 'tushare_top10_floatholders', 'tushare_top10_holders']:
             return 'start_date', 'end_date', self.entities.ann_date
         elif self.table_name in ['tushare_cn_cpi', 'tushare_cn_m', 'tushare_cn_ppi', 'tushare_sf_month']:
             return 'start_m', 'end_m', self.entities.month
         elif self.table_name in ['tushare_cn_gdp']:
             return 'start_q', 'end_q', self.entities.quarter
-        elif self.table_name in ['tushare_us_tbr', 'tushare_us_tltr', 'tushare_us_trltr', 'tushare_us_trycr']:
+        elif self.table_name in ['tushare_us_tbr', 'tushare_us_tltr', 'tushare_us_trltr', 'tushare_us_trycr',
+                                 'tushare_us_tycr', 'tushare_gz_index', 'tushare_hibor', 'tushare_libor',
+                                 'tushare_shibor', 'tushare_shibor_lpr', 'tushare_wz_index', 'tushare_eco_cal']:
             return 'start_date', 'end_date', self.entities.date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date

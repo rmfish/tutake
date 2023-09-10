@@ -73,13 +73,19 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         TushareBakBasic.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['trade_date', 'ts_code', 'limit', 'offset']
+        self.tushare_fields = [
+            "trade_date", "ts_code", "name", "industry", "area", "pe", "float_share", "total_share", "total_assets",
+            "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
+            "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
+        ]
         entity_fields = [
             "trade_date", "ts_code", "name", "industry", "area", "pe", "float_share", "total_share", "total_assets",
             "liquid_assets", "fixed_assets", "reserved", "reserved_pershare", "eps", "bvps", "pb", "list_date", "undp",
             "per_undp", "rev_yoy", "profit_yoy", "gpr", "npr", "holder_num"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareBakBasic, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "bak_basic", config)
         TuShareBase.__init__(self, "bak_basic", config, 120)
         self.api = TushareAPI(config)
@@ -221,12 +227,12 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -251,7 +257,7 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.bak_basic with args: {}".format(kwargs))
-                return self.tushare_query('bak_basic', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('bak_basic', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -263,6 +269,7 @@ class BakBasic(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -281,5 +288,5 @@ if __name__ == '__main__':
     print(pro.bak_basic())
 
     api = BakBasic(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.bak_basic())    # 数据查询接口

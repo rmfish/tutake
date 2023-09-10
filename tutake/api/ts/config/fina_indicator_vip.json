@@ -54,7 +54,7 @@
             "name": "offset"
         }
     ],
-    "integral_required": 5000,
+    "integral_required": 2000,
     "is_ready": null,
     "name": "fina_indicator_vip",
     "order_by": null,

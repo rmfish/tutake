@@ -62,12 +62,17 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         TushareCnCpi.__table__.create(bind=self.engine, checkfirst=True)
 
         query_fields = ['m', 'start_m', 'end_m', 'limit', 'offset']
+        self.tushare_fields = [
+            "month", "nt_val", "nt_yoy", "nt_mom", "nt_accu", "town_val", "town_yoy", "town_mom", "town_accu",
+            "cnt_val", "cnt_yoy", "cnt_mom", "cnt_accu"
+        ]
         entity_fields = [
             "month", "nt_val", "nt_yoy", "nt_mom", "nt_accu", "town_val", "town_yoy", "town_mom", "town_accu",
             "cnt_val", "cnt_yoy", "cnt_mom", "cnt_accu"
         ]
+        column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareCnCpi, self.database, self.table_name,
-                            query_fields, entity_fields, config)
+                            query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "cn_cpi", config)
         TuShareBase.__init__(self, "cn_cpi", config, 600)
         self.api = TushareAPI(config)
@@ -155,12 +160,12 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         """
         return super().query(fields, **kwargs)
 
-    def process(self):
+    def process(self, **kwargs):
         """
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name))
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -185,7 +190,7 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
             try:
                 kwargs['offset'] = str(offset_val)
                 self.logger.debug("Invoke pro.cn_cpi with args: {}".format(kwargs))
-                return self.tushare_query('cn_cpi', fields=self.entity_fields, **kwargs)
+                return self.tushare_query('cn_cpi', fields=self.tushare_fields, **kwargs)
             except Exception as err:
                 raise ProcessException(kwargs, err)
 
@@ -197,6 +202,7 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
             size = result.size()
             offset += size
             res.append(result)
+        res.fields = self.entity_fields
         return res
 
 
@@ -215,5 +221,5 @@ if __name__ == '__main__':
     print(pro.cn_cpi())
 
     api = CnCpi(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.cn_cpi())    # 数据查询接口

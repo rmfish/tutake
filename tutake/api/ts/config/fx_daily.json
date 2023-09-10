@@ -1,5 +1,5 @@
 {
-    "database": null,
+    "database": "tushare_fx",
     "default_limit": "1000",
     "desc": "外汇日线行情",
     "id": 179,
@@ -49,7 +49,7 @@
         }
     ],
     "integral_required": 2000,
-    "is_ready": null,
+    "is_ready": true,
     "name": "fx_daily",
     "order_by": null,
     "outputs": [
