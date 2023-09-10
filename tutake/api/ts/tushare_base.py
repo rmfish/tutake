@@ -14,7 +14,7 @@ from pandas import DataFrame
 from tutake.api.base_dao import Records
 from tutake.api.process import CriticalException
 from tutake.api.process_client import Task
-from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig
+from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig, TUSHARE_TOKEN_CHECK_KEY
 from tutake.utils.utils import end_of_day
 
 tushare_logger = logging.getLogger("tutake.tushare")
@@ -123,6 +123,34 @@ def _test_token(path):
         #     print(f"{i[1]} #{i[0]}")
 
 
+tushare_clients = None
+tushare_clients_init_lock = threading.Lock()
+
+
+def _get_tushare_clients(_config):
+    global tushare_clients
+    if tushare_clients is not None:
+        return tushare_clients
+    else:
+        tushare_clients_init_lock.acquire()
+        try:
+            if tushare_clients is not None:
+                return tushare_clients
+            tushare_tokens = _config.get_config(TUSHARE_TOKENS_KEY)
+            if tushare_tokens and len(tushare_tokens) > 1:
+                clients = []
+                for t in tushare_tokens:
+                    if tushare_tokens[t]:
+                        clients.extend([TushareClient(token, t, time.time() - t) for token in tushare_tokens[t]])
+                if _config.get_config(TUSHARE_TOKEN_CHECK_KEY, False):
+                    tushare_clients = [client for client in clients if client.validate_token()]
+                else:
+                    tushare_clients = clients
+                return tushare_clients
+        finally:
+            tushare_clients_init_lock.release()
+
+
 class TushareTokenPool(object):
 
     def __init__(self, score, tokens: []):
@@ -148,12 +176,9 @@ class TuShareBase(Task):
         tushare_tokens = config.get_config(TUSHARE_TOKENS_KEY)
         self.client_queue = None
         if tushare_tokens and len(tushare_tokens) > 1:
-            clients = []
-            for t in tushare_tokens:
-                if t >= token_integral:
-                    clients.extend([TushareClient(token, t, time.time() - t) for token in tushare_tokens[t]])
-            self.client_queue = TushareTokenQueue(clients, self.logger)
-        # assert self.t_api is not None or self.client_queue is not None, 'Tushare token is required, pls config it in config.yaml'
+            clients = _get_tushare_clients(config)
+            self.client_queue = TushareTokenQueue([client for client in clients if client.score >= token_integral],
+                                                  self.logger)
 
     def tushare_query(self, api, fields, **kwargs) -> Records:
         if self.client_queue:
@@ -209,7 +234,7 @@ class TushareClient:
 
     def query(self, api_name, fields='', **kwargs) -> DataFrame:
         result = self.query_records(api_name, fields, **kwargs)
-        return pd.DataFrame(result['items'], columns=result['fields'])
+        return pd.DataFrame(result.items, columns=result.fields)
 
     def query_json(self, api_name, fields='', **kwargs):
         req_params = {
@@ -235,6 +260,18 @@ class TushareClient:
             return Records(res['fields'], items)
         else:
             return Records()
+
+    def validate_token(self):
+        try:
+            df = self.query('user', token=self.__token)
+            score = self.score
+            self.score = df['到期积分'].sum()
+            if score != self.score:
+                logging.error(f"Check tushare token diff token:{self.__token}, acture score is {self.score}")
+            return True
+        except Exception as err:
+            logging.error(f"Check tushare token error {err}. token:{self.__token}")
+            return False
 
     def set_alive_time(self, _time):
         self._time = _time
@@ -310,22 +347,3 @@ class TushareTokenQueue:
         return str(self.items)
 
     __class_getitem__ = classmethod(types.GenericAlias)
-
-
-if __name__ == '__main__':
-    config = TutakeConfig("/Users/rmfish/Documents/Projects/PycharmProjects/tutake")
-    check_token(config)
-
-    # _test_token("/Users/rmfish/Documents/Projects/PycharmProjects/tutake/tmp/token2.txt")
-    # tokens = [TushareClient(i, time.time() - 5000) for i in ["123", "345"]]
-    # queue = TushareTokenQueue(tokens)
-    # print(queue)
-    # # for i in range(10):
-    # #     print(queue.get())
-    # queue.alive(tokens[1], time.time() + 100)
-    # queue.alive(tokens[0], time.time() + 100)
-    # start = time.time()
-    # for i in range(50):
-    #     time.sleep(0.3)
-    #     j = queue.get(5)
-    #     print("{} {}".format(time.time() - start, j))
