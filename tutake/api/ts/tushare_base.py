@@ -173,7 +173,7 @@ class TuShareBase(Task):
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
                         return self.tushare_query(api, fields, **kwargs)
                     elif str(err).startswith("抱歉，您没有访问该接口的权限") or str(err).startswith(
-                            "抱歉，您输入的TOKEN无效！"):
+                            "抱歉，您输入的TOKEN无效！") or str(err).startswith("抱歉，检测到您存在恶意行为"):
                         self.client_queue.alive(client, time.time() + 4294967.0)
                         tushare_logger.debug(
                             f"Request limit {api} {client} {self.client_queue.useful_size()} {','.join(str(err).split('，')[0:2])}")
