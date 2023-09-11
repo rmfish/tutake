@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, and_
+from sqlalchemy import create_engine, and_, orm
 from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao
@@ -25,15 +25,22 @@ class TushareDAO(BaseDao):
         self.records = Records()
 
     def filter_process(self, filter_criterion, filter_by):
-        if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly']:
-            ts_code = filter_by.get("ts_code")
-            if ts_code is not None and "," in ts_code:
-                codes = ts_code.split(",")
+        if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly', 'tushare_adj_factor']:
+            return self.filter_process_by_column(filter_criterion, filter_by, ['ts_code'])
+        elif self.table_name in ['tushare_trade_cal']:
+            return self.filter_process_by_column(filter_criterion, filter_by, ['exchange'])
+        return filter_criterion, filter_by
+
+    def filter_process_by_column(self, filter_criterion, filter_by, columns):
+        for column in columns:
+            field = filter_by.get(column)
+            if field is not None and "," in field:
+                codes = field.split(",")
                 if filter_criterion is None:
-                    filter_criterion = self.entities.in_(codes)
+                    filter_criterion = orm.class_mapper(self.entities).c[column].in_(codes)
                 else:
-                    filter_criterion = and_(self.entities.ts_code.in_(codes), filter_criterion)
-                del filter_by['ts_code']
+                    filter_criterion = and_(orm.class_mapper(self.entities).c[column].in_(codes), filter_criterion)
+                del filter_by[column]
         return filter_criterion, filter_by
 
     def default_time_range(self) -> ():

@@ -190,5 +190,5 @@ if __name__ == '__main__':
     config = TutakeConfig(project_root())
 
     api = HotStock(config)
-    api.process()    # 同步增量数据
+    print(api.process())    # 同步增量数据
     print(api.hot_stock())    # 数据查询接口
