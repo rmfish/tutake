@@ -1,18 +1,65 @@
 import logging
-import pickle
 import sqlite3
 import threading
 import time
+from datetime import datetime
 from operator import and_
 from sqlite3 import Connection
 
 import pandas as pd
-from sqlalchemy import text, create_engine
+from sqlalchemy import text, Column, Integer, PickleType, String, Boolean, DateTime
 from sqlalchemy.orm import load_only, declarative_base, sessionmaker
 
 from tutake.utils.config import TutakeConfig
 
 Base = declarative_base()
+checker_logger = logging.getLogger('tutake.checker')
+
+
+class TutakeCheckerPoint(Base):
+    __tablename__ = "checker_point"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    table_name = Column(String, index=True, comment='表名')
+    points = Column(PickleType, comment='检测点')
+    error = Column(Boolean, comment='是否错误的point')
+    update_time = Column(DateTime, comment='更新时间', default=datetime.utcnow)
+
+
+class DataChecker:
+
+    def __init__(self, engine, name, session_factory, config):
+        self.config = config
+        self.engine = engine
+        self.name = name
+        self.session_factory: sessionmaker = session_factory
+        TutakeCheckerPoint.__table__.create(bind=self.engine, checkfirst=True)
+
+    def check_point(self) -> (dict, bool):
+        session = self.session_factory()
+        point = session.query(TutakeCheckerPoint).filter_by(table_name=self.name).order_by(
+            TutakeCheckerPoint.update_time.desc()).first()
+        if point is None:
+            return None, True
+        else:
+            return point.points, point.error
+
+    def _save(self, error: False, **points):
+        session = self.session_factory()
+        model = session.query(TutakeCheckerPoint).filter_by(table_name=self.name).first()
+        if model:
+            model.points = points
+            model.update_time = datetime.now()
+            session.merge(model)
+        else:
+            model = TutakeCheckerPoint(table_name=self.name, points=points, error=error, update_time=datetime.now())
+            session.add(model)  # 执行插入操作
+        session.commit()
+
+    def save_point(self, **points):
+        self._save(False, **points)
+
+    def error_point(self, **points):
+        self._save(True, **points)
 
 
 class BaseDao(object):
@@ -29,6 +76,7 @@ class BaseDao(object):
         self.column_mapping = column_mapping
         self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
+        self.checker = DataChecker(self.engine, table_name, session_factory, config)
 
     def columns_meta(self):
         pass

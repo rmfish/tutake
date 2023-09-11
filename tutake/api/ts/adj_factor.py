@@ -147,6 +147,7 @@ setattr(AdjFactor, 'default_order_by', default_order_by_ext)
 setattr(AdjFactor, 'prepare', prepare_ext)
 setattr(AdjFactor, 'query_parameters', query_parameters_ext)
 setattr(AdjFactor, 'param_loop_process', param_loop_process_ext)
+setattr(AdjFactor, 'check', check_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数

@@ -212,6 +212,9 @@ class DataProcess:
         """
         return params
 
+    def check(self, **kwargs):
+        pass
+
     def _forbidden_entrypoint(self, entrypoint):
         if entrypoint is None:
             entrypoint = "main"
@@ -224,14 +227,17 @@ class DataProcess:
         同步历史数据
         :return:
         """
+        return self._process_by_func(self.prepare, self.query_parameters, fetch_and_append, writer, **kwargs)
+
+    def _process_by_func(self, prepare, query_parameters, fetch_and_append, writer, **kwargs):
         entrypoint = kwargs.get("entrypoint")
         if self._forbidden_entrypoint(entrypoint):
             task_logger.warning(f"Ignore process {self.name()}. forbidden by {entrypoint} entrypoint")
             return ProcessStatus(self.name, [])
 
         start = time.time()
-        self.prepare()
-        params = self.query_parameters()
+        prepare()
+        params = query_parameters()
         status = ProcessStatus(self.name, params)
         try:
             writer.start()

@@ -196,7 +196,7 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.eco_cal(start_date='19800101',end_date='20050101'))
+    print(pro.eco_cal())
 
     api = EcoCal(config)
     print(api.process())    # 同步增量数据

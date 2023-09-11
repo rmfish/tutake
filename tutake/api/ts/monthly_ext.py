@@ -1,3 +1,5 @@
+from tutake.api.checker import check_by_date
+from tutake.api.ts.date_utils import m_by_m_params
 
 
 def default_cron_express_ext(self) -> str:
@@ -17,6 +19,7 @@ def prepare_ext(self):
     同步历史数据准备工作
     :return:
     """
+    self.delete_by(trade_date='20230831')
 
 
 def query_parameters_ext(self):
@@ -24,25 +27,16 @@ def query_parameters_ext(self):
     同步历史数据调用的参数
     :return: list(dict)
     """
-    return self.api.stock_basic.column_data(['ts_code', 'list_date'])
+    return m_by_m_params(self, '19901231')
 
 
 def param_loop_process_ext(self, **params):
     """
     每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
     """
-    import pendulum
-    date_format = 'YYYYMMDD'
-    max_date = self.max("trade_date", "ts_code = '%s'" % params['ts_code'])
-    if max_date is None:
-        params['start_date'] = ""
-    else:
-        start_date = pendulum.parse(max_date).add(months=1)
-        if params.get('list_date'):
-            if start_date.to_date_string()[:-2] > pendulum.now().to_date_string()[:-2]:
-                return None
-            if start_date.diff(pendulum.now(), abs=False).days < 0:
-                return None
-            else:
-                params['start_date'] = start_date.format(date_format)
     return params
+
+
+def check_ext(self, **kwargs):
+    check_by_date(self, self.monthly, force_start=kwargs.get("force_start"), default_start='19901231',
+                  date_apply=lambda date: date.add(months=1).last_of("month"), print_step=10)

@@ -79,6 +79,7 @@ TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
 TUTAKE_REMOTE_SERVER_KEY = "tutake.remote.address"
 TUTAKE_SERVER_PORT_KEY = "tutake.server.port"
 TUSHARE_TOKEN_KEY = "tushare.token"
+TUSHARE_TOKEN_CHECK_KEY = "tushare.token_check"
 TUSHARE_TOKENS_KEY = "tushare.tokens"
 DEFAULT_TUSHARE_TOKEN = "4907b8834a0cecb6af0613e29bf71847206c41ddc3e598b9a25a0203"  # 网上随机找的，兜底程序一定可用
 TUSHARE_META_DRIVER_URL_KEY = "tushare.meta.driver_url"

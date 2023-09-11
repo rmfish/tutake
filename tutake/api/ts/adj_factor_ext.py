@@ -1,6 +1,7 @@
 """
 获取股票复权因子，可提取单只股票全部历史复权因子，也可以提取单日全部股票的复权因子。更新时间：早上9点30分
 """
+from tutake.api.checker import check_by_date
 from tutake.api.ts.date_utils import start_end_step_params
 
 
@@ -37,3 +38,7 @@ def param_loop_process_ext(self, **params):
     """
     return params
 
+
+def check_ext(self, **kwargs):
+    check_by_date(self, self.adj_factor, force_start=kwargs.get("force_start"), default_start='19901219',
+                  date_apply=lambda date: date.add(days=1))
