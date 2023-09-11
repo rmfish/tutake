@@ -51,9 +51,10 @@ class TushareProcessTask:
         for i in config_tasks:
             configs = {**configs, **i}
         default_cron = configs.get('default') or "10 0,6,21 * * *"
+        check_cron = configs.get('check') or "30 0 * * 6"
         tasks = self._get_all_task()
         api_crontabs = []
-        api_schedule = {'default_cron': default_cron, 'apis': api_crontabs}
+        api_schedule = {'check_cron': check_cron, 'default_cron': default_cron, 'apis': api_crontabs}
         for task in tasks:
             cron = ""
             skip = False
@@ -82,9 +83,12 @@ class TushareProcessTask:
         :return:
         """
         default_cron = schedule_configs.get('default_cron')
+        check_cron = schedule_configs.get('check_cron')
         api_crontabs = schedule_configs.get('apis')
         default_crontabs = []
+        check_jobs = []
         for cron in api_crontabs:
+            check_jobs.append(cron['task'])
             if not cron["skip"]:
                 if cron["group"] == 'default':
                     default_crontabs.append(cron['task'])
@@ -94,6 +98,9 @@ class TushareProcessTask:
         if len(default_crontabs) > 0:
             self.add_job("default_schedule", default_crontabs,
                          trigger=CronTrigger.from_crontab(default_cron, timezone=self.timezone))
+        if len(check_jobs) > 0:
+            self._scheduler.add_job(self._do_check, args=[check_jobs], id='check_schedule', name='check_schedule',
+                                    trigger=CronTrigger.from_crontab(check_cron, timezone=self.timezone))
 
     def _get_all_task(self) -> [Task]:
         tushare_api = TushareAPI(self.config)
@@ -130,18 +137,42 @@ class TushareProcessTask:
             self.logger.info(
                 f"Finished {len(status_list)} of scheduled tasks, it takes {time.time() - start}s. Tasks details is:\n|-{result}")
 
+    def _do_check(self, tasks):
+        def __check(_job_id, _task):
+            if _task is not None:
+                _task.check()
+
+        start = time.time()
+        status_cnt = 0
+        if isinstance(tasks, Task):
+            __check(f"tutake_{tasks.name}", tasks)
+            status_cnt = 1
+        elif isinstance(tasks, Sequence):
+            for task in tasks:
+                try:
+                    __check(f"tutake_{task.name}", task)
+                    status_cnt = status_cnt + 1
+                except Exception as err:
+                    # self.logger.error(f"Exception with {api} process,err is {err}")
+                    continue
+        self.logger.info(
+            f"Finished {status_cnt} of check tasks, it takes {time.time() - start}s.")
+
     def get_scheduler(self):
         return self._scheduler
 
     def add_job(self, job_id, api, **kwargs):
         self._scheduler.add_job(self._do_process, args=[api], id=job_id, name=job_id, **kwargs)
 
-    def start(self, now=False):
+    def start(self, now=False, check=False):
         try:
             schedule_configs = self._api_schedule_config()
             if now:
                 tasks = [api['task'] for api in schedule_configs.get('apis') if not api['skip']]
                 self._do_process(tasks, "manual")
+            if check:
+                tasks = [api['task'] for api in schedule_configs.get('apis')]
+                self._do_check(tasks)
             self._api_to_jobs(schedule_configs)
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:

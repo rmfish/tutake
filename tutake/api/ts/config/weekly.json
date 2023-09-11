@@ -4,6 +4,7 @@
     "desc": "获取A股周线行情,全部历史，每周五15点～17点之间更新",
     "id": 144,
     "if_exists": null,
+    "checker": true,
     "inputs": [
         {
             "data_type": "str",

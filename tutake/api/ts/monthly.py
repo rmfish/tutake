@@ -199,6 +199,7 @@ setattr(Monthly, 'default_order_by', default_order_by_ext)
 setattr(Monthly, 'prepare', prepare_ext)
 setattr(Monthly, 'query_parameters', query_parameters_ext)
 setattr(Monthly, 'param_loop_process', param_loop_process_ext)
+setattr(Monthly, 'check', check_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数

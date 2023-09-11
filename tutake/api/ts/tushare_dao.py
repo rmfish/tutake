@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, and_, orm
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import QueuePool
 
 from tutake.api.base_dao import BaseDao
 from tutake.api.ts.tushare_base import Records
@@ -9,11 +10,7 @@ engine_pool = {}
 
 
 def create_shared_engine(url: str, **connect_args):
-    engine = engine_pool.get(url)
-    if engine is None:
-        engine = create_engine(url, **connect_args)
-        engine_pool[url] = engine
-    return engine
+    return create_engine(url, poolclass=QueuePool, **connect_args)
 
 
 class TushareDAO(BaseDao):

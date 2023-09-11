@@ -123,6 +123,7 @@ setattr({{title_name}}, 'default_order_by', default_order_by_ext)
 setattr({{title_name}}, 'prepare', prepare_ext)
 setattr({{title_name}}, 'query_parameters', query_parameters_ext)
 setattr({{title_name}}, 'param_loop_process', param_loop_process_ext)
+{% if checker %}setattr({{title_name}}, 'check', check_ext){% endif %}
 
 
 if __name__ == '__main__':
