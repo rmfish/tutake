@@ -317,7 +317,8 @@ class BatchWriter:
     def start(self):
         if self.conn is None:
             self.conn = sqlite3.connect(self.engine.url.database)
-        # self.conn.execute('''PRAGMA synchronous = OFF''')
+            self.conn.execute('''PRAGMA journal_mode=WAL''')
+            # self.conn.execute('''PRAGMA synchronous = OFF''')
 
     def rollback(self):
         if self.conn:

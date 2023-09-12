@@ -3,6 +3,7 @@
     "default_limit": "1000",
     "desc": "指数周线行情",
     "id": 171,
+    "checker": true,
     "if_exists": null,
     "inputs": [
         {

@@ -1,4 +1,7 @@
+import pandas as pd
 import pendulum
+
+from tutake.api.base_dao import checker_logger
 
 
 def default_cron_express_ext(self) -> str:
@@ -34,7 +37,7 @@ def query_parameters_ext(self):
     :return: list(dict)
     """
     return self.api.index_basic.column_data(['ts_code', 'list_date'],
-                                            TushareIndexBasic.market.not_in(['MSCI', 'CNI']),
+                                            TushareIndexBasic.market.not_in(['MSCI']),
                                             TushareIndexBasic.list_date.is_not(None))
 
 
@@ -54,3 +57,44 @@ def param_loop_process_ext(self, **params):
         start_date = max_date.add(days=1)
         params['start_date'] = start_date.format(date_format)
     return params
+
+
+def check_ext(self, **kwargs):
+    indexes = pd.DataFrame(self.api.index_basic.column_data(['ts_code', 'list_date']))
+    force_start = kwargs.get("force_start")
+    if force_start is not None:
+        start = force_start
+    else:
+        point = self.checker.check_point()
+        if point[0] is not None:
+            start = point[0].get('list_date')
+        else:
+            start = None
+    if start is not None:
+        indexes = indexes[(indexes['list_date'] >= start) & (indexes['list_date'].notnull())]
+    else:
+        indexes = indexes[indexes['list_date'].notnull()]
+    indexes = indexes.sort_values('list_date', ignore_index=True)
+    count = 0
+    for idx, row in indexes.iterrows():
+        tushare = self.fetch_and_append(ts_code=row['ts_code'])
+        db = self.index_daily(ts_code=row['ts_code'], limit=100000)
+        if tushare.size() != db.shape[0]:
+            tushare_pd = set(pd.DataFrame(tushare.items, columns=tushare.fields)['trade_date'].unique().tolist())
+            db_pd = set(db['trade_date'].unique().tolist())
+            diff = list(tushare_pd - db_pd)
+            if len(diff) == 0:
+                diff = list(db_pd - tushare_pd)
+            if len(diff) == 0:
+                duplicates = db.duplicated('trade_date')
+                print(db[duplicates])
+            checker_logger.warning(
+                f"Not equals data. The date is {row['ts_code']}. tushare size is {tushare.size()}, db size is {db.shape[0]}, diff is {diff}")
+            if force_start is None and row['list_date'] is not None:
+                self.checker.error_point(list_date=row['list_date'])
+            return
+        if count % 30 == 0:
+            checker_logger.warning(f"Start check time of {row['list_date']}")
+            if row['list_date'] is not None:
+                self.checker.save_point(list_date=row['list_date'])
+        count = count + 1

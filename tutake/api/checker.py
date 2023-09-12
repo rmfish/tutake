@@ -4,7 +4,7 @@ import pendulum
 from tutake.api.base_dao import TutakeCheckerPoint, checker_logger, BatchWriter
 
 
-def _auto_fix(self, trade_date, ts_codes):
+def _auto_data_repair(self, trade_date, ts_codes):
     writer = BatchWriter(self.engine, self.table_name)
     if len(ts_codes) < 100:
         for ts_code in ts_codes:
@@ -19,7 +19,7 @@ def _auto_fix(self, trade_date, ts_codes):
 
 def check_by_date(self, method, default_start, force_start=None, date_apply=lambda d: d.add(days=1), print_step=30,
                   diff_column='ts_code',
-                  diff_fix=_auto_fix):
+                  diff_repair=_auto_data_repair):
     """
     一个按照日期进行检测的通用函数，
     :param self:
@@ -29,7 +29,7 @@ def check_by_date(self, method, default_start, force_start=None, date_apply=lamb
     :param date_apply: 计算日期的函数
     :param print_step: 打印的步进
     :param diff_column: 对比差异的列名
-    :param diff_fix: 处理差异数据
+    :param diff_repair: 处理差异数据
     :return:
     """
     if force_start is not None:
@@ -53,8 +53,8 @@ def check_by_date(self, method, default_start, force_start=None, date_apply=lamb
         if tushare.size() != db.shape[0]:
             tushare_pd = pd.DataFrame(tushare.items, columns=tushare.fields)
             diff = list(set(tushare_pd[diff_column].unique().tolist()) - set(db[diff_column].unique().tolist()))
-            if diff_fix is not None:
-                diff_fix(self, trade_date, diff)
+            if diff_repair is not None:
+                diff_repair(self, trade_date, diff)
                 continue
             else:
                 checker_logger.warning(

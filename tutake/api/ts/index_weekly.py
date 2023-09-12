@@ -199,6 +199,7 @@ setattr(IndexWeekly, 'default_order_by', default_order_by_ext)
 setattr(IndexWeekly, 'prepare', prepare_ext)
 setattr(IndexWeekly, 'query_parameters', query_parameters_ext)
 setattr(IndexWeekly, 'param_loop_process', param_loop_process_ext)
+setattr(IndexWeekly, 'check', check_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数
