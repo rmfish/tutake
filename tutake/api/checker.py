@@ -8,12 +8,12 @@ def _auto_data_repair(self, trade_date, ts_codes):
     writer = BatchWriter(self.engine, self.table_name)
     if len(ts_codes) < 100:
         for ts_code in ts_codes:
-            print(f"Auto fix data of {ts_code}")
-            print(self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
+            checker_logger.info(f"Auto fix {self.name} data of {ts_code}")
+            checker_logger.info(self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
                                         self.fetch_and_append, writer))
     else:
-        print(f"Auto fix data of {trade_date}")
-        print(self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
+        checker_logger.info(f"Auto fix {self.name} data of {trade_date}")
+        checker_logger.info(self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
                                     self.fetch_and_append, writer))
 
 
@@ -63,7 +63,7 @@ def check_by_date(self, method, default_start, force_start=None, date_apply=lamb
                     self.checker.error_point(trade_date=trade_date)
             return
         if count % print_step == 0:
-            checker_logger.warning(f"Start check time of {trade_date}")
+            checker_logger.warning(f"Start {self.name} check: {trade_date}")
             if force_start is None:
                 self.checker.save_point(trade_date=trade_date)
         start_date = date_apply(start_date)

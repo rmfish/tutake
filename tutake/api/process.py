@@ -254,18 +254,19 @@ class DataProcess:
         return status
 
     def _inner_process(self, process_params, fetch_and_append, status: ProcessStatus, writer: BatchWriter = None,
-                       retry_cnt=0):
+                       retry_cnt=0, entrypoint=None):
         if retry_cnt > self.max_repeat:
             # TODO
             status.break_down = True
             # self.logger.error(f"Over max retry cnt. {self.name} {status.err}")
             return status
-        elif retry_cnt > 0:
-            task_logger.warning(
-                f"Start the {retry_cnt}'s retry {self.entities.__name__} process, retry tasks cnt is {len(process_params)}")
-        else:
-            task_logger.warning(
-                f"Start the {self.entities.__name__} process, tasks cnt is {len(process_params)}")
+        elif entrypoint != 'scheduler':
+            if retry_cnt > 0:
+                task_logger.warning(
+                    f"Start the {retry_cnt}'s retry {self.entities.__name__} process, retry tasks cnt is {len(process_params)}")
+            else:
+                task_logger.warning(
+                    f"Start the {self.entities.__name__} process, tasks cnt is {len(process_params)}")
 
         if process_params:
             def action(param) -> ProcessTask:
