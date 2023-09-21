@@ -8,6 +8,7 @@ from qlib.data.data import Cal
 from tutake.utils.config import TutakeConfig
 
 PRICE_COLS = ['open', 'close', 'high', 'low', 'pre_close']
+FIELDS = {"vwap": "avg_price", "volume": "vol", }
 
 
 class TutakeProvider:
@@ -31,19 +32,23 @@ class TutakeFeatureProvider(FeatureProvider, TutakeProvider):
         if end_index is not None:
             end_index = end_index.strftime('%Y%m%d')
         field = str(field)[1:]
+        mapping = FIELDS.get(field)
+        if mapping is None:
+            mapping = field
+
         if freq == 'day':
-            df = self.tushare().daily(ts_code=instrument, fields=f'trade_date,{field}', start_date=start_index,
-                                      end_date=end_index, limit=100000)
-            if field in PRICE_COLS:
+            df = self.tushare().bak_daily(ts_code=instrument, fields=f'trade_date,{mapping}', start_date=start_index,
+                                          end_date=end_index, limit=100000)
+            if mapping in PRICE_COLS:
                 df_adj = self.tushare().adj_factor(ts_code=instrument, fields=f'trade_date,adj_factor',
                                                    start_date=start_index, limit=100000)
                 df = pd.merge(df, df_adj, how='left', left_on='trade_date', right_on='trade_date')
-                df[field] = df[field] * df['adj_factor'] / float(df_adj['adj_factor'][0])
-            df[field] = df[field].astype(float)
+                df[mapping] = df[mapping] * df['adj_factor'] / float(df_adj['adj_factor'][0])
+                df[mapping] = df[mapping].astype(float)
             df['trade_date'] = pd.to_datetime(df['trade_date'])
             df.set_index('trade_date', inplace=True)
             df.sort_index(inplace=True)
-            return df[field]
+            return df[mapping]
 
 
 @patch("qlib.data", 'TutakeCalendarProvider')
