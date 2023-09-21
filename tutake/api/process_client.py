@@ -3,10 +3,6 @@ import time
 from collections.abc import Sequence
 from functools import partial
 
-from apscheduler.schedulers.background import BackgroundScheduler
-from apscheduler.schedulers.blocking import BlockingScheduler
-from apscheduler.triggers.cron import CronTrigger
-
 from tutake.api.process import ProcessStatus
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
@@ -22,8 +18,12 @@ class Task(object):
         return ''
 
 
-class TushareProcessTask:
+class TushareProcessTask(object):
     def __init__(self, config: TutakeConfig):
+        from apscheduler.schedulers.background import BackgroundScheduler
+        from apscheduler.schedulers.blocking import BlockingScheduler
+        from apscheduler.triggers.cron import CronTrigger
+
         self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
         if config.get_config("tutake.scheduler.background", False):
             self._scheduler = BackgroundScheduler(timezone=self.timezone)
@@ -179,7 +179,7 @@ class TushareProcessTask:
             self.logger.error(f"Exit with {type(err).__name__} {err}")
 
 
-class TushareProcess:
+class TushareProcess(object):
     def __init__(self, config: TutakeConfig):
         self.api = TushareAPI(config)
         self.config = config

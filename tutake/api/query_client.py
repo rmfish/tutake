@@ -8,10 +8,11 @@ from tutake.api.xq.xueqiu_api import XueQiuAPI
 from tutake.remote.client import TutakeClient
 
 
-class TushareQuery:
+class TushareQuery(object):
     def __init__(self, config):
         token = config.get_tushare_token()
         if token and token != '':
+            import tushare
             self.tushare = tushare.pro_api(token)
         self.config = config
         self.api = TushareAPI(config)
@@ -57,7 +58,7 @@ class TushareQuery:
         return partial(self.query, name)
 
 
-class XueQiuQuery:
+class XueQiuQuery(object):
     def __init__(self, config):
         self.config = config
         self.api = XueQiuAPI(config)

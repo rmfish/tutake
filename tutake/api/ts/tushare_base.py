@@ -346,4 +346,4 @@ class TushareTokenQueue:
     def __str__(self):
         return str(self.items)
 
-    __class_getitem__ = classmethod(types.GenericAlias)
+    # __class_getitem__ = classmethod(types.GenericAlias)

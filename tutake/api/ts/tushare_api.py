@@ -19,6 +19,7 @@ class TushareAPI(object):
             self.instances[name] = self.instance_from_name(name, self.config)
         return self.instances.get(name)
 
+
     def all_apis(self):
         apis = [
             'stock_company', 'hk_hold', 'stk_rewards', 'hs_const', 'report_rc', 'stk_managers', 'moneyflow_hsgt',

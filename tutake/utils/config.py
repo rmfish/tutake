@@ -1,5 +1,6 @@
 import logging
 import os.path
+import pickle
 from os.path import dirname, abspath, join
 from pathlib import Path
 
@@ -10,6 +11,12 @@ from tutake.utils.utils import project_root, file_dir, realpath
 
 
 class DotConfig(dict):
+
+    def __getstate__(self):
+        return self
+
+    def __setstate__(self, state):
+        self.update(state)
 
     def __getattr__(self, k):
         try:
@@ -93,19 +100,36 @@ TUTAKE_PROCESS_FORBIDDEN_CONFIG_KEY = 'tutake.process.forbidden'
 
 class TutakeConfig(object):
 
-    def __init__(self, config_file):
-        if config_file and os.path.isdir(config_file):
-            config_file = f'{config_file}/config.yml'
-        if config_file and not os.path.exists(config_file):
-            config_file = f'{project_root()}/config.yml'
-            if os.path.exists(config_file):
-                print(f"Tutake config file is None or not exists. use default configfile. {config_file}")
+    def __init__(self, absolute_config_path):
+        if absolute_config_path and os.path.isdir(absolute_config_path):
+            absolute_config_path = f'{absolute_config_path}/config.yml'
+        if absolute_config_path and not os.path.exists(absolute_config_path):
+            absolute_config_path = f'{project_root()}/config.yml'
+            if os.path.exists(absolute_config_path):
+                print(f"Tutake config file is None or not exists. use default configfile. {absolute_config_path}")
             else:
                 raise Exception(f"Tutake config file is None or not exists. pls set it.")
-        self.config_file = config_file
+        self.config_file = absolute_config_path
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
         self._remote_client = None
+        self._tutake = None
+
+    def __setstate__(self, state):
+        self.__config = state.get('config')
+        self.config_file = state.get('config_file')
+        self._default_config()
+
+    def __getstate__(self):
+        return {'config_file': self.config_file, "config": self.__config}
+
+    def load_tutake(self):
+        if self._tutake is not None:
+            return self._tutake
+        else:
+            from tutake import Tutake
+            self._tutake = Tutake(self.config_file)
+            return self._tutake
 
     def _default_config(self):
         """
@@ -246,10 +270,10 @@ class TutakeConfig(object):
             # 如果日志配置文件是相对路径，转换成绝对路径
             logger_config_path = join(abspath(dirname(self.config_file)), logger_config_path)
         if not logger_config_path or not os.path.exists(logger_config_path):
-            logging.warning(
-                f"Logger config file is not config or not exists. {logger_config_path}")
+            # logging.warning(
+            #     f"Logger config file is not config or not exists. {logger_config_path}")
             logger_config_path = f"{file_dir(__file__)}/ts_logger.yml"
-            logging.warning(f"Use default logger config: {logger_config_path}")
+            # logging.warning(f"Use default logger config: {logger_config_path}")
         return logger_config_path
 
     def get_process_thread_cnt(self):
