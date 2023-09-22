@@ -73,6 +73,8 @@ class TushareDAO(BaseDao):
                                  'tushare_us_tycr', 'tushare_gz_index', 'tushare_hibor', 'tushare_libor',
                                  'tushare_shibor', 'tushare_shibor_lpr', 'tushare_wz_index', 'tushare_eco_cal']:
             return 'start_date', 'end_date', self.entities.date
+        elif self.table_name in ['tushare_index_stock']:
+            return 'start_date', 'end_date', self.entities.list_date
         elif 'start_date' in self.query_fields:
             return 'start_date', 'end_date', self.entities.trade_date
         elif 'start_month' in self.query_fields:

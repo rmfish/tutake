@@ -6,7 +6,9 @@ from datetime import datetime
 from operator import and_
 from sqlite3 import Connection
 
+import numpy as np
 import pandas as pd
+from pandas import DataFrame
 from sqlalchemy import text, Column, Integer, PickleType, String, Boolean, DateTime
 from sqlalchemy.orm import load_only, declarative_base, sessionmaker
 
@@ -216,7 +218,7 @@ class BaseDao(object):
         filter_by = {
             key: kwargs[key]
             for key in kwargs.keys()
-            if key in self.query_fields and key in self.entity_fields and key is not None and kwargs[key] != ''
+            if (key in self.entity_fields) and key is not None and kwargs[key] != ''
         }
         filter_criterion, filter_by = self.filter_process(filter_criterion, filter_by)
         order_by = self._get_order_by(**kwargs)
@@ -298,9 +300,18 @@ class Records:
             return len(self.items)
 
     def append(self, records):
-        if self.fields is None:
-            self.fields = records.fields
-        self.items = self.items + records.items
+        if records is not None:
+            if isinstance(records, DataFrame):
+                if self.fields is None:
+                    self.fields = records.columns.tolist()
+                if self.size() == 0:
+                    self.items = records.values
+                else:
+                    self.items = np.concatenate((self.items, records.values))
+            else:
+                if self.fields is None:
+                    self.fields = records.fields
+                self.items = self.items + records.items
 
 
 class BatchWriter:
@@ -335,10 +346,9 @@ class BatchWriter:
             self.conn = None
 
     def add_records(self, records):
-        if isinstance(records, Records):
-            self.records.append(records)
-            if self.records.size() > 500000:
-                self.flush()
+        self.records.append(records)
+        if self.records.size() > 500000:
+            self.flush()
 
     def flush(self):
         self.shared_resource_lock.acquire()

@@ -8,15 +8,15 @@ Tushare index_weight接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import Base, BatchWriter
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_weight_ext import *
-from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
@@ -155,12 +155,23 @@ setattr(IndexWeight, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     import tushare as ts
-    pd.set_option('display.max_columns', 50)    # 显示列数
+
+    pd.set_option('display.max_columns', 50)  # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.index_weight())
+    # print(pro.index_weight(index_code='000300.SH', offset=25000))
 
     api = IndexWeight(config)
-    print(api.process())    # 同步增量数据
-    print(api.index_weight())    # 数据查询接口
+    # trade_cal = TradeCal(config)
+    # # print(api.process())    # 同步增量数据
+    print(api.index_weight(index_code='000300.SH', con_code='601995.SH', limit=100000))  # 数据查询接口
+    #
+    # df = api.index_weight(index_code='000300.SH', limit=1000000)
+    # # df.sort_values(['con_code', 'trade_date'], inplace=True)
+    #
+    # grouped = df.groupby('con_code')
+    #
+    # # 针对每个分组进行处理
+    # for group_name, group_df in grouped:
+    #     print(group_name,group_df)

@@ -19,7 +19,6 @@ class TushareAPI(object):
             self.instances[name] = self.instance_from_name(name, self.config)
         return self.instances.get(name)
 
-
     def all_apis(self):
         apis = [
             'report_rc', 'adj_factor', 'fx_obasic', 'shibor', 'stock_company', 'hk_hold', 'daily', 'moneyflow',
@@ -36,13 +35,17 @@ class TushareAPI(object):
             'index_global', 'index_weekly', 'index_monthly', 'index_weight', 'daily_info', 'sz_daily_info', 'cn_cpi',
             'cn_gdp', 'cn_m', 'cn_ppi', 'sf_month', 'us_tbr', 'us_tltr', 'us_trltr', 'us_trycr'
         ]
-        apis.extend(['daily_full'])
+        apis.extend(['daily_full', 'index_stock'])
         return apis
 
     def _instance_from_name(self, name, config):
         if name == 'daily_full':
             adj_factor_module = import_module("tutake.api.ts.daily_full")
             clazz = getattr(adj_factor_module, "DailyFull")
+            return clazz(config)
+        elif name == 'index_stock':
+            index_stock_module = import_module("tutake.api.ts.index_stock")
+            clazz = getattr(index_stock_module, "IndexStock")
             return clazz(config)
 
     def instance_from_name(self, name, config):

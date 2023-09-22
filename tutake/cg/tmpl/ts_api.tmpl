@@ -21,13 +21,17 @@ class TushareAPI(object):
 
     def all_apis(self):
         apis = [{% for api in apis %}'{{api.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
-        apis.extend(['daily_full'])
+        apis.extend(['daily_full', 'index_stock'])
         return apis
 
     def _instance_from_name(self, name, config):
         if name == 'daily_full':
-            adj_factor_module = import_module("tutake.api.ts.daily_full")
-            clazz = getattr(adj_factor_module, "DailyFull")
+            daily_full_module = import_module("tutake.api.ts.daily_full")
+            clazz = getattr(daily_full_module, "DailyFull")
+            return clazz(config)
+        elif name == 'index_stock':
+            index_stock_module = import_module("tutake.api.ts.index_stock")
+            clazz = getattr(index_stock_module, "IndexStock")
             return clazz(config)
 
     def instance_from_name(self, name, config):

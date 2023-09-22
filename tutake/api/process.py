@@ -3,6 +3,7 @@ import time
 from concurrent.futures import ThreadPoolExecutor
 
 from ordered_enum import OrderedEnum
+from pandas import DataFrame
 
 from tutake.api.base_dao import BatchWriter, Records
 
@@ -87,6 +88,8 @@ class ProcessTask:
             return 0
         elif isinstance(self.records, Records):
             return self.records.size()
+        elif isinstance(self.records, DataFrame):
+            return self.records.shape[0]
         else:
             return self.records
 
@@ -291,8 +294,8 @@ class DataProcess:
                         continue
                     elif result.is_critical_failed():
                         status.break_down = True
-                        task_logger.critical(f"Stop with critical exception. {result}")
-                        return
+                        task_logger.critical(f"Stop with critical exception. {result.input_params} {result.err}")
+                        return status
                     else:
                         retry_params.append(result.retry_params())
 
