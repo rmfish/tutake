@@ -1,7 +1,7 @@
 import pandas as pd
 import pendulum
 from mock.mock import patch
-from qlib.data import D, FeatureProvider, CalendarProvider, InstrumentProvider
+from qlib.data import FeatureProvider, CalendarProvider, InstrumentProvider
 from qlib.data.cache import H
 from qlib.data.data import Cal
 
@@ -9,6 +9,7 @@ from tutake.utils.config import TutakeConfig
 
 PRICE_COLS = ['open', 'close', 'high', 'low', 'pre_close']
 FIELDS = {"vwap": "avg_price", "volume": "vol", }
+INDEXES = ['000300.SH', '000905.SH', '000852.SH', '000903.SH', '000016.SH']
 
 
 class TutakeProvider:
@@ -37,14 +38,19 @@ class TutakeFeatureProvider(FeatureProvider, TutakeProvider):
             mapping = field
 
         if freq == 'day':
-            df = self.tushare().bak_daily(ts_code=instrument, fields=f'trade_date,{mapping}', start_date=start_index,
-                                          end_date=end_index, limit=100000)
-            if mapping in PRICE_COLS:
-                df_adj = self.tushare().adj_factor(ts_code=instrument, fields=f'trade_date,adj_factor',
-                                                   start_date=start_index, limit=100000)
-                df = pd.merge(df, df_adj, how='left', left_on='trade_date', right_on='trade_date')
-                df[mapping] = df[mapping] * df['adj_factor'] / float(df_adj['adj_factor'][0])
-                df[mapping] = df[mapping].astype(float)
+            if instrument in INDEXES:
+                df = self.tushare().index_daily(ts_code=instrument, fields=f'trade_date,{mapping}',
+                                                start_date=start_index, end_date=end_index, limit=100000)
+            else:
+                df = self.tushare().bak_daily(ts_code=instrument, fields=f'trade_date,{mapping}',
+                                              start_date=start_index,
+                                              end_date=end_index, limit=100000)
+                if mapping in PRICE_COLS:
+                    df_adj = self.tushare().adj_factor(ts_code=instrument, fields=f'trade_date,adj_factor',
+                                                       start_date=start_index, limit=100000)
+                    df = pd.merge(df, df_adj, how='left', left_on='trade_date', right_on='trade_date')
+                    df[mapping] = df[mapping] * df['adj_factor'] / float(df_adj['adj_factor'][0])
+                    df[mapping] = df[mapping].astype(float)
             df['trade_date'] = pd.to_datetime(df['trade_date'])
             df.set_index('trade_date', inplace=True)
             df.sort_index(inplace=True)
@@ -94,7 +100,8 @@ class TutakeInstrumentProvider(InstrumentProvider, TutakeProvider):
 
         _instruments = dict()
         if index_code is not None:
-            df = self.tushare().index_weight(index_code=index_code)
+            df = self.tushare().index_stock(index_code=index_code, fields='con_code,list_date,delist_date')
+            df['delist_date'] = df['delist_date'].fillna(pretrade_date)
         elif market == 'all':
             df = self.tushare().stock_basic(fields='ts_code,list_date,delist_date')
             df['delist_date'] = df['delist_date'].fillna(pretrade_date)
