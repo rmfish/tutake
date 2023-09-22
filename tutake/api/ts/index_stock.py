@@ -884,6 +884,9 @@ class IndexStock(TushareDAO, DataProcess):
     def default_limit(self) -> str:
         return "10000"
 
+    def default_order_by(self) -> str:
+        return 'index_code,list_date'
+
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)  # 显示列数
@@ -891,5 +894,6 @@ if __name__ == '__main__':
     config = TutakeConfig(project_root())
 
     api = IndexStock(config)
-    print(api.process())  # 同步增量数据
+    # print(api.fetch_and_append(index_code='000300.SH'))
+    # print(api.process())  # 同步增量数据
     print(api.index_stock())
