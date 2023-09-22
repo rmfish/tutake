@@ -22,7 +22,6 @@ class TushareProcessTask(object):
     def __init__(self, config: TutakeConfig):
         from apscheduler.schedulers.background import BackgroundScheduler
         from apscheduler.schedulers.blocking import BlockingScheduler
-        from apscheduler.triggers.cron import CronTrigger
 
         self.timezone = config.get_config("tutake.scheduler.timezone", 'Asia/Shanghai')
         if config.get_config("tutake.scheduler.background", False):
@@ -82,6 +81,7 @@ class TushareProcessTask(object):
         将api添加到任务中
         :return:
         """
+        from apscheduler.triggers.cron import CronTrigger
         default_cron = schedule_configs.get('default_cron')
         check_cron = schedule_configs.get('check_cron')
         api_crontabs = schedule_configs.get('apis')
