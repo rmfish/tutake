@@ -1,97 +1,100 @@
 {
-    "database": "tushare_stock",
-    "desc": "获取各大期货交易所交易日历数据，数据开始月1996年1月",
-    "id": 137,
-    "inputs": [
-        {
-            "data_type": "str",
-            "default": "SSE",
-            "desc": "交易所 SSE上交所 SZSE深交所",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "日历日期",
-            "must": "N",
-            "name": "cal_date"
-        },
-        {
-            "data_type": "str",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "是否交易 0休市 1交易",
-            "must": "N",
-            "name": "is_open"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": "tushare_stock",
+  "desc": "获取各大期货交易所交易日历数据，数据开始月1996年1月",
+  "id": 137,
+  "default_query_params": {
+    "exchange": "SSE"
+  },
+  "inputs": [
+    {
+      "data_type": "str",
+      "default": "SSE",
+      "desc": "交易所 SSE上交所 SZSE深交所",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "日历日期",
+      "must": "N",
+      "name": "cal_date"
+    },
+    {
+      "data_type": "str",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "是否交易 0休市 1交易",
+      "must": "N",
+      "name": "is_open"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "name": "trade_cal",
+  "outputs": [
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所 SSE上交所 SZSE深交所",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "CAL_DATE",
+      "data_type": "str",
+      "desc": "日历日期",
+      "must": "Y",
+      "name": "cal_date"
+    },
+    {
+      "column": "IS_OPEN",
+      "data_type": "str",
+      "desc": "是否交易 0休市 1交易",
+      "must": "Y",
+      "name": "is_open"
+    },
+    {
+      "column": "PRETRADE_DATE",
+      "data_type": "str",
+      "desc": "上一个交易日",
+      "must": "Y",
+      "name": "pretrade_date"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "name": "trade_cal",
-    "outputs": [
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所 SSE上交所 SZSE深交所",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "CAL_DATE",
-            "data_type": "str",
-            "desc": "日历日期",
-            "must": "Y",
-            "name": "cal_date"
-        },
-        {
-            "column": "IS_OPEN",
-            "data_type": "str",
-            "desc": "是否交易 0休市 1交易",
-            "must": "Y",
-            "name": "is_open"
-        },
-        {
-            "column": "PRETRADE_DATE",
-            "data_type": "str",
-            "desc": "上一个交易日",
-            "must": "Y",
-            "name": "pretrade_date"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            137,
-            "期货交易日历"
-        ]
-    ],
-    "title": "期货交易日历",
-    "validations": []
+    [
+      137,
+      "期货交易日历"
+    ]
+  ],
+  "title": "期货交易日历",
+  "validations": []
 }

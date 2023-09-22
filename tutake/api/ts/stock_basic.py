@@ -8,11 +8,10 @@ Tushare stock_basic接口
 @author: rmfish
 """
 import pandas as pd
-import tushare as ts
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import Base, BatchWriter
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.stock_basic_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -172,6 +171,8 @@ class StockBasic(TushareDAO, TuShareBase, DataProcess):
          is_hs(str)  是否沪深港通标的，N否 H沪股通 S深股通 N
         
         """
+        default_query_params = {'list_status': ['L', 'P']}
+        kwargs = {**default_query_params, **kwargs}
         return super().query(fields, **kwargs)
 
     def process(self, **kwargs):
@@ -237,6 +238,7 @@ setattr(StockBasic, 'query_parameters', query_parameters_ext)
 setattr(StockBasic, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
+    import tushare as ts
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())

@@ -22,22 +22,33 @@ class TushareDAO(BaseDao):
         self.records = Records()
 
     def filter_process(self, filter_criterion, filter_by):
-        if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly', 'tushare_adj_factor']:
-            return self.filter_process_by_column(filter_criterion, filter_by, ['ts_code'])
+        split_columns = []
+        if self.table_name in ['tushare_daily', 'tushare_weekly', 'tushare_monthly', 'tushare_adj_factor',
+                               'tushare_stock_basic']:
+            split_columns = ['ts_code']
         elif self.table_name in ['tushare_trade_cal']:
-            return self.filter_process_by_column(filter_criterion, filter_by, ['exchange'])
-        return filter_criterion, filter_by
+            split_columns = ['exchange']
+        return self.filter_process_by_column(filter_criterion, filter_by, split_columns)
 
-    def filter_process_by_column(self, filter_criterion, filter_by, columns):
-        for column in columns:
-            field = filter_by.get(column)
-            if field is not None and "," in field:
-                codes = field.split(",")
-                if filter_criterion is None:
-                    filter_criterion = orm.class_mapper(self.entities).c[column].in_(codes)
-                else:
-                    filter_criterion = and_(orm.class_mapper(self.entities).c[column].in_(codes), filter_criterion)
-                del filter_by[column]
+    def filter_process_by_column(self, filter_criterion, filter_by, split_columns):
+        keys_to_remove = []
+        for key in filter_by.keys():
+            field = filter_by.get(key)
+            if field is not None:
+                codes = None
+                if key in split_columns and "," in field:
+                    codes = field.split(",")
+                elif isinstance(field, list):
+                    codes = field
+                if codes is not None:
+                    keys_to_remove.append(key)
+                    if filter_criterion is None:
+                        filter_criterion = orm.class_mapper(self.entities).c[key].in_(codes)
+                    else:
+                        filter_criterion = and_(orm.class_mapper(self.entities).c[key].in_(codes), filter_criterion)
+                    # del filter_by[key]
+        for key in keys_to_remove:
+            del filter_by[key]
         return filter_criterion, filter_by
 
     def default_time_range(self) -> ():

@@ -8,120 +8,15 @@ from datetime import datetime
 
 import pandas as pd
 import requests
-import tushare as ts
 from pandas import DataFrame
 
 from tutake.api.base_dao import Records
 from tutake.api.process import CriticalException
 from tutake.api.process_client import Task
-from tutake.utils.config import TUSHARE_TOKENS_KEY, TutakeConfig, TUSHARE_TOKEN_CHECK_KEY
+from tutake.utils.config import TUSHARE_TOKENS_KEY, TUSHARE_TOKEN_CHECK_KEY
 from tutake.utils.utils import end_of_day
 
 tushare_logger = logging.getLogger("tutake.tushare")
-
-
-def _is_useful_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.stock_basic(limit=100)
-        if df.shape[0] == 100:
-            return True
-    except Exception:
-        return False
-
-
-def _is_2000_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.stk_managers(ts_code='000001.SZ')
-        if df.shape[0] >= 1:
-            return True
-    except Exception:
-        return False
-
-
-def _is_800_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.block_trade(ts_code='000001.SZ')
-        if df.shape[0] >= 1:
-            return True
-    except Exception:
-        return False
-
-
-def _is_600_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.stk_account(ts_code='000001.SZ')
-        if df.shape[0] >= 1:
-            return True
-    except Exception:
-        return False
-
-
-def _is_120_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.libor()
-        if df.shape[0] >= 1:
-            return True
-    except Exception:
-        return False
-
-
-def _is_5000_token(token):
-    pro = ts.pro_api(token)
-    try:
-        df = pro.ggt_monthly(trade_date='201906')
-        if df.shape[0] >= 1:
-            return True
-    except Exception:
-        return False
-
-
-def _baseline_score(i):
-    if _is_5000_token(i):
-        return 5000, i
-    elif _is_2000_token(i):
-        return 2000, i
-    elif _is_800_token(i):
-        return 800, i
-    elif _is_600_token(i):
-        return 600, i
-    elif _is_120_token(i):
-        return 120, i
-    elif _is_useful_token(i):
-        return 0, i
-    else:
-        return -1, i
-
-
-def check_token(config: TutakeConfig):
-    config_tokens = config.get_config(TUSHARE_TOKENS_KEY)
-    for level in config_tokens.keys():
-        tokens = config_tokens.get(level)
-        for token in tokens:
-            val = _baseline_score(token)
-            if val[0] != level:
-                print(f"Check failed. {token} expect:{level} actual:{val[0]}")
-
-
-def _test_token(path):
-    with open(path, 'r', encoding='utf-8') as f:
-        tokens = {"5000": set(), "2000": set(), "800": set(), "120": set()}
-        for t in set(f.read().split("\n")):
-            tt = t.split(" #")
-            tokens[tt[1]].add(tt[0])
-        for i in tokens:
-            print(f"{i}:")
-            for j in tokens[i]:
-                print(f" - {j}")
-        # print(tokens)
-        # i = _baseline_score(t.split(" ")[0])
-        # if i[0] > 0:
-        #     print(f"{i[1]} #{i[0]}")
-
 
 tushare_clients = None
 tushare_clients_init_lock = threading.Lock()
@@ -149,22 +44,6 @@ def _get_tushare_clients(_config):
                 return tushare_clients
         finally:
             tushare_clients_init_lock.release()
-
-
-class TushareTokenPool(object):
-
-    def __init__(self, score, tokens: []):
-        self.score = score
-        self.t_apis = {i: ts.pro_api(tokens[i]) for i in range(len(tokens))}
-        self.token_index = 0
-
-    def get_api(self):
-        if self.t_apis:
-            api = self.t_apis[self.token_index]
-            self.token_index = (self.token_index + 1) % len(self.t_apis.keys())
-            return api
-        else:
-            return None
 
 
 class TuShareBase(Task):

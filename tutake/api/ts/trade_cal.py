@@ -8,7 +8,6 @@ Tushare trade_cal接口
 @author: rmfish
 """
 import pandas as pd
-import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -100,6 +99,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
          pretrade_date(str)  上一个交易日 Y
         
         """
+        default_query_params = {'exchange': 'SSE'}
+        kwargs = {**default_query_params, **kwargs}
         return super().query(fields, **kwargs)
 
     def process(self, **kwargs):
@@ -164,6 +165,7 @@ setattr(TradeCal, 'query_parameters', query_parameters_ext)
 setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
+    import tushare as ts
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())

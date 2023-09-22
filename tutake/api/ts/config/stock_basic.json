@@ -1,190 +1,196 @@
 {
-    "database": "tushare_stock",
-    "default_limit": null,
-    "desc": "获取基础信息数据，包括股票代码、名称、上市日期、退市日期等",
-    "id": 25,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "名称",
-            "must": "N",
-            "name": "name"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所 SSE上交所 SZSE深交所 HKEX港交所",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "市场类别",
-            "must": "N",
-            "name": "market"
-        },
-        {
-            "data_type": "str",
-            "desc": "是否沪深港通标的，N否 H沪股通 S深股通",
-            "must": "N",
-            "name": "is_hs"
-        },
-        {
-            "data_type": "str",
-            "default": "L",
-            "desc": "上市状态 L上市 D退市 P暂停上市",
-            "must": "N",
-            "name": "list_status"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": "tushare_stock",
+  "default_limit": null,
+  "desc": "获取基础信息数据，包括股票代码、名称、上市日期、退市日期等",
+  "id": 25,
+  "if_exists": null,
+  "default_query_params": {
+    "list_status": [
+      "L",
+      "P"
+    ]
+  },
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "名称",
+      "must": "N",
+      "name": "name"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所 SSE上交所 SZSE深交所 HKEX港交所",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "市场类别",
+      "must": "N",
+      "name": "market"
+    },
+    {
+      "data_type": "str",
+      "desc": "是否沪深港通标的，N否 H沪股通 S深股通",
+      "must": "N",
+      "name": "is_hs"
+    },
+    {
+      "data_type": "str",
+      "default": "L",
+      "desc": "上市状态 L上市 D退市 P暂停上市",
+      "must": "N",
+      "name": "list_status"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": 1,
+  "name": "stock_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code",
+      "primary_key": true
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "AREA",
+      "data_type": "str",
+      "desc": "地域",
+      "must": "Y",
+      "name": "area"
+    },
+    {
+      "column": "INDUSTRY",
+      "data_type": "str",
+      "desc": "所属行业",
+      "must": "Y",
+      "name": "industry"
+    },
+    {
+      "column": "FULLNAME",
+      "data_type": "str",
+      "desc": "股票全称",
+      "must": "N",
+      "name": "fullname"
+    },
+    {
+      "column": "ENNAME",
+      "data_type": "str",
+      "desc": "英文全称",
+      "must": "N",
+      "name": "enname"
+    },
+    {
+      "column": "CN_SPELL",
+      "data_type": "str",
+      "desc": "拼音缩写",
+      "must": "N",
+      "name": "cnspell"
+    },
+    {
+      "column": "ASSET_CLASS",
+      "data_type": "str",
+      "desc": "市场类型",
+      "must": "Y",
+      "name": "market"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所代码",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "column": "CURR_TYPE",
+      "data_type": "str",
+      "desc": "交易货币",
+      "must": "N",
+      "name": "curr_type"
+    },
+    {
+      "column": "LIST_STATUS",
+      "data_type": "str",
+      "desc": "上市状态 L上市 D退市 P暂停上市",
+      "must": "N",
+      "name": "list_status"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "DELIST_DATE",
+      "data_type": "str",
+      "desc": "退市日期",
+      "must": "N",
+      "name": "delist_date"
+    },
+    {
+      "column": "IS_HS",
+      "data_type": "str",
+      "desc": "是否沪深港通标的，N否 H沪股通 S深股通",
+      "must": "N",
+      "name": "is_hs"
+    }
+  ],
+  "parent_id": 24,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": 1,
-    "name": "stock_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code",
-            "primary_key": true
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "AREA",
-            "data_type": "str",
-            "desc": "地域",
-            "must": "Y",
-            "name": "area"
-        },
-        {
-            "column": "INDUSTRY",
-            "data_type": "str",
-            "desc": "所属行业",
-            "must": "Y",
-            "name": "industry"
-        },
-        {
-            "column": "FULLNAME",
-            "data_type": "str",
-            "desc": "股票全称",
-            "must": "N",
-            "name": "fullname"
-        },
-        {
-            "column": "ENNAME",
-            "data_type": "str",
-            "desc": "英文全称",
-            "must": "N",
-            "name": "enname"
-        },
-        {
-            "column": "CN_SPELL",
-            "data_type": "str",
-            "desc": "拼音缩写",
-            "must": "N",
-            "name": "cnspell"
-        },
-        {
-            "column": "ASSET_CLASS",
-            "data_type": "str",
-            "desc": "市场类型",
-            "must": "Y",
-            "name": "market"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所代码",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "column": "CURR_TYPE",
-            "data_type": "str",
-            "desc": "交易货币",
-            "must": "N",
-            "name": "curr_type"
-        },
-        {
-            "column": "LIST_STATUS",
-            "data_type": "str",
-            "desc": "上市状态 L上市 D退市 P暂停上市",
-            "must": "N",
-            "name": "list_status"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "DELIST_DATE",
-            "data_type": "str",
-            "desc": "退市日期",
-            "must": "N",
-            "name": "delist_date"
-        },
-        {
-            "column": "IS_HS",
-            "data_type": "str",
-            "desc": "是否沪深港通标的，N否 H沪股通 S深股通",
-            "must": "N",
-            "name": "is_hs"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 24,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            24,
-            "基础数据"
-        ],
-        [
-            25,
-            "股票列表"
-        ]
+    [
+      24,
+      "基础数据"
     ],
-    "title": "股票列表",
-    "validations": []
+    [
+      25,
+      "股票列表"
+    ]
+  ],
+  "title": "股票列表",
+  "validations": []
 }

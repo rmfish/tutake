@@ -8,11 +8,10 @@ Tushare {{name}}接口
 @author: rmfish
 """
 import pandas as pd
-import tushare as ts
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import Base, BatchWriter
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.{{name}}_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -68,7 +67,9 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         {% for output in outputs %} {{output.name}}({{output.data_type}})  {% autoescape false %}{{output.desc}} {{output.must}}{% endautoescape %}
         {% endfor %}
         """
-        return super().query(fields, **kwargs)
+        {% if default_query_params is defined and default_query_params %}default_query_params={% autoescape false %}{{default_query_params}}{% endautoescape %}
+        kwargs = {**default_query_params, **kwargs}
+        {% endif %}return super().query(fields, **kwargs)
 
     def process(self, **kwargs):
         """
@@ -127,6 +128,7 @@ setattr({{title_name}}, 'param_loop_process', param_loop_process_ext)
 
 
 if __name__ == '__main__':
+    import tushare as ts
     pd.set_option('display.max_columns', 50)  # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())

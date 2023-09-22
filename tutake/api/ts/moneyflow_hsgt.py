@@ -8,7 +8,6 @@ Tushare moneyflow_hsgt接口
 @author: rmfish
 """
 import pandas as pd
-import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -172,6 +171,7 @@ setattr(MoneyflowHsgt, 'query_parameters', query_parameters_ext)
 setattr(MoneyflowHsgt, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
+    import tushare as ts
     pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
