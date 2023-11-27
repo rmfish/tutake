@@ -1,11 +1,9 @@
 from functools import partial
 
-import tushare
 from pandas import DataFrame
 
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.xq.xueqiu_api import XueQiuAPI
-from tutake.remote.client import TutakeClient
 
 
 class TushareQuery(object):
@@ -22,6 +20,7 @@ class TushareQuery(object):
     def _init_remote_client(self):
         remote_address = self.config.get_remote_address()
         if remote_address is not None:
+            from tutake.remote.client import TutakeClient
             self._remote_client = TutakeClient(remote_address)
 
     def query(self, api_name, fields='', **kwargs) -> DataFrame:
@@ -48,6 +47,7 @@ class TushareQuery(object):
 
     def pro_bar(self, ts_code='', start_date='', end_date='', freq='D', asset='E', exchange='', adj=None,
                 ma=[], factors=None, adjfactor=False, offset=None, limit=None, contract_type=''):
+        import tushare
         return tushare.pro_bar(ts_code, self, start_date, end_date, freq, asset, exchange, adj, ma, factors, adjfactor,
                                offset,
                                limit, contract_type)

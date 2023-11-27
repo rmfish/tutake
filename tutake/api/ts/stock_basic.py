@@ -246,5 +246,5 @@ if __name__ == '__main__':
     print(pro.stock_basic())
 
     api = StockBasic(config)
-    print(api.process())    # 同步增量数据
-    print(api.stock_basic())    # 数据查询接口
+    # print(api.process())    # 同步增量数据
+    print(api.stock_basic(ts_code='T00018.SH'))    # 数据查询接口

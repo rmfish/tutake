@@ -894,6 +894,5 @@ if __name__ == '__main__':
     config = TutakeConfig(project_root())
 
     api = IndexStock(config)
-    # print(api.fetch_and_append(index_code='000300.SH'))
-    # print(api.process())  # 同步增量数据
-    print(api.index_stock())
+    print(api.process())  # 同步增量数据
+    print(api.index_stock(con_code='T00018.SH'))
