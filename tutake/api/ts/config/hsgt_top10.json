@@ -89,14 +89,14 @@
         },
         {
             "column": "RANK",
-            "data_type": "str",
+            "data_type": "int",
             "desc": "资金排名",
             "must": "Y",
             "name": "rank"
         },
         {
             "column": "MARKETTYPE",
-            "data_type": "str",
+            "data_type": "int",
             "desc": "市场类型（1：沪市 3：深市）",
             "must": "Y",
             "name": "market_type"

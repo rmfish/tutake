@@ -13,11 +13,12 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.hk_hold_ext import *
+from tutake.api.ts import hk_hold_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -177,12 +178,7 @@ class HkHold(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(HkHold, 'default_limit', default_limit_ext)
-setattr(HkHold, 'default_cron_express', default_cron_express_ext)
-setattr(HkHold, 'default_order_by', default_order_by_ext)
-setattr(HkHold, 'prepare', prepare_ext)
-setattr(HkHold, 'query_parameters', query_parameters_ext)
-setattr(HkHold, 'param_loop_process', param_loop_process_ext)
+extends_attr(HkHold, hk_hold_ext)
 
 if __name__ == '__main__':
     import tushare as ts

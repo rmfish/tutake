@@ -13,11 +13,12 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.namechange_ext import *
+from tutake.api.ts import namechange_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -159,12 +160,7 @@ class Namechange(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(Namechange, 'default_limit', default_limit_ext)
-setattr(Namechange, 'default_cron_express', default_cron_express_ext)
-setattr(Namechange, 'default_order_by', default_order_by_ext)
-setattr(Namechange, 'prepare', prepare_ext)
-setattr(Namechange, 'query_parameters', query_parameters_ext)
-setattr(Namechange, 'param_loop_process', param_loop_process_ext)
+extends_attr(Namechange, namechange_ext)
 
 if __name__ == '__main__':
     import tushare as ts

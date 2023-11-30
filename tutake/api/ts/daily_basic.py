@@ -13,11 +13,12 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.daily_basic_ext import *
+from tutake.api.ts import daily_basic_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -249,12 +250,7 @@ class DailyBasic(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(DailyBasic, 'default_limit', default_limit_ext)
-setattr(DailyBasic, 'default_cron_express', default_cron_express_ext)
-setattr(DailyBasic, 'default_order_by', default_order_by_ext)
-setattr(DailyBasic, 'prepare', prepare_ext)
-setattr(DailyBasic, 'query_parameters', query_parameters_ext)
-setattr(DailyBasic, 'param_loop_process', param_loop_process_ext)
+extends_attr(DailyBasic, daily_basic_ext)
 
 if __name__ == '__main__':
     import tushare as ts

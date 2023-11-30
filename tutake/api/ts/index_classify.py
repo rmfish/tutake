@@ -13,11 +13,12 @@ from sqlalchemy.orm import sessionmaker
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.index_classify_ext import *
+from tutake.api.ts import index_classify_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -166,12 +167,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         return res
 
 
-setattr(IndexClassify, 'default_limit', default_limit_ext)
-setattr(IndexClassify, 'default_cron_express', default_cron_express_ext)
-setattr(IndexClassify, 'default_order_by', default_order_by_ext)
-setattr(IndexClassify, 'prepare', prepare_ext)
-setattr(IndexClassify, 'query_parameters', query_parameters_ext)
-setattr(IndexClassify, 'param_loop_process', param_loop_process_ext)
+extends_attr(IndexClassify, index_classify_ext)
 
 if __name__ == '__main__':
     import tushare as ts
