@@ -5,7 +5,6 @@ Xueqiu hot_stock接口
 import pendulum
 
 
-
 def default_order_by_ext(self) -> str:
     """
     查询时默认的排序

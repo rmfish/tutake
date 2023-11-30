@@ -33,6 +33,7 @@ def query_parameters_ext(self):
     """
     return [{}]
 
+
 def need_to_process_ext(self, **kwargs):
     from tutake.api.ts.date_utils import min_count_and_last_process
     return min_count_and_last_process(self, last_process_day=32)

@@ -9,12 +9,14 @@ def _auto_data_repair(self, trade_date, ts_codes):
     if len(ts_codes) < 100:
         for ts_code in ts_codes:
             checker_logger.info(f"Auto fix {self.name} data of {ts_code}")
-            checker_logger.info(self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
-                                        self.fetch_and_append, writer))
+            checker_logger.info(
+                self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
+                                      self.fetch_and_append, writer))
     else:
         checker_logger.info(f"Auto fix {self.name} data of {trade_date}")
-        checker_logger.info(self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
-                                    self.fetch_and_append, writer))
+        checker_logger.info(
+            self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
+                                  self.fetch_and_append, writer))
 
 
 def check_by_date(self, method, default_start, force_start=None, date_apply=lambda d: d.add(days=1), print_step=30,

@@ -5,7 +5,6 @@ Xueqiu index_valuation接口
 import pendulum
 
 
-
 def default_order_by_ext(self) -> str:
     """
     查询时默认的排序
@@ -30,4 +29,3 @@ def query_parameters_ext(self):
     if current == max:
         return []
     return [{"date": current}]
-

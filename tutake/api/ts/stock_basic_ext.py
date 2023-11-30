@@ -5,6 +5,7 @@ def default_order_by_ext(self) -> str:
 def default_limit_ext(self):
     return ''
 
+
 def prepare_write_ext(self, writer, **kwargs):
     """
     同步历史数据准备工作

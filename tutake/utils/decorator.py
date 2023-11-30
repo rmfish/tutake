@@ -31,7 +31,7 @@ def test(val):
     raise Exception("testadf")
 
 
-def extends_attr(clazz:Type,ext):
+def extends_attr(clazz: Type, ext):
     functions_list = getmembers(ext, isfunction)
     for function in functions_list:
         name = function[0]

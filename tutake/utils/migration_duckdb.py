@@ -12,7 +12,6 @@ import sqlalchemy
 # 你的SQLite数据库文件所在的目录
 
 
-
 def sqlite_type_to_parquet_type(sqlite_type):
     if sqlite_type in ['INT', 'INTEGER', 'TINYINT', 'SMALLINT', 'MEDIUMINT', 'BIGINT', 'UNSIGNED BIG INT', 'INT2',
                        'INT8']:
@@ -113,7 +112,7 @@ def migration():
 
 if __name__ == '__main__':
     engine = sqlalchemy.create_engine('duckdb:///D:\\Dataset\\quant\\tutake\\tutake.duckdb').connect()
-    result=engine.execute("select * from tushare_adj_factor limit 10")
+    result = engine.execute("select * from tushare_adj_factor limit 10")
     # 打印查询结果
     for row in result:
         print(row)

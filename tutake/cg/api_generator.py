@@ -100,7 +100,6 @@ class CodeGenerator(object):
                         column_rename = {}
                     column_rename[field.get('column_name')] = field.get('name')
 
-
             # [(o.get('column_name') is not None and o['column_name'] or o['name']) for o in api['outputs']
             #                       if o['must'] == 'Y']
             # output_fields = [o['name'] for o in api['outputs']]

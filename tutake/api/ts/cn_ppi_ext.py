@@ -33,6 +33,7 @@ def query_parameters_ext(self):
     """
     return [{}]
 
+
 def need_to_process_ext(self, **kwargs):
     """
     同步历史数据准备工作

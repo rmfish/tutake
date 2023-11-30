@@ -9,6 +9,7 @@ from tutake.api.ts.date_utils import day_by_day_params
 def default_cron_express_ext(self):
     return None
 
+
 def default_order_by_ext(self) -> str:
     """
     查询时默认的排序
