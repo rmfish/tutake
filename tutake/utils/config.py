@@ -81,6 +81,7 @@ class DotConfig(dict):
         return __set(self, key, val)
 
 
+TUTAKE_TEST_MODE = "tutake.test_mode"
 TUTAKE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
 TUTAKE_REMOTE_SERVER_KEY = "tutake.remote.address"
@@ -196,6 +197,9 @@ class TutakeConfig(object):
     def set_config(self, key, val) -> True:
         return self.__config.set(key, val)
 
+    def is_test_mode(self):
+        return self.get_config(TUTAKE_TEST_MODE, False)
+
     def set_tutake_data_dir(self, _dir: Path = None):
         if _dir:
             self.set_config(TUTAKE_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
@@ -252,12 +256,15 @@ class TutakeConfig(object):
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)
 
-    def get_data_driver_url(self, data_file="tutake.duck"):
+    def get_data_driver_url(self, data_file="tutake.duckdb"):
         url = self.require_config(TUTAKE_DRIVER_URL_KEY)
+        suffix = ""
+        if self.is_test_mode():
+            suffix = ".test"
         if not data_file:
-            return url
+            return f"{url}{suffix}"
         else:
-            return f"{url}{os.sep}{data_file}"
+            return f"{url}{os.sep}{data_file}{suffix}"
         # if os.name == 'nt':
         #     return f"{url}{os.sep}{data_file}".replace("\\", "\\\\")
         # else:

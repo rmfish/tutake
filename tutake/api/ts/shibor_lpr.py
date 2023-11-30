@@ -117,6 +117,7 @@ LPR报价银行团现由10家商业银行组成。报价银行应符合财务硬
         :return: 数量行数
         """
         init_args = {"date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -141,12 +142,14 @@ LPR报价银行团现由10家商业银行组成。报价银行应符合财务硬
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 

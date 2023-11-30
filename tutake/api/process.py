@@ -253,6 +253,9 @@ class DataProcess:
 
         start = time.time()
         params = query_parameters()
+        if self.config.is_test_mode() and params is not None and len(params) > 1:
+            params = [params[0]]
+
         status = ProcessStatus(self.name, params)
         if not self.need_to_process(params=params):
             task_logger.warning(f"Skip {self.entities.__name__} process.")
@@ -305,6 +308,8 @@ class DataProcess:
                 if new_param is None:
                     return task.stop(ProcessStatusEnum.SKIP)
                 try:
+                    if self.config.is_test_mode():
+                        new_param['test'] = True
                     records = fetch_and_append(**new_param)
                     return task.stop(records=records)
                 except Exception as err:

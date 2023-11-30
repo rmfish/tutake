@@ -142,6 +142,7 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
             "offset": "",
             "limit": ""
         }
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -171,6 +172,8 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
 
         df = fetch_save(offset)
         offset += df.shape[0]
+        if is_test:
+            return offset - init_offset
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
             df = fetch_save(offset)
             offset += df.shape[0]
