@@ -104,11 +104,11 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
             "comment": "涨跌幅"
         }, {
             "name": "rank",
-            "type": "String",
+            "type": "Integer",
             "comment": "资金排名"
         }, {
             "name": "market_type",
-            "type": "String",
+            "type": "Integer",
             "comment": "市场类型 2：港股通（沪） 4：港股通（深）"
         }, {
             "name": "amount",
@@ -170,8 +170,8 @@ class GgtTop10(TushareDAO, TuShareBase, DataProcess):
          name(str)  股票名称 Y
          close(float)  收盘价 Y
          p_change(float)  涨跌幅 Y
-         rank(str)  资金排名 Y
-         market_type(str)  市场类型 2：港股通（沪） 4：港股通（深） Y
+         rank(int)  资金排名 Y
+         market_type(int)  市场类型 2：港股通（沪） 4：港股通（深） Y
          amount(float)  累计成交金额 Y
          net_amount(float)  净买入金额 Y
          sh_amount(float)  沪市成交金额 Y

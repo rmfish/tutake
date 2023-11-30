@@ -72,27 +72,27 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
             "comment": "交易日期"
         }, {
             "name": "ggt_ss",
-            "type": "String",
+            "type": "Float",
             "comment": "港股通（上海）"
         }, {
             "name": "ggt_sz",
-            "type": "String",
+            "type": "Float",
             "comment": "港股通（深圳）"
         }, {
             "name": "hgt",
-            "type": "String",
+            "type": "Float",
             "comment": "沪股通"
         }, {
             "name": "sgt",
-            "type": "String",
+            "type": "Float",
             "comment": "深股通"
         }, {
             "name": "north_money",
-            "type": "String",
+            "type": "Float",
             "comment": "北向资金"
         }, {
             "name": "south_money",
-            "type": "String",
+            "type": "Float",
             "comment": "南向资金"
         }]
 
@@ -108,12 +108,12 @@ class MoneyflowHsgt(TushareDAO, TuShareBase, DataProcess):
         
         :return: DataFrame
          trade_date(str)  交易日期 Y
-         ggt_ss(str)  港股通（上海） Y
-         ggt_sz(str)  港股通（深圳） Y
-         hgt(str)  沪股通 Y
-         sgt(str)  深股通 Y
-         north_money(str)  北向资金 Y
-         south_money(str)  南向资金 Y
+         ggt_ss(float)  港股通（上海） Y
+         ggt_sz(float)  港股通（深圳） Y
+         hgt(float)  沪股通 Y
+         sgt(float)  深股通 Y
+         north_money(float)  北向资金 Y
+         south_money(float)  南向资金 Y
         
         """
         return super().query(fields, **kwargs)

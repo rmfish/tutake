@@ -73,7 +73,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
             "comment": "日历日期"
         }, {
             "name": "is_open",
-            "type": "String",
+            "type": "Integer",
             "comment": "是否交易 0休市 1交易"
         }, {
             "name": "pretrade_date",
@@ -96,7 +96,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         :return: DataFrame
          exchange(str)  交易所 SSE上交所 SZSE深交所 Y
          cal_date(str)  日历日期 Y
-         is_open(str)  是否交易 0休市 1交易 Y
+         is_open(int)  是否交易 0休市 1交易 Y
          pretrade_date(str)  上一个交易日 Y
         
         """
