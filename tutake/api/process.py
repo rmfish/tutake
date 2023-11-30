@@ -132,6 +132,7 @@ class ProcessStatus:
         self.break_down = False
         self.percent = ProcessPercent(len(params))
         self.run_time = 0
+        self.inner_status = None
 
     def run_once(self, task: ProcessTask):
         if task.is_retry():
@@ -155,6 +156,8 @@ class ProcessStatus:
         return self.task_cnt + self.skip + self.failed + self.retry_cnt
 
     def status(self):
+        if self.inner_status is not None:
+            return self.inner_status
         total_cnt = len(self.params)
         if self.break_down:
             return ProcessStatusEnum.FAILED
@@ -187,6 +190,12 @@ class DataProcess:
     def name(self):
         return self.name
 
+    def need_to_process(self, **kwargs) -> bool:
+        """
+        判断是否需要进行process,部分任务执行成本比较高可以定期执行，不需要频繁执行的
+        """
+        return True
+
     def process(self, **kwargs) -> ProcessStatus:
         pass
 
@@ -197,10 +206,11 @@ class DataProcess:
         """
         return ()
 
-    def prepare(self):
+    def prepare_write(self, writer, **params) -> bool:
         """
         同步历史数据准备工作
         """
+        return True
 
     def query_parameters(self):
         """
@@ -215,7 +225,7 @@ class DataProcess:
         """
         return params
 
-    def need_to_write(self, writer) -> bool:
+    def need_to_write(self, writer, **params) -> bool:
         return True
 
     def check(self, **kwargs):
@@ -233,33 +243,43 @@ class DataProcess:
         同步历史数据
         :return:
         """
-        return self._process_by_func(self.prepare, self.query_parameters, fetch_and_append, writer, **kwargs)
+        return self._process_by_func(self.prepare_write, self.query_parameters, fetch_and_append, writer, **kwargs)
 
-    def _process_by_func(self, prepare, query_parameters, fetch_and_append, writer, **kwargs):
+    def _process_by_func(self, prepare_write, query_parameters, fetch_and_append, writer, **kwargs):
         entrypoint = kwargs.get("entrypoint")
         if self._forbidden_entrypoint(entrypoint):
             task_logger.warning(f"Ignore process {self.name()}. forbidden by {entrypoint} entrypoint")
             return ProcessStatus(self.name, [])
 
         start = time.time()
-        prepare()
         params = query_parameters()
         status = ProcessStatus(self.name, params)
+        if not self.need_to_process(params=params):
+            task_logger.warning(f"Skip {self.entities.__name__} process.")
+            status.inner_status = ProcessStatusEnum.SKIP
+            return status
         try:
             writer.start()
             status = self._inner_process(params, fetch_and_append, status, writer)
             status.run_time = time.time() - start
             if status.break_down:
                 writer.rollback()
-            elif self.need_to_write(writer):
-                writer.commit()
-                task_logger.debug(
-                    f"Finished {self.entities.__name__} process. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
             else:
-                task_logger.debug(
-                    f"Finished {self.entities.__name__} process, but ignore to persist records. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
+                prepared = prepare_write(writer)
+                if prepared is None or prepared:
+                    writer.commit()
+                    task_logger.debug(
+                        f"Finished {self.entities.__name__} process. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
+                    self.checker.save_process_point()
+                else:
+                    status.inner_status = ProcessStatusEnum.SKIP
+                    task_logger.debug(
+                        f"Finished {self.entities.__name__} process, but ignore to persist records. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
         except Exception as err:
+            status.inner_status(ProcessStatusEnum.FAILED)
             logging.exception(err)
+        finally:
+            writer.close()
         return status
 
     def _inner_process(self, process_params, fetch_and_append, status: ProcessStatus, writer: BatchWriter = None,

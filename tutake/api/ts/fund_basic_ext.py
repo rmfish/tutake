@@ -6,7 +6,7 @@ def default_limit_ext(self):
     return '15000'
 
 
-def prepare_ext(self):
+def prepare_write_ext(self, writer, **kwargs):
     """
     同步历史数据准备工作
     """

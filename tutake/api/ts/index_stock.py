@@ -7,6 +7,8 @@ Tushare index_weight接口
 
 @author: rmfish
 """
+from datetime import datetime, timedelta
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -194,6 +196,8 @@ class IndexStock(TushareDAO, Task, DataProcess):
         csi100:000903.SH
         csi50:000016.SH
 
+
+        000009,000016,000010
         index_code	display_name	publish_date
         000001	上证指数	1991/7/15
         000002	A股指数	1992/2/21
@@ -878,12 +882,31 @@ class IndexStock(TushareDAO, Task, DataProcess):
         399996	中证智能家居指数	2014/9/17
         399997	中证白酒指数	2015/1/21
         399998	中证煤炭指数	2015/2/13
+        000035 000032  399170
         """
-        return [{"index_code": "000300.SH"}, {"index_code": "000905.SH"}, {"index_code": "000852.SH"},
-                {"index_code": "000903.SH"}, {"index_code": "000016.SH"}]
 
-    def prepare(self):
-        self.delete_all()
+        return [{"index_code": "000300.SH"}, {"index_code": "000905.SH"}, {"index_code": "000852.SH"},
+                {"index_code": "000903.SH"}, {"index_code": "000016.SH"}, {"index_code": "000037.SH"},
+                {"index_code": "000039.SH"}, {"index_code": "000035.SH"}, {"index_code": "000032.SH"},
+                {"index_code": "399170.SH"}]
+
+    def need_to_process(self, **kwargs) -> bool:
+        size = self.select("count(distinct(index_code))")
+        if size != len(kwargs['params']):
+            return True
+        max_date = self.max("list_date")
+        if max_date is not None:
+            return max_date < (datetime.now() + timedelta(days=-30)).strftime("%Y%m%d")
+        return True
+
+    def prepare_write(self, writer, **kwargs) -> bool:
+        db_cnt = self.count()
+        w_cnt = writer.count()
+        if w_cnt >= db_cnt:
+            self.delete_all()
+            return True
+        else:
+            return False
 
     def default_limit(self) -> str:
         return "10000"

@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import duckdb
+import pandas as pd
 from sqlalchemy.orm import DeclarativeMeta
 from tutake.api.ts.daily import TushareDaily
 import pyarrow as pa
@@ -37,5 +38,21 @@ if __name__ == '__main__':
     config = TutakeConfig(project_root())
     file = Path(config.get_tutake_data_dir(), "tutake.duckdb")
     conn = duckdb.connect(str(file))
-    conn.execute("DROP TABLE process_report")
+    # conn.execute("DROP TABLE process_report")
+    # conn.execute("ALTER TABLE checker_point ADD COLUMN check_type VARCHAR;")
+
+    # query_result = conn.execute('SELECT * FROM checker_point')
+    # print(query_result.fetchdf().to_pickle("test.pickle"))
+    # test = pd.read_pickle("test.pickle")
+    # test['check_type'] = "check"
+    # print(test)
+    # conn.register('test', test)
+    # conn.execute('CREATE TABLE checker_point1 AS SELECT * FROM test')
+    # conn.execute("ALTER TABLE checker_point RENAME TO checker_point2;")
+    conn.execute("ALTER TABLE checker_point3 RENAME TO checker_point;")
+    # conn.execute("COPY (SELECT * FROM checker_point) TO 'checker_point.parquet' (FORMAT 'parquet')")
+    # conn.execute("Create table checker_point4 AS select * from 'checker_point.parquet'")
+    # conn.execute("DROP TABLE checker_point")
+
+    # conn.execute("ALTER TABLE checker_point DROP check_type;")
     conn.close()

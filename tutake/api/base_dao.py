@@ -8,6 +8,7 @@ from datetime import datetime
 from operator import and_
 from sqlite3 import Connection
 
+import duckdb
 import numpy as np
 import pandas as pd
 import sqlalchemy
@@ -47,6 +48,7 @@ class TutakeCheckerPoint(TutakeTableBase):
     points = Column(PickleType, comment='检测点')
     error = Column(Boolean, comment='是否错误的point')
     update_time = Column(DateTime, comment='更新时间', default=datetime.utcnow)
+    check_type = Column(String, comment='检测类型')
 
 
 class DataChecker:
@@ -58,32 +60,40 @@ class DataChecker:
         self.session_factory: sessionmaker = session_factory
         TutakeCheckerPoint.__table__.create(bind=self.engine, checkfirst=True)
 
-    def check_point(self) -> (dict, bool):
+    def check_point(self, check_type="check") -> (dict, bool):
         session = self.session_factory()
-        point = session.query(TutakeCheckerPoint).filter_by(table_name=self.name).order_by(
+        point = session.query(TutakeCheckerPoint).filter_by(table_name=self.name, check_type=check_type).order_by(
             TutakeCheckerPoint.update_time.desc()).first()
         if point is None:
-            return None, True
+            return None, True, None
         else:
-            return point.points, point.error
+            return point.points, point.error, point.update_time
 
-    def _save(self, error: False, **points):
+    def process_point(self):
+        point = self.check_point('process')
+        return point[0], point[2]
+
+    def _save(self, error: False, check_type, **points):
         session = self.session_factory()
-        model = session.query(TutakeCheckerPoint).filter_by(table_name=self.name).first()
+        model = session.query(TutakeCheckerPoint).filter_by(table_name=self.name, check_type=check_type).first()
         if model:
             model.points = points
             model.update_time = datetime.now()
             session.merge(model)
         else:
-            model = TutakeCheckerPoint(table_name=self.name, points=points, error=error, update_time=datetime.now())
+            model = TutakeCheckerPoint(table_name=self.name, points=points, error=error, update_time=datetime.now(),
+                                       check_type=check_type)
             session.add(model)  # 执行插入操作
         session.commit()
 
-    def save_point(self, **points):
-        self._save(False, **points)
+    def save_process_point(self):
+        self.save_point('process')
 
-    def error_point(self, **points):
-        self._save(True, **points)
+    def save_point(self, check_type="check", **points):
+        self._save(False, check_type, **points)
+
+    def error_point(self, check_type="check", **points):
+        self._save(True, check_type, **points)
 
 
 class BaseDao(object):
@@ -136,11 +146,12 @@ class BaseDao(object):
         session.query(self.entities).delete()
         session.commit()
 
-    def delete_by(self, **kwargs):
+    def delete_by(self, **kwargs) -> bool:
         self.logger.warning("Delete data from {} by {}".format(self.table_name, kwargs))
         session = self.session_factory()
         session.query(self.entities).filter_by(**kwargs).delete()
         session.commit()
+        return True
 
     def get_ident(self, ident):
         session = self.session_factory()
@@ -159,6 +170,9 @@ class BaseDao(object):
         vals = list({key: i.__dict__[key] for key in columns} for i in result)
         return vals
 
+    def distinct(self, column: str, condition: str = ""):
+        return self._single_func(column, 'distinct', condition)
+
     def max(self, column: str, condition: str = ""):
         return self._single_func(column, 'max', condition)
 
@@ -174,6 +188,16 @@ class BaseDao(object):
                 sql = 'SELECT {}({}) FROM {}'.format(func, column, self.table_name)
             else:
                 sql = 'SELECT {}({}) FROM {} WHERE {}'.format(func, column, self.table_name, condition)
+            rs = con.execute(sql)
+            for i in rs:
+                return i[0]
+
+    def select(self, select: str, condition: str = ""):
+        with self.engine.connect() as con:
+            if condition.strip() == '':
+                sql = 'SELECT {} FROM {}'.format(select, self.table_name)
+            else:
+                sql = 'SELECT {} FROM {} WHERE {}'.format(select, self.table_name, condition)
             rs = con.execute(sql)
             for i in rs:
                 return i[0]
@@ -434,3 +458,21 @@ class BatchWriter:
         except FileNotFoundError:
             return
 
+    def count(self, condition: str = ""):
+        return self._single_func('id', 'count', condition)
+
+    def max(self, column: str, condition: str = ""):
+        return self._single_func(column, 'max', condition)
+
+    def min(self, column: str, condition: str = ""):
+        return self._single_func(column, 'min', condition)
+
+    def _single_func(self, column: str, func: str, condition: str = ""):
+        if condition.strip() == '':
+            sql = f"SELECT {func}({column}) FROM '{self.parquet_file}'"
+        else:
+            sql = f"SELECT {func}({column}) FROM '{self.parquet_file}' WHERE {condition}"
+        self.writer.close()
+        rs = duckdb.query(sql).fetchall()
+        for i in rs:
+            return i[0]

@@ -12,7 +12,7 @@ def default_limit_ext(self) -> str:
     return '3000'
 
 
-def prepare_ext(self):
+def prepare_write_ext(self, writer, **kwargs):
     """
     同步历史数据准备工作
     """
@@ -26,3 +26,7 @@ def query_parameters_ext(self):
     """
     # return self.api.index_classify.column_data(['index_code'])
     return [{}]
+
+def need_to_process_ext(self, **kwargs):
+    from tutake.api.ts.date_utils import min_count_and_last_process
+    return min_count_and_last_process(self, last_process_day=30)

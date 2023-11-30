@@ -19,7 +19,7 @@ def default_limit_ext(self) -> str:
     return "5000"
 
 
-def prepare_ext(self):
+def prepare_write_ext(self, writer, **kwargs):
     """
     同步历史数据准备工作
     """
@@ -32,3 +32,15 @@ def query_parameters_ext(self):
     :return: list(dict)
     """
     return [{}]
+
+
+def need_to_process_ext(self, **kwargs):
+    """
+    同步历史数据准备工作
+    """
+    max_date = self.max("month")
+    if max_date is not None:
+        from datetime import datetime
+        from datetime import timedelta
+        return max_date < (datetime.now() + timedelta(days=-31)).strftime("%Y%m")
+    return True
