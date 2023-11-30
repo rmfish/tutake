@@ -8,10 +8,10 @@ Tushare limit_list_d接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.limit_list_d_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareLimitListD(Base):
+class TushareLimitListD(TutakeTableBase):
     __tablename__ = "tushare_limit_list_d"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     trade_date = Column(String, index=True, comment='交易日期')
     ts_code = Column(String, index=True, comment='股票代码')
     industry = Column(String, comment='所属行业')
@@ -55,8 +54,9 @@ class LimitListD(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_limit_list_d"
-        self.database = 'tushare_stock.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -65,6 +65,7 @@ class LimitListD(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareLimitListD.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareLimitListD)
 
         query_fields = [
             'trade_date', 'ts_code', 'limit_type', 'exchange', 'start_date', 'end_date', 'test', 'limit', 'offset'
@@ -211,7 +212,8 @@ class LimitListD(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

@@ -1,5 +1,5 @@
 {
-    "database": "tushare_ggt",
+    "database": null,
     "default_limit": "1000",
     "desc": "获取港股通每日成交信息，数据从2014年开始",
     "id": 196,

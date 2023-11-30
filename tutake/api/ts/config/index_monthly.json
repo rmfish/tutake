@@ -1,5 +1,5 @@
 {
-    "database": "tushare_index",
+    "database": null,
     "default_limit": "1000",
     "desc": "获取指数月线行情,每月更新一次",
     "id": 172,

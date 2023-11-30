@@ -1,5 +1,7 @@
 import logging
+import os
 import sqlite3
+import tempfile
 import threading
 import time
 from datetime import datetime
@@ -8,19 +10,39 @@ from sqlite3 import Connection
 
 import numpy as np
 import pandas as pd
+import sqlalchemy
 from pandas import DataFrame
+from pathlib import Path
 from sqlalchemy import text, Column, Integer, PickleType, String, Boolean, DateTime
-from sqlalchemy.orm import load_only, declarative_base, sessionmaker
+from sqlalchemy.orm import load_only, declarative_base, sessionmaker, DeclarativeMeta
+import pyarrow as pa
+import pyarrow.parquet as pq
+from typing import Type
 
 from tutake.utils.config import TutakeConfig
 
 Base = declarative_base()
 checker_logger = logging.getLogger('tutake.checker')
 
+id_seq = sqlalchemy.Sequence('id_seq')
 
-class TutakeCheckerPoint(Base):
-    __tablename__ = "checker_point"
+
+class SqliteBase(Base):
+    __abstract__ = True
     id = Column(Integer, primary_key=True, autoincrement=True)
+
+
+class DuckDBBase(Base):
+    __abstract__ = True
+    id = Column(Integer, id_seq, server_default=id_seq.next_value(), primary_key=True)
+
+
+class TutakeTableBase(DuckDBBase):
+    __abstract__ = True
+
+
+class TutakeCheckerPoint(TutakeTableBase):
+    __tablename__ = "checker_point"
     table_name = Column(String, index=True, comment='表名')
     points = Column(PickleType, comment='检测点')
     error = Column(Boolean, comment='是否错误的point')
@@ -79,6 +101,31 @@ class BaseDao(object):
         self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
         self.checker = DataChecker(self.engine, table_name, session_factory, config)
+
+    def parquet_type(sqlite_type: str):
+        if sqlite_type in ['INT', 'INTEGER', 'TINYINT', 'SMALLINT', 'MEDIUMINT', 'BIGINT', 'UNSIGNED BIG INT', 'INT2',
+                           'INT8']:
+            return pa.int64()
+        elif sqlite_type in ['TEXT', 'CHARACTER', 'VARCHAR', 'VARYING CHARACTER', 'NCHAR', 'NATIVE CHARACTER',
+                             'NVARCHAR',
+                             'TEXT', 'CLOB']:
+            return pa.string()
+        elif sqlite_type in ['REAL', 'DOUBLE', 'DOUBLE PRECISION', 'FLOAT']:
+            return pa.float64()
+        elif sqlite_type in ['BLOB']:
+            return pa.binary()
+        elif sqlite_type in ['BOOLEAN']:
+            return pa.bool_()
+        elif sqlite_type in ['DATETIME']:
+            return pa.timestamp('s')  # 修改为 's'，表示秒
+        else:
+            raise ValueError(f"Unknown SQLite type: {sqlite_type}")
+
+    def parquet_schema(table_type: Type[DeclarativeMeta]):
+        columns = [pa.field(column, BaseDao.parquet_type(str(table_type.__dict__.get(column).type))) for column in
+                   table_type.__dict__ if (not column.startswith("_") and (not column == 'id'))]
+        columns.insert(0, pa.field('id', pa.int64()))
+        return pa.schema(columns)
 
     def columns_meta(self):
         pass
@@ -316,55 +363,74 @@ class Records:
 
 class BatchWriter:
 
-    def __init__(self, engine, table: str):
-        self.records = Records()
+    def __init__(self, engine, table: str, schema, database_dir):
+        self.writer = None
         self.engine = engine
         self.table = table
         self.shared_resource_lock = threading.Lock()
-        self.conn: Connection = None
         self.logger = logging.getLogger('tutake.dao.writer.{}'.format(table))
-        self.database = self.engine.url.database.split("/")[-1]
+        self.schema = schema
+        self.database_dir = database_dir
+        self.parquet_file = None
+        self.max_id = 0
+
+    def _init_writer(self):
+        if self.writer is None:
+            self.parquet_file = Path(self.database_dir, f'{self.table}-{time.time()}.parquet')
+            self.writer = pq.ParquetWriter(self.parquet_file, self.schema)
+        return self.writer
 
     def start(self):
-        if self.conn is None:
-            self.conn = sqlite3.connect(self.engine.url.database)
-            self.conn.execute('''PRAGMA journal_mode=WAL''')
-            # self.conn.execute('''PRAGMA synchronous = OFF''')
+        self._init_writer()
+        conn = self.engine.connect()
+        result = conn.execute(f"""Select max(id) from {self.table}""").fetchone()
+        if result is not None and result[0] is not None:
+            self.max_id = int(result[0])
 
     def rollback(self):
-        if self.conn:
-            self.logger.warning(f"Rollback all {self.table} records of writers.")
-            self.conn.rollback()
-            self.conn.close()
-            self.conn = None
+        if self.writer:
+            self.writer = None
+        try:
+            os.remove(self.parquet_file)
+        except FileNotFoundError:
+            return
 
     def commit(self):
-        if self.conn:
-            self.flush()
-            self.conn.commit()
-            self.conn.close()
-            self.conn = None
+        try:
+            self.writer.close()
+            self.shared_resource_lock.acquire()
+            conn = self.engine.connect()
+            conn.execute(f"""INSERT INTO {self.table} SELECT * FROM read_parquet('{self.parquet_file}')""")
+            conn.execute(f"""FORCE CHECKPOINT;""")
+            conn.close()
+            self.shared_resource_lock.release()
+            self.writer = None
+        finally:
+            try:
+                os.remove(self.parquet_file)
+            except FileNotFoundError:
+                return
 
     def add_records(self, records):
-        self.records.append(records)
-        if self.records.size() > 500000:
-            self.flush()
+        if isinstance(records, Records):
+            data = records.data_frame()
+        elif isinstance(records, DataFrame):
+            data = records
+        else:
+            return
+        data['id'] = range(self.max_id, self.max_id + len(data))
+        data = data.reindex(columns=['id'] + list(data.columns[:-1]))
+        table = pa.Table.from_pandas(df=data, schema=self.schema)
+        self.writer.write_table(table)
+        self.max_id = self.max_id + len(data)
 
-    def flush(self):
-        self.shared_resource_lock.acquire()
-        records = self.records
-        self.records = Records()
-        self.shared_resource_lock.release()
-        size = records.size()
-        if size > 0:
-            t = time.time()
-            sql = "insert or ignore into {}({}) values ({})".format(self.table, ','.join(records.fields),
-                                                                    ','.join(["?" for _ in
-                                                                              range(len(records.fields))]))
-            if self.conn is None:
-                self.start()
-            self.conn.executemany(sql, records.items)
+    def close(self):
+        self.max_id = 0
+        if self.writer:
+            self.writer.close()
+            self.writer = None
+        try:
+            os.remove(self.parquet_file)
+        except FileNotFoundError:
+            return
 
-            self.logger.debug("Save {} records to table {} in {}, costs {}s".format(size, self.table,
-                                                                                    self.database,
-                                                                                    '%.4f' % (time.time() - t)))

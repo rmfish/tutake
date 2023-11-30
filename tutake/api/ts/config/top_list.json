@@ -1,5 +1,5 @@
 {
-    "database": "tushare_stock_market",
+    "database": null,
     "default_limit": "10000",
     "desc": "龙虎榜每日交易明细,数据开始于2005年，每日晚8点更新",
     "id": 106,

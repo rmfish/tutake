@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": "100",
     "desc": "获取各渠道公募基金销售保有规模占比数据，年度更新",
     "id": 265,

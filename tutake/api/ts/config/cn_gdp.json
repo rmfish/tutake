@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "10000",
     "integral_required": 600,
     "desc": "获取国民经济之GDP数据",

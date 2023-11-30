@@ -11,19 +11,18 @@ import pandas as pd
 from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_weight_ext import *
+from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
-from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareIndexWeight(Base):
+class TushareIndexWeight(TutakeTableBase):
     __tablename__ = "tushare_index_weight"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     index_code = Column(String, index=True, comment='指数代码')
     con_code = Column(String, comment='成分代码')
     trade_date = Column(String, index=True, comment='交易日期')
@@ -40,8 +39,9 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_index_weight"
-        self.database = 'tushare_index.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -50,6 +50,7 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexWeight.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareIndexWeight)
 
         query_fields = ['index_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = ["index_code", "con_code", "trade_date", "weight"]
@@ -105,7 +106,8 @@ class IndexWeight(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -155,23 +157,12 @@ setattr(IndexWeight, 'param_loop_process', param_loop_process_ext)
 
 if __name__ == '__main__':
     import tushare as ts
-
-    pd.set_option('display.max_columns', 50)  # 显示列数
+    pd.set_option('display.max_columns', 50)    # 显示列数
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    # print(pro.index_weight(index_code='000300.SH', offset=25000))
+    print(pro.index_weight())
 
     api = IndexWeight(config)
-    # trade_cal = TradeCal(config)
-    # # print(api.process())    # 同步增量数据
-    print(api.index_weight(index_code='000300.SH', con_code='601995.SH', limit=100000))  # 数据查询接口
-    #
-    # df = api.index_weight(index_code='000300.SH', limit=1000000)
-    # # df.sort_values(['con_code', 'trade_date'], inplace=True)
-    #
-    # grouped = df.groupby('con_code')
-    #
-    # # 针对每个分组进行处理
-    # for group_name, group_df in grouped:
-    #     print(group_name,group_df)
+    print(api.process())    # 同步增量数据
+    print(api.index_weight())    # 数据查询接口

@@ -8,10 +8,10 @@ Tushare cn_m接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.cn_m_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareCnM(Base):
+class TushareCnM(TutakeTableBase):
     __tablename__ = "tushare_cn_m"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     month = Column(String, comment='月份YYYYMM')
     m0 = Column(Float, comment='M0（亿元）')
     m0_yoy = Column(Float, comment='M0同比（%）')
@@ -46,8 +45,9 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_cn_m"
-        self.database = 'tushare_macroeconomic.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -56,6 +56,7 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareCnM.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareCnM)
 
         query_fields = ['m', 'start_m', 'end_m', 'limit', 'offset']
         self.tushare_fields = ["month", "m0", "m0_yoy", "m0_mom", "m1", "m1_yoy", "m1_mom", "m2", "m2_yoy", "m2_mom"]
@@ -140,7 +141,8 @@ class CnM(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

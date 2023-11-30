@@ -8,10 +8,10 @@ Tushare fund_sales_vol接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.fund_sales_vol_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareFundSalesVol(Base):
+class TushareFundSalesVol(TutakeTableBase):
     __tablename__ = "tushare_fund_sales_vol"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     year = Column(Integer, index=True, comment='年度')
     quarter = Column(String, index=True, comment='季度')
     inst_name = Column(String, comment='销售机构')
@@ -42,8 +41,9 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_fund_sales_vol"
-        self.database = 'tushare_fund.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -52,6 +52,7 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundSalesVol.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareFundSalesVol)
 
         query_fields = ['year', 'quarter', 'name', 'limit', 'offset']
         self.tushare_fields = ["year", "quarter", "inst_name", "fund_scale", "scale", "rank"]
@@ -116,7 +117,8 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

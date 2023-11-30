@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": null,
     "default_query": "ts_code='500001.SH'",
     "desc": "获取公募基金分红数据",

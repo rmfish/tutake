@@ -1,5 +1,5 @@
 {
-    "database": "tushare_moneyflow",
+    "database": null,
     "default_limit": "300",
     "default_query": "trade_date='20221118'",
     "desc": "获取沪股通、深股通、港股通每日资金流向数据",
@@ -50,42 +50,42 @@
         },
         {
             "column": "GGT_SS",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "港股通（上海）",
             "must": "Y",
             "name": "ggt_ss"
         },
         {
             "column": "GGT_SZ",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "港股通（深圳）",
             "must": "Y",
             "name": "ggt_sz"
         },
         {
             "column": "HGT",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "沪股通",
             "must": "Y",
             "name": "hgt"
         },
         {
             "column": "SGT",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "深股通",
             "must": "Y",
             "name": "sgt"
         },
         {
             "column": "NORTH_MONEY",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "北向资金",
             "must": "Y",
             "name": "north_money"
         },
         {
             "column": "SOUTH_MONEY",
-            "data_type": "str",
+            "data_type": "float",
             "desc": "南向资金",
             "must": "Y",
             "name": "south_money"

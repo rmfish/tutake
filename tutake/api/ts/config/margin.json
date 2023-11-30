@@ -1,5 +1,5 @@
 {
-    "database": "tushare_stock_market",
+    "database": null,
     "default_limit": null,
     "desc": "获取融资融券每日交易汇总数据,数据开始于2010年，每日9点更新",
     "id": 58,

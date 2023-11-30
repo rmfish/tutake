@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "desc": "获取业绩预告数据",
     "id": 45,

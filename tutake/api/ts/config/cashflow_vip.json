@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "desc": "获取上市公司现金流量表",
     "id": 4400,

@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "4000",
     "desc": "Shibor报价数据，每日12点更新",
     "id": 150,

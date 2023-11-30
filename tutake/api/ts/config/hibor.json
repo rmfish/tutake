@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "4000",
     "desc": "Hibor利率,每日12点更新，HIBOR (Hongkong InterBank Offered Rate)，是香港银行同行业拆借利率。指香港货币市场上，银行与银行之间的一年期以下的短期资金借贷利率，从伦敦同业拆借利率（LIBOR）变化出来的。",
     "id": 153,

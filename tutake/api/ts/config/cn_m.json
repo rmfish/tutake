@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "5000",
     "desc": "获取货币供应量月度数据",
     "id": 242,

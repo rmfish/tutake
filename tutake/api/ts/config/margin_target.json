@@ -1,5 +1,5 @@
 {
-    "database": "tushare_stock_market",
+    "database": null,
     "default_limit": "5000",
     "desc": "获取全市场融资融券标的",
     "id": 286,

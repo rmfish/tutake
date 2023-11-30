@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "desc": "获取上市公司现金流量表,当前接口只能按单只股票获取其历史数据，如果需要获取某一季度全部上市公司数据",
     "id": 44,

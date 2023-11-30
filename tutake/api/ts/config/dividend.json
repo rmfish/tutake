@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "default_query": "ts_code='000002.SZ'",
     "desc": "分红送股数据",

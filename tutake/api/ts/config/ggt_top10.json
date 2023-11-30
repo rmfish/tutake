@@ -1,5 +1,5 @@
 {
-    "database": "tushare_ggt",
+    "database": null,
     "default_limit": null,
     "default_query": "ts_code='00700.HK'",
     "desc": "获取港股通每日成交数据，其中包括沪市、深市详细数据，每天18~20点之间完成当日更新",
@@ -91,14 +91,14 @@
         },
         {
             "column": "RANK",
-            "data_type": "str",
+            "data_type": "int",
             "desc": "资金排名",
             "must": "Y",
             "name": "rank"
         },
         {
             "column": "MARKETTYPE",
-            "data_type": "str",
+            "data_type": "int",
             "desc": "市场类型 2：港股通（沪） 4：港股通（深）",
             "must": "Y",
             "name": "market_type"

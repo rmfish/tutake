@@ -1,5 +1,5 @@
 {
-    "database": "tushare_stock",
+    "database": null,
     "default_limit": "5000",
     "desc": "每日停复牌信息",
     "id": 214,

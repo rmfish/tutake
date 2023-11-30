@@ -1,5 +1,5 @@
 {
-    "database": "tushare_index",
+    "database": null,
     "default_limit": "1000",
     "desc": "指数周线行情",
     "id": 171,

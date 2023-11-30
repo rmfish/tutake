@@ -1,5 +1,5 @@
 {
-    "database": "tushare_moneyflow",
+    "database": null,
     "default_limit": "5000",
     "default_query": "ts_code='000001.SH'",
     "desc": "获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向，每日晚19点更新",

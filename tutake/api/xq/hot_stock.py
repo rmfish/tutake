@@ -9,8 +9,9 @@ Xueqiu hot_stock接口
 import pandas as pd
 from sqlalchemy import Integer, String, Float, Boolean, Column, create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import QueuePool
 
-from tutake.api.base_dao import Base, BatchWriter, Records, BaseDao
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.xq.hot_stock_ext import *
 from tutake.api.xq.xueqiu_base import XueQiuBase
@@ -18,9 +19,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class XueqiuHotStock(Base):
+class XueqiuHotStock(TutakeTableBase):
     __tablename__ = "xueqiu_hot_stock"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String, index=True, comment='股票代码')
     trade_date = Column(String, index=True, comment='交易日期')
     hot_type = Column(
@@ -45,16 +45,14 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "xueqiu_hot_stock"
-        self.database = 'xueqiu.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
-        self.engine = create_engine(self.database_url,
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
+        self.engine = create_engine(self.database_url, poolclass=QueuePool)
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         XueqiuHotStock.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(XueqiuHotStock)
 
         query_fields = ['ts_code', 'hot_type', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = ["ts_code", "trade_date", "hot_type", "name", "value", "increment", "rank"]
@@ -126,7 +124,8 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

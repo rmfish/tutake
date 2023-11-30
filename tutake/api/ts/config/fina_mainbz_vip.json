@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "desc": "获得上市公司主营业务构成，分地区和产品两种方式",
     "id": 81,

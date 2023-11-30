@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": "500",
     "desc": "获取销售机构公募基金销售保有规模数据，本数据从2021年Q1开始公布，季度更新",
     "id": 266,

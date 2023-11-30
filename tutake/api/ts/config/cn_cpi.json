@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "5000",
     "integral_required": 600,
     "desc": "获取CPI居民消费价格数据，包括全国、城市和农村的数据",

@@ -1,5 +1,5 @@
 {
-  "database": "tushare_xiaopei",
+  "database": null,
   "default_limit": null,
   "desc": "获取小佩数据动量因子数据，可以获取股票动能评级数据，包括最新及过去历史数据",
   "id": 300,

@@ -20,17 +20,17 @@ class XueQiuAPI(object):
         return self.instances.get(name)
 
     def all_apis(self):
-        apis = ['index_valuation', 'hot_stock']
+        apis = ['hot_stock', 'index_valuation']
         return apis
 
     def instance_from_name(self, name, config):
-        if name == 'index_valuation':
-            index_valuation_module = import_module("tutake.api.xq.index_valuation")
-            clazz = getattr(index_valuation_module, "IndexValuation")
-            return clazz(config)
         if name == 'hot_stock':
             hot_stock_module = import_module("tutake.api.xq.hot_stock")
             clazz = getattr(hot_stock_module, "HotStock")
+            return clazz(config)
+        if name == 'index_valuation':
+            index_valuation_module = import_module("tutake.api.xq.index_valuation")
+            clazz = getattr(index_valuation_module, "IndexValuation")
             return clazz(config)
         else:
             return None

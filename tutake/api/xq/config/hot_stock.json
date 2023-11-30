@@ -1,5 +1,5 @@
 {
-  "database": "xueqiu",
+  "database": null,
   "default_limit": "1000",
   "desc": "热门的股票ETF数据 热门类型（etf_query: 热门ETF, etf_1h:1小时热门ETF, etf_follow:热门关注ETF, stock_query:热门股票, stock_increase: 热门股票飙升, stock_comment:热评股票, stock_follow：热门关注股票, cube:热门组合）",
   "id": 10000,

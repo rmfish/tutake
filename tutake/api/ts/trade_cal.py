@@ -8,10 +8,10 @@ Tushare trade_cal接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.trade_cal_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,12 +21,11 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareTradeCal(Base):
+class TushareTradeCal(TutakeTableBase):
     __tablename__ = "tushare_trade_cal"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     exchange = Column(String, index=True, comment='交易所 SSE上交所 SZSE深交所')
     cal_date = Column(String, index=True, comment='日历日期')
-    is_open = Column(String, index=True, comment='是否交易 0休市 1交易')
+    is_open = Column(Integer, index=True, comment='是否交易 0休市 1交易')
     pretrade_date = Column(String, comment='上一个交易日')
 
 
@@ -40,8 +39,9 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_trade_cal"
-        self.database = 'tushare_stock.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -50,6 +50,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareTradeCal.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareTradeCal)
 
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         self.tushare_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
@@ -108,7 +109,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

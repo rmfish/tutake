@@ -1,5 +1,5 @@
 {
-    "database": "tushare_stk",
+    "database": null,
     "default_limit": "100",
     "desc": "获取上市公司机构调研记录数据",
     "id": 275,

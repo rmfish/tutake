@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": null,
     "desc": "获取公募基金管理人列表",
     "id": 118,

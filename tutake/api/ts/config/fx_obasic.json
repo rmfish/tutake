@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fx",
+    "database": null,
     "default_limit": null,
     "desc": "获取海外外汇基础信息，目前只有FXCM交易商的数据",
     "id": 178,

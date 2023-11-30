@@ -176,7 +176,7 @@ class TushareProcessTask(object):
             self._api_to_jobs(schedule_configs)
             self._scheduler.start()
         except (Exception, KeyboardInterrupt) as err:
-            self.logger.error(f"Exit with {type(err).__name__} {err}")
+            self.logger.error(f"Exit start job with {type(err).__name__} {err}")
 
 
 class TushareProcess(object):

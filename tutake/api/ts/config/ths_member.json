@@ -1,5 +1,5 @@
 {
-    "database": "tushare_ths",
+    "database": null,
     "default_limit": null,
     "desc": "获取同花顺概念板块成分列表",
     "id": 261,

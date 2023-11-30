@@ -8,10 +8,10 @@ Tushare index_member接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.index_member_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareIndexMember(Base):
+class TushareIndexMember(TutakeTableBase):
     __tablename__ = "tushare_index_member"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     index_code = Column(String, index=True, comment='指数代码')
     index_name = Column(String, comment='指数名称')
     con_code = Column(String, comment='成分股票代码')
@@ -43,8 +42,9 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_index_member"
-        self.database = 'tushare_index.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -53,6 +53,7 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexMember.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareIndexMember)
 
         query_fields = ['index_code', 'is_new', 'ts_code', 'limit', 'offset']
         self.tushare_fields = ["index_code", "index_name", "con_code", "con_name", "in_date", "out_date", "is_new"]
@@ -122,7 +123,8 @@ class IndexMember(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

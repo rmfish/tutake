@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": "800",
     "default_query": "trade_date='20221117'",
     "desc": "获取场内基金日线行情，类似股票日行情",

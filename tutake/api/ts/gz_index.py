@@ -8,10 +8,10 @@ Tushare gz_index接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.gz_index_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareGzIndex(Base):
+class TushareGzIndex(TutakeTableBase):
     __tablename__ = "tushare_gz_index"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(String, index=True, comment='日期')
     d10_rate = Column(Float, comment='小额贷市场平均利率（十天）')
     m1_rate = Column(Float, comment='小额贷市场平均利率（一月期）')
@@ -43,8 +42,9 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_gz_index"
-        self.database = 'tushare_macroeconomic.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -53,6 +53,7 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareGzIndex.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareGzIndex)
 
         query_fields = ['date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = ["date", "d10_rate", "m1_rate", "m3_rate", "m6_rate", "m12_rate", "long_rate"]
@@ -122,7 +123,8 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

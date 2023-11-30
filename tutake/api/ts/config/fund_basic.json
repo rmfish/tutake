@@ -1,5 +1,5 @@
 {
-    "database": "tushare_fund",
+    "database": null,
     "default_limit": "15000",
     "desc": "获取公募基金数据列表，包括场内和场外基金",
     "id": 19,

@@ -1,5 +1,5 @@
 {
-    "database": "tushare_macroeconomic",
+    "database": null,
     "default_limit": "100",
     "desc": "获取全球财经日历、包括经济事件数据更新",
     "id": 233,

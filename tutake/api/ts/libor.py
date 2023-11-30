@@ -8,10 +8,10 @@ Libor拆借利率，每日12点更新，Libor（London Interbank Offered Rate �
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.libor_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -21,9 +21,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareLibor(Base):
+class TushareLibor(TutakeTableBase):
     __tablename__ = "tushare_libor"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(String, index=True, comment='日期')
     curr_type = Column(String, index=True, comment='货币')
     on_night = Column(Float, comment='隔夜')
@@ -45,8 +44,9 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_libor"
-        self.database = 'tushare_macroeconomic.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -55,6 +55,7 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareLibor.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareLibor)
 
         query_fields = ['date', 'start_date', 'end_date', 'curr_type', 'limit', 'offset']
         self.tushare_fields = ["date", "curr_type", "on", "1w", "1m", "2m", "3m", "6m", "12m"]
@@ -143,7 +144,8 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

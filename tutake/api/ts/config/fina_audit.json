@@ -1,5 +1,5 @@
 {
-    "database": "tushare_report",
+    "database": null,
     "default_limit": null,
     "desc": "获取上市公司定期财务审计意见数据",
     "id": 80,

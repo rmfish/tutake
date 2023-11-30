@@ -78,7 +78,8 @@ class CodeGenerator(object):
             if not api_config.get('if_exists'):
                 api_config['if_exists'] = 'append'
             if not api_config.get('database'):
-                api_config['database'] = f"{prefix}_{api_config.get('name')}"
+                api_config['database'] = "tutake"
+                # api_config['database'] = f"{prefix}_{api_config.get('name')}"
             if not api_config.get('default_limit'):
                 api_config['default_limit'] = ""
 

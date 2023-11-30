@@ -1,5 +1,5 @@
 {
-    "database": "tushare_index",
+    "database": null,
     "default_limit": "3000",
     "desc": "申万行业成分构成",
     "id": 182,

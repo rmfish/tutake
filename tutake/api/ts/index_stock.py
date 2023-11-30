@@ -13,24 +13,24 @@ from bs4 import BeautifulSoup
 from sqlalchemy import Integer, String, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter
+from tutake.api.base_dao import Base, BatchWriter, BaseDao, TutakeTableBase
 from tutake.api.process import DataProcess
+from tutake.api.process_client import Task
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareIndexStock(Base):
+class TushareIndexStock(TutakeTableBase):
     __tablename__ = "tushare_index_stock"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     index_code = Column(String, index=True, comment='指数代码')
     con_code = Column(String, index=True, comment='成分代码')
     list_date = Column(String, index=True, comment='纳入日期')
     delist_date = Column(String, comment='剔除日期')
 
 
-class IndexStock(TushareDAO, DataProcess):
+class IndexStock(TushareDAO, Task,DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -40,8 +40,9 @@ class IndexStock(TushareDAO, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_index_stock"
-        self.database = 'tushare_index.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -50,6 +51,7 @@ class IndexStock(TushareDAO, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexStock.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareIndexStock)
 
         query_fields = ['index_code', 'con_code', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = ["index_code", "con_code", "list_date", "delist_date"]
@@ -57,7 +59,8 @@ class IndexStock(TushareDAO, DataProcess):
         column_mapping = None
         TushareDAO.__init__(self, self.engine, session_factory, TushareIndexStock, self.database, self.table_name,
                             query_fields, entity_fields, column_mapping, config)
-        DataProcess.__init__(self, "index_weight", config)
+        DataProcess.__init__(self, "index_stock", config)
+        Task.__init__(self, "index_stock", config)
         self.api = TushareAPI(config)
 
     def columns_meta(self):
@@ -104,7 +107,7 @@ class IndexStock(TushareDAO, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def _index_stock_cons(self, index_code: str = "000300.SH", latest=True) -> pd.DataFrame:
         """

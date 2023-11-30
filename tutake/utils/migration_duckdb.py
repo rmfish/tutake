@@ -6,14 +6,11 @@ import duckdb
 import numpy as np
 import os
 
+import sqlalchemy
+
+
 # 你的SQLite数据库文件所在的目录
-directory = 'D:\\Dataset\\quant\\tutake'
 
-# 获取目录下所有以.db结尾的文件
-db_files = [f for f in os.listdir(directory) if f.endswith('.db')]
-
-# 创建或打开DuckDB数据库
-con = duckdb.connect('tutake.duckdb')
 
 
 def sqlite_type_to_parquet_type(sqlite_type):
@@ -35,68 +32,88 @@ def sqlite_type_to_parquet_type(sqlite_type):
         raise ValueError(f"Unknown SQLite type: {sqlite_type}")
 
 
-# 对于每个SQLite数据库文件，执行转换操作
-for db_file in db_files:
-    # 连接到SQLite数据库
-    conn = sqlite3.connect(os.path.join(directory, db_file))
+def migration():
+    global name, table_name, columns, fields
 
-    # 获取数据库中所有表的名称
-    table_names = conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
-    table_names = [name[0] for name in table_names]
+    directory = 'D:\\Dataset\\quant\\tutake'
 
-    # 对于每个表，分块读取数据并写入Parquet文件
-    for table_name in table_names:
-        if table_name in ['checker_point']:
-            continue
-        print(f"Start {db_file}.{table_name}")
-        cursor = con.execute(f"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '{table_name}'")
-        table_exists = cursor.fetchone()[0] > 0
+    # 获取目录下所有以.db结尾的文件
+    db_files = [f for f in os.listdir(directory) if f.endswith('.db')]
 
-        if table_exists:
-            duckdb_rows = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
-            sqlite_rows = conn.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
-            if sqlite_rows > duckdb_rows:
-                con.execute(f"DROP TABLE {table_name}")
-            else:
+    # 创建或打开DuckDB数据库
+    con = duckdb.connect('tutake.duckdb')
+
+    # 对于每个SQLite数据库文件，执行转换操作
+    for db_file in db_files:
+        # 连接到SQLite数据库
+        conn = sqlite3.connect(os.path.join(directory, db_file))
+
+        # 获取数据库中所有表的名称
+        table_names = conn.execute("SELECT name FROM sqlite_master WHERE type='table';").fetchall()
+        table_names = [name[0] for name in table_names]
+
+        # 对于每个表，分块读取数据并写入Parquet文件
+        for table_name in table_names:
+            if table_name in ['checker_point']:
                 continue
+            print(f"Start {db_file}.{table_name}")
+            cursor = con.execute(f"SELECT COUNT(*) FROM information_schema.tables WHERE table_name = '{table_name}'")
+            table_exists = cursor.fetchone()[0] > 0
 
-        cursor = conn.execute(f"PRAGMA table_info({table_name})")
-        columns = cursor.fetchall()
-        # 打印列的名称和类型
-        # for column in columns:
-        #     print(f"{column[1]}: {column[2]}")
-        # 创建一个字段列表
-        fields = [pa.field(column[1], sqlite_type_to_parquet_type(column[2])) for column in columns]
-        # 创建一个模式
-        schema = pa.schema(fields)
+            if table_exists:
+                duckdb_rows = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
+                sqlite_rows = conn.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
+                if sqlite_rows > duckdb_rows:
+                    con.execute(f"DROP TABLE {table_name}")
+                else:
+                    continue
 
-        parquet_file = f'{table_name}.parquet'
-        writer = None
-        total_rows = 0
-        for chunk in pd.read_sql_query(f"SELECT * FROM {table_name}", conn, chunksize=50000):
-            total_rows += len(chunk)
-            table = pa.Table.from_pandas(df=chunk, schema=schema)
-            if writer is None:
-                writer = pq.ParquetWriter(parquet_file, schema)
-            writer.write_table(table)
-        if writer:
-            writer.close()
-        # print(f"Table {table_name} in {db_file} contains {total_rows} rows.")
+            cursor = conn.execute(f"PRAGMA table_info({table_name})")
+            columns = cursor.fetchall()
+            # 打印列的名称和类型
+            # for column in columns:
+            #     print(f"{column[1]}: {column[2]}")
+            # 创建一个字段列表
+            fields = [pa.field(column[1], sqlite_type_to_parquet_type(column[2])) for column in columns]
+            # 创建一个模式
+            schema = pa.schema(fields)
 
-        if total_rows == 0:
-            os.remove(parquet_file)
-        else:
-            # 将Parquet文件的数据读入到DuckDB数据库中的对应表
-            con.execute(f"""
+            parquet_file = f'{table_name}.parquet'
+            writer = None
+            total_rows = 0
+            for chunk in pd.read_sql_query(f"SELECT * FROM {table_name}", conn, chunksize=50000):
+                total_rows += len(chunk)
+                table = pa.Table.from_pandas(df=chunk, schema=schema)
+                if writer is None:
+                    writer = pq.ParquetWriter(parquet_file, schema)
+                writer.write_table(table)
+            if writer:
+                writer.close()
+            # print(f"Table {table_name} in {db_file} contains {total_rows} rows.")
+
+            if total_rows == 0:
+                os.remove(parquet_file)
+            else:
+                # 将Parquet文件的数据读入到DuckDB数据库中的对应表
+                con.execute(f"""
             CREATE TABLE {table_name} AS SELECT * FROM parquet_scan('{parquet_file}')
             """)
-            # 删除Parquet文件
-            os.remove(parquet_file)
+                # 删除Parquet文件
+                os.remove(parquet_file)
 
-            # 打印DuckDB中表的基本信息
-            duckdb_rows = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
-            print(f"Table {table_name} in DuckDB contains {duckdb_rows} rows.")
+                # 打印DuckDB中表的基本信息
+                duckdb_rows = con.execute(f"SELECT COUNT(*) FROM {table_name}").fetchall()[0][0]
+                print(f"Table {table_name} in DuckDB contains {duckdb_rows} rows.")
 
-    conn.close()
+        conn.close()
+    con.close()
 
-con.close()
+
+# migration()
+
+if __name__ == '__main__':
+    engine = sqlalchemy.create_engine('duckdb:///D:\\Dataset\\quant\\tutake\\tutake.duckdb').connect()
+    result=engine.execute("select * from tushare_adj_factor limit 10")
+    # 打印查询结果
+    for row in result:
+        print(row)
