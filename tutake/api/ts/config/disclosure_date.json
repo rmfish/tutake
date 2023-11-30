@@ -1,114 +1,114 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取财报披露计划日期",
-    "id": 162,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "财报周期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "计划披露日期",
-            "must": "N",
-            "name": "pre_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "实际披露日期",
-            "must": "N",
-            "name": "actual_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "",
-            "must": "N",
-            "name": "offset"
-        },
-        {
-            "data_type": "int",
-            "desc": "",
-            "must": "N",
-            "name": "limit"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取财报披露计划日期",
+  "id": 162,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "财报周期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "计划披露日期",
+      "must": "N",
+      "name": "pre_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "实际披露日期",
+      "must": "N",
+      "name": "actual_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "int",
+      "desc": "",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "disclosure_date",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "最新披露公告日",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "PRE_DATE",
+      "data_type": "str",
+      "desc": "预计披露日期",
+      "must": "Y",
+      "name": "pre_date"
+    },
+    {
+      "column": "ACTUAL_DATE",
+      "data_type": "str",
+      "desc": "实际披露日期",
+      "must": "Y",
+      "name": "actual_date"
+    },
+    {
+      "column": "MODIFY_DATE",
+      "data_type": "str",
+      "desc": "披露日期修正记录",
+      "must": "N",
+      "name": "modify_date"
+    }
+  ],
+  "parent_id": 16,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "disclosure_date",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "最新披露公告日",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "PRE_DATE",
-            "data_type": "str",
-            "desc": "预计披露日期",
-            "must": "Y",
-            "name": "pre_date"
-        },
-        {
-            "column": "ACTUAL_DATE",
-            "data_type": "str",
-            "desc": "实际披露日期",
-            "must": "Y",
-            "name": "actual_date"
-        },
-        {
-            "column": "MODIFY_DATE",
-            "data_type": "str",
-            "desc": "披露日期修正记录",
-            "must": "N",
-            "name": "modify_date"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 16,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            16,
-            "财务数据"
-        ],
-        [
-            162,
-            "财报披露日期表"
-        ]
+    [
+      16,
+      "财务数据"
     ],
-    "title": "财报披露日期表",
-    "validations": []
+    [
+      162,
+      "财报披露日期表"
+    ]
+  ],
+  "title": "财报披露日期表",
+  "validations": []
 }

@@ -1,81 +1,81 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "每月初获取券商月度金股",
-    "id": 267,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "月度（YYYYMM）",
-            "must": "Y",
-            "name": "month"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "每月初获取券商月度金股",
+  "id": 267,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "月度（YYYYMM）",
+      "must": "Y",
+      "name": "month"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "broker_recommend",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "MONTH",
+      "data_type": "str",
+      "desc": "月度",
+      "must": "Y",
+      "name": "month"
+    },
+    {
+      "column": "BROKER",
+      "data_type": "str",
+      "desc": "券商",
+      "must": "Y",
+      "name": "broker"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票简称",
+      "must": "Y",
+      "name": "name"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "broker_recommend",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "MONTH",
-            "data_type": "str",
-            "desc": "月度",
-            "must": "Y",
-            "name": "month"
-        },
-        {
-            "column": "BROKER",
-            "data_type": "str",
-            "desc": "券商",
-            "must": "Y",
-            "name": "broker"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票简称",
-            "must": "Y",
-            "name": "name"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            267,
-            "券商月度金股"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "券商月度金股",
-    "validations": []
+    [
+      267,
+      "券商月度金股"
+    ]
+  ],
+  "title": "券商月度金股",
+  "validations": []
 }

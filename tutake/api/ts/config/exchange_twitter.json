@@ -1,153 +1,153 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取Twitter上数字货币交易所发布的消息",
-    "id": 92,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "datetime",
-            "desc": "开始时间",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "data_type": "datetime",
-            "desc": "结束时间",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取Twitter上数字货币交易所发布的消息",
+  "id": 92,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "datetime",
+      "desc": "开始时间",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "data_type": "datetime",
+      "desc": "结束时间",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "exchange_twitter",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "id",
+      "data_type": "int",
+      "desc": "记录ID",
+      "must": "Y",
+      "name": "id"
+    },
+    {
+      "column": "social_account_id",
+      "data_type": "int",
+      "desc": "交易所账号ID",
+      "must": "Y",
+      "name": "account_id"
+    },
+    {
+      "column": "social_account",
+      "data_type": "str",
+      "desc": "交易所账号",
+      "must": "N",
+      "name": "account"
+    },
+    {
+      "column": "social_nickname",
+      "data_type": "str",
+      "desc": "交易所昵称",
+      "must": "N",
+      "name": "nickname"
+    },
+    {
+      "column": "social_avatar",
+      "data_type": "str",
+      "desc": "头像",
+      "must": "N",
+      "name": "avatar"
+    },
+    {
+      "column": "social_content_id",
+      "data_type": "int",
+      "desc": "类容ID",
+      "must": "Y",
+      "name": "content_id"
+    },
+    {
+      "column": "content",
+      "data_type": "str",
+      "desc": "内容",
+      "must": "Y",
+      "name": "content"
+    },
+    {
+      "column": "is_retweet",
+      "data_type": "int",
+      "desc": "是否转发",
+      "must": "Y",
+      "name": "is_retweet"
+    },
+    {
+      "column": "retweet_content",
+      "data_type": "json",
+      "desc": "转发内容",
+      "must": "Y",
+      "name": "retweet_content"
+    },
+    {
+      "column": "media",
+      "data_type": "json",
+      "desc": "附件",
+      "must": "Y",
+      "name": "media"
+    },
+    {
+      "column": "posted_at",
+      "data_type": "int",
+      "desc": "发布时间戳",
+      "must": "Y",
+      "name": "posted_at"
+    },
+    {
+      "column": "content_translation",
+      "data_type": "str",
+      "desc": "内容翻译",
+      "must": "Y",
+      "name": "content_translation"
+    },
+    {
+      "column": "str_posted_at",
+      "data_type": "str",
+      "desc": "发布时间，根据posted_at转换而来",
+      "must": "Y",
+      "name": "str_posted_at"
+    },
+    {
+      "column": "create_at",
+      "data_type": "str",
+      "desc": "采集时间",
+      "must": "Y",
+      "name": "create_at"
+    }
+  ],
+  "parent_id": 69,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "exchange_twitter",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "id",
-            "data_type": "int",
-            "desc": "记录ID",
-            "must": "Y",
-            "name": "id"
-        },
-        {
-            "column": "social_account_id",
-            "data_type": "int",
-            "desc": "交易所账号ID",
-            "must": "Y",
-            "name": "account_id"
-        },
-        {
-            "column": "social_account",
-            "data_type": "str",
-            "desc": "交易所账号",
-            "must": "N",
-            "name": "account"
-        },
-        {
-            "column": "social_nickname",
-            "data_type": "str",
-            "desc": "交易所昵称",
-            "must": "N",
-            "name": "nickname"
-        },
-        {
-            "column": "social_avatar",
-            "data_type": "str",
-            "desc": "头像",
-            "must": "N",
-            "name": "avatar"
-        },
-        {
-            "column": "social_content_id",
-            "data_type": "int",
-            "desc": "类容ID",
-            "must": "Y",
-            "name": "content_id"
-        },
-        {
-            "column": "content",
-            "data_type": "str",
-            "desc": "内容",
-            "must": "Y",
-            "name": "content"
-        },
-        {
-            "column": "is_retweet",
-            "data_type": "int",
-            "desc": "是否转发",
-            "must": "Y",
-            "name": "is_retweet"
-        },
-        {
-            "column": "retweet_content",
-            "data_type": "json",
-            "desc": "转发内容",
-            "must": "Y",
-            "name": "retweet_content"
-        },
-        {
-            "column": "media",
-            "data_type": "json",
-            "desc": "附件",
-            "must": "Y",
-            "name": "media"
-        },
-        {
-            "column": "posted_at",
-            "data_type": "int",
-            "desc": "发布时间戳",
-            "must": "Y",
-            "name": "posted_at"
-        },
-        {
-            "column": "content_translation",
-            "data_type": "str",
-            "desc": "内容翻译",
-            "must": "Y",
-            "name": "content_translation"
-        },
-        {
-            "column": "str_posted_at",
-            "data_type": "str",
-            "desc": "发布时间，根据posted_at转换而来",
-            "must": "Y",
-            "name": "str_posted_at"
-        },
-        {
-            "column": "create_at",
-            "data_type": "str",
-            "desc": "采集时间",
-            "must": "Y",
-            "name": "create_at"
-        }
+    [
+      69,
+      "资讯公告"
     ],
-    "parent_id": 69,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            69,
-            "资讯公告"
-        ],
-        [
-            92,
-            "交易所Twitter数据"
-        ]
-    ],
-    "title": "交易所Twitter数据",
-    "validations": []
+    [
+      92,
+      "交易所Twitter数据"
+    ]
+  ],
+  "title": "交易所Twitter数据",
+  "validations": []
 }

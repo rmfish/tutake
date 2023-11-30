@@ -1,89 +1,89 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "获取港股交易日历",
-    "id": 250,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "是否交易 '0'休市 '1'交易",
-            "must": "N",
-            "name": "is_open"
-        },
-        {
-            "data_type": "str",
-            "default": "HK",
-            "desc": "",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取港股交易日历",
+  "id": 250,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "是否交易 '0'休市 '1'交易",
+      "must": "N",
+      "name": "is_open"
+    },
+    {
+      "data_type": "str",
+      "default": "HK",
+      "desc": "",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "hk_tradecal",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "CAL_DATE",
+      "data_type": "str",
+      "desc": "日历日期",
+      "must": "Y",
+      "name": "cal_date"
+    },
+    {
+      "column": "IS_OPEN",
+      "data_type": "int",
+      "desc": "是否交易 '0'休市 '1'交易",
+      "must": "Y",
+      "name": "is_open"
+    },
+    {
+      "column": "PRETRADE_DATE",
+      "data_type": "str",
+      "desc": "上一个交易日",
+      "must": "Y",
+      "name": "pretrade_date"
+    }
+  ],
+  "parent_id": 190,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "hk_tradecal",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "CAL_DATE",
-            "data_type": "str",
-            "desc": "日历日期",
-            "must": "Y",
-            "name": "cal_date"
-        },
-        {
-            "column": "IS_OPEN",
-            "data_type": "int",
-            "desc": "是否交易 '0'休市 '1'交易",
-            "must": "Y",
-            "name": "is_open"
-        },
-        {
-            "column": "PRETRADE_DATE",
-            "data_type": "str",
-            "desc": "上一个交易日",
-            "must": "Y",
-            "name": "pretrade_date"
-        }
+    [
+      190,
+      "港股"
     ],
-    "parent_id": 190,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            190,
-            "港股"
-        ],
-        [
-            250,
-            "港股交易日历"
-        ]
-    ],
-    "title": "港股交易日历",
-    "validations": []
+    [
+      250,
+      "港股交易日历"
+    ]
+  ],
+  "title": "港股交易日历",
+  "validations": []
 }

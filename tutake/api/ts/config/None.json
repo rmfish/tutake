@@ -1,29 +1,29 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "",
-    "id": 55,
-    "if_exists": null,
-    "inputs": null,
-    "is_ready": null,
-    "name": null,
-    "order_by": null,
-    "outputs": null,
-    "parent_id": 3,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            3,
-            "基础数据"
-        ],
-        [
-            55,
-            "全球区块链项目Logo"
-        ]
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 55,
+  "if_exists": null,
+  "inputs": null,
+  "is_ready": null,
+  "name": null,
+  "order_by": null,
+  "outputs": null,
+  "parent_id": 3,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "title": "全球区块链项目Logo",
-    "validations": null
+    [
+      3,
+      "基础数据"
+    ],
+    [
+      55,
+      "全球区块链项目Logo"
+    ]
+  ],
+  "title": "全球区块链项目Logo",
+  "validations": null
 }

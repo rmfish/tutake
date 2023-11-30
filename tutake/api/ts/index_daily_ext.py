@@ -3,11 +3,6 @@ import pendulum
 
 from tutake.api.base_dao import checker_logger
 
-
-def default_cron_express_ext(self) -> str:
-    return ""
-
-
 from tutake.api.ts.index_basic import TushareIndexBasic
 
 
@@ -23,12 +18,6 @@ def default_limit_ext(self) -> str:
     每次取数的默认Limit
     """
     return '8000'
-
-
-def prepare_ext(self):
-    """
-    同步历史数据准备工作
-    """
 
 
 def query_parameters_ext(self):

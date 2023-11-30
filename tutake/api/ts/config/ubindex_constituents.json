@@ -1,117 +1,117 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取优币指数成分所对应的流通市值、权重以及指数调仓日价格等数据。",
-    "id": 99,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数名称",
-            "must": "Y",
-            "name": "index_name"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期，格式：yyyymmdd",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期，格式：yyyymmdd",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取优币指数成分所对应的流通市值、权重以及指数调仓日价格等数据。",
+  "id": 99,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数名称",
+      "must": "Y",
+      "name": "index_name"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期，格式：yyyymmdd",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期，格式：yyyymmdd",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ubindex_constituents",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "trade_date",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "index_name",
+      "data_type": "str",
+      "desc": "指数名称",
+      "must": "Y",
+      "name": "index_name"
+    },
+    {
+      "column": "symbol",
+      "data_type": "str",
+      "desc": "成分货币简称",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "circulated_cap",
+      "data_type": "float",
+      "desc": "计算周期内日流动市值均值",
+      "must": "N",
+      "name": "circulated_cap"
+    },
+    {
+      "column": "sqrt",
+      "data_type": "float",
+      "desc": "计算周期内日流动市值均值平方根",
+      "must": "N",
+      "name": "sqrt_cap"
+    },
+    {
+      "column": "weight",
+      "data_type": "float",
+      "desc": "计算周期内权重",
+      "must": "Y",
+      "name": "weight"
+    },
+    {
+      "column": "price",
+      "data_type": "float",
+      "desc": "指数日价格",
+      "must": "N",
+      "name": "price"
+    },
+    {
+      "column": "create_time",
+      "data_type": "datetime",
+      "desc": "入库时间",
+      "must": "Y",
+      "name": "create_time"
+    }
+  ],
+  "parent_id": 52,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "ubindex_constituents",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "trade_date",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "index_name",
-            "data_type": "str",
-            "desc": "指数名称",
-            "must": "Y",
-            "name": "index_name"
-        },
-        {
-            "column": "symbol",
-            "data_type": "str",
-            "desc": "成分货币简称",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "circulated_cap",
-            "data_type": "float",
-            "desc": "计算周期内日流动市值均值",
-            "must": "N",
-            "name": "circulated_cap"
-        },
-        {
-            "column": "sqrt",
-            "data_type": "float",
-            "desc": "计算周期内日流动市值均值平方根",
-            "must": "N",
-            "name": "sqrt_cap"
-        },
-        {
-            "column": "weight",
-            "data_type": "float",
-            "desc": "计算周期内权重",
-            "must": "Y",
-            "name": "weight"
-        },
-        {
-            "column": "price",
-            "data_type": "float",
-            "desc": "指数日价格",
-            "must": "N",
-            "name": "price"
-        },
-        {
-            "column": "create_time",
-            "data_type": "datetime",
-            "desc": "入库时间",
-            "must": "Y",
-            "name": "create_time"
-        }
+    [
+      52,
+      "行情数据"
     ],
-    "parent_id": 52,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            52,
-            "行情数据"
-        ],
-        [
-            99,
-            "优币指数成分"
-        ]
-    ],
-    "title": "优币指数成分",
-    "validations": []
+    [
+      99,
+      "优币指数成分"
+    ]
+  ],
+  "title": "优币指数成分",
+  "validations": []
 }

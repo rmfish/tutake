@@ -61,12 +61,10 @@ class TushareProcessTask(object):
                 cron = task.default_cron_express()
             if task.name in configs.keys():
                 cron = configs.get(task.name)
-                if cron is None:  # 配置cron为空的代表跳过不执行
-                    skip = True
             elif task.type in configs.keys():
                 cron = configs.get(task.type)
-                if cron is None:  # 配置cron为空的代表跳过不执行
-                    skip = True
+            if cron is None:  # 配置cron为空的代表跳过不执行
+                skip = True
 
             if cron is not None and cron != '':
                 api_crontabs.append(

@@ -1,172 +1,172 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取交易所股票交易统计，包括各板块明细",
-    "id": 215,
-    "if_exists": null,
-    "integral_required": 5000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "板块代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "股票市场",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取交易所股票交易统计，包括各板块明细",
+  "id": 215,
+  "if_exists": null,
+  "integral_required": 5000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "板块代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "股票市场",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "daily_info",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "市场代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TS_NAME",
+      "data_type": "str",
+      "desc": "市场名称",
+      "must": "Y",
+      "name": "ts_name"
+    },
+    {
+      "column": "COM_COUNT",
+      "data_type": "int",
+      "desc": "挂牌数",
+      "must": "Y",
+      "name": "com_count"
+    },
+    {
+      "column": "TOTAL_SHARE",
+      "data_type": "float",
+      "desc": "总股本（亿股）",
+      "must": "Y",
+      "name": "total_share"
+    },
+    {
+      "column": "FLOAT_SHARE",
+      "data_type": "float",
+      "desc": "流通股本（亿股）",
+      "must": "Y",
+      "name": "float_share"
+    },
+    {
+      "column": "TOTAL_MV",
+      "data_type": "float",
+      "desc": "总市值（亿元）",
+      "must": "Y",
+      "name": "total_mv"
+    },
+    {
+      "column": "FLOAT_MV",
+      "data_type": "float",
+      "desc": "流通市值（亿元）",
+      "must": "Y",
+      "name": "float_mv"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "交易金额（亿元）",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量（亿股）",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "TRANS_COUNT",
+      "data_type": "int",
+      "desc": "成交笔数（万笔）",
+      "must": "Y",
+      "name": "trans_count"
+    },
+    {
+      "column": "PE",
+      "data_type": "float",
+      "desc": "平均市盈率",
+      "must": "Y",
+      "name": "pe"
+    },
+    {
+      "column": "TR",
+      "data_type": "float",
+      "desc": "换手率（％）",
+      "must": "Y",
+      "name": "tr"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "Y",
+      "name": "exchange"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "daily_info",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "市场代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TS_NAME",
-            "data_type": "str",
-            "desc": "市场名称",
-            "must": "Y",
-            "name": "ts_name"
-        },
-        {
-            "column": "COM_COUNT",
-            "data_type": "int",
-            "desc": "挂牌数",
-            "must": "Y",
-            "name": "com_count"
-        },
-        {
-            "column": "TOTAL_SHARE",
-            "data_type": "float",
-            "desc": "总股本（亿股）",
-            "must": "Y",
-            "name": "total_share"
-        },
-        {
-            "column": "FLOAT_SHARE",
-            "data_type": "float",
-            "desc": "流通股本（亿股）",
-            "must": "Y",
-            "name": "float_share"
-        },
-        {
-            "column": "TOTAL_MV",
-            "data_type": "float",
-            "desc": "总市值（亿元）",
-            "must": "Y",
-            "name": "total_mv"
-        },
-        {
-            "column": "FLOAT_MV",
-            "data_type": "float",
-            "desc": "流通市值（亿元）",
-            "must": "Y",
-            "name": "float_mv"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "交易金额（亿元）",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量（亿股）",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "TRANS_COUNT",
-            "data_type": "int",
-            "desc": "成交笔数（万笔）",
-            "must": "Y",
-            "name": "trans_count"
-        },
-        {
-            "column": "PE",
-            "data_type": "float",
-            "desc": "平均市盈率",
-            "must": "Y",
-            "name": "pe"
-        },
-        {
-            "column": "TR",
-            "data_type": "float",
-            "desc": "换手率（％）",
-            "must": "Y",
-            "name": "tr"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "Y",
-            "name": "exchange"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            215,
-            "沪深市场每日交易统计"
-        ]
-    ],
-    "title": "沪深市场每日交易统计",
-    "validations": []
+    [
+      215,
+      "沪深市场每日交易统计"
+    ]
+  ],
+  "title": "沪深市场每日交易统计",
+  "validations": []
 }

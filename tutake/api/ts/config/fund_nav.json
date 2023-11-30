@@ -1,159 +1,159 @@
 {
-    "database": null,
-    "default_limit": null,
-    "default_query": "nav_date='20221111'",
-    "desc": "获取公募基金净值数据",
-    "id": 119,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS基金代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "净值日期",
-            "must": "N",
-            "name": "nav_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "",
-            "must": "N",
-            "name": "offset"
-        },
-        {
-            "data_type": "int",
-            "desc": "",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "str",
-            "desc": "E场内O场外",
-            "must": "N",
-            "name": "market"
-        },
-        {
-            "data_type": "str",
-            "desc": "净值开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "净值结束日期",
-            "must": "N",
-            "name": "end_date"
-        }
+  "database": null,
+  "default_limit": null,
+  "default_query": "nav_date='20221111'",
+  "desc": "获取公募基金净值数据",
+  "id": 119,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS基金代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "净值日期",
+      "must": "N",
+      "name": "nav_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "int",
+      "desc": "",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "str",
+      "desc": "E场内O场外",
+      "must": "N",
+      "name": "market"
+    },
+    {
+      "data_type": "str",
+      "desc": "净值开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "净值结束日期",
+      "must": "N",
+      "name": "end_date"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "fund_nav",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "截止日期",
+      "must": "Y",
+      "name": "nav_date"
+    },
+    {
+      "column": "UNIT_NAV",
+      "data_type": "float",
+      "desc": "单位净值",
+      "must": "Y",
+      "name": "unit_nav"
+    },
+    {
+      "column": "ACCUM_NAV",
+      "data_type": "float",
+      "desc": "累计净值",
+      "must": "Y",
+      "name": "accum_nav"
+    },
+    {
+      "column": "ACCUM_DIV",
+      "data_type": "float",
+      "desc": "累计分红",
+      "must": "Y",
+      "name": "accum_div"
+    },
+    {
+      "column": "NET_ASSET",
+      "data_type": "float",
+      "desc": "资产净值",
+      "must": "Y",
+      "name": "net_asset"
+    },
+    {
+      "column": "TOTAL_NETASSET",
+      "data_type": "float",
+      "desc": "合计资产净值",
+      "must": "Y",
+      "name": "total_netasset"
+    },
+    {
+      "column": "ADJ_NAV",
+      "data_type": "float",
+      "desc": "复权单位净值",
+      "must": "Y",
+      "name": "adj_nav"
+    },
+    {
+      "column": "UPDATE_FLAG",
+      "data_type": "str",
+      "desc": "更新标识",
+      "must": "Y",
+      "name": "update_flag"
+    }
+  ],
+  "parent_id": 18,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "fund_nav",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "截止日期",
-            "must": "Y",
-            "name": "nav_date"
-        },
-        {
-            "column": "UNIT_NAV",
-            "data_type": "float",
-            "desc": "单位净值",
-            "must": "Y",
-            "name": "unit_nav"
-        },
-        {
-            "column": "ACCUM_NAV",
-            "data_type": "float",
-            "desc": "累计净值",
-            "must": "Y",
-            "name": "accum_nav"
-        },
-        {
-            "column": "ACCUM_DIV",
-            "data_type": "float",
-            "desc": "累计分红",
-            "must": "Y",
-            "name": "accum_div"
-        },
-        {
-            "column": "NET_ASSET",
-            "data_type": "float",
-            "desc": "资产净值",
-            "must": "Y",
-            "name": "net_asset"
-        },
-        {
-            "column": "TOTAL_NETASSET",
-            "data_type": "float",
-            "desc": "合计资产净值",
-            "must": "Y",
-            "name": "total_netasset"
-        },
-        {
-            "column": "ADJ_NAV",
-            "data_type": "float",
-            "desc": "复权单位净值",
-            "must": "Y",
-            "name": "adj_nav"
-        },
-        {
-            "column": "UPDATE_FLAG",
-            "data_type": "str",
-            "desc": "更新标识",
-            "must": "Y",
-            "name": "update_flag"
-        }
+    [
+      18,
+      "公募基金"
     ],
-    "parent_id": 18,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            18,
-            "公募基金"
-        ],
-        [
-            119,
-            "基金净值"
-        ]
-    ],
-    "title": "基金净值",
-    "validations": [
-        {
-            "message": "ts_code和nav_date至少填写一个",
-            "name": "ts_code",
-            "trigger": [
-                {
-                    "name": "nav_date",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                }
-            ],
-            "validator": "required"
-        }
+    [
+      119,
+      "基金净值"
     ]
+  ],
+  "title": "基金净值",
+  "validations": [
+    {
+      "message": "ts_code和nav_date至少填写一个",
+      "name": "ts_code",
+      "trigger": [
+        {
+          "name": "nav_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required"
+    }
+  ]
 }

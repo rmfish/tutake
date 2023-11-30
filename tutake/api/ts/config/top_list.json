@@ -1,165 +1,165 @@
 {
-    "database": null,
-    "default_limit": "10000",
-    "desc": "龙虎榜每日交易明细,数据开始于2005年，每日晚8点更新",
-    "id": 106,
-    "if_exists": null,
-    "integral_required": 2000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "10000",
+  "desc": "龙虎榜每日交易明细,数据开始于2005年，每日晚8点更新",
+  "id": 106,
+  "if_exists": null,
+  "integral_required": 2000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "top_list",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "收盘价",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "PCT_CHANGE",
+      "data_type": "float",
+      "desc": "涨跌幅",
+      "must": "Y",
+      "name": "pct_change"
+    },
+    {
+      "column": "TURNOVER_RATE",
+      "data_type": "float",
+      "desc": "换手率",
+      "must": "Y",
+      "name": "turnover_rate"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "总成交额",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "L_SELL",
+      "data_type": "float",
+      "desc": "龙虎榜卖出额",
+      "must": "Y",
+      "name": "l_sell"
+    },
+    {
+      "column": "L_BUY",
+      "data_type": "float",
+      "desc": "龙虎榜买入额",
+      "must": "Y",
+      "name": "l_buy"
+    },
+    {
+      "column": "L_AMOUNT",
+      "data_type": "float",
+      "desc": "龙虎榜成交额",
+      "must": "Y",
+      "name": "l_amount"
+    },
+    {
+      "column": "NET_AMOUNT",
+      "data_type": "float",
+      "desc": "龙虎榜净买入额",
+      "must": "Y",
+      "name": "net_amount"
+    },
+    {
+      "column": "NET_RATE",
+      "data_type": "float",
+      "desc": "龙虎榜净买额占比",
+      "must": "Y",
+      "name": "net_rate"
+    },
+    {
+      "column": "AMOUNT_RATE",
+      "data_type": "float",
+      "desc": "龙虎榜成交额占比",
+      "must": "Y",
+      "name": "amount_rate"
+    },
+    {
+      "column": "FLOAT_VALUES",
+      "data_type": "float",
+      "desc": "当日流通市值",
+      "must": "Y",
+      "name": "float_values"
+    },
+    {
+      "column": "REASON",
+      "data_type": "str",
+      "desc": "上榜理由",
+      "must": "Y",
+      "name": "reason"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "top_list",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "收盘价",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "PCT_CHANGE",
-            "data_type": "float",
-            "desc": "涨跌幅",
-            "must": "Y",
-            "name": "pct_change"
-        },
-        {
-            "column": "TURNOVER_RATE",
-            "data_type": "float",
-            "desc": "换手率",
-            "must": "Y",
-            "name": "turnover_rate"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "总成交额",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "L_SELL",
-            "data_type": "float",
-            "desc": "龙虎榜卖出额",
-            "must": "Y",
-            "name": "l_sell"
-        },
-        {
-            "column": "L_BUY",
-            "data_type": "float",
-            "desc": "龙虎榜买入额",
-            "must": "Y",
-            "name": "l_buy"
-        },
-        {
-            "column": "L_AMOUNT",
-            "data_type": "float",
-            "desc": "龙虎榜成交额",
-            "must": "Y",
-            "name": "l_amount"
-        },
-        {
-            "column": "NET_AMOUNT",
-            "data_type": "float",
-            "desc": "龙虎榜净买入额",
-            "must": "Y",
-            "name": "net_amount"
-        },
-        {
-            "column": "NET_RATE",
-            "data_type": "float",
-            "desc": "龙虎榜净买额占比",
-            "must": "Y",
-            "name": "net_rate"
-        },
-        {
-            "column": "AMOUNT_RATE",
-            "data_type": "float",
-            "desc": "龙虎榜成交额占比",
-            "must": "Y",
-            "name": "amount_rate"
-        },
-        {
-            "column": "FLOAT_VALUES",
-            "data_type": "float",
-            "desc": "当日流通市值",
-            "must": "Y",
-            "name": "float_values"
-        },
-        {
-            "column": "REASON",
-            "data_type": "str",
-            "desc": "上榜理由",
-            "must": "Y",
-            "name": "reason"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            106,
-            "龙虎榜每日明细"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "龙虎榜每日明细",
-    "validations": []
+    [
+      106,
+      "龙虎榜每日明细"
+    ]
+  ],
+  "title": "龙虎榜每日明细",
+  "validations": []
 }

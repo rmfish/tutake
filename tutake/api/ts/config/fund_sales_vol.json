@@ -1,108 +1,108 @@
 {
-    "database": null,
-    "default_limit": "500",
-    "desc": "获取销售机构公募基金销售保有规模数据，本数据从2021年Q1开始公布，季度更新",
-    "id": 266,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "年度",
-            "must": "N",
-            "name": "year"
-        },
-        {
-            "data_type": "str",
-            "desc": "季度",
-            "must": "N",
-            "name": "quarter"
-        },
-        {
-            "data_type": "str",
-            "desc": "机构名称",
-            "must": "N",
-            "name": "name"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "500",
+  "desc": "获取销售机构公募基金销售保有规模数据，本数据从2021年Q1开始公布，季度更新",
+  "id": 266,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "年度",
+      "must": "N",
+      "name": "year"
+    },
+    {
+      "data_type": "str",
+      "desc": "季度",
+      "must": "N",
+      "name": "quarter"
+    },
+    {
+      "data_type": "str",
+      "desc": "机构名称",
+      "must": "N",
+      "name": "name"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "fund_sales_vol",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "YEAR",
+      "data_type": "int",
+      "desc": "年度",
+      "must": "Y",
+      "name": "year"
+    },
+    {
+      "column": "QUARTER",
+      "data_type": "str",
+      "desc": "季度",
+      "must": "Y",
+      "name": "quarter"
+    },
+    {
+      "column": "INST_NAME",
+      "data_type": "str",
+      "desc": "销售机构",
+      "must": "Y",
+      "name": "inst_name"
+    },
+    {
+      "column": "FUND_SCALE",
+      "data_type": "float",
+      "desc": "股票+混合公募基金保有规模（亿元）",
+      "must": "Y",
+      "name": "fund_scale"
+    },
+    {
+      "column": "SCALE",
+      "data_type": "float",
+      "desc": "非货币市场公募基金保有规模(亿元)",
+      "must": "Y",
+      "name": "scale"
+    },
+    {
+      "column": "RANK",
+      "data_type": "int",
+      "desc": "排名",
+      "must": "Y",
+      "name": "rank"
+    }
+  ],
+  "parent_id": 264,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "fund_sales_vol",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "YEAR",
-            "data_type": "int",
-            "desc": "年度",
-            "must": "Y",
-            "name": "year"
-        },
-        {
-            "column": "QUARTER",
-            "data_type": "str",
-            "desc": "季度",
-            "must": "Y",
-            "name": "quarter"
-        },
-        {
-            "column": "INST_NAME",
-            "data_type": "str",
-            "desc": "销售机构",
-            "must": "Y",
-            "name": "inst_name"
-        },
-        {
-            "column": "FUND_SCALE",
-            "data_type": "float",
-            "desc": "股票+混合公募基金保有规模（亿元）",
-            "must": "Y",
-            "name": "fund_scale"
-        },
-        {
-            "column": "SCALE",
-            "data_type": "float",
-            "desc": "非货币市场公募基金保有规模(亿元)",
-            "must": "Y",
-            "name": "scale"
-        },
-        {
-            "column": "RANK",
-            "data_type": "int",
-            "desc": "排名",
-            "must": "Y",
-            "name": "rank"
-        }
+    [
+      263,
+      "财富管理"
     ],
-    "parent_id": 264,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            263,
-            "财富管理"
-        ],
-        [
-            264,
-            "基金销售行业数据"
-        ],
-        [
-            266,
-            "销售机构公募基金销售保有规模"
-        ]
+    [
+      264,
+      "基金销售行业数据"
     ],
-    "title": "销售机构公募基金销售保有规模",
-    "validations": []
+    [
+      266,
+      "销售机构公募基金销售保有规模"
+    ]
+  ],
+  "title": "销售机构公募基金销售保有规模",
+  "validations": []
 }

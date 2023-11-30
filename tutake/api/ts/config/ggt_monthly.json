@@ -1,128 +1,128 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "港股通每月成交信息，数据从2014年开始",
-    "id": 197,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "月度",
-            "must": "N",
-            "name": "month"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始月度",
-            "must": "N",
-            "name": "start_month"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束月度",
-            "must": "N",
-            "name": "end_month"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "港股通每月成交信息，数据从2014年开始",
+  "id": 197,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "月度",
+      "must": "N",
+      "name": "month"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始月度",
+      "must": "N",
+      "name": "start_month"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束月度",
+      "must": "N",
+      "name": "end_month"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ggt_monthly",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "MONTH",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "month"
+    },
+    {
+      "column": "DAY_BUY_AMT",
+      "data_type": "float",
+      "desc": "当月日均买入成交金额（亿元）",
+      "must": "Y",
+      "name": "day_buy_amt"
+    },
+    {
+      "column": "DAY_BUY_VOL",
+      "data_type": "float",
+      "desc": "当月日均买入成交笔数（万笔）",
+      "must": "Y",
+      "name": "day_buy_vol"
+    },
+    {
+      "column": "DAY_SELL_AMT",
+      "data_type": "float",
+      "desc": "当月日均卖出成交金额（亿元）",
+      "must": "Y",
+      "name": "day_sell_amt"
+    },
+    {
+      "column": "DAY_SELL_VOL",
+      "data_type": "float",
+      "desc": "当月日均卖出成交笔数（万笔）",
+      "must": "Y",
+      "name": "day_sell_vol"
+    },
+    {
+      "column": "TOTAL_BUY_AMT",
+      "data_type": "float",
+      "desc": "总买入成交金额（亿元）",
+      "must": "Y",
+      "name": "total_buy_amt"
+    },
+    {
+      "column": "TOTAL_BUY_VOL",
+      "data_type": "float",
+      "desc": "总买入成交笔数（万笔）",
+      "must": "Y",
+      "name": "total_buy_vol"
+    },
+    {
+      "column": "TOTAL_SELL_AMT",
+      "data_type": "float",
+      "desc": "总卖出成交金额（亿元）",
+      "must": "Y",
+      "name": "total_sell_amt"
+    },
+    {
+      "column": "TOTAL_SELL_VOL",
+      "data_type": "float",
+      "desc": "总卖出成交笔数（万笔）",
+      "must": "Y",
+      "name": "total_sell_vol"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "ggt_monthly",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "MONTH",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "month"
-        },
-        {
-            "column": "DAY_BUY_AMT",
-            "data_type": "float",
-            "desc": "当月日均买入成交金额（亿元）",
-            "must": "Y",
-            "name": "day_buy_amt"
-        },
-        {
-            "column": "DAY_BUY_VOL",
-            "data_type": "float",
-            "desc": "当月日均买入成交笔数（万笔）",
-            "must": "Y",
-            "name": "day_buy_vol"
-        },
-        {
-            "column": "DAY_SELL_AMT",
-            "data_type": "float",
-            "desc": "当月日均卖出成交金额（亿元）",
-            "must": "Y",
-            "name": "day_sell_amt"
-        },
-        {
-            "column": "DAY_SELL_VOL",
-            "data_type": "float",
-            "desc": "当月日均卖出成交笔数（万笔）",
-            "must": "Y",
-            "name": "day_sell_vol"
-        },
-        {
-            "column": "TOTAL_BUY_AMT",
-            "data_type": "float",
-            "desc": "总买入成交金额（亿元）",
-            "must": "Y",
-            "name": "total_buy_amt"
-        },
-        {
-            "column": "TOTAL_BUY_VOL",
-            "data_type": "float",
-            "desc": "总买入成交笔数（万笔）",
-            "must": "Y",
-            "name": "total_buy_vol"
-        },
-        {
-            "column": "TOTAL_SELL_AMT",
-            "data_type": "float",
-            "desc": "总卖出成交金额（亿元）",
-            "must": "Y",
-            "name": "total_sell_amt"
-        },
-        {
-            "column": "TOTAL_SELL_VOL",
-            "data_type": "float",
-            "desc": "总卖出成交笔数（万笔）",
-            "must": "Y",
-            "name": "total_sell_vol"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            197,
-            "港股通每月成交统计"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "港股通每月成交统计",
-    "validations": []
+    [
+      197,
+      "港股通每月成交统计"
+    ]
+  ],
+  "title": "港股通每月成交统计",
+  "validations": []
 }

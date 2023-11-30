@@ -215,6 +215,9 @@ class DataProcess:
         """
         return params
 
+    def need_to_write(self, writer) -> bool:
+        return True
+
     def check(self, **kwargs):
         pass
 
@@ -248,10 +251,13 @@ class DataProcess:
             status.run_time = time.time() - start
             if status.break_down:
                 writer.rollback()
-            else:
+            elif self.need_to_write(writer):
                 writer.commit()
                 task_logger.debug(
                     f"Finished {self.entities.__name__} process. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
+            else:
+                task_logger.debug(
+                    f"Finished {self.entities.__name__} process, but ignore to persist records. run {status.task_cnt} tasks, save {status.records_cnt} records,takes {status.format_run_time()}s")
         except Exception as err:
             logging.exception(err)
         return status

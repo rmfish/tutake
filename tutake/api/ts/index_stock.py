@@ -30,7 +30,7 @@ class TushareIndexStock(TutakeTableBase):
     delist_date = Column(String, comment='剔除日期')
 
 
-class IndexStock(TushareDAO, Task,DataProcess):
+class IndexStock(TushareDAO, Task, DataProcess):
     instance = None
 
     def __new__(cls, *args, **kwargs):
@@ -107,7 +107,8 @@ class IndexStock(TushareDAO, Task,DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def _index_stock_cons(self, index_code: str = "000300.SH", latest=True) -> pd.DataFrame:
         """

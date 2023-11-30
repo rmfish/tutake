@@ -1,144 +1,144 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "获取新股上市列表数据,每日19点更新",
-    "id": 123,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取新股上市列表数据,每日19点更新",
+  "id": 123,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 120,
+  "is_ready": 1,
+  "name": "new_share",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "SUB_CODE",
+      "data_type": "str",
+      "desc": "申购代码",
+      "must": "Y",
+      "name": "sub_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "IPO_DATE",
+      "data_type": "str",
+      "desc": "上网发行日期",
+      "must": "Y",
+      "name": "ipo_date"
+    },
+    {
+      "column": "ISSUE_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "issue_date"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "发行总量（万股）",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "MARKET_AMOUNT",
+      "data_type": "float",
+      "desc": "上网发行总量（万股）",
+      "must": "Y",
+      "name": "market_amount"
+    },
+    {
+      "column": "PRICE",
+      "data_type": "float",
+      "desc": "发行价格",
+      "must": "Y",
+      "name": "price"
+    },
+    {
+      "column": "PE",
+      "data_type": "float",
+      "desc": "市盈率",
+      "must": "Y",
+      "name": "pe"
+    },
+    {
+      "column": "LIMIT_AMOUNT",
+      "data_type": "float",
+      "desc": "个人申购上限（万股）",
+      "must": "Y",
+      "name": "limit_amount"
+    },
+    {
+      "column": "FUNDS",
+      "data_type": "float",
+      "desc": "募集资金（亿元）",
+      "must": "Y",
+      "name": "funds"
+    },
+    {
+      "column": "BALLOT",
+      "data_type": "float",
+      "desc": "中签率",
+      "must": "Y",
+      "name": "ballot"
+    }
+  ],
+  "parent_id": 24,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 120,
-    "is_ready": 1,
-    "name": "new_share",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "SUB_CODE",
-            "data_type": "str",
-            "desc": "申购代码",
-            "must": "Y",
-            "name": "sub_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "IPO_DATE",
-            "data_type": "str",
-            "desc": "上网发行日期",
-            "must": "Y",
-            "name": "ipo_date"
-        },
-        {
-            "column": "ISSUE_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "issue_date"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "发行总量（万股）",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "MARKET_AMOUNT",
-            "data_type": "float",
-            "desc": "上网发行总量（万股）",
-            "must": "Y",
-            "name": "market_amount"
-        },
-        {
-            "column": "PRICE",
-            "data_type": "float",
-            "desc": "发行价格",
-            "must": "Y",
-            "name": "price"
-        },
-        {
-            "column": "PE",
-            "data_type": "float",
-            "desc": "市盈率",
-            "must": "Y",
-            "name": "pe"
-        },
-        {
-            "column": "LIMIT_AMOUNT",
-            "data_type": "float",
-            "desc": "个人申购上限（万股）",
-            "must": "Y",
-            "name": "limit_amount"
-        },
-        {
-            "column": "FUNDS",
-            "data_type": "float",
-            "desc": "募集资金（亿元）",
-            "must": "Y",
-            "name": "funds"
-        },
-        {
-            "column": "BALLOT",
-            "data_type": "float",
-            "desc": "中签率",
-            "must": "Y",
-            "name": "ballot"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 24,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            24,
-            "基础数据"
-        ],
-        [
-            123,
-            "IPO新股上市"
-        ]
+    [
+      24,
+      "基础数据"
     ],
-    "title": "IPO新股上市",
-    "validations": []
+    [
+      123,
+      "IPO新股上市"
+    ]
+  ],
+  "title": "IPO新股上市",
+  "validations": []
 }

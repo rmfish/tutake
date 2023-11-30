@@ -1,131 +1,131 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "获取深圳市场每日交易概况",
-    "id": 268,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "板块代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取深圳市场每日交易概况",
+  "id": 268,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "板块代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "sz_daily_info",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "市场类型",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "COUNT",
+      "data_type": "int",
+      "desc": "股票个数",
+      "must": "Y",
+      "name": "count"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "成交金额",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "TOTAL_SHARE",
+      "data_type": "float",
+      "desc": "总股本",
+      "must": "Y",
+      "name": "total_share"
+    },
+    {
+      "column": "TOTAL_MV",
+      "data_type": "float",
+      "desc": "总市值",
+      "must": "Y",
+      "name": "total_mv"
+    },
+    {
+      "column": "FLOAT_SHARE",
+      "data_type": "float",
+      "desc": "流通股票",
+      "must": "Y",
+      "name": "float_share"
+    },
+    {
+      "column": "FLOAT_MV",
+      "data_type": "float",
+      "desc": "流通市值",
+      "must": "Y",
+      "name": "float_mv"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "sz_daily_info",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "市场类型",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "COUNT",
-            "data_type": "int",
-            "desc": "股票个数",
-            "must": "Y",
-            "name": "count"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "成交金额",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "TOTAL_SHARE",
-            "data_type": "float",
-            "desc": "总股本",
-            "must": "Y",
-            "name": "total_share"
-        },
-        {
-            "column": "TOTAL_MV",
-            "data_type": "float",
-            "desc": "总市值",
-            "must": "Y",
-            "name": "total_mv"
-        },
-        {
-            "column": "FLOAT_SHARE",
-            "data_type": "float",
-            "desc": "流通股票",
-            "must": "Y",
-            "name": "float_share"
-        },
-        {
-            "column": "FLOAT_MV",
-            "data_type": "float",
-            "desc": "流通市值",
-            "must": "Y",
-            "name": "float_mv"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            268,
-            "深圳市场每日交易情况"
-        ]
-    ],
-    "title": "深圳市场每日交易情况",
-    "validations": []
+    [
+      268,
+      "深圳市场每日交易情况"
+    ]
+  ],
+  "title": "深圳市场每日交易情况",
+  "validations": []
 }

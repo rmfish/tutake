@@ -6,10 +6,6 @@ Tushare fina_mainbz_vip接口
 from tutake.api.ts.date_utils import get_latest_quarter, quarter_params
 
 
-def default_cron_express_ext(self) -> str:
-    return ""
-
-
 def default_order_by_ext(self) -> str:
     """
     查询时默认的排序
@@ -38,10 +34,3 @@ def query_parameters_ext(self):
     :return: list(dict)
     """
     return quarter_params(self, '20001231', 'end_date', 'period')
-
-
-def param_loop_process_ext(self, **params):
-    """
-    每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
-    """
-    return params

@@ -1,186 +1,186 @@
 {
-    "database": null,
-    "default_limit": "6000",
-    "desc": "获取美股行情（未复权），包括全部股票全历史行情，以及重要的市场和估值指标",
-    "id": 254,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码（e.g. AAPL）",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期（YYYYMMDD）",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期（YYYYMMDD）",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期（YYYYMMDD）",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "开始行数",
-            "must": "N",
-            "name": "offset"
-        },
-        {
-            "data_type": "int",
-            "desc": "每页行数行数",
-            "must": "N",
-            "name": "limit"
-        }
+  "database": null,
+  "default_limit": "6000",
+  "desc": "获取美股行情（未复权），包括全部股票全历史行情，以及重要的市场和估值指标",
+  "id": 254,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码（e.g. AAPL）",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期（YYYYMMDD）",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期（YYYYMMDD）",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期（YYYYMMDD）",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "int",
+      "desc": "每页行数行数",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "is_ready": null,
+  "name": "us_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "收盘价",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "OPEN",
+      "data_type": "float",
+      "desc": "开盘价",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "HIGH",
+      "data_type": "float",
+      "desc": "最高价",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "LOW",
+      "data_type": "float",
+      "desc": "最低价",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "PRE_CLOSE",
+      "data_type": "float",
+      "desc": "昨收价",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "CHANGE",
+      "data_type": "float",
+      "desc": "涨跌额",
+      "must": "N",
+      "name": "change"
+    },
+    {
+      "column": "PCT_CHANGE",
+      "data_type": "float",
+      "desc": "涨跌幅",
+      "must": "Y",
+      "name": "pct_change"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "成交额",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "VWAP",
+      "data_type": "float",
+      "desc": "平均价",
+      "must": "Y",
+      "name": "vwap"
+    },
+    {
+      "column": "ADJ_FACTOR",
+      "data_type": "float",
+      "desc": "复权因子",
+      "must": "N",
+      "name": "adj_factor"
+    },
+    {
+      "column": "TURNOVER_RATIO",
+      "data_type": "float",
+      "desc": "换手率",
+      "must": "N",
+      "name": "turnover_ratio"
+    },
+    {
+      "column": "TOTAL_MV",
+      "data_type": "float",
+      "desc": "总市值",
+      "must": "N",
+      "name": "total_mv"
+    },
+    {
+      "column": "PE",
+      "data_type": "float",
+      "desc": "PE",
+      "must": "N",
+      "name": "pe"
+    },
+    {
+      "column": "PB",
+      "data_type": "float",
+      "desc": "PB",
+      "must": "N",
+      "name": "pb"
+    }
+  ],
+  "parent_id": 251,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "us_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "收盘价",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "OPEN",
-            "data_type": "float",
-            "desc": "开盘价",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "HIGH",
-            "data_type": "float",
-            "desc": "最高价",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "LOW",
-            "data_type": "float",
-            "desc": "最低价",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "PRE_CLOSE",
-            "data_type": "float",
-            "desc": "昨收价",
-            "must": "Y",
-            "name": "pre_close"
-        },
-        {
-            "column": "CHANGE",
-            "data_type": "float",
-            "desc": "涨跌额",
-            "must": "N",
-            "name": "change"
-        },
-        {
-            "column": "PCT_CHANGE",
-            "data_type": "float",
-            "desc": "涨跌幅",
-            "must": "Y",
-            "name": "pct_change"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "成交额",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "VWAP",
-            "data_type": "float",
-            "desc": "平均价",
-            "must": "Y",
-            "name": "vwap"
-        },
-        {
-            "column": "ADJ_FACTOR",
-            "data_type": "float",
-            "desc": "复权因子",
-            "must": "N",
-            "name": "adj_factor"
-        },
-        {
-            "column": "TURNOVER_RATIO",
-            "data_type": "float",
-            "desc": "换手率",
-            "must": "N",
-            "name": "turnover_ratio"
-        },
-        {
-            "column": "TOTAL_MV",
-            "data_type": "float",
-            "desc": "总市值",
-            "must": "N",
-            "name": "total_mv"
-        },
-        {
-            "column": "PE",
-            "data_type": "float",
-            "desc": "PE",
-            "must": "N",
-            "name": "pe"
-        },
-        {
-            "column": "PB",
-            "data_type": "float",
-            "desc": "PB",
-            "must": "N",
-            "name": "pb"
-        }
+    [
+      251,
+      "美股"
     ],
-    "parent_id": 251,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            251,
-            "美股"
-        ],
-        [
-            254,
-            "美股日线行情"
-        ]
-    ],
-    "title": "美股日线行情",
-    "validations": []
+    [
+      254,
+      "美股日线行情"
+    ]
+  ],
+  "title": "美股日线行情",
+  "validations": []
 }

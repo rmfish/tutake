@@ -1,141 +1,141 @@
 {
-    "database": null,
-    "default_limit": "100",
-    "desc": "获取上市公司机构调研记录数据",
-    "id": 275,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "调研日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "调研开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "调研结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "100",
+  "desc": "获取上市公司机构调研记录数据",
+  "id": 275,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "调研日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "调研开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "调研结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "stk_surv",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "SURV_DATE",
+      "data_type": "str",
+      "desc": "调研日期",
+      "must": "Y",
+      "name": "surv_date"
+    },
+    {
+      "column": "FUND_VISITORS",
+      "data_type": "str",
+      "desc": "机构参与人员",
+      "must": "Y",
+      "name": "fund_visitors"
+    },
+    {
+      "column": "RECE_PLACE",
+      "data_type": "str",
+      "desc": "接待地点",
+      "must": "Y",
+      "name": "rece_place"
+    },
+    {
+      "column": "RECE_MODE",
+      "data_type": "str",
+      "desc": "接待方式",
+      "must": "Y",
+      "name": "rece_mode"
+    },
+    {
+      "column": "RECE_ORG",
+      "data_type": "str",
+      "desc": "接待的公司",
+      "must": "Y",
+      "name": "rece_org"
+    },
+    {
+      "column": "ORG_TYPE",
+      "data_type": "str",
+      "desc": "接待公司类型",
+      "must": "Y",
+      "name": "org_type"
+    },
+    {
+      "column": "COMP_RECE",
+      "data_type": "str",
+      "desc": "上市公司接待人员",
+      "must": "Y",
+      "name": "comp_rece"
+    },
+    {
+      "column": "CONTENT",
+      "data_type": null,
+      "desc": "调研内容",
+      "must": "N",
+      "name": "content"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "stk_surv",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "SURV_DATE",
-            "data_type": "str",
-            "desc": "调研日期",
-            "must": "Y",
-            "name": "surv_date"
-        },
-        {
-            "column": "FUND_VISITORS",
-            "data_type": "str",
-            "desc": "机构参与人员",
-            "must": "Y",
-            "name": "fund_visitors"
-        },
-        {
-            "column": "RECE_PLACE",
-            "data_type": "str",
-            "desc": "接待地点",
-            "must": "Y",
-            "name": "rece_place"
-        },
-        {
-            "column": "RECE_MODE",
-            "data_type": "str",
-            "desc": "接待方式",
-            "must": "Y",
-            "name": "rece_mode"
-        },
-        {
-            "column": "RECE_ORG",
-            "data_type": "str",
-            "desc": "接待的公司",
-            "must": "Y",
-            "name": "rece_org"
-        },
-        {
-            "column": "ORG_TYPE",
-            "data_type": "str",
-            "desc": "接待公司类型",
-            "must": "Y",
-            "name": "org_type"
-        },
-        {
-            "column": "COMP_RECE",
-            "data_type": "str",
-            "desc": "上市公司接待人员",
-            "must": "Y",
-            "name": "comp_rece"
-        },
-        {
-            "column": "CONTENT",
-            "data_type": null,
-            "desc": "调研内容",
-            "must": "N",
-            "name": "content"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            275,
-            "机构调研数据"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "机构调研数据",
-    "validations": []
+    [
+      275,
+      "机构调研数据"
+    ]
+  ],
+  "title": "机构调研数据",
+  "validations": []
 }

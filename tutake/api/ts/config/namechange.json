@@ -1,107 +1,107 @@
 {
-    "database": null,
-    "default_limit": "10000",
-    "desc": "历史名称变更记录",
-    "id": 100,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "10000",
+  "desc": "历史名称变更记录",
+  "id": 100,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": 1,
+  "name": "namechange",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "证券名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "START_DATE",
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "CHANGE_REASON",
+      "data_type": "str",
+      "desc": "变更原因",
+      "must": "Y",
+      "name": "change_reason"
+    }
+  ],
+  "parent_id": 24,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": 1,
-    "name": "namechange",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "证券名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "START_DATE",
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "CHANGE_REASON",
-            "data_type": "str",
-            "desc": "变更原因",
-            "must": "Y",
-            "name": "change_reason"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 24,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            24,
-            "基础数据"
-        ],
-        [
-            100,
-            "股票曾用名"
-        ]
+    [
+      24,
+      "基础数据"
     ],
-    "title": "股票曾用名",
-    "validations": []
+    [
+      100,
+      "股票曾用名"
+    ]
+  ],
+  "title": "股票曾用名",
+  "validations": []
 }

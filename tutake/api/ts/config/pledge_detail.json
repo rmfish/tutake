@@ -1,166 +1,166 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "数据开始于2004年，每日晚9点更新",
-    "id": 111,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "数据开始于2004年，每日晚9点更新",
+  "id": 111,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "pledge_detail",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "HOLDER_NAME",
+      "data_type": "str",
+      "desc": "股东名称",
+      "must": "Y",
+      "name": "holder_name"
+    },
+    {
+      "column": "HOLDER_TYPE",
+      "data_type": "str",
+      "desc": "股东类型",
+      "must": "N",
+      "name": "holder_type"
+    },
+    {
+      "column": "PLEDGE_AMOUNT",
+      "data_type": "float",
+      "desc": "质押数量",
+      "must": "Y",
+      "name": "pledge_amount"
+    },
+    {
+      "column": "START_DATE",
+      "data_type": "str",
+      "desc": "质押开始日期",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "质押结束日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "IS_RELEASE",
+      "data_type": "str",
+      "desc": "是否已解押",
+      "must": "Y",
+      "name": "is_release"
+    },
+    {
+      "column": "RELEASE_DATE",
+      "data_type": "str",
+      "desc": "解押日期",
+      "must": "Y",
+      "name": "release_date"
+    },
+    {
+      "column": "PLEDGOR",
+      "data_type": "str",
+      "desc": "质押方",
+      "must": "Y",
+      "name": "pledgor"
+    },
+    {
+      "column": "HOLDING_AMOUNT",
+      "data_type": "float",
+      "desc": "持股总数",
+      "must": "Y",
+      "name": "holding_amount"
+    },
+    {
+      "column": "PLEDGED_AMOUNT",
+      "data_type": "float",
+      "desc": "质押总数",
+      "must": "Y",
+      "name": "pledged_amount"
+    },
+    {
+      "column": "P_TOTAL_RATIO",
+      "data_type": "float",
+      "desc": "本次质押占总股本比例",
+      "must": "Y",
+      "name": "p_total_ratio"
+    },
+    {
+      "column": "H_TOTAL_RATIO",
+      "data_type": "float",
+      "desc": "持股总数占总股本比例",
+      "must": "Y",
+      "name": "h_total_ratio"
+    },
+    {
+      "column": "IS_BUYBACK",
+      "data_type": "str",
+      "desc": "是否回购",
+      "must": "Y",
+      "name": "is_buyback"
+    },
+    {
+      "column": "DESC",
+      "data_type": "str",
+      "desc": "备注",
+      "must": "N",
+      "name": "desc"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "pledge_detail",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "HOLDER_NAME",
-            "data_type": "str",
-            "desc": "股东名称",
-            "must": "Y",
-            "name": "holder_name"
-        },
-        {
-            "column": "HOLDER_TYPE",
-            "data_type": "str",
-            "desc": "股东类型",
-            "must": "N",
-            "name": "holder_type"
-        },
-        {
-            "column": "PLEDGE_AMOUNT",
-            "data_type": "float",
-            "desc": "质押数量",
-            "must": "Y",
-            "name": "pledge_amount"
-        },
-        {
-            "column": "START_DATE",
-            "data_type": "str",
-            "desc": "质押开始日期",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "质押结束日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "IS_RELEASE",
-            "data_type": "str",
-            "desc": "是否已解押",
-            "must": "Y",
-            "name": "is_release"
-        },
-        {
-            "column": "RELEASE_DATE",
-            "data_type": "str",
-            "desc": "解押日期",
-            "must": "Y",
-            "name": "release_date"
-        },
-        {
-            "column": "PLEDGOR",
-            "data_type": "str",
-            "desc": "质押方",
-            "must": "Y",
-            "name": "pledgor"
-        },
-        {
-            "column": "HOLDING_AMOUNT",
-            "data_type": "float",
-            "desc": "持股总数",
-            "must": "Y",
-            "name": "holding_amount"
-        },
-        {
-            "column": "PLEDGED_AMOUNT",
-            "data_type": "float",
-            "desc": "质押总数",
-            "must": "Y",
-            "name": "pledged_amount"
-        },
-        {
-            "column": "P_TOTAL_RATIO",
-            "data_type": "float",
-            "desc": "本次质押占总股本比例",
-            "must": "Y",
-            "name": "p_total_ratio"
-        },
-        {
-            "column": "H_TOTAL_RATIO",
-            "data_type": "float",
-            "desc": "持股总数占总股本比例",
-            "must": "Y",
-            "name": "h_total_ratio"
-        },
-        {
-            "column": "IS_BUYBACK",
-            "data_type": "str",
-            "desc": "是否回购",
-            "must": "Y",
-            "name": "is_buyback"
-        },
-        {
-            "column": "DESC",
-            "data_type": "str",
-            "desc": "备注",
-            "must": "N",
-            "name": "desc"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            111,
-            "股权质押明细数据"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "股权质押明细数据",
-    "validations": []
+    [
+      111,
+      "股权质押明细数据"
+    ]
+  ],
+  "title": "股权质押明细数据",
+  "validations": []
 }

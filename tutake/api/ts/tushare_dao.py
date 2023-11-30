@@ -6,7 +6,6 @@ from tutake.api.base_dao import BaseDao
 from tutake.api.ts.tushare_base import Records
 from tutake.utils.config import TutakeConfig
 
-
 engine_pool = {}
 
 
@@ -26,8 +25,6 @@ class TushareDAO(BaseDao):
         super().__init__(engine, session_factory, entities, database, table_name, query_fields, entity_fields,
                          column_mapping, config)
         self.records = Records()
-
-
 
     def filter_process(self, filter_criterion, filter_by):
         split_columns = []

@@ -37,5 +37,5 @@ if __name__ == '__main__':
     config = TutakeConfig(project_root())
     file = Path(config.get_tutake_data_dir(), "tutake.duckdb")
     conn = duckdb.connect(str(file))
-    conn.execute("DROP TABLE tushare_moneyflow_hsgt")
+    conn.execute("DROP TABLE process_report")
     conn.close()

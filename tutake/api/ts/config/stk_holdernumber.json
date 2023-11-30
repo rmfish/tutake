@@ -1,107 +1,107 @@
 {
-    "database": null,
-    "default_limit": "3000",
-    "desc": "获取上市公司股东户数数据，数据不定期公布",
-    "id": 166,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "截止日期",
-            "must": "N",
-            "name": "enddate"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "3000",
+  "desc": "获取上市公司股东户数数据，数据不定期公布",
+  "id": 166,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "截止日期",
+      "must": "N",
+      "name": "enddate"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "stk_holdernumber",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "截止日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "HOLDER_NUM",
+      "data_type": "int",
+      "desc": "股东户数",
+      "must": "N",
+      "name": "holder_nums"
+    },
+    {
+      "column": "HOLDER_TOTAL",
+      "data_type": "int",
+      "desc": "股东总户数（A+B）",
+      "must": "Y",
+      "name": "holder_num"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "stk_holdernumber",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "截止日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "HOLDER_NUM",
-            "data_type": "int",
-            "desc": "股东户数",
-            "must": "N",
-            "name": "holder_nums"
-        },
-        {
-            "column": "HOLDER_TOTAL",
-            "data_type": "int",
-            "desc": "股东总户数（A+B）",
-            "must": "Y",
-            "name": "holder_num"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            166,
-            "股东人数"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "股东人数",
-    "validations": []
+    [
+      166,
+      "股东人数"
+    ]
+  ],
+  "title": "股东人数",
+  "validations": []
 }

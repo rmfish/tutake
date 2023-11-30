@@ -1,167 +1,167 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取A股每日筹码平均成本和胜率情况，每天17~18点左右更新，数据从2005年开始",
-    "id": 293,
-    "if_exists": null,
-    "integral_required": 5000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期（YYYYMMDD）",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取A股每日筹码平均成本和胜率情况，每天17~18点左右更新，数据从2005年开始",
+  "id": 293,
+  "if_exists": null,
+  "integral_required": 5000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期（YYYYMMDD）",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "cyq_perf",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE_STR",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "HIS_LOW",
+      "data_type": "float",
+      "desc": "历史最低价",
+      "must": "Y",
+      "name": "his_low"
+    },
+    {
+      "column": "HIS_HIGH",
+      "data_type": "float",
+      "desc": "历史最高价",
+      "must": "Y",
+      "name": "his_high"
+    },
+    {
+      "column": "COST_5PCT",
+      "data_type": "float",
+      "desc": "5分位成本",
+      "must": "Y",
+      "name": "cost_5pct"
+    },
+    {
+      "column": "COST_15PCT",
+      "data_type": "float",
+      "desc": "15分位成本",
+      "must": "Y",
+      "name": "cost_15pct"
+    },
+    {
+      "column": "COST_50PCT",
+      "data_type": "float",
+      "desc": "50分位成本",
+      "must": "Y",
+      "name": "cost_50pct"
+    },
+    {
+      "column": "COST_85PCT",
+      "data_type": "float",
+      "desc": "85分位成本",
+      "must": "Y",
+      "name": "cost_85pct"
+    },
+    {
+      "column": "COST_95PCT",
+      "data_type": "float",
+      "desc": "95分位成本",
+      "must": "Y",
+      "name": "cost_95pct"
+    },
+    {
+      "column": "WEIGHT_AVG",
+      "data_type": "float",
+      "desc": "加权平均成本",
+      "must": "Y",
+      "name": "weight_avg"
+    },
+    {
+      "column": "WINNER_RATE",
+      "data_type": "float",
+      "desc": "胜率",
+      "must": "Y",
+      "name": "winner_rate"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "cyq_perf",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE_STR",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "HIS_LOW",
-            "data_type": "float",
-            "desc": "历史最低价",
-            "must": "Y",
-            "name": "his_low"
-        },
-        {
-            "column": "HIS_HIGH",
-            "data_type": "float",
-            "desc": "历史最高价",
-            "must": "Y",
-            "name": "his_high"
-        },
-        {
-            "column": "COST_5PCT",
-            "data_type": "float",
-            "desc": "5分位成本",
-            "must": "Y",
-            "name": "cost_5pct"
-        },
-        {
-            "column": "COST_15PCT",
-            "data_type": "float",
-            "desc": "15分位成本",
-            "must": "Y",
-            "name": "cost_15pct"
-        },
-        {
-            "column": "COST_50PCT",
-            "data_type": "float",
-            "desc": "50分位成本",
-            "must": "Y",
-            "name": "cost_50pct"
-        },
-        {
-            "column": "COST_85PCT",
-            "data_type": "float",
-            "desc": "85分位成本",
-            "must": "Y",
-            "name": "cost_85pct"
-        },
-        {
-            "column": "COST_95PCT",
-            "data_type": "float",
-            "desc": "95分位成本",
-            "must": "Y",
-            "name": "cost_95pct"
-        },
-        {
-            "column": "WEIGHT_AVG",
-            "data_type": "float",
-            "desc": "加权平均成本",
-            "must": "Y",
-            "name": "weight_avg"
-        },
-        {
-            "column": "WINNER_RATE",
-            "data_type": "float",
-            "desc": "胜率",
-            "must": "Y",
-            "name": "winner_rate"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            293,
-            "每日筹码及胜率"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "每日筹码及胜率",
-    "validations": [
-        {
-            "message": "ts_code,trade_date至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      293,
+      "每日筹码及胜率"
     ]
+  ],
+  "title": "每日筹码及胜率",
+  "validations": [
+    {
+      "message": "ts_code,trade_date至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

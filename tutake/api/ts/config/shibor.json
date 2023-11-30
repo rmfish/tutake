@@ -1,141 +1,141 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "Shibor利率，每日12点更新，上海银行间同业拆放利率（Shanghai Interbank Offered Rate，简称Shibor），以位于上海的全国银行间同业拆借中心为技术平台计算、发布并命名，是由信用等级较高的银行组成报价团自主报出的人民币同业拆出利率计算确定的算术平均利率，是单利、无担保、批发性利率。目前，对社会公布的Shibor品种包括隔夜、1周、2周、1个月、3个月、6个月、9个月及1年。\n\nShibor报价银行团现由18家商业银行组成。报价银行是公开市场一级交易商或外汇市场做市商，在中国货币市场上人民币交易相对活跃、信息披露比较充分的银行。中国人民银行成立Shibor工作小组，依据《上海银行间同业拆放利率（Shibor）实施准则》确定和调整报价银行团成员、监督和管理Shibor运行、规范报价行与指定发布人行为。\n\n全国银行间同业拆借中心受权Shibor的报价计算和信息发布。每个交易日根据各报价行的报价，剔除最高、最低各4家报价，对其余报价进行算术平均计算后，得出每一期限品种的Shibor，并于11:00对外发布。",
-    "id": 149,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "Shibor利率，每日12点更新，上海银行间同业拆放利率（Shanghai Interbank Offered Rate，简称Shibor），以位于上海的全国银行间同业拆借中心为技术平台计算、发布并命名，是由信用等级较高的银行组成报价团自主报出的人民币同业拆出利率计算确定的算术平均利率，是单利、无担保、批发性利率。目前，对社会公布的Shibor品种包括隔夜、1周、2周、1个月、3个月、6个月、9个月及1年。\n\nShibor报价银行团现由18家商业银行组成。报价银行是公开市场一级交易商或外汇市场做市商，在中国货币市场上人民币交易相对活跃、信息披露比较充分的银行。中国人民银行成立Shibor工作小组，依据《上海银行间同业拆放利率（Shibor）实施准则》确定和调整报价银行团成员、监督和管理Shibor运行、规范报价行与指定发布人行为。\n\n全国银行间同业拆借中心受权Shibor的报价计算和信息发布。每个交易日根据各报价行的报价，剔除最高、最低各4家报价，对其余报价进行算术平均计算后，得出每一期限品种的Shibor，并于11:00对外发布。",
+  "id": 149,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 120,
+  "is_ready": true,
+  "name": "shibor",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "ON",
+      "data_type": "float",
+      "desc": "隔夜",
+      "must": "Y",
+      "name": "on",
+      "column_name": "on_night"
+    },
+    {
+      "column": "1W",
+      "data_type": "float",
+      "desc": "1周",
+      "must": "Y",
+      "name": "1w",
+      "column_name": "t_1w"
+    },
+    {
+      "column": "2W",
+      "data_type": "float",
+      "desc": "2周",
+      "must": "Y",
+      "name": "2w",
+      "column_name": "t_2w"
+    },
+    {
+      "column": "1M",
+      "data_type": "float",
+      "desc": "1月",
+      "must": "Y",
+      "name": "1m",
+      "column_name": "t_1m"
+    },
+    {
+      "column": "3M",
+      "data_type": "float",
+      "desc": "3月",
+      "must": "Y",
+      "name": "3m",
+      "column_name": "t_3m"
+    },
+    {
+      "column": "6M",
+      "data_type": "float",
+      "desc": "6月",
+      "must": "Y",
+      "name": "6m",
+      "column_name": "t_6m"
+    },
+    {
+      "column": "9M",
+      "data_type": "float",
+      "desc": "9月",
+      "must": "Y",
+      "name": "9m",
+      "column_name": "t_9m"
+    },
+    {
+      "column": "1Y",
+      "data_type": "float",
+      "desc": "1年",
+      "must": "Y",
+      "name": "1y",
+      "column_name": "t_1y"
+    }
+  ],
+  "parent_id": 148,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 120,
-    "is_ready": true,
-    "name": "shibor",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "ON",
-            "data_type": "float",
-            "desc": "隔夜",
-            "must": "Y",
-            "name": "on",
-            "column_name": "on_night"
-        },
-        {
-            "column": "1W",
-            "data_type": "float",
-            "desc": "1周",
-            "must": "Y",
-            "name": "1w",
-            "column_name": "t_1w"
-        },
-        {
-            "column": "2W",
-            "data_type": "float",
-            "desc": "2周",
-            "must": "Y",
-            "name": "2w",
-            "column_name": "t_2w"
-        },
-        {
-            "column": "1M",
-            "data_type": "float",
-            "desc": "1月",
-            "must": "Y",
-            "name": "1m",
-            "column_name": "t_1m"
-        },
-        {
-            "column": "3M",
-            "data_type": "float",
-            "desc": "3月",
-            "must": "Y",
-            "name": "3m",
-            "column_name": "t_3m"
-        },
-        {
-            "column": "6M",
-            "data_type": "float",
-            "desc": "6月",
-            "must": "Y",
-            "name": "6m",
-            "column_name": "t_6m"
-        },
-        {
-            "column": "9M",
-            "data_type": "float",
-            "desc": "9月",
-            "must": "Y",
-            "name": "9m",
-            "column_name": "t_9m"
-        },
-        {
-            "column": "1Y",
-            "data_type": "float",
-            "desc": "1年",
-            "must": "Y",
-            "name": "1y",
-            "column_name": "t_1y"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 148,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            224,
-            "国内宏观"
-        ],
-        [
-            148,
-            "利率数据"
-        ],
-        [
-            149,
-            "Shibor利率"
-        ]
+    [
+      224,
+      "国内宏观"
     ],
-    "title": "Shibor利率",
-    "validations": []
+    [
+      148,
+      "利率数据"
+    ],
+    [
+      149,
+      "Shibor利率"
+    ]
+  ],
+  "title": "Shibor利率",
+  "validations": []
 }

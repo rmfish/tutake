@@ -1,137 +1,137 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
-    "id": 176,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取上市公司公告数据及原文文本，数据从2000年开始。",
+  "id": 176,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "anns",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "ANN_TYPE",
+      "data_type": "str",
+      "desc": "公告类型",
+      "must": "N",
+      "name": "ann_type"
+    },
+    {
+      "column": "TITLE",
+      "data_type": "str",
+      "desc": "公告标题",
+      "must": "Y",
+      "name": "title"
+    },
+    {
+      "column": "CONTENT",
+      "data_type": "str",
+      "desc": "公告内容",
+      "must": "Y",
+      "name": "content"
+    },
+    {
+      "column": "PUB_TIME",
+      "data_type": "str",
+      "desc": "公告发布时间",
+      "must": "N",
+      "name": "pub_time"
+    },
+    {
+      "column": "SRC_URL",
+      "data_type": "str",
+      "desc": "pdf原文URL",
+      "must": "N",
+      "name": "src_url"
+    },
+    {
+      "column": "FILE_PATH",
+      "data_type": "str",
+      "desc": "pdf原文",
+      "must": "N",
+      "name": "filepath"
+    }
+  ],
+  "parent_id": 142,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "anns",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "ANN_TYPE",
-            "data_type": "str",
-            "desc": "公告类型",
-            "must": "N",
-            "name": "ann_type"
-        },
-        {
-            "column": "TITLE",
-            "data_type": "str",
-            "desc": "公告标题",
-            "must": "Y",
-            "name": "title"
-        },
-        {
-            "column": "CONTENT",
-            "data_type": "str",
-            "desc": "公告内容",
-            "must": "Y",
-            "name": "content"
-        },
-        {
-            "column": "PUB_TIME",
-            "data_type": "str",
-            "desc": "公告发布时间",
-            "must": "N",
-            "name": "pub_time"
-        },
-        {
-            "column": "SRC_URL",
-            "data_type": "str",
-            "desc": "pdf原文URL",
-            "must": "N",
-            "name": "src_url"
-        },
-        {
-            "column": "FILE_PATH",
-            "data_type": "str",
-            "desc": "pdf原文",
-            "must": "N",
-            "name": "filepath"
-        }
+    [
+      142,
+      "另类数据"
     ],
-    "parent_id": 142,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            142,
-            "另类数据"
-        ],
-        [
-            176,
-            "上市公司公告原文"
-        ]
-    ],
-    "title": "上市公司公告原文",
-    "validations": [
-        {
-            "message": "请输入正确的日期格式yyyymmdd",
-            "name": "start_date",
-            "options": "\\d{8}",
-            "validator": "regex"
-        },
-        {
-            "message": "请输入正确的日期格式yyyymmdd",
-            "name": "end_date",
-            "options": "\\d{8}",
-            "validator": "regex"
-        }
+    [
+      176,
+      "上市公司公告原文"
     ]
+  ],
+  "title": "上市公司公告原文",
+  "validations": [
+    {
+      "message": "请输入正确的日期格式yyyymmdd",
+      "name": "start_date",
+      "options": "\\d{8}",
+      "validator": "regex"
+    },
+    {
+      "message": "请输入正确的日期格式yyyymmdd",
+      "name": "end_date",
+      "options": "\\d{8}",
+      "validator": "regex"
+    }
+  ]
 }

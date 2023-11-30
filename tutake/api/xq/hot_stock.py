@@ -13,9 +13,10 @@ from sqlalchemy.pool import QueuePool
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.xq.hot_stock_ext import *
+from tutake.api.xq import hot_stock_ext
 from tutake.api.xq.xueqiu_base import XueQiuBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -176,12 +177,7 @@ class HotStock(BaseDao, XueQiuBase, DataProcess):
         return offset - init_offset
 
 
-setattr(HotStock, 'default_limit', default_limit_ext)
-setattr(HotStock, 'default_cron_express', default_cron_express_ext)
-setattr(HotStock, 'default_order_by', default_order_by_ext)
-setattr(HotStock, 'prepare', prepare_ext)
-setattr(HotStock, 'query_parameters', query_parameters_ext)
-setattr(HotStock, 'param_loop_process', param_loop_process_ext)
+extends_attr(HotStock, hot_stock_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数

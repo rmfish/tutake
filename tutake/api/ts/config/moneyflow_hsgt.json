@@ -1,128 +1,128 @@
 {
-    "database": null,
-    "default_limit": "300",
-    "default_query": "trade_date='20221118'",
-    "desc": "获取沪股通、深股通、港股通每日资金流向数据",
-    "id": 47,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "300",
+  "default_query": "trade_date='20221118'",
+  "desc": "获取沪股通、深股通、港股通每日资金流向数据",
+  "id": 47,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": 1,
+  "name": "moneyflow_hsgt",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "GGT_SS",
+      "data_type": "float",
+      "desc": "港股通（上海）",
+      "must": "Y",
+      "name": "ggt_ss"
+    },
+    {
+      "column": "GGT_SZ",
+      "data_type": "float",
+      "desc": "港股通（深圳）",
+      "must": "Y",
+      "name": "ggt_sz"
+    },
+    {
+      "column": "HGT",
+      "data_type": "float",
+      "desc": "沪股通",
+      "must": "Y",
+      "name": "hgt"
+    },
+    {
+      "column": "SGT",
+      "data_type": "float",
+      "desc": "深股通",
+      "must": "Y",
+      "name": "sgt"
+    },
+    {
+      "column": "NORTH_MONEY",
+      "data_type": "float",
+      "desc": "北向资金",
+      "must": "Y",
+      "name": "north_money"
+    },
+    {
+      "column": "SOUTH_MONEY",
+      "data_type": "float",
+      "desc": "南向资金",
+      "must": "Y",
+      "name": "south_money"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": 1,
-    "name": "moneyflow_hsgt",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "GGT_SS",
-            "data_type": "float",
-            "desc": "港股通（上海）",
-            "must": "Y",
-            "name": "ggt_ss"
-        },
-        {
-            "column": "GGT_SZ",
-            "data_type": "float",
-            "desc": "港股通（深圳）",
-            "must": "Y",
-            "name": "ggt_sz"
-        },
-        {
-            "column": "HGT",
-            "data_type": "float",
-            "desc": "沪股通",
-            "must": "Y",
-            "name": "hgt"
-        },
-        {
-            "column": "SGT",
-            "data_type": "float",
-            "desc": "深股通",
-            "must": "Y",
-            "name": "sgt"
-        },
-        {
-            "column": "NORTH_MONEY",
-            "data_type": "float",
-            "desc": "北向资金",
-            "must": "Y",
-            "name": "north_money"
-        },
-        {
-            "column": "SOUTH_MONEY",
-            "data_type": "float",
-            "desc": "南向资金",
-            "must": "Y",
-            "name": "south_money"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            47,
-            "沪深港通资金流向"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "沪深港通资金流向",
-    "validations": [
-        {
-            "name": "trade_date",
-            "trigger": [
-                {
-                    "name": "start_date",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                }
-            ],
-            "validator": "required"
-        }
+    [
+      47,
+      "沪深港通资金流向"
     ]
+  ],
+  "title": "沪深港通资金流向",
+  "validations": [
+    {
+      "name": "trade_date",
+      "trigger": [
+        {
+          "name": "start_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required"
+    }
+  ]
 }

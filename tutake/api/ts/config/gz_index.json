@@ -1,119 +1,119 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "广州民间借贷利率,广州民间金融街",
-    "id": 174,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "广州民间借贷利率,广州民间金融街",
+  "id": 174,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": true,
+  "name": "gz_index",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "D10_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（十天）",
+      "must": "Y",
+      "name": "d10_rate"
+    },
+    {
+      "column": "M1_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（一月期）",
+      "must": "Y",
+      "name": "m1_rate"
+    },
+    {
+      "column": "M3_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（三月期）",
+      "must": "Y",
+      "name": "m3_rate"
+    },
+    {
+      "column": "M6_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（六月期）",
+      "must": "Y",
+      "name": "m6_rate"
+    },
+    {
+      "column": "M12_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（一年期）",
+      "must": "Y",
+      "name": "m12_rate"
+    },
+    {
+      "column": "LONG_RATE",
+      "data_type": "float",
+      "desc": "小额贷市场平均利率（长期）",
+      "must": "Y",
+      "name": "long_rate"
+    }
+  ],
+  "parent_id": 148,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": true,
-    "name": "gz_index",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "D10_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（十天）",
-            "must": "Y",
-            "name": "d10_rate"
-        },
-        {
-            "column": "M1_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（一月期）",
-            "must": "Y",
-            "name": "m1_rate"
-        },
-        {
-            "column": "M3_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（三月期）",
-            "must": "Y",
-            "name": "m3_rate"
-        },
-        {
-            "column": "M6_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（六月期）",
-            "must": "Y",
-            "name": "m6_rate"
-        },
-        {
-            "column": "M12_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（一年期）",
-            "must": "Y",
-            "name": "m12_rate"
-        },
-        {
-            "column": "LONG_RATE",
-            "data_type": "float",
-            "desc": "小额贷市场平均利率（长期）",
-            "must": "Y",
-            "name": "long_rate"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 148,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            224,
-            "国内宏观"
-        ],
-        [
-            148,
-            "利率数据"
-        ],
-        [
-            174,
-            "广州民间借贷利率"
-        ]
+    [
+      224,
+      "国内宏观"
     ],
-    "title": "广州民间借贷利率",
-    "validations": []
+    [
+      148,
+      "利率数据"
+    ],
+    [
+      174,
+      "广州民间借贷利率"
+    ]
+  ],
+  "title": "广州民间借贷利率",
+  "validations": []
 }

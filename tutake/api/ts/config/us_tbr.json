@@ -1,153 +1,153 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "获取美国短期国债利率数据",
-    "id": 221,
-    "integral_required": 120,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "指定字段",
-            "must": "N",
-            "name": "fields"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取美国短期国债利率数据",
+  "id": 221,
+  "integral_required": 120,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "指定字段",
+      "must": "N",
+      "name": "fields"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "us_tbr",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "W4_BD",
+      "data_type": "float",
+      "desc": "4周银行折现收益率",
+      "must": "Y",
+      "name": "w4_bd"
+    },
+    {
+      "column": "W4_CE",
+      "data_type": "float",
+      "desc": "4周票面利率",
+      "must": "Y",
+      "name": "w4_ce"
+    },
+    {
+      "column": "W8_BD",
+      "data_type": "float",
+      "desc": "8周银行折现收益率",
+      "must": "Y",
+      "name": "w8_bd"
+    },
+    {
+      "column": "W8_CE",
+      "data_type": "float",
+      "desc": "8周票面利率",
+      "must": "Y",
+      "name": "w8_ce"
+    },
+    {
+      "column": "W13_BD",
+      "data_type": "float",
+      "desc": "13周银行折现收益率",
+      "must": "Y",
+      "name": "w13_bd"
+    },
+    {
+      "column": "W13_CE",
+      "data_type": "float",
+      "desc": "13周票面利率",
+      "must": "Y",
+      "name": "w13_ce"
+    },
+    {
+      "column": "W26_BD",
+      "data_type": "float",
+      "desc": "26周银行折现收益率",
+      "must": "Y",
+      "name": "w26_bd"
+    },
+    {
+      "column": "W26_CE",
+      "data_type": "float",
+      "desc": "26周票面利率",
+      "must": "Y",
+      "name": "w26_ce"
+    },
+    {
+      "column": "W52_BD",
+      "data_type": "float",
+      "desc": "52周银行折现收益率",
+      "must": "Y",
+      "name": "w52_bd"
+    },
+    {
+      "column": "W52_CE",
+      "data_type": "float",
+      "desc": "52周票面利率",
+      "must": "Y",
+      "name": "w52_ce"
+    }
+  ],
+  "parent_id": 218,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "us_tbr",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "W4_BD",
-            "data_type": "float",
-            "desc": "4周银行折现收益率",
-            "must": "Y",
-            "name": "w4_bd"
-        },
-        {
-            "column": "W4_CE",
-            "data_type": "float",
-            "desc": "4周票面利率",
-            "must": "Y",
-            "name": "w4_ce"
-        },
-        {
-            "column": "W8_BD",
-            "data_type": "float",
-            "desc": "8周银行折现收益率",
-            "must": "Y",
-            "name": "w8_bd"
-        },
-        {
-            "column": "W8_CE",
-            "data_type": "float",
-            "desc": "8周票面利率",
-            "must": "Y",
-            "name": "w8_ce"
-        },
-        {
-            "column": "W13_BD",
-            "data_type": "float",
-            "desc": "13周银行折现收益率",
-            "must": "Y",
-            "name": "w13_bd"
-        },
-        {
-            "column": "W13_CE",
-            "data_type": "float",
-            "desc": "13周票面利率",
-            "must": "Y",
-            "name": "w13_ce"
-        },
-        {
-            "column": "W26_BD",
-            "data_type": "float",
-            "desc": "26周银行折现收益率",
-            "must": "Y",
-            "name": "w26_bd"
-        },
-        {
-            "column": "W26_CE",
-            "data_type": "float",
-            "desc": "26周票面利率",
-            "must": "Y",
-            "name": "w26_ce"
-        },
-        {
-            "column": "W52_BD",
-            "data_type": "float",
-            "desc": "52周银行折现收益率",
-            "must": "Y",
-            "name": "w52_bd"
-        },
-        {
-            "column": "W52_CE",
-            "data_type": "float",
-            "desc": "52周票面利率",
-            "must": "Y",
-            "name": "w52_ce"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 218,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            217,
-            "国际宏观"
-        ],
-        [
-            218,
-            "美国利率"
-        ],
-        [
-            221,
-            "短期国债利率"
-        ]
+    [
+      217,
+      "国际宏观"
     ],
-    "title": "短期国债利率",
-    "validations": []
+    [
+      218,
+      "美国利率"
+    ],
+    [
+      221,
+      "短期国债利率"
+    ]
+  ],
+  "title": "短期国债利率",
+  "validations": []
 }

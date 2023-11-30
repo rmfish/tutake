@@ -1,143 +1,143 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "获取新冠状肺炎疫情感染人数统计数据",
-    "id": 202,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "地区名称",
-            "must": "N",
-            "name": "area_name"
-        },
-        {
-            "data_type": "str",
-            "desc": "级别：2-中国内地，3-省级，4-地区市级别",
-            "must": "N",
-            "name": "level"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "查询开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "查询结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取新冠状肺炎疫情感染人数统计数据",
+  "id": 202,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "地区名称",
+      "must": "N",
+      "name": "area_name"
+    },
+    {
+      "data_type": "str",
+      "desc": "级别：2-中国内地，3-省级，4-地区市级别",
+      "must": "N",
+      "name": "level"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "查询开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "查询结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ncov_num",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "PUBLISH_DATE",
+      "data_type": "str",
+      "desc": "发布日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "AREA_NAME",
+      "data_type": "str",
+      "desc": "地区名称",
+      "must": "Y",
+      "name": "area_name"
+    },
+    {
+      "column": "PARENT_NAME",
+      "data_type": "str",
+      "desc": "上一级地区",
+      "must": "Y",
+      "name": "parent_name"
+    },
+    {
+      "column": "LEVEL",
+      "data_type": "int",
+      "desc": "级别",
+      "must": "Y",
+      "name": "level"
+    },
+    {
+      "column": "CONFIRMED_NUM",
+      "data_type": "int",
+      "desc": "累计确诊人数",
+      "must": "Y",
+      "name": "confirmed_num"
+    },
+    {
+      "column": "SUSPECTED_NUM",
+      "data_type": "int",
+      "desc": "累计疑似人数",
+      "must": "Y",
+      "name": "suspected_num"
+    },
+    {
+      "column": "CONFIRMED_NUM_NOW",
+      "data_type": "int",
+      "desc": "现有确诊人数",
+      "must": "Y",
+      "name": "confirmed_num_now"
+    },
+    {
+      "column": "SUSPECTED_NUM_NOW",
+      "data_type": "int",
+      "desc": "现有疑似人数",
+      "must": "Y",
+      "name": "suspected_num_now"
+    },
+    {
+      "column": "CURED_NUM",
+      "data_type": "int",
+      "desc": "累计治愈人数",
+      "must": "Y",
+      "name": "cured_num"
+    },
+    {
+      "column": "DEAD_NUM",
+      "data_type": "int",
+      "desc": "累计死亡人数",
+      "must": "Y",
+      "name": "dead_num"
+    }
+  ],
+  "parent_id": 142,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "ncov_num",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "PUBLISH_DATE",
-            "data_type": "str",
-            "desc": "发布日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "AREA_NAME",
-            "data_type": "str",
-            "desc": "地区名称",
-            "must": "Y",
-            "name": "area_name"
-        },
-        {
-            "column": "PARENT_NAME",
-            "data_type": "str",
-            "desc": "上一级地区",
-            "must": "Y",
-            "name": "parent_name"
-        },
-        {
-            "column": "LEVEL",
-            "data_type": "int",
-            "desc": "级别",
-            "must": "Y",
-            "name": "level"
-        },
-        {
-            "column": "CONFIRMED_NUM",
-            "data_type": "int",
-            "desc": "累计确诊人数",
-            "must": "Y",
-            "name": "confirmed_num"
-        },
-        {
-            "column": "SUSPECTED_NUM",
-            "data_type": "int",
-            "desc": "累计疑似人数",
-            "must": "Y",
-            "name": "suspected_num"
-        },
-        {
-            "column": "CONFIRMED_NUM_NOW",
-            "data_type": "int",
-            "desc": "现有确诊人数",
-            "must": "Y",
-            "name": "confirmed_num_now"
-        },
-        {
-            "column": "SUSPECTED_NUM_NOW",
-            "data_type": "int",
-            "desc": "现有疑似人数",
-            "must": "Y",
-            "name": "suspected_num_now"
-        },
-        {
-            "column": "CURED_NUM",
-            "data_type": "int",
-            "desc": "累计治愈人数",
-            "must": "Y",
-            "name": "cured_num"
-        },
-        {
-            "column": "DEAD_NUM",
-            "data_type": "int",
-            "desc": "累计死亡人数",
-            "must": "Y",
-            "name": "dead_num"
-        }
+    [
+      142,
+      "另类数据"
     ],
-    "parent_id": 142,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            142,
-            "另类数据"
-        ],
-        [
-            202,
-            "新冠状肺炎感染人数"
-        ]
-    ],
-    "title": "新冠状肺炎感染人数",
-    "validations": []
+    [
+      202,
+      "新冠状肺炎感染人数"
+    ]
+  ],
+  "title": "新冠状肺炎感染人数",
+  "validations": []
 }

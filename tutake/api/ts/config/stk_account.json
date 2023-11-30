@@ -1,101 +1,101 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取股票账户开户数据，统计周期为一周，此数据官方已经停止更新。",
-    "id": 164,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取股票账户开户数据，统计周期为一周，此数据官方已经停止更新。",
+  "id": 164,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "stk_account",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "统计周期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "WEEKLY_NEW",
+      "data_type": "float",
+      "desc": "本周新增",
+      "must": "Y",
+      "name": "weekly_new"
+    },
+    {
+      "column": "TOTAL",
+      "data_type": "float",
+      "desc": "期末总账户数",
+      "must": "Y",
+      "name": "total"
+    },
+    {
+      "column": "WEEKLY_HOLD",
+      "data_type": "float",
+      "desc": "本周持仓账户数",
+      "must": "Y",
+      "name": "weekly_hold"
+    },
+    {
+      "column": "WEEKLY_TRADE",
+      "data_type": "float",
+      "desc": "本周参与交易账户数",
+      "must": "Y",
+      "name": "weekly_trade"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "stk_account",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "统计周期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "WEEKLY_NEW",
-            "data_type": "float",
-            "desc": "本周新增",
-            "must": "Y",
-            "name": "weekly_new"
-        },
-        {
-            "column": "TOTAL",
-            "data_type": "float",
-            "desc": "期末总账户数",
-            "must": "Y",
-            "name": "total"
-        },
-        {
-            "column": "WEEKLY_HOLD",
-            "data_type": "float",
-            "desc": "本周持仓账户数",
-            "must": "Y",
-            "name": "weekly_hold"
-        },
-        {
-            "column": "WEEKLY_TRADE",
-            "data_type": "float",
-            "desc": "本周参与交易账户数",
-            "must": "Y",
-            "name": "weekly_trade"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            164,
-            "股票开户数据（停）"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "股票开户数据（停）",
-    "validations": []
+    [
+      164,
+      "股票开户数据（停）"
+    ]
+  ],
+  "title": "股票开户数据（停）",
+  "validations": []
 }

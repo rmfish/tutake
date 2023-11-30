@@ -1,98 +1,98 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "获取主流新闻网站的快讯新闻数据",
-    "id": 143,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "default": "sina",
-            "desc": "新闻来源sina新浪财经",
-            "must": "N",
-            "name": "src"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "获取主流新闻网站的快讯新闻数据",
+  "id": 143,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "default": "sina",
+      "desc": "新闻来源sina新浪财经",
+      "must": "N",
+      "name": "src"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "news",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "datetime",
+      "data_type": "str",
+      "desc": "时间",
+      "must": "Y",
+      "name": "datetime"
+    },
+    {
+      "column": "content",
+      "data_type": "str",
+      "desc": "内容",
+      "must": "Y",
+      "name": "content"
+    },
+    {
+      "column": "title",
+      "data_type": "str",
+      "desc": "标题",
+      "must": "Y",
+      "name": "title"
+    },
+    {
+      "column": "channels",
+      "data_type": "str",
+      "desc": "分类",
+      "must": "N",
+      "name": "channels"
+    },
+    {
+      "column": "score",
+      "data_type": "str",
+      "desc": "分值",
+      "must": "N",
+      "name": "score"
+    }
+  ],
+  "parent_id": 142,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "news",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "datetime",
-            "data_type": "str",
-            "desc": "时间",
-            "must": "Y",
-            "name": "datetime"
-        },
-        {
-            "column": "content",
-            "data_type": "str",
-            "desc": "内容",
-            "must": "Y",
-            "name": "content"
-        },
-        {
-            "column": "title",
-            "data_type": "str",
-            "desc": "标题",
-            "must": "Y",
-            "name": "title"
-        },
-        {
-            "column": "channels",
-            "data_type": "str",
-            "desc": "分类",
-            "must": "N",
-            "name": "channels"
-        },
-        {
-            "column": "score",
-            "data_type": "str",
-            "desc": "分值",
-            "must": "N",
-            "name": "score"
-        }
+    [
+      142,
+      "另类数据"
     ],
-    "parent_id": 142,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            142,
-            "另类数据"
-        ],
-        [
-            143,
-            "新闻快讯"
-        ]
-    ],
-    "title": "新闻快讯",
-    "validations": []
+    [
+      143,
+      "新闻快讯"
+    ]
+  ],
+  "title": "新闻快讯",
+  "validations": []
 }

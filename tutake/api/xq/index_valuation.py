@@ -13,9 +13,10 @@ from sqlalchemy.pool import QueuePool
 
 from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.xq.index_valuation_ext import *
+from tutake.api.xq import index_valuation_ext
 from tutake.api.xq.xueqiu_base import XueQiuBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
@@ -192,12 +193,7 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
         return offset - init_offset
 
 
-setattr(IndexValuation, 'default_limit', default_limit_ext)
-setattr(IndexValuation, 'default_cron_express', default_cron_express_ext)
-setattr(IndexValuation, 'default_order_by', default_order_by_ext)
-setattr(IndexValuation, 'prepare', prepare_ext)
-setattr(IndexValuation, 'query_parameters', query_parameters_ext)
-setattr(IndexValuation, 'param_loop_process', param_loop_process_ext)
+extends_attr(IndexValuation, index_valuation_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数

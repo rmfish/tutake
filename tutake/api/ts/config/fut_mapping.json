@@ -1,88 +1,88 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "期货主力(连续)合约与月合约映射",
-    "id": 189,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "合约代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "期货主力(连续)合约与月合约映射",
+  "id": 189,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "合约代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "fut_mapping",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "连续合约代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "起始日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "MAPPING_TS_CODE",
+      "data_type": "str",
+      "desc": "期货合约代码",
+      "must": "Y",
+      "name": "mapping_ts_code"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "fut_mapping",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "连续合约代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "起始日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "MAPPING_TS_CODE",
-            "data_type": "str",
-            "desc": "期货合约代码",
-            "must": "Y",
-            "name": "mapping_ts_code"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            189,
-            "期货主力与连续合约"
-        ]
-    ],
-    "title": "期货主力与连续合约",
-    "validations": []
+    [
+      189,
+      "期货主力与连续合约"
+    ]
+  ],
+  "title": "期货主力与连续合约",
+  "validations": []
 }

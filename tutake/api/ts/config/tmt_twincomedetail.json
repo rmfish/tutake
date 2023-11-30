@@ -1,131 +1,131 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取台湾TMT行业上市公司各类产品月度营收情况，数据开始于2011年，月度更新",
-    "id": 87,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "N",
-            "name": "item"
-        },
-        {
-            "data_type": "str",
-            "desc": "公司代码",
-            "must": "N",
-            "name": "symbol"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "default": "TEJ",
-            "must": "N",
-            "name": "source"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取台湾TMT行业上市公司各类产品月度营收情况，数据开始于2011年，月度更新",
+  "id": 87,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "N",
+      "name": "item"
+    },
+    {
+      "data_type": "str",
+      "desc": "公司代码",
+      "must": "N",
+      "name": "symbol"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "default": "TEJ",
+      "must": "N",
+      "name": "source"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "tmt_twincomedetail",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "ITEM_CODE",
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "Y",
+      "name": "item"
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "公司代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "OP_INCOME",
+      "data_type": "str",
+      "desc": "月度营收",
+      "must": "Y",
+      "name": "op_income"
+    },
+    {
+      "column": "CONSOP_INCOME",
+      "data_type": "str",
+      "desc": "合并月度营收",
+      "must": "N",
+      "name": "consop_income"
+    }
+  ],
+  "parent_id": 83,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "tmt_twincomedetail",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "ITEM_CODE",
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "Y",
-            "name": "item"
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "公司代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "OP_INCOME",
-            "data_type": "str",
-            "desc": "月度营收",
-            "must": "Y",
-            "name": "op_income"
-        },
-        {
-            "column": "CONSOP_INCOME",
-            "data_type": "str",
-            "desc": "合并月度营收",
-            "must": "N",
-            "name": "consop_income"
-        }
+    [
+      82,
+      "行业经济"
     ],
-    "parent_id": 83,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            82,
-            "行业经济"
-        ],
-        [
-            83,
-            "TMT行业"
-        ],
-        [
-            87,
-            "台湾电子产业月营收明细"
-        ]
+    [
+      83,
+      "TMT行业"
     ],
-    "title": "台湾电子产业月营收明细",
-    "validations": [
-        {
-            "name": "item",
-            "trigger": [
-                {
-                    "name": "symbol",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                }
-            ],
-            "validator": "required"
-        }
+    [
+      87,
+      "台湾电子产业月营收明细"
     ]
+  ],
+  "title": "台湾电子产业月营收明细",
+  "validations": [
+    {
+      "name": "item",
+      "trigger": [
+        {
+          "name": "symbol",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required"
+    }
+  ]
 }

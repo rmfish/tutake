@@ -111,7 +111,8 @@ class MonthlyAdj(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -261,8 +262,9 @@ if __name__ == '__main__':
     result_df = pd.merge(df, result_df, on='ts_code')
     result_df = result_df.loc[
         (result_df['trade_date'] == result_df['min_date']) | (result_df['trade_date'] == result_df['max_date'])]
-    # print(result_df)
 
+
+    # print(result_df)
 
     # 按照 'code'、'min_date'、'max_date' 进行分组，并比较对应的最小和最大日期的 'val' 值，得到最小值和最大值
     def group_df(df):

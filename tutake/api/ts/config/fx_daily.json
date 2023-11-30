@@ -1,158 +1,158 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "外汇日线行情",
-    "id": 179,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期（GMT）",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期（GMT）",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期（GMT）",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易商",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "外汇日线行情",
+  "id": 179,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期（GMT）",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期（GMT）",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期（GMT）",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易商",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": true,
+  "name": "fx_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "外汇代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "BID_OPEN",
+      "data_type": "float",
+      "desc": "买入开盘价",
+      "must": "Y",
+      "name": "bid_open"
+    },
+    {
+      "column": "BID_CLOSE",
+      "data_type": "float",
+      "desc": "买入收盘价",
+      "must": "Y",
+      "name": "bid_close"
+    },
+    {
+      "column": "BID_HIGH",
+      "data_type": "float",
+      "desc": "买入最高价",
+      "must": "Y",
+      "name": "bid_high"
+    },
+    {
+      "column": "BID_LOW",
+      "data_type": "float",
+      "desc": "买入最低价",
+      "must": "Y",
+      "name": "bid_low"
+    },
+    {
+      "column": "ASK_OPEN",
+      "data_type": "float",
+      "desc": "卖出开盘价",
+      "must": "Y",
+      "name": "ask_open"
+    },
+    {
+      "column": "ASK_CLOSE",
+      "data_type": "float",
+      "desc": "卖出收盘价",
+      "must": "Y",
+      "name": "ask_close"
+    },
+    {
+      "column": "ASK_HIGH",
+      "data_type": "float",
+      "desc": "卖出最高价",
+      "must": "Y",
+      "name": "ask_high"
+    },
+    {
+      "column": "ASK_LOW",
+      "data_type": "float",
+      "desc": "卖出最低价",
+      "must": "Y",
+      "name": "ask_low"
+    },
+    {
+      "column": "TICK_QTY",
+      "data_type": "int",
+      "desc": "报价笔数",
+      "must": "Y",
+      "name": "tick_qty"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易商",
+      "must": "N",
+      "name": "exchange"
+    }
+  ],
+  "parent_id": 177,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": true,
-    "name": "fx_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "外汇代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "BID_OPEN",
-            "data_type": "float",
-            "desc": "买入开盘价",
-            "must": "Y",
-            "name": "bid_open"
-        },
-        {
-            "column": "BID_CLOSE",
-            "data_type": "float",
-            "desc": "买入收盘价",
-            "must": "Y",
-            "name": "bid_close"
-        },
-        {
-            "column": "BID_HIGH",
-            "data_type": "float",
-            "desc": "买入最高价",
-            "must": "Y",
-            "name": "bid_high"
-        },
-        {
-            "column": "BID_LOW",
-            "data_type": "float",
-            "desc": "买入最低价",
-            "must": "Y",
-            "name": "bid_low"
-        },
-        {
-            "column": "ASK_OPEN",
-            "data_type": "float",
-            "desc": "卖出开盘价",
-            "must": "Y",
-            "name": "ask_open"
-        },
-        {
-            "column": "ASK_CLOSE",
-            "data_type": "float",
-            "desc": "卖出收盘价",
-            "must": "Y",
-            "name": "ask_close"
-        },
-        {
-            "column": "ASK_HIGH",
-            "data_type": "float",
-            "desc": "卖出最高价",
-            "must": "Y",
-            "name": "ask_high"
-        },
-        {
-            "column": "ASK_LOW",
-            "data_type": "float",
-            "desc": "卖出最低价",
-            "must": "Y",
-            "name": "ask_low"
-        },
-        {
-            "column": "TICK_QTY",
-            "data_type": "int",
-            "desc": "报价笔数",
-            "must": "Y",
-            "name": "tick_qty"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易商",
-            "must": "N",
-            "name": "exchange"
-        }
+    [
+      177,
+      "外汇"
     ],
-    "parent_id": 177,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            177,
-            "外汇"
-        ],
-        [
-            179,
-            "外汇日线行情"
-        ]
-    ],
-    "title": "外汇日线行情",
-    "validations": []
+    [
+      179,
+      "外汇日线行情"
+    ]
+  ],
+  "title": "外汇日线行情",
+  "validations": []
 }

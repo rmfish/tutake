@@ -1,146 +1,146 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取海外外汇基础信息，目前只有FXCM交易商的数据",
-    "id": 178,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易商",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "分类",
-            "must": "N",
-            "name": "classify"
-        },
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取海外外汇基础信息，目前只有FXCM交易商的数据",
+  "id": 178,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易商",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "分类",
+      "must": "N",
+      "name": "classify"
+    },
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": true,
+  "name": "fx_obasic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "外汇代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "CLASSIFY",
+      "data_type": "str",
+      "desc": "分类",
+      "must": "Y",
+      "name": "classify"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "FXCM/CFETS",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "MIN_UNIT",
+      "data_type": "float",
+      "desc": "最小交易单位",
+      "must": "Y",
+      "name": "min_unit"
+    },
+    {
+      "column": "MAX_UNIT",
+      "data_type": "float",
+      "desc": "最大交易单位",
+      "must": "Y",
+      "name": "max_unit"
+    },
+    {
+      "column": "PIP",
+      "data_type": "float",
+      "desc": "最大交易单位",
+      "must": "Y",
+      "name": "pip"
+    },
+    {
+      "column": "PIP_COST",
+      "data_type": "float",
+      "desc": "点值",
+      "must": "Y",
+      "name": "pip_cost"
+    },
+    {
+      "column": "TRAGET_SPREAD",
+      "data_type": "float",
+      "desc": "目标差价",
+      "must": "Y",
+      "name": "traget_spread"
+    },
+    {
+      "column": "MIN_STOP_DISTANCE",
+      "data_type": "float",
+      "desc": "最小止损距离（点子）",
+      "must": "Y",
+      "name": "min_stop_distance"
+    },
+    {
+      "column": "TRADING_HOURS",
+      "data_type": "str",
+      "desc": "交易时间",
+      "must": "Y",
+      "name": "trading_hours"
+    },
+    {
+      "column": "BREAK_TIME",
+      "data_type": "str",
+      "desc": "休市时间",
+      "must": "Y",
+      "name": "break_time"
+    }
+  ],
+  "parent_id": 177,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": true,
-    "name": "fx_obasic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "外汇代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "CLASSIFY",
-            "data_type": "str",
-            "desc": "分类",
-            "must": "Y",
-            "name": "classify"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "FXCM/CFETS",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "MIN_UNIT",
-            "data_type": "float",
-            "desc": "最小交易单位",
-            "must": "Y",
-            "name": "min_unit"
-        },
-        {
-            "column": "MAX_UNIT",
-            "data_type": "float",
-            "desc": "最大交易单位",
-            "must": "Y",
-            "name": "max_unit"
-        },
-        {
-            "column": "PIP",
-            "data_type": "float",
-            "desc": "最大交易单位",
-            "must": "Y",
-            "name": "pip"
-        },
-        {
-            "column": "PIP_COST",
-            "data_type": "float",
-            "desc": "点值",
-            "must": "Y",
-            "name": "pip_cost"
-        },
-        {
-            "column": "TRAGET_SPREAD",
-            "data_type": "float",
-            "desc": "目标差价",
-            "must": "Y",
-            "name": "traget_spread"
-        },
-        {
-            "column": "MIN_STOP_DISTANCE",
-            "data_type": "float",
-            "desc": "最小止损距离（点子）",
-            "must": "Y",
-            "name": "min_stop_distance"
-        },
-        {
-            "column": "TRADING_HOURS",
-            "data_type": "str",
-            "desc": "交易时间",
-            "must": "Y",
-            "name": "trading_hours"
-        },
-        {
-            "column": "BREAK_TIME",
-            "data_type": "str",
-            "desc": "休市时间",
-            "must": "Y",
-            "name": "break_time"
-        }
+    [
+      177,
+      "外汇"
     ],
-    "parent_id": 177,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            177,
-            "外汇"
-        ],
-        [
-            178,
-            "外汇基础信息（海外）"
-        ]
-    ],
-    "title": "外汇基础信息（海外）",
-    "validations": []
+    [
+      178,
+      "外汇基础信息（海外）"
+    ]
+  ],
+  "title": "外汇基础信息（海外）",
+  "validations": []
 }

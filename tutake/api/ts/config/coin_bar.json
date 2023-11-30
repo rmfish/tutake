@@ -1,162 +1,162 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "",
-    "id": 238,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所原始代码",
-            "must": "N",
-            "name": "symbol"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "频度",
-            "must": "N",
-            "name": "freq"
-        },
-        {
-            "data_type": "datetime",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "datetime",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "",
-            "must": "N",
-            "name": "is_contract"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 238,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所原始代码",
+      "must": "N",
+      "name": "symbol"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "频度",
+      "must": "N",
+      "name": "freq"
+    },
+    {
+      "data_type": "datetime",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "datetime",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "",
+      "must": "N",
+      "name": "is_contract"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "coin_bar",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "TS_PAIR",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "交易所原始代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "FREQ",
+      "data_type": "str",
+      "desc": "频度",
+      "must": "Y",
+      "name": "freq"
+    },
+    {
+      "column": "TRADE_TIME",
+      "data_type": "str",
+      "desc": "交易时间",
+      "must": "Y",
+      "name": "trade_time"
+    },
+    {
+      "column": "OPEN",
+      "data_type": "float",
+      "desc": "开盘价",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "收盘价",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "HIGH",
+      "data_type": "float",
+      "desc": "最高价",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "LOW",
+      "data_type": "float",
+      "desc": "最低价",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "IS_CONTRACT",
+      "data_type": "str",
+      "desc": "是否合约",
+      "must": "Y",
+      "name": "is_contract"
+    }
+  ],
+  "parent_id": 52,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "coin_bar",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "TS_PAIR",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "交易所原始代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "FREQ",
-            "data_type": "str",
-            "desc": "频度",
-            "must": "Y",
-            "name": "freq"
-        },
-        {
-            "column": "TRADE_TIME",
-            "data_type": "str",
-            "desc": "交易时间",
-            "must": "Y",
-            "name": "trade_time"
-        },
-        {
-            "column": "OPEN",
-            "data_type": "float",
-            "desc": "开盘价",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "收盘价",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "HIGH",
-            "data_type": "float",
-            "desc": "最高价",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "LOW",
-            "data_type": "float",
-            "desc": "最低价",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "IS_CONTRACT",
-            "data_type": "str",
-            "desc": "是否合约",
-            "must": "Y",
-            "name": "is_contract"
-        }
+    [
+      52,
+      "行情数据"
     ],
-    "parent_id": 52,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            52,
-            "行情数据"
-        ],
-        [
-            238,
-            "数字货币k线行情"
-        ]
-    ],
-    "title": "数字货币k线行情",
-    "validations": []
+    [
+      238,
+      "数字货币k线行情"
+    ]
+  ],
+  "title": "数字货币k线行情",
+  "validations": []
 }

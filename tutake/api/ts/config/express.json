@@ -1,325 +1,325 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取上市公司业绩快报",
-    "id": 46,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "N",
-            "name": "period"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取上市公司业绩快报",
+  "id": 46,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "N",
+      "name": "period"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "express",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "REVENUE",
+      "data_type": "float",
+      "desc": "营业收入(元)",
+      "must": "Y",
+      "name": "revenue"
+    },
+    {
+      "column": "OPERATE_PROFIT",
+      "data_type": "float",
+      "desc": "营业利润(元)",
+      "must": "Y",
+      "name": "operate_profit"
+    },
+    {
+      "column": "TOTAL_PROFIT",
+      "data_type": "float",
+      "desc": "利润总额(元)",
+      "must": "Y",
+      "name": "total_profit"
+    },
+    {
+      "column": "N_INCOME",
+      "data_type": "float",
+      "desc": "净利润(元)",
+      "must": "Y",
+      "name": "n_income"
+    },
+    {
+      "column": "TOTAL_ASSETS",
+      "data_type": "float",
+      "desc": "总资产(元)",
+      "must": "Y",
+      "name": "total_assets"
+    },
+    {
+      "column": "TOTAL_HLDR_EQY_EXC_MIN_INT",
+      "data_type": "float",
+      "desc": "股东权益合计(不含少数股东权益)(元)",
+      "must": "Y",
+      "name": "total_hldr_eqy_exc_min_int"
+    },
+    {
+      "column": "DILUTED_EPS",
+      "data_type": "float",
+      "desc": "每股收益(摊薄)(元)",
+      "must": "Y",
+      "name": "diluted_eps"
+    },
+    {
+      "column": "DILUTED_ROE",
+      "data_type": "float",
+      "desc": "净资产收益率(摊薄)(%)",
+      "must": "Y",
+      "name": "diluted_roe"
+    },
+    {
+      "column": "YOY_NET_PROFIT",
+      "data_type": "float",
+      "desc": "去年同期修正后净利润",
+      "must": "Y",
+      "name": "yoy_net_profit"
+    },
+    {
+      "column": "BPS",
+      "data_type": "float",
+      "desc": "每股净资产",
+      "must": "Y",
+      "name": "bps"
+    },
+    {
+      "column": "YOY_SALES",
+      "data_type": "float",
+      "desc": "同比增长率:营业收入",
+      "must": "N",
+      "name": "yoy_sales"
+    },
+    {
+      "column": "YOY_OP",
+      "data_type": "float",
+      "desc": "同比增长率:营业利润",
+      "must": "N",
+      "name": "yoy_op"
+    },
+    {
+      "column": "YOY_TP",
+      "data_type": "float",
+      "desc": "同比增长率:利润总额",
+      "must": "N",
+      "name": "yoy_tp"
+    },
+    {
+      "column": "YOY_DEDU_NP",
+      "data_type": "float",
+      "desc": "同比增长率:归属母公司股东的净利润",
+      "must": "N",
+      "name": "yoy_dedu_np"
+    },
+    {
+      "column": "YOY_EPS",
+      "data_type": "float",
+      "desc": "同比增长率:基本每股收益",
+      "must": "N",
+      "name": "yoy_eps"
+    },
+    {
+      "column": "YOY_ROE",
+      "data_type": "float",
+      "desc": "同比增减:加权平均净资产收益率",
+      "must": "N",
+      "name": "yoy_roe"
+    },
+    {
+      "column": "GROWTH_ASSETS",
+      "data_type": "float",
+      "desc": "比年初增长率:总资产",
+      "must": "N",
+      "name": "growth_assets"
+    },
+    {
+      "column": "YOY_EQUITY",
+      "data_type": "float",
+      "desc": "比年初增长率:归属母公司的股东权益",
+      "must": "N",
+      "name": "yoy_equity"
+    },
+    {
+      "column": "GROWTH_BPS",
+      "data_type": "float",
+      "desc": "比年初增长率:归属于母公司股东的每股净资产",
+      "must": "N",
+      "name": "growth_bps"
+    },
+    {
+      "column": "OR_LAST_YEAR",
+      "data_type": "float",
+      "desc": "去年同期营业收入",
+      "must": "N",
+      "name": "or_last_year"
+    },
+    {
+      "column": "OP_LAST_YEAR",
+      "data_type": "float",
+      "desc": "去年同期营业利润",
+      "must": "N",
+      "name": "op_last_year"
+    },
+    {
+      "column": "TP_LAST_YEAR",
+      "data_type": "float",
+      "desc": "去年同期利润总额",
+      "must": "N",
+      "name": "tp_last_year"
+    },
+    {
+      "column": "NP_LAST_YEAR",
+      "data_type": "float",
+      "desc": "去年同期净利润",
+      "must": "N",
+      "name": "np_last_year"
+    },
+    {
+      "column": "EPS_LAST_YEAR",
+      "data_type": "float",
+      "desc": "去年同期每股收益",
+      "must": "N",
+      "name": "eps_last_year"
+    },
+    {
+      "column": "OPEN_NET_ASSETS",
+      "data_type": "float",
+      "desc": "期初净资产",
+      "must": "N",
+      "name": "open_net_assets"
+    },
+    {
+      "column": "OPEN_BPS",
+      "data_type": "float",
+      "desc": "期初每股净资产",
+      "must": "N",
+      "name": "open_bps"
+    },
+    {
+      "column": "PERF_SUMMARY",
+      "data_type": "str",
+      "desc": "业绩简要说明",
+      "must": "Y",
+      "name": "perf_summary"
+    },
+    {
+      "column": "IS_AUDIT",
+      "data_type": "int",
+      "desc": "是否审计： 1是 0否",
+      "must": "N",
+      "name": "is_audit"
+    },
+    {
+      "column": "REMARK",
+      "data_type": "str",
+      "desc": "备注",
+      "must": "N",
+      "name": "remark"
+    }
+  ],
+  "parent_id": 16,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "express",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "REVENUE",
-            "data_type": "float",
-            "desc": "营业收入(元)",
-            "must": "Y",
-            "name": "revenue"
-        },
-        {
-            "column": "OPERATE_PROFIT",
-            "data_type": "float",
-            "desc": "营业利润(元)",
-            "must": "Y",
-            "name": "operate_profit"
-        },
-        {
-            "column": "TOTAL_PROFIT",
-            "data_type": "float",
-            "desc": "利润总额(元)",
-            "must": "Y",
-            "name": "total_profit"
-        },
-        {
-            "column": "N_INCOME",
-            "data_type": "float",
-            "desc": "净利润(元)",
-            "must": "Y",
-            "name": "n_income"
-        },
-        {
-            "column": "TOTAL_ASSETS",
-            "data_type": "float",
-            "desc": "总资产(元)",
-            "must": "Y",
-            "name": "total_assets"
-        },
-        {
-            "column": "TOTAL_HLDR_EQY_EXC_MIN_INT",
-            "data_type": "float",
-            "desc": "股东权益合计(不含少数股东权益)(元)",
-            "must": "Y",
-            "name": "total_hldr_eqy_exc_min_int"
-        },
-        {
-            "column": "DILUTED_EPS",
-            "data_type": "float",
-            "desc": "每股收益(摊薄)(元)",
-            "must": "Y",
-            "name": "diluted_eps"
-        },
-        {
-            "column": "DILUTED_ROE",
-            "data_type": "float",
-            "desc": "净资产收益率(摊薄)(%)",
-            "must": "Y",
-            "name": "diluted_roe"
-        },
-        {
-            "column": "YOY_NET_PROFIT",
-            "data_type": "float",
-            "desc": "去年同期修正后净利润",
-            "must": "Y",
-            "name": "yoy_net_profit"
-        },
-        {
-            "column": "BPS",
-            "data_type": "float",
-            "desc": "每股净资产",
-            "must": "Y",
-            "name": "bps"
-        },
-        {
-            "column": "YOY_SALES",
-            "data_type": "float",
-            "desc": "同比增长率:营业收入",
-            "must": "N",
-            "name": "yoy_sales"
-        },
-        {
-            "column": "YOY_OP",
-            "data_type": "float",
-            "desc": "同比增长率:营业利润",
-            "must": "N",
-            "name": "yoy_op"
-        },
-        {
-            "column": "YOY_TP",
-            "data_type": "float",
-            "desc": "同比增长率:利润总额",
-            "must": "N",
-            "name": "yoy_tp"
-        },
-        {
-            "column": "YOY_DEDU_NP",
-            "data_type": "float",
-            "desc": "同比增长率:归属母公司股东的净利润",
-            "must": "N",
-            "name": "yoy_dedu_np"
-        },
-        {
-            "column": "YOY_EPS",
-            "data_type": "float",
-            "desc": "同比增长率:基本每股收益",
-            "must": "N",
-            "name": "yoy_eps"
-        },
-        {
-            "column": "YOY_ROE",
-            "data_type": "float",
-            "desc": "同比增减:加权平均净资产收益率",
-            "must": "N",
-            "name": "yoy_roe"
-        },
-        {
-            "column": "GROWTH_ASSETS",
-            "data_type": "float",
-            "desc": "比年初增长率:总资产",
-            "must": "N",
-            "name": "growth_assets"
-        },
-        {
-            "column": "YOY_EQUITY",
-            "data_type": "float",
-            "desc": "比年初增长率:归属母公司的股东权益",
-            "must": "N",
-            "name": "yoy_equity"
-        },
-        {
-            "column": "GROWTH_BPS",
-            "data_type": "float",
-            "desc": "比年初增长率:归属于母公司股东的每股净资产",
-            "must": "N",
-            "name": "growth_bps"
-        },
-        {
-            "column": "OR_LAST_YEAR",
-            "data_type": "float",
-            "desc": "去年同期营业收入",
-            "must": "N",
-            "name": "or_last_year"
-        },
-        {
-            "column": "OP_LAST_YEAR",
-            "data_type": "float",
-            "desc": "去年同期营业利润",
-            "must": "N",
-            "name": "op_last_year"
-        },
-        {
-            "column": "TP_LAST_YEAR",
-            "data_type": "float",
-            "desc": "去年同期利润总额",
-            "must": "N",
-            "name": "tp_last_year"
-        },
-        {
-            "column": "NP_LAST_YEAR",
-            "data_type": "float",
-            "desc": "去年同期净利润",
-            "must": "N",
-            "name": "np_last_year"
-        },
-        {
-            "column": "EPS_LAST_YEAR",
-            "data_type": "float",
-            "desc": "去年同期每股收益",
-            "must": "N",
-            "name": "eps_last_year"
-        },
-        {
-            "column": "OPEN_NET_ASSETS",
-            "data_type": "float",
-            "desc": "期初净资产",
-            "must": "N",
-            "name": "open_net_assets"
-        },
-        {
-            "column": "OPEN_BPS",
-            "data_type": "float",
-            "desc": "期初每股净资产",
-            "must": "N",
-            "name": "open_bps"
-        },
-        {
-            "column": "PERF_SUMMARY",
-            "data_type": "str",
-            "desc": "业绩简要说明",
-            "must": "Y",
-            "name": "perf_summary"
-        },
-        {
-            "column": "IS_AUDIT",
-            "data_type": "int",
-            "desc": "是否审计： 1是 0否",
-            "must": "N",
-            "name": "is_audit"
-        },
-        {
-            "column": "REMARK",
-            "data_type": "str",
-            "desc": "备注",
-            "must": "N",
-            "name": "remark"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 16,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            16,
-            "财务数据"
-        ],
-        [
-            46,
-            "业绩快报"
-        ]
+    [
+      16,
+      "财务数据"
     ],
-    "title": "业绩快报",
-    "validations": [
-        {
-            "message": "ts_code,ann_date至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "ann_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "period",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      46,
+      "业绩快报"
     ]
+  ],
+  "title": "业绩快报",
+  "validations": [
+    {
+      "message": "ts_code,ann_date至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "ann_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "period",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

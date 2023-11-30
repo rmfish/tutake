@@ -1,140 +1,140 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取上市公司定期财务审计意见数据",
-    "id": 80,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "N",
-            "name": "period"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取上市公司定期财务审计意见数据",
+  "id": 80,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "N",
+      "name": "period"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 500,
+  "is_ready": null,
+  "name": "fina_audit",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "AUDIT_RESULT",
+      "data_type": "str",
+      "desc": "审计结果",
+      "must": "Y",
+      "name": "audit_result"
+    },
+    {
+      "column": "AUDIT_FEES",
+      "data_type": "float",
+      "desc": "审计总费用（元）",
+      "must": "N",
+      "name": "audit_fees"
+    },
+    {
+      "column": "AUDIT_AGENCY",
+      "data_type": "str",
+      "desc": "会计事务所",
+      "must": "Y",
+      "name": "audit_agency"
+    },
+    {
+      "column": "AUDIT_SIGN",
+      "data_type": "str",
+      "desc": "签字会计师",
+      "must": "Y",
+      "name": "audit_sign"
+    }
+  ],
+  "parent_id": 16,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 500,
-    "is_ready": null,
-    "name": "fina_audit",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "AUDIT_RESULT",
-            "data_type": "str",
-            "desc": "审计结果",
-            "must": "Y",
-            "name": "audit_result"
-        },
-        {
-            "column": "AUDIT_FEES",
-            "data_type": "float",
-            "desc": "审计总费用（元）",
-            "must": "N",
-            "name": "audit_fees"
-        },
-        {
-            "column": "AUDIT_AGENCY",
-            "data_type": "str",
-            "desc": "会计事务所",
-            "must": "Y",
-            "name": "audit_agency"
-        },
-        {
-            "column": "AUDIT_SIGN",
-            "data_type": "str",
-            "desc": "签字会计师",
-            "must": "Y",
-            "name": "audit_sign"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 16,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            16,
-            "财务数据"
-        ],
-        [
-            80,
-            "财务审计意见"
-        ]
+    [
+      16,
+      "财务数据"
     ],
-    "title": "财务审计意见",
-    "validations": [
-        {
-            "name": "ts_code",
-            "trigger": [
-                {
-                    "name": "end_date",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                }
-            ],
-            "validator": "required"
-        }
+    [
+      80,
+      "财务审计意见"
     ]
+  ],
+  "title": "财务审计意见",
+  "validations": [
+    {
+      "name": "ts_code",
+      "trigger": [
+        {
+          "name": "end_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required"
+    }
+  ]
 }

@@ -1,307 +1,307 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取可转债基本信息",
-    "id": 185,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "转债代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "N",
-            "name": "list_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "上市地点",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取可转债基本信息",
+  "id": 185,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "转债代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "N",
+      "name": "list_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "上市地点",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "cb_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "转债代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "BOND_FULL_NAME",
+      "data_type": "str",
+      "desc": "转债名称",
+      "must": "Y",
+      "name": "bond_full_name"
+    },
+    {
+      "column": "BOND_SHORT_NAME",
+      "data_type": "str",
+      "desc": "转债简称",
+      "must": "Y",
+      "name": "bond_short_name"
+    },
+    {
+      "column": "CB_CODE",
+      "data_type": "str",
+      "desc": "转股申报代码",
+      "must": "Y",
+      "name": "cb_code"
+    },
+    {
+      "column": "STK_CODE",
+      "data_type": "str",
+      "desc": "正股代码",
+      "must": "Y",
+      "name": "stk_code"
+    },
+    {
+      "column": "STK_SHORT_NAME",
+      "data_type": "str",
+      "desc": "正股简称",
+      "must": "Y",
+      "name": "stk_short_name"
+    },
+    {
+      "column": "MATURITY",
+      "data_type": "float",
+      "desc": "发行期限（年）",
+      "must": "Y",
+      "name": "maturity"
+    },
+    {
+      "column": "PAR",
+      "data_type": "float",
+      "desc": "面值",
+      "must": "Y",
+      "name": "par"
+    },
+    {
+      "column": "ISSUE_PRICE",
+      "data_type": "float",
+      "desc": "发行价格",
+      "must": "Y",
+      "name": "issue_price"
+    },
+    {
+      "column": "ISSUE_SIZE",
+      "data_type": "float",
+      "desc": "发行总额（元）",
+      "must": "Y",
+      "name": "issue_size"
+    },
+    {
+      "column": "REMAIN_SIZE",
+      "data_type": "float",
+      "desc": "债券余额（元）",
+      "must": "Y",
+      "name": "remain_size"
+    },
+    {
+      "column": "VALUE_DATE",
+      "data_type": "str",
+      "desc": "起息日期",
+      "must": "Y",
+      "name": "value_date"
+    },
+    {
+      "column": "MATURITY_DATE",
+      "data_type": "str",
+      "desc": "到期日期",
+      "must": "Y",
+      "name": "maturity_date"
+    },
+    {
+      "column": "RATE_TYPE",
+      "data_type": "str",
+      "desc": "利率类型",
+      "must": "Y",
+      "name": "rate_type"
+    },
+    {
+      "column": "COUPON_RATE",
+      "data_type": "float",
+      "desc": "票面利率（%）",
+      "must": "Y",
+      "name": "coupon_rate"
+    },
+    {
+      "column": "ADD_RATE",
+      "data_type": "float",
+      "desc": "补偿利率（%）",
+      "must": "Y",
+      "name": "add_rate"
+    },
+    {
+      "column": "PAY_PER_YEAR",
+      "data_type": "int",
+      "desc": "年付息次数",
+      "must": "Y",
+      "name": "pay_per_year"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "DELIST_DATE",
+      "data_type": "str",
+      "desc": "摘牌日",
+      "must": "Y",
+      "name": "delist_date"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "上市地点",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "CONV_START_DATE",
+      "data_type": "str",
+      "desc": "转股起始日",
+      "must": "Y",
+      "name": "conv_start_date"
+    },
+    {
+      "column": "CONV_END_DATE",
+      "data_type": "str",
+      "desc": "转股截止日",
+      "must": "Y",
+      "name": "conv_end_date"
+    },
+    {
+      "column": "FIRST_CONV_PRICE",
+      "data_type": "float",
+      "desc": "初始转股价",
+      "must": "Y",
+      "name": "first_conv_price"
+    },
+    {
+      "column": "CONV_PRICE",
+      "data_type": "float",
+      "desc": "最新转股价",
+      "must": "Y",
+      "name": "conv_price"
+    },
+    {
+      "column": "RATE_CLAUSE",
+      "data_type": "str",
+      "desc": "利率说明",
+      "must": "Y",
+      "name": "rate_clause"
+    },
+    {
+      "column": "PUT_CLAUSE",
+      "data_type": "str",
+      "desc": "赎回条款",
+      "must": "N",
+      "name": "put_clause"
+    },
+    {
+      "column": "MATURITY_PUT_PRICE",
+      "data_type": "float",
+      "desc": "到期赎回价格(含税)",
+      "must": "N",
+      "name": "maturity_put_price"
+    },
+    {
+      "column": "CALL_CLAUSE",
+      "data_type": "str",
+      "desc": "回售条款",
+      "must": "N",
+      "name": "call_clause"
+    },
+    {
+      "column": "RESET_CLAUSE",
+      "data_type": "str",
+      "desc": "特别向下修正条款",
+      "must": "N",
+      "name": "reset_clause"
+    },
+    {
+      "column": "CONV_CLAUSE",
+      "data_type": "str",
+      "desc": "转股条款",
+      "must": "N",
+      "name": "conv_clause"
+    },
+    {
+      "column": "GUARANTOR",
+      "data_type": "str",
+      "desc": "担保人",
+      "must": "N",
+      "name": "guarantor"
+    },
+    {
+      "column": "GUARANTEE_TYPE",
+      "data_type": "str",
+      "desc": "担保方式",
+      "must": "N",
+      "name": "guarantee_type"
+    },
+    {
+      "column": "ISSUE_RATING",
+      "data_type": "str",
+      "desc": "发行信用等级",
+      "must": "N",
+      "name": "issue_rating"
+    },
+    {
+      "column": "NEWEST_RATING",
+      "data_type": "str",
+      "desc": "最新信用等级",
+      "must": "N",
+      "name": "newest_rating"
+    },
+    {
+      "column": "RATING_COMP",
+      "data_type": "str",
+      "desc": "最新评级机构",
+      "must": "N",
+      "name": "rating_comp"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "cb_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "转债代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "BOND_FULL_NAME",
-            "data_type": "str",
-            "desc": "转债名称",
-            "must": "Y",
-            "name": "bond_full_name"
-        },
-        {
-            "column": "BOND_SHORT_NAME",
-            "data_type": "str",
-            "desc": "转债简称",
-            "must": "Y",
-            "name": "bond_short_name"
-        },
-        {
-            "column": "CB_CODE",
-            "data_type": "str",
-            "desc": "转股申报代码",
-            "must": "Y",
-            "name": "cb_code"
-        },
-        {
-            "column": "STK_CODE",
-            "data_type": "str",
-            "desc": "正股代码",
-            "must": "Y",
-            "name": "stk_code"
-        },
-        {
-            "column": "STK_SHORT_NAME",
-            "data_type": "str",
-            "desc": "正股简称",
-            "must": "Y",
-            "name": "stk_short_name"
-        },
-        {
-            "column": "MATURITY",
-            "data_type": "float",
-            "desc": "发行期限（年）",
-            "must": "Y",
-            "name": "maturity"
-        },
-        {
-            "column": "PAR",
-            "data_type": "float",
-            "desc": "面值",
-            "must": "Y",
-            "name": "par"
-        },
-        {
-            "column": "ISSUE_PRICE",
-            "data_type": "float",
-            "desc": "发行价格",
-            "must": "Y",
-            "name": "issue_price"
-        },
-        {
-            "column": "ISSUE_SIZE",
-            "data_type": "float",
-            "desc": "发行总额（元）",
-            "must": "Y",
-            "name": "issue_size"
-        },
-        {
-            "column": "REMAIN_SIZE",
-            "data_type": "float",
-            "desc": "债券余额（元）",
-            "must": "Y",
-            "name": "remain_size"
-        },
-        {
-            "column": "VALUE_DATE",
-            "data_type": "str",
-            "desc": "起息日期",
-            "must": "Y",
-            "name": "value_date"
-        },
-        {
-            "column": "MATURITY_DATE",
-            "data_type": "str",
-            "desc": "到期日期",
-            "must": "Y",
-            "name": "maturity_date"
-        },
-        {
-            "column": "RATE_TYPE",
-            "data_type": "str",
-            "desc": "利率类型",
-            "must": "Y",
-            "name": "rate_type"
-        },
-        {
-            "column": "COUPON_RATE",
-            "data_type": "float",
-            "desc": "票面利率（%）",
-            "must": "Y",
-            "name": "coupon_rate"
-        },
-        {
-            "column": "ADD_RATE",
-            "data_type": "float",
-            "desc": "补偿利率（%）",
-            "must": "Y",
-            "name": "add_rate"
-        },
-        {
-            "column": "PAY_PER_YEAR",
-            "data_type": "int",
-            "desc": "年付息次数",
-            "must": "Y",
-            "name": "pay_per_year"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "DELIST_DATE",
-            "data_type": "str",
-            "desc": "摘牌日",
-            "must": "Y",
-            "name": "delist_date"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "上市地点",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "CONV_START_DATE",
-            "data_type": "str",
-            "desc": "转股起始日",
-            "must": "Y",
-            "name": "conv_start_date"
-        },
-        {
-            "column": "CONV_END_DATE",
-            "data_type": "str",
-            "desc": "转股截止日",
-            "must": "Y",
-            "name": "conv_end_date"
-        },
-        {
-            "column": "FIRST_CONV_PRICE",
-            "data_type": "float",
-            "desc": "初始转股价",
-            "must": "Y",
-            "name": "first_conv_price"
-        },
-        {
-            "column": "CONV_PRICE",
-            "data_type": "float",
-            "desc": "最新转股价",
-            "must": "Y",
-            "name": "conv_price"
-        },
-        {
-            "column": "RATE_CLAUSE",
-            "data_type": "str",
-            "desc": "利率说明",
-            "must": "Y",
-            "name": "rate_clause"
-        },
-        {
-            "column": "PUT_CLAUSE",
-            "data_type": "str",
-            "desc": "赎回条款",
-            "must": "N",
-            "name": "put_clause"
-        },
-        {
-            "column": "MATURITY_PUT_PRICE",
-            "data_type": "float",
-            "desc": "到期赎回价格(含税)",
-            "must": "N",
-            "name": "maturity_put_price"
-        },
-        {
-            "column": "CALL_CLAUSE",
-            "data_type": "str",
-            "desc": "回售条款",
-            "must": "N",
-            "name": "call_clause"
-        },
-        {
-            "column": "RESET_CLAUSE",
-            "data_type": "str",
-            "desc": "特别向下修正条款",
-            "must": "N",
-            "name": "reset_clause"
-        },
-        {
-            "column": "CONV_CLAUSE",
-            "data_type": "str",
-            "desc": "转股条款",
-            "must": "N",
-            "name": "conv_clause"
-        },
-        {
-            "column": "GUARANTOR",
-            "data_type": "str",
-            "desc": "担保人",
-            "must": "N",
-            "name": "guarantor"
-        },
-        {
-            "column": "GUARANTEE_TYPE",
-            "data_type": "str",
-            "desc": "担保方式",
-            "must": "N",
-            "name": "guarantee_type"
-        },
-        {
-            "column": "ISSUE_RATING",
-            "data_type": "str",
-            "desc": "发行信用等级",
-            "must": "N",
-            "name": "issue_rating"
-        },
-        {
-            "column": "NEWEST_RATING",
-            "data_type": "str",
-            "desc": "最新信用等级",
-            "must": "N",
-            "name": "newest_rating"
-        },
-        {
-            "column": "RATING_COMP",
-            "data_type": "str",
-            "desc": "最新评级机构",
-            "must": "N",
-            "name": "rating_comp"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            185,
-            "可转债基础信息"
-        ]
-    ],
-    "title": "可转债基础信息",
-    "validations": []
+    [
+      185,
+      "可转债基础信息"
+    ]
+  ],
+  "title": "可转债基础信息",
+  "validations": []
 }

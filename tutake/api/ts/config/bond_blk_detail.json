@@ -1,123 +1,123 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取沪深交易所债券大宗交易数据，目前只有深交所的大宗交易明细，上交所明细已经包含在大宗交易接口里，未单独罗列。",
-    "id": 272,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "债券代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "",
-            "must": "N",
-            "name": "offset"
-        },
-        {
-            "data_type": "str",
-            "desc": "",
-            "must": "N",
-            "name": "limit"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取沪深交易所债券大宗交易数据，目前只有深交所的大宗交易明细，上交所明细已经包含在大宗交易接口里，未单独罗列。",
+  "id": 272,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "债券代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "str",
+      "desc": "",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "is_ready": null,
+  "name": "bond_blk_detail",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "债券代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "债券名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "PRICE",
+      "data_type": "float",
+      "desc": "成交价（元）",
+      "must": "Y",
+      "name": "price"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交数量（万股/万份/万张/万手）",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "成交金额（万元）",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "BUY_DP",
+      "data_type": "str",
+      "desc": "买方营业部",
+      "must": "Y",
+      "name": "buy_dp"
+    },
+    {
+      "column": "SELL_DP",
+      "data_type": "str",
+      "desc": "卖方营业部",
+      "must": "Y",
+      "name": "sell_dp"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "bond_blk_detail",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "债券代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "债券名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "PRICE",
-            "data_type": "float",
-            "desc": "成交价（元）",
-            "must": "Y",
-            "name": "price"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交数量（万股/万份/万张/万手）",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "成交金额（万元）",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "BUY_DP",
-            "data_type": "str",
-            "desc": "买方营业部",
-            "must": "Y",
-            "name": "buy_dp"
-        },
-        {
-            "column": "SELL_DP",
-            "data_type": "str",
-            "desc": "卖方营业部",
-            "must": "Y",
-            "name": "sell_dp"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            272,
-            "大宗交易明细"
-        ]
-    ],
-    "title": "大宗交易明细",
-    "validations": []
+    [
+      272,
+      "大宗交易明细"
+    ]
+  ],
+  "title": "大宗交易明细",
+  "validations": []
 }

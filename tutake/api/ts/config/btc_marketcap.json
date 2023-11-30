@@ -1,69 +1,69 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "",
-    "id": 76,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "开始时间",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束时间",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 76,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "开始时间",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束时间",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "btc_marketcap",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "date",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "marketcap",
+      "data_type": "float",
+      "desc": "市值",
+      "must": "Y",
+      "name": "marketcap"
+    }
+  ],
+  "parent_id": 52,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "btc_marketcap",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "date",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "marketcap",
-            "data_type": "float",
-            "desc": "市值",
-            "must": "Y",
-            "name": "marketcap"
-        }
+    [
+      52,
+      "行情数据"
     ],
-    "parent_id": 52,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            52,
-            "行情数据"
-        ],
-        [
-            76,
-            "比特币每日市值"
-        ]
-    ],
-    "title": "比特币每日市值",
-    "validations": []
+    [
+      76,
+      "比特币每日市值"
+    ]
+  ],
+  "title": "比特币每日市值",
+  "validations": []
 }

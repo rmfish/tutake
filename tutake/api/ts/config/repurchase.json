@@ -1,149 +1,149 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取上市公司回购股票数据,数据开始于2011年，每日定时更新",
-    "id": 124,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取上市公司回购股票数据,数据开始于2011年，每日定时更新",
+  "id": 124,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "repurchase",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "截止日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "PROC",
+      "data_type": "str",
+      "desc": "进度",
+      "must": "Y",
+      "name": "proc"
+    },
+    {
+      "column": "EXP_DATE",
+      "data_type": "str",
+      "desc": "过期日期",
+      "must": "Y",
+      "name": "exp_date"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "回购数量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "回购金额",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "HIGH_LIMIT",
+      "data_type": "float",
+      "desc": "回购最高价",
+      "must": "Y",
+      "name": "high_limit"
+    },
+    {
+      "column": "LOW_LIMIT",
+      "data_type": "float",
+      "desc": "回购最低价",
+      "must": "Y",
+      "name": "low_limit"
+    },
+    {
+      "column": "REPO_GOAL",
+      "data_type": "str",
+      "desc": "回购目的",
+      "must": "N",
+      "name": "repo_goal"
+    },
+    {
+      "column": "UPDATE_FLAG",
+      "data_type": "str",
+      "desc": "更新标识",
+      "must": "N",
+      "name": "update_flag"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "repurchase",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "截止日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "PROC",
-            "data_type": "str",
-            "desc": "进度",
-            "must": "Y",
-            "name": "proc"
-        },
-        {
-            "column": "EXP_DATE",
-            "data_type": "str",
-            "desc": "过期日期",
-            "must": "Y",
-            "name": "exp_date"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "回购数量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "回购金额",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "HIGH_LIMIT",
-            "data_type": "float",
-            "desc": "回购最高价",
-            "must": "Y",
-            "name": "high_limit"
-        },
-        {
-            "column": "LOW_LIMIT",
-            "data_type": "float",
-            "desc": "回购最低价",
-            "must": "Y",
-            "name": "low_limit"
-        },
-        {
-            "column": "REPO_GOAL",
-            "data_type": "str",
-            "desc": "回购目的",
-            "must": "N",
-            "name": "repo_goal"
-        },
-        {
-            "column": "UPDATE_FLAG",
-            "data_type": "str",
-            "desc": "更新标识",
-            "must": "N",
-            "name": "update_flag"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            124,
-            "股票回购"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "股票回购",
-    "validations": []
+    [
+      124,
+      "股票回购"
+    ]
+  ],
+  "title": "股票回购",
+  "validations": []
 }

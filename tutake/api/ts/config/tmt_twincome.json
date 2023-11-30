@@ -1,92 +1,92 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取台湾TMT电子产业领域各类产品月度营收数据。数据开始于2011年",
-    "id": 88,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "Y",
-            "name": "item"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取台湾TMT电子产业领域各类产品月度营收数据。数据开始于2011年",
+  "id": 88,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "Y",
+      "name": "item"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "tmt_twincome",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "ITEM_CODE",
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "Y",
+      "name": "item"
+    },
+    {
+      "column": "OP_INCOME",
+      "data_type": "str",
+      "desc": "月度收入",
+      "must": "Y",
+      "name": "op_income"
+    }
+  ],
+  "parent_id": 83,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "tmt_twincome",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "ITEM_CODE",
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "Y",
-            "name": "item"
-        },
-        {
-            "column": "OP_INCOME",
-            "data_type": "str",
-            "desc": "月度收入",
-            "must": "Y",
-            "name": "op_income"
-        }
+    [
+      82,
+      "行业经济"
     ],
-    "parent_id": 83,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            82,
-            "行业经济"
-        ],
-        [
-            83,
-            "TMT行业"
-        ],
-        [
-            88,
-            "台湾电子产业月营收"
-        ]
+    [
+      83,
+      "TMT行业"
     ],
-    "title": "台湾电子产业月营收",
-    "validations": []
+    [
+      88,
+      "台湾电子产业月营收"
+    ]
+  ],
+  "title": "台湾电子产业月营收",
+  "validations": []
 }

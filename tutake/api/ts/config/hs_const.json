@@ -1,96 +1,96 @@
 {
-    "database": null,
-    "default_limit": null,
-    "default_query": "hs_type='SH'",
-    "desc": "获取沪股通、深股通成分数据",
-    "id": 104,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "类型SH沪股通SZ深股通",
-            "must": "Y",
-            "name": "hs_type"
-        },
-        {
-            "data_type": "str",
-            "default": 1,
-            "desc": "是否最新1最新0不是",
-            "must": "N",
-            "name": "is_new"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "default_query": "hs_type='SH'",
+  "desc": "获取沪股通、深股通成分数据",
+  "id": 104,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "类型SH沪股通SZ深股通",
+      "must": "Y",
+      "name": "hs_type"
+    },
+    {
+      "data_type": "str",
+      "default": 1,
+      "desc": "是否最新1最新0不是",
+      "must": "N",
+      "name": "is_new"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": 1,
+  "name": "hs_const",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "HS_TYPE",
+      "data_type": "str",
+      "desc": "沪深港通类型SH沪SZ深",
+      "must": "Y",
+      "name": "hs_type"
+    },
+    {
+      "column": "IN_DATE",
+      "data_type": "str",
+      "desc": "纳入日期",
+      "must": "Y",
+      "name": "in_date"
+    },
+    {
+      "column": "OUT_DATE",
+      "data_type": "str",
+      "desc": "剔除日期",
+      "must": "Y",
+      "name": "out_date"
+    },
+    {
+      "column": "IS_NEW",
+      "data_type": "str",
+      "desc": "是否最新",
+      "must": "Y",
+      "name": "is_new"
+    }
+  ],
+  "parent_id": 24,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": 1,
-    "name": "hs_const",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "HS_TYPE",
-            "data_type": "str",
-            "desc": "沪深港通类型SH沪SZ深",
-            "must": "Y",
-            "name": "hs_type"
-        },
-        {
-            "column": "IN_DATE",
-            "data_type": "str",
-            "desc": "纳入日期",
-            "must": "Y",
-            "name": "in_date"
-        },
-        {
-            "column": "OUT_DATE",
-            "data_type": "str",
-            "desc": "剔除日期",
-            "must": "Y",
-            "name": "out_date"
-        },
-        {
-            "column": "IS_NEW",
-            "data_type": "str",
-            "desc": "是否最新",
-            "must": "Y",
-            "name": "is_new"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 24,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            24,
-            "基础数据"
-        ],
-        [
-            104,
-            "沪深股通成分股"
-        ]
+    [
+      24,
+      "基础数据"
     ],
-    "title": "沪深股通成分股",
-    "validations": []
+    [
+      104,
+      "沪深股通成分股"
+    ]
+  ],
+  "title": "沪深股通成分股",
+  "validations": []
 }

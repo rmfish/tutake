@@ -1,145 +1,145 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取中央结算系统机构席位持股明细，数据覆盖全历史，根据交易所披露时间，当日数据在下一交易日早上9点前完成",
-    "id": 274,
-    "if_exists": null,
-    "integral_required": 5000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "港交所股份代码",
-            "must": "N",
-            "name": "hk_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取中央结算系统机构席位持股明细，数据覆盖全历史，根据交易所披露时间，当日数据在下一交易日早上9点前完成",
+  "id": 274,
+  "if_exists": null,
+  "integral_required": 5000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "港交所股份代码",
+      "must": "N",
+      "name": "hk_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": true,
+  "name": "ccass_hold_detail",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代号",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "COL_PARTICIPANT_ID",
+      "data_type": "str",
+      "desc": "参与者编号",
+      "must": "Y",
+      "name": "col_participant_id"
+    },
+    {
+      "column": "COL_PARTICIPANT_NAME",
+      "data_type": "str",
+      "desc": "机构名称",
+      "must": "Y",
+      "name": "col_participant_name"
+    },
+    {
+      "column": "COL_SHAREHOLDING",
+      "data_type": "str",
+      "desc": "持股量(股)",
+      "must": "Y",
+      "name": "col_shareholding"
+    },
+    {
+      "column": "COL_SHAREHOLDING_PERCENT",
+      "data_type": "str",
+      "desc": "占已发行股份/权证/单位百分比(%)",
+      "must": "Y",
+      "name": "col_shareholding_percent"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": true,
-    "name": "ccass_hold_detail",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代号",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "COL_PARTICIPANT_ID",
-            "data_type": "str",
-            "desc": "参与者编号",
-            "must": "Y",
-            "name": "col_participant_id"
-        },
-        {
-            "column": "COL_PARTICIPANT_NAME",
-            "data_type": "str",
-            "desc": "机构名称",
-            "must": "Y",
-            "name": "col_participant_name"
-        },
-        {
-            "column": "COL_SHAREHOLDING",
-            "data_type": "str",
-            "desc": "持股量(股)",
-            "must": "Y",
-            "name": "col_shareholding"
-        },
-        {
-            "column": "COL_SHAREHOLDING_PERCENT",
-            "data_type": "str",
-            "desc": "占已发行股份/权证/单位百分比(%)",
-            "must": "Y",
-            "name": "col_shareholding_percent"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            274,
-            "中央结算系统持股明细"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "中央结算系统持股明细",
-    "validations": [
-        {
-            "message": "ts_code,trade_date至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      274,
+      "中央结算系统持股明细"
     ]
+  ],
+  "title": "中央结算系统持股明细",
+  "validations": [
+    {
+      "message": "ts_code,trade_date至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

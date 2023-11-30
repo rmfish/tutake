@@ -1,153 +1,153 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取全国电影剧本备案的公示数据",
-    "id": 156,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "公布日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取全国电影剧本备案的公示数据",
+  "id": 156,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "公布日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 120,
+  "is_ready": null,
+  "name": "film_record",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "REC_NO",
+      "data_type": "str",
+      "desc": "备案号",
+      "must": "Y",
+      "name": "rec_no"
+    },
+    {
+      "column": "FILM_NAME",
+      "data_type": "str",
+      "desc": "影片名称",
+      "must": "Y",
+      "name": "film_name"
+    },
+    {
+      "column": "REC_ORG",
+      "data_type": "str",
+      "desc": "备案单位",
+      "must": "Y",
+      "name": "rec_org"
+    },
+    {
+      "column": "SCRIPT_WRITER",
+      "data_type": "str",
+      "desc": "编剧",
+      "must": "Y",
+      "name": "script_writer"
+    },
+    {
+      "column": "REC_RESULT",
+      "data_type": "str",
+      "desc": "备案结果",
+      "must": "Y",
+      "name": "rec_result"
+    },
+    {
+      "column": "REC_AREA",
+      "data_type": "str",
+      "desc": "备案地",
+      "must": "Y",
+      "name": "rec_area"
+    },
+    {
+      "column": "CLASSIFIED",
+      "data_type": "str",
+      "desc": "影片分类",
+      "must": "Y",
+      "name": "classified"
+    },
+    {
+      "column": "DATE_RANGE",
+      "data_type": "str",
+      "desc": "备案日期",
+      "must": "Y",
+      "name": "date_range"
+    },
+    {
+      "column": "ANN_TIME",
+      "data_type": "str",
+      "desc": "备案结果发布时间",
+      "must": "Y",
+      "name": "ann_date"
+    }
+  ],
+  "parent_id": 83,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 120,
-    "is_ready": null,
-    "name": "film_record",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "REC_NO",
-            "data_type": "str",
-            "desc": "备案号",
-            "must": "Y",
-            "name": "rec_no"
-        },
-        {
-            "column": "FILM_NAME",
-            "data_type": "str",
-            "desc": "影片名称",
-            "must": "Y",
-            "name": "film_name"
-        },
-        {
-            "column": "REC_ORG",
-            "data_type": "str",
-            "desc": "备案单位",
-            "must": "Y",
-            "name": "rec_org"
-        },
-        {
-            "column": "SCRIPT_WRITER",
-            "data_type": "str",
-            "desc": "编剧",
-            "must": "Y",
-            "name": "script_writer"
-        },
-        {
-            "column": "REC_RESULT",
-            "data_type": "str",
-            "desc": "备案结果",
-            "must": "Y",
-            "name": "rec_result"
-        },
-        {
-            "column": "REC_AREA",
-            "data_type": "str",
-            "desc": "备案地",
-            "must": "Y",
-            "name": "rec_area"
-        },
-        {
-            "column": "CLASSIFIED",
-            "data_type": "str",
-            "desc": "影片分类",
-            "must": "Y",
-            "name": "classified"
-        },
-        {
-            "column": "DATE_RANGE",
-            "data_type": "str",
-            "desc": "备案日期",
-            "must": "Y",
-            "name": "date_range"
-        },
-        {
-            "column": "ANN_TIME",
-            "data_type": "str",
-            "desc": "备案结果发布时间",
-            "must": "Y",
-            "name": "ann_date"
-        }
+    [
+      82,
+      "行业经济"
     ],
-    "parent_id": 83,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            82,
-            "行业经济"
-        ],
-        [
-            83,
-            "TMT行业"
-        ],
-        [
-            156,
-            "全国电影剧本备案数据"
-        ]
+    [
+      83,
+      "TMT行业"
     ],
-    "title": "全国电影剧本备案数据",
-    "validations": [
-        {
-            "message": "至少输入一个参数",
-            "name": "ann_date",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "start_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "end_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      156,
+      "全国电影剧本备案数据"
     ]
+  ],
+  "title": "全国电影剧本备案数据",
+  "validations": [
+    {
+      "message": "至少输入一个参数",
+      "name": "ann_date",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "start_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "end_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

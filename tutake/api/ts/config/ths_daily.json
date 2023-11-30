@@ -1,179 +1,179 @@
 {
-    "database": null,
-    "default_limit": "3000",
-    "desc": "获取同花顺板块指数行情。",
-    "id": 260,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期（YYYYMMDD格式，下同）",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "3000",
+  "desc": "获取同花顺板块指数行情。",
+  "id": 260,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期（YYYYMMDD格式，下同）",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ths_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS指数代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "收盘点位",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "OPEN",
+      "data_type": "float",
+      "desc": "开盘点位",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "HIGH",
+      "data_type": "float",
+      "desc": "最高点位",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "LOW",
+      "data_type": "float",
+      "desc": "最低点位",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "PRE_CLOSE",
+      "data_type": "float",
+      "desc": "昨日收盘点",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "AVG_PRICE",
+      "data_type": "float",
+      "desc": "平均点位",
+      "must": "Y",
+      "name": "avg_price"
+    },
+    {
+      "column": "CHANGE",
+      "data_type": "float",
+      "desc": "涨跌点位",
+      "must": "Y",
+      "name": "change"
+    },
+    {
+      "column": "PCT_CHANGE",
+      "data_type": "float",
+      "desc": "涨跌幅",
+      "must": "Y",
+      "name": "pct_change"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "TURNOVER_RATE",
+      "data_type": "float",
+      "desc": "换手率",
+      "must": "Y",
+      "name": "turnover_rate"
+    },
+    {
+      "column": "TOTAL_MV",
+      "data_type": "float",
+      "desc": "总市值",
+      "must": "N",
+      "name": "total_mv"
+    },
+    {
+      "column": "FLOAT_MV",
+      "data_type": "float",
+      "desc": "流通市值",
+      "must": "N",
+      "name": "float_mv"
+    },
+    {
+      "column": "PE_TTM",
+      "data_type": "float",
+      "desc": "PE TTM",
+      "must": "N",
+      "name": "pe_ttm"
+    },
+    {
+      "column": "PB_MRQ",
+      "data_type": "float",
+      "desc": "PB MRQ",
+      "must": "N",
+      "name": "pb_mrq"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "ths_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS指数代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "收盘点位",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "OPEN",
-            "data_type": "float",
-            "desc": "开盘点位",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "HIGH",
-            "data_type": "float",
-            "desc": "最高点位",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "LOW",
-            "data_type": "float",
-            "desc": "最低点位",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "PRE_CLOSE",
-            "data_type": "float",
-            "desc": "昨日收盘点",
-            "must": "Y",
-            "name": "pre_close"
-        },
-        {
-            "column": "AVG_PRICE",
-            "data_type": "float",
-            "desc": "平均点位",
-            "must": "Y",
-            "name": "avg_price"
-        },
-        {
-            "column": "CHANGE",
-            "data_type": "float",
-            "desc": "涨跌点位",
-            "must": "Y",
-            "name": "change"
-        },
-        {
-            "column": "PCT_CHANGE",
-            "data_type": "float",
-            "desc": "涨跌幅",
-            "must": "Y",
-            "name": "pct_change"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "TURNOVER_RATE",
-            "data_type": "float",
-            "desc": "换手率",
-            "must": "Y",
-            "name": "turnover_rate"
-        },
-        {
-            "column": "TOTAL_MV",
-            "data_type": "float",
-            "desc": "总市值",
-            "must": "N",
-            "name": "total_mv"
-        },
-        {
-            "column": "FLOAT_MV",
-            "data_type": "float",
-            "desc": "流通市值",
-            "must": "N",
-            "name": "float_mv"
-        },
-        {
-            "column": "PE_TTM",
-            "data_type": "float",
-            "desc": "PE TTM",
-            "must": "N",
-            "name": "pe_ttm"
-        },
-        {
-            "column": "PB_MRQ",
-            "data_type": "float",
-            "desc": "PB MRQ",
-            "must": "N",
-            "name": "pb_mrq"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            260,
-            "同花顺概念和行业指数行情"
-        ]
-    ],
-    "title": "同花顺概念和行业指数行情",
-    "validations": []
+    [
+      260,
+      "同花顺概念和行业指数行情"
+    ]
+  ],
+  "title": "同花顺概念和行业指数行情",
+  "validations": []
 }

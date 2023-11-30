@@ -1,211 +1,211 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "获取仓单日报数据，了解各仓库/厂库的仓单变化，数据开始月2006年1月",
-    "id": 140,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "N",
-            "name": "symbol"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所代码",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "获取仓单日报数据，了解各仓库/厂库的仓单变化，数据开始月2006年1月",
+  "id": 140,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "N",
+      "name": "symbol"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所代码",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 1000,
+  "is_ready": null,
+  "name": "fut_wsr",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "FUT_CODE",
+      "data_type": "str",
+      "desc": "产品代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "FUT_NAME",
+      "data_type": "str",
+      "desc": "产品名称",
+      "must": "Y",
+      "name": "fut_name"
+    },
+    {
+      "column": "WAREHOUSE",
+      "data_type": "str",
+      "desc": "仓库名称",
+      "must": "Y",
+      "name": "warehouse"
+    },
+    {
+      "column": "WH_ID",
+      "data_type": "str",
+      "desc": "仓库编号",
+      "must": "N",
+      "name": "wh_id"
+    },
+    {
+      "column": "PRE_VOL",
+      "data_type": "int",
+      "desc": "昨日仓单量",
+      "must": "Y",
+      "name": "pre_vol"
+    },
+    {
+      "column": "VOL",
+      "data_type": "int",
+      "desc": "今日仓单量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "VOL_CHG",
+      "data_type": "int",
+      "desc": "增减量",
+      "must": "Y",
+      "name": "vol_chg"
+    },
+    {
+      "column": "AREA",
+      "data_type": "str",
+      "desc": "地区",
+      "must": "N",
+      "name": "area"
+    },
+    {
+      "column": "YEAR",
+      "data_type": "str",
+      "desc": "年度",
+      "must": "N",
+      "name": "year"
+    },
+    {
+      "column": "GRADE",
+      "data_type": "str",
+      "desc": "等级",
+      "must": "N",
+      "name": "grade"
+    },
+    {
+      "column": "BRAND",
+      "data_type": "str",
+      "desc": "品牌",
+      "must": "N",
+      "name": "brand"
+    },
+    {
+      "column": "PLACE",
+      "data_type": "str",
+      "desc": "产地",
+      "must": "N",
+      "name": "place"
+    },
+    {
+      "column": "PD",
+      "data_type": "int",
+      "desc": "升贴水",
+      "must": "N",
+      "name": "pd"
+    },
+    {
+      "column": "IS_CT",
+      "data_type": "str",
+      "desc": "是否折算仓单",
+      "must": "N",
+      "name": "is_ct"
+    },
+    {
+      "column": "UNIT",
+      "data_type": "str",
+      "desc": "单位",
+      "must": "Y",
+      "name": "unit"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "N",
+      "name": "exchange"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 1000,
-    "is_ready": null,
-    "name": "fut_wsr",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "FUT_CODE",
-            "data_type": "str",
-            "desc": "产品代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "FUT_NAME",
-            "data_type": "str",
-            "desc": "产品名称",
-            "must": "Y",
-            "name": "fut_name"
-        },
-        {
-            "column": "WAREHOUSE",
-            "data_type": "str",
-            "desc": "仓库名称",
-            "must": "Y",
-            "name": "warehouse"
-        },
-        {
-            "column": "WH_ID",
-            "data_type": "str",
-            "desc": "仓库编号",
-            "must": "N",
-            "name": "wh_id"
-        },
-        {
-            "column": "PRE_VOL",
-            "data_type": "int",
-            "desc": "昨日仓单量",
-            "must": "Y",
-            "name": "pre_vol"
-        },
-        {
-            "column": "VOL",
-            "data_type": "int",
-            "desc": "今日仓单量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "VOL_CHG",
-            "data_type": "int",
-            "desc": "增减量",
-            "must": "Y",
-            "name": "vol_chg"
-        },
-        {
-            "column": "AREA",
-            "data_type": "str",
-            "desc": "地区",
-            "must": "N",
-            "name": "area"
-        },
-        {
-            "column": "YEAR",
-            "data_type": "str",
-            "desc": "年度",
-            "must": "N",
-            "name": "year"
-        },
-        {
-            "column": "GRADE",
-            "data_type": "str",
-            "desc": "等级",
-            "must": "N",
-            "name": "grade"
-        },
-        {
-            "column": "BRAND",
-            "data_type": "str",
-            "desc": "品牌",
-            "must": "N",
-            "name": "brand"
-        },
-        {
-            "column": "PLACE",
-            "data_type": "str",
-            "desc": "产地",
-            "must": "N",
-            "name": "place"
-        },
-        {
-            "column": "PD",
-            "data_type": "int",
-            "desc": "升贴水",
-            "must": "N",
-            "name": "pd"
-        },
-        {
-            "column": "IS_CT",
-            "data_type": "str",
-            "desc": "是否折算仓单",
-            "must": "N",
-            "name": "is_ct"
-        },
-        {
-            "column": "UNIT",
-            "data_type": "str",
-            "desc": "单位",
-            "must": "Y",
-            "name": "unit"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "N",
-            "name": "exchange"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            140,
-            "仓单日报"
-        ]
-    ],
-    "title": "仓单日报",
-    "validations": [
-        {
-            "message": "trade_date,symbol参数不能都为空",
-            "name": "trade_date",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "symbol",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      140,
+      "仓单日报"
     ]
+  ],
+  "title": "仓单日报",
+  "validations": [
+    {
+      "message": "trade_date,symbol参数不能都为空",
+      "name": "trade_date",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "symbol",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }
