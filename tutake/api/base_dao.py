@@ -1,24 +1,21 @@
 import logging
 import os
-import sqlite3
-import tempfile
 import threading
 import time
 from datetime import datetime
 from operator import and_
-from sqlite3 import Connection
+from pathlib import Path
+from typing import Type
 
 import duckdb
 import numpy as np
 import pandas as pd
-import sqlalchemy
-from pandas import DataFrame
-from pathlib import Path
-from sqlalchemy import text, Column, Integer, PickleType, String, Boolean, DateTime
-from sqlalchemy.orm import load_only, declarative_base, sessionmaker, DeclarativeMeta
 import pyarrow as pa
 import pyarrow.parquet as pq
-from typing import Type
+import sqlalchemy
+from pandas import DataFrame
+from sqlalchemy import text, Column, Integer, PickleType, String, Boolean, DateTime
+from sqlalchemy.orm import load_only, declarative_base, sessionmaker, DeclarativeMeta
 
 from tutake.utils.config import TutakeConfig
 
@@ -425,7 +422,6 @@ class BatchWriter:
             self.shared_resource_lock.acquire()
             conn = self.engine.connect()
             conn.execute(f"""INSERT INTO {self.table} SELECT * FROM read_parquet('{self.parquet_file}')""")
-            conn.execute(f"""FORCE CHECKPOINT;""")
             conn.close()
             self.shared_resource_lock.release()
             self.writer = None

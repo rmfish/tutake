@@ -1,7 +1,7 @@
 import pandas as pd
 import pendulum
 
-from tutake.api.base_dao import TutakeCheckerPoint, checker_logger, BatchWriter
+from tutake.api.base_dao import checker_logger, BatchWriter
 
 
 def _auto_data_repair(self, trade_date, ts_codes):
