@@ -111,20 +111,23 @@ class TushareProcessTask(object):
         return apis
 
     def _do_process(self, tasks, entrypoint="scheduler"):
-        def __process(_job_id, _task) -> ProcessStatus:
+        def __process(_job_id, _task, is_last_task=None) -> ProcessStatus:
             if _task is not None:
-                return _task.process(entrypoint=entrypoint)
+                return _task.process(entrypoint=entrypoint, last_task=is_last_task)
             else:
                 return None
 
         start = time.time()
         status_list = []
         if isinstance(tasks, Task):
-            status_list.append(__process(f"tutake_{tasks.name}", tasks))
+            status_list.append(__process(f"tutake_{tasks.name}", tasks, None))
         elif isinstance(tasks, Sequence):
             for task in tasks:
                 try:
-                    status_list.append(__process(f"tutake_{task.name}", task))
+                    if task == tasks[-1]:
+                        status_list.append(__process(f"tutake_{task.name}", task, True))
+                    else:
+                        status_list.append(__process(f"tutake_{task.name}", task, False))
                 except Exception as err:
                     # self.logger.error(f"Exception with {api} process,err is {err}")
                     continue

@@ -41,7 +41,6 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_trade_cal"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -51,7 +50,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareTradeCal.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareTradeCal)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareTradeCal),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         self.tushare_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
@@ -110,8 +110,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

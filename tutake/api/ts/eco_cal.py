@@ -45,7 +45,6 @@ class EcoCal(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_eco_cal"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -55,7 +54,8 @@ class EcoCal(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareEcoCal.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareEcoCal)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareEcoCal),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['date', 'start_date', 'end_date', 'currency', 'country', 'event', 'is_new', 'limit', 'offset']
         self.tushare_fields = ["date", "time", "currency", "country", "event", "value", "pre_value", "fore_value"]
@@ -134,8 +134,7 @@ class EcoCal(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

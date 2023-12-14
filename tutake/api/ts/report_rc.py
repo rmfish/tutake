@@ -60,7 +60,6 @@ class ReportRc(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_report_rc"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -70,7 +69,8 @@ class ReportRc(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareReportRc.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareReportRc)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareReportRc),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['ts_code', 'report_date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -232,8 +232,7 @@ class ReportRc(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

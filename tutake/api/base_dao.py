@@ -381,10 +381,13 @@ class Records:
                     self.fields = records.fields
                 self.items = self.items + records.items
 
+    def __str__(self):
+        return self.data_frame().__str__()
+
 
 class BatchWriter:
 
-    def __init__(self, engine, table: str, schema, database_dir):
+    def __init__(self, engine, table: str, schema, database_dir=None):
         self.writer = None
         self.engine = engine
         self.table = table
@@ -402,11 +405,12 @@ class BatchWriter:
         return self.writer
 
     def start(self):
-        self._init_writer()
-        conn = self.engine.connect()
-        result = conn.execute(f"""Select max(id) from {self.table}""").fetchone()
-        if result is not None and result[0] is not None:
-            self.max_id = int(result[0])
+        if self.writer is None:
+            self._init_writer()
+            conn = self.engine.connect()
+            result = conn.execute(f"""Select max(id) from {self.table}""").fetchone()
+            if result is not None and result[0] is not None:
+                self.max_id = int(result[0])
 
     def rollback(self):
         if self.writer:
@@ -438,11 +442,18 @@ class BatchWriter:
             data = records
         else:
             return
+
+        self.start()
         data['id'] = range(self.max_id, self.max_id + len(data))
         data = data.reindex(columns=['id'] + list(data.columns[:-1]))
         table = pa.Table.from_pandas(df=data, schema=self.schema)
         self.writer.write_table(table)
         self.max_id = self.max_id + len(data)
+
+    def flush(self):
+        conn = self.engine.connect()
+        conn.execute("FORCE CHECKPOINT;")
+        conn.close()
 
     def close(self):
         self.max_id = 0

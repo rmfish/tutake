@@ -46,7 +46,6 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_libor"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -56,7 +55,8 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareLibor.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareLibor)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareLibor),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['date', 'start_date', 'end_date', 'curr_type', 'limit', 'offset']
         self.tushare_fields = ["date", "curr_type", "on", "1w", "1m", "2m", "3m", "6m", "12m"]
@@ -145,8 +145,7 @@ class Libor(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

@@ -43,7 +43,6 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_fund_sales_ratio"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -53,7 +52,8 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundSalesRatio.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareFundSalesRatio)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareFundSalesRatio),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['年份', 'limit', 'offset']
         self.tushare_fields = ["year", "bank", "sec_comp", "fund_comp", "indep_comp", "rests"]
@@ -116,8 +116,7 @@ class FundSalesRatio(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

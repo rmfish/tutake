@@ -283,7 +283,11 @@ class DataProcess:
             logging.exception(err)
         finally:
             writer.close()
+            last_task = kwargs.get("last_task")
+            if last_task is None or last_task is True:
+                writer.flush()
         return status
+
 
     def _inner_process(self, process_params, fetch_and_append, status: ProcessStatus, writer: BatchWriter = None,
                        retry_cnt=0, entrypoint=None):

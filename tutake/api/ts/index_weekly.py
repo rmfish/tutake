@@ -48,7 +48,6 @@ class IndexWeekly(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_index_weekly"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -58,7 +57,8 @@ class IndexWeekly(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexWeekly.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareIndexWeekly)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareIndexWeekly),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -153,8 +153,7 @@ class IndexWeekly(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -206,8 +205,9 @@ if __name__ == '__main__':
     pd.set_option('display.width', 100)
     config = TutakeConfig(project_root())
     pro = ts.pro_api(config.get_tushare_token())
-    print(pro.index_weekly())
+    # print(pro.index_weekly())
 
     api = IndexWeekly(config)
-    print(api.process())    # 同步增量数据
-    print(api.index_weekly())    # 数据查询接口
+    # print(api.process())    # 同步增量数据
+    # print(api.index_weekly())    # 数据查询接口
+    api.check()

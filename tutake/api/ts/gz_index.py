@@ -44,7 +44,6 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
     def __init__(self, config):
         self.table_name = "tushare_gz_index"
         self.database = 'tutake.duckdb'
-        self.database_dir = config.get_tutake_data_dir()
         self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
@@ -54,7 +53,8 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareGzIndex.__table__.create(bind=self.engine, checkfirst=True)
-        self.schema = BaseDao.parquet_schema(TushareGzIndex)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareGzIndex),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = ["date", "d10_rate", "m1_rate", "m3_rate", "m6_rate", "m12_rate", "long_rate"]
@@ -124,8 +124,7 @@ class GzIndex(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append,
-                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """

@@ -30,5 +30,13 @@ def query_parameters_ext(self):
 
 
 def check_ext(self, **kwargs):
+    def repair(self, trade_date, ts_codes, query_records):
+        self.delete_by(trade_date=trade_date)
+        self.writer.add_records(query_records)
+        self.writer.commit()
+        self.writer.flush()
+        self.writer.close()
+
+
     check_by_date(self, self.index_weekly, force_start=kwargs.get("force_start"), default_start='19901218',
-                  date_apply=lambda date: date.add(days=1), print_step=30, diff_repair=None)
+                  date_apply=lambda date: date.add(days=1), print_step=30, diff_repair=repair)

@@ -78,7 +78,7 @@ def check_ext(self, **kwargs):
                 duplicates = db.duplicated('trade_date')
                 print(db[duplicates])
             checker_logger.warning(
-                f"Not equals data. The date is {row['ts_code']}. tushare size is {tushare.size()}, db size is {db.shape[0]}, diff is {diff}")
+                f"Not equals data {self.name}. The date is {row['ts_code']}. tushare size is {tushare.size()}, db size is {db.shape[0]}, diff is {diff}")
             if force_start is None and row['list_date'] is not None:
                 self.checker.error_point(list_date=row['list_date'])
             return
