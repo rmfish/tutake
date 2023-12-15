@@ -27,6 +27,20 @@ Take data from Tushare, respect Tushare!
 数据文件使用了git lfs, 所以先使用git lfs clone数据文件，数据文件在 database 目录（由于Github LFS配额的限制，目前只上传了daily/stock_basic/adj_factor截止到23年12月14日的最新数据，可以满足股票日数据的处理分析了）
 下载好文件后，参考 main.py 执行：
 ```python
+def quick_start():
+    tushare = tt.Tutake().tushare_api()
+    print("========查询股票列表========")
+    print(tushare.stock_basic())
+    print("========查询股票日K数据========")
+    print(tushare.daily())
+    print("========查询股票复权因子========")
+    print(tushare.adj_factor())
+    print("========查询股票000002.SZ后复权日K数据=========")
+    print(tushare.pro_bar(ts_code='000002.SZ', adj='hfq'))
+    print("========使用sql自定义查询：20221230日收盘价大于开盘价的5个股票日K数据=========")
+    print(tushare._daily.sql("select * from {table} where trade_date='20221230' and close>open limit 5"))
+
+
 if __name__ == '__main__':
     # 加载数据,这个会将database中的数据生成数据库文件，执行一次即可，或者database中的数据有更新的再执行即可
     load_data()
@@ -43,7 +57,7 @@ COPY tushare_daily with tushare_daily-2020~2022.parquet
 COPY tushare_daily with tushare_daily-2023~.parquet
 Create tushare_stock_basic with tushare_stock_basic.parquet
 Tutake config file [None] is not exists. use the default configfile. /mnt/d/Develop/projects/Github/tutake/config.yml
-========查询股票数据========
+========查询股票列表========
         ts_code  symbol  name area  ... list_status list_date delist_date is_hs
 0     000001.SZ  000001  平安银行   深圳  ...           L  19910403        None     S
 1     000002.SZ  000002   万科A   深圳  ...           L  19910129        None     S
@@ -58,6 +72,7 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5323  873833.BJ  873833  美心翼申   重庆  ...           L  20231108        None     N
 
 [5324 rows x 15 columns]
+========查询股票日K数据========
         ts_code trade_date   open   high  ...  change  pct_chg       vol      amount
 0     873833.BJ   20231214  14.64  15.31  ...    0.76   5.2270  44108.90   65738.804
 1     873726.BJ   20231214  30.37  31.49  ...    0.14   0.4608  17083.15   52606.482
@@ -72,6 +87,7 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  688121.SH   20231213  23.48  23.57  ...   -0.28  -1.1900   6609.85   15454.148
 
 [6000 rows x 11 columns]
+========查询股票复权因子========
         ts_code trade_date  adj_factor
 0     873833.BJ   20231215       1.000
 1     873726.BJ   20231215       1.000
@@ -86,6 +102,7 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  688150.SH   20231214       1.008
 
 [6000 rows x 3 columns]
+========查询股票000002.SZ后复权日K数据=========
         ts_code trade_date       open  ...  pct_chg         vol        amount
 0     000002.SZ   20231214  1938.7817  ...  -1.3158   611202.34  6.477785e+05
 1     000002.SZ   20231213  1971.4884  ...  -3.3606   865832.43  9.275875e+05
@@ -100,6 +117,7 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  000002.SZ   19980504        NaN  ...      NaN    60605.00  8.786420e+04
 
 [6000 rows x 11 columns]
+========使用sql自定义查询：20221230日收盘价大于开盘价的5个股票日K数据=========
      ts_code trade_date  open  high  ...  change  pct_chg        vol      amount
 0  002198.SZ   20221230  6.39  6.57  ...    0.12   1.8750  101579.12   65646.164
 1  002199.SZ   20221230  6.36  6.43  ...    0.10   1.5898   38684.00   24640.014
