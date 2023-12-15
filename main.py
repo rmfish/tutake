@@ -1,5 +1,35 @@
+import os
+
+import duckdb
+
 import tutake as tt
 
+
+def load_data():
+    con = duckdb.connect('./database/tutake.duckdb')
+    datas = {}
+    for i, j, k in os.walk('./database'):
+        for file in k:
+            if file.endswith('.parquet'):
+                table = os.path.splitext(os.path.basename(file))[0]
+                tokens = table.split("-")
+                name = tokens[0]
+                files = datas.get(name)
+                if files is None:
+                    files = []
+                    datas[name] = files
+                files.append(file)
+    for name, files in datas.items():
+        con.execute(f"DROP TABLE IF EXISTS {name};")
+        for file in files:
+            if file == files[0]:
+                print(f"Create {name} with {file}")
+                con.execute(f"-- CREATE TABLE {name} AS SELECT * FROM read_parquet('{file}');")
+            else:
+                print(f"COPY {name} with {file}")
+                con.execute(f"-- COPY {name} FROM '{file}' (FORMAT PARQUET);")
+        con.execute("FORCE CHECKPOINT;")
+    con.close()
 
 def quick_start():
     tushare = tt.Tutake().tushare_api()
@@ -10,6 +40,18 @@ def quick_start():
     print(tushare.adj_factor())
     print(tushare.pro_bar(ts_code='000002.SZ', adj='hfq'))
     print(tushare._daily.sql("select * from {table} where trade_date='20221230' and close>open limit 5"))
+
+def export():
+    tutake = tt.Tutake("./config.yml").tushare_api()
+    # daily = tutake._daily
+    # daily.export("trade_date<'20000101'",'1990-1999')
+    # daily.export("trade_date>='20000101' and trade_date<'20100101'",'2000~2009')
+    # daily.export("trade_date>='20100101' and trade_date<'20200101'",'2010~2019')
+    # daily.export("trade_date>='20200101' and trade_date<'20230101'",'2020~2022')
+    # daily.export("trade_date>='20230101' and trade_date<'20240101'",'2023~')
+
+    tutake._stock_basic.export()
+    tutake._adj_factor.export()
 
 
 def complete():
@@ -38,8 +80,11 @@ def cron_task():
 
 
 if __name__ == '__main__':
-    # 可以查看这个接口入门
+    # 加载数据,这个会将database中的数据生成数据库文件，执行一次即可，或者database中的数据有更新的再执行即可
+    load_data()
     quick_start()
+    # 可以查看这个接口入门
+    # export()
 
     # 全量的演示代码都在complete接口，但这个接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
     # complete()

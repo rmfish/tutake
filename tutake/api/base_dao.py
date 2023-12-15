@@ -109,6 +109,7 @@ class BaseDao(object):
         self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
         self.time_order = config.get_config("tutake.query.time_order")
         self.checker = DataChecker(self.engine, table_name, session_factory, config)
+        self.config = config
 
     def parquet_type(sqlite_type: str):
         if sqlite_type in ['INT', 'INTEGER', 'TINYINT', 'SMALLINT', 'MEDIUMINT', 'BIGINT', 'UNSIGNED BIG INT', 'INT2',
@@ -135,12 +136,21 @@ class BaseDao(object):
         columns.insert(0, pa.field('id', pa.int64()))
         return pa.schema(columns)
 
-    def export(self, _dir=None):
-        pq_file = f"{self.table_name}.parquet"
+    def export(self, condition=None, name_suffix=None, _dir=None):
+        if name_suffix is None:
+            pq_file = f"{self.table_name}.parquet"
+        else:
+            pq_file = f"{self.table_name}-{name_suffix}.parquet"
+        if _dir is None:
+            _dir = self.config.get_tutake_data_dir()
         if _dir is not None:
             pq_file = pathlib.Path(_dir, pq_file)
+        self.logger.warning(f"Export data of {self.table_name} to {pq_file}")
         conn = self.engine.connect()
-        conn.execute(f"COPY (SELECT * FROM {self.table_name}) TO '{pq_file}' (FORMAT PARQUET);")
+        if condition is None:
+            conn.execute(f"COPY (SELECT * FROM {self.table_name}) TO '{pq_file}' (FORMAT PARQUET);")
+        else:
+            conn.execute(f"COPY (SELECT * FROM {self.table_name} where {condition}) TO '{pq_file}' (FORMAT PARQUET);")
         conn.close()
 
     def columns_meta(self):

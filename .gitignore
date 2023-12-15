@@ -12,3 +12,4 @@ __pycache__/
 run.sh
 tushare_token.py
 docker/docker-config.yml
+*.duckdb

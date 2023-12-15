@@ -232,7 +232,7 @@ class TutakeConfig(object):
             # return "%s/%s" % (Path.home(), '.tutake')
 
     def get_tutake_data_dir(self):
-        return Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data')))
+        return Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('database')))
 
     def _get_default_driver_url(self, path: Path, sub_dir=None):
         if path is None:
