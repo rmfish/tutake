@@ -24,7 +24,7 @@ Take data from Tushare, respect Tushare!
 
 下载数据，使用的参考：
 
-数据文件使用了git lfs, 所以先使用git lfs clone数据文件，数据文件在 ./database 目录
+数据文件使用了git lfs, 所以先使用git lfs clone数据文件，数据文件在 database 目录（由于Github LFS配额的限制，目前只上传了daily/stock_basic/adj_factor截止到23年12月14日的最新数据，可以满足股票日数据的处理分析了）
 下载好文件后，参考 main.py 执行：
 ```python
 if __name__ == '__main__':
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     quick_start()
 ```
 
-现实结构如下：
+显示日志如下，完成了数据库的加载和本地查询：
 ```python
 Create tushare_adj_factor with tushare_adj_factor.parquet
 Create tushare_daily with tushare_daily-1990~1999.parquet
@@ -121,11 +121,11 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，
 目前调试的接口是按照个人需要生成的，还有很多接口没有生成，如果有需要的可以留言，或者阅读代码自行添加。目前的接口基本覆盖了股票、基金、指数、期货相关的接口
 
+由于之前的数据存储使用了sqlite，如果使用了之前的版本代码，可以自行查询将sqlite升级为duckdb的存储，sqlite的版本后续也不会继续维护
+
+
 ## 关于数据
-基本一个接口会有一个数据文件，但是数据文件会比较大，如果有人想直接要这个数据，也可以加Star留言，后续数据稳定了，会发布历史数据供大家一次性下载。同时也计划开发定期增量数据更新的功能(日/周/月/季度/年)，解决大家账号低权限无法下载的问题。
-
-![data.png](data.png)
-
+完整的数据文件会比较大，github的lfs有空间的限制，后续逐步更新上传
 
 ## 计划
 目前距离生产可用性的距离还很远，但是希望能不断优化接近高可用，当然还有更多的功能也会不断增加
