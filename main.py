@@ -35,12 +35,15 @@ def load_data():
 
 def quick_start():
     tushare = tt.Tutake().tushare_api()
-    # tutake = tt.Tutake("./config.yml")
-    print("========查询股票数据========")
+    print("========查询股票列表========")
     print(tushare.stock_basic())
+    print("========查询股票日K数据========")
     print(tushare.daily())
+    print("========查询股票复权因子========")
     print(tushare.adj_factor())
+    print("========查询股票000002.SZ后复权日K数据=========")
     print(tushare.pro_bar(ts_code='000002.SZ', adj='hfq'))
+    print("========使用sql自定义查询：20221230日收盘价大于开盘价的5个股票日K数据=========")
     print(tushare._daily.sql("select * from {table} where trade_date='20221230' and close>open limit 5"))
 
 def export():
