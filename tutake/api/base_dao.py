@@ -95,18 +95,34 @@ class DataChecker:
 
 
 class BaseDao(object):
+    """
+    Class representing a BaseDao.
 
+    Attributes:
+    - engine: The engine used for database connection.
+    - session_factory: The session factory for creating sessions.
+    - entities: The entities used in the database.
+    - database: The name of the database.
+    - table_name: The name of the table.
+    - query_fields: The fields to query.
+    - entity_fields: The fields in the entity.
+    - column_mapping: The mapping between columns and types.
+    - logger: The logger for the class.
+    - time_order: The time order for sorting.
+    - checker: The data checker.
+    - config: The configuration.
+    """
     def __init__(self, engine, session_factory: sessionmaker, entities, database, table_name, query_fields,
                  entity_fields, column_mapping, config: TutakeConfig):
         self.engine = engine
         self.entities = entities
         self.database = database
-        self.session_factory: sessionmaker = session_factory
+        self.session_factory = session_factory
         self.table_name = table_name
         self.query_fields = query_fields
         self.entity_fields = entity_fields
         self.column_mapping = column_mapping
-        self.logger = logging.getLogger('tutake.dao.base.{}'.format(table_name))
+        self.logger = logging.getLogger(f'tutake.dao.base.{table_name}')
         self.time_order = config.get_config("tutake.query.time_order")
         self.checker = DataChecker(self.engine, table_name, session_factory, config)
         self.config = config
@@ -137,6 +153,27 @@ class BaseDao(object):
         return pa.schema(columns)
 
     def export(self, condition=None, name_suffix=None, _dir=None):
+        """
+        Export method exports data from a table to a Parquet file.
+
+        Parameters:
+            condition (str, optional): SQL condition to filter the data before exporting (default: None)
+            name_suffix (str, optional): Suffix to be added to the Parquet file name (default: None)
+            _dir (str, optional): Directory where the Parquet file will be saved (default: None)
+
+        Example usage:
+            export()                                # Exports all data from the table to the default directory with the default file name
+            export(condition="age > 18")            # Exports data from the table where age > 18 to the default directory with the default file name
+            export(name_suffix="backup")            # Exports all data from the table to the default directory with a file name appended with '-backup'
+            export(_dir="/path/to/directory")       # Exports all data from the table to the specified directory with the default file name
+            export(condition="age > 18", _dir="/path/to/directory")   # Exports data from the table where age > 18 to the specified directory with the default file name
+
+        Note:
+            - If name_suffix is not provided, the Parquet file name will be generated based on the table name.
+            - If _dir is not provided, the default directory will be obtained from the configuration.
+            - If _dir is provided, the Parquet file will be saved in the specified directory.
+
+        """
         if name_suffix is None:
             pq_file = f"{self.table_name}.parquet"
         else:
@@ -157,12 +194,45 @@ class BaseDao(object):
         pass
 
     def delete_all(self):
+        """
+        Delete all data from the specified table.
+
+        This method deletes all rows from the table associated with the current instance of the class.
+        It first logs a warning message indicating the table name, then creates a new session using the session factory.
+        Using the session, it executes a query to delete all rows from the table.
+        Finally, it commits the changes made in the session to persist the deletion.
+
+        Note:
+        - Make sure to use this method with caution, as it permanently deletes all data from the table.
+
+        Example:
+            self.delete_all()
+        """
         self.logger.warning("Delete all data of {}".format(self.table_name))
         session = self.session_factory()
         session.query(self.entities).delete()
         session.commit()
 
     def delete_by(self, **kwargs) -> bool:
+        """
+
+        This method is used to delete data from a table in the database based on the given condition(s).
+
+        Parameters:
+            **kwargs (keyword arguments): A dictionary of column names and their corresponding values to specify the condition(s) for deletion.
+
+        Returns:
+            bool: True if deletion is successful, False otherwise.
+
+        Example Usage:
+            # Delete a row from the table 'employees' where the 'id' column is 10
+            delete_by(table_name='employees', id=10)
+
+        Note:
+            - The table name and entity class are obtained from the instance variables of the class.
+            - This method internally uses a session factory and commits the changes made to the database.
+
+        """
         self.logger.warning("Delete data from {} by {}".format(self.table_name, kwargs))
         session = self.session_factory()
         session.query(self.entities).filter_by(**kwargs).delete()
@@ -170,6 +240,21 @@ class BaseDao(object):
         return True
 
     def get_ident(self, ident):
+        """
+        Retrieve a record from the database based on the given ident.
+
+        Parameters:
+        - self: The instance of the class.
+        - ident: The ident of the record to retrieve.
+
+        Returns:
+        - A single record from the database matching the given ident, or None if not found.
+
+        Example:
+        session = self.session_factory()
+        record = session.query(self.entities).get(ident)
+        return record
+        """
         session = self.session_factory()
         return session.query(self.entities).get(ident)
 
@@ -179,6 +264,29 @@ class BaseDao(object):
         return query.commit()
 
     def column_data(self, columns: [], *criteria):
+        """
+        Fetches column data from the specified table using given criteria.
+
+        Parameters:
+            - columns (list[str]): A list of column names to fetch data from.
+            - *criteria (tuple): Optional. Criteria to filter the data. It can include multiple filter conditions.
+
+        Returns:
+            - list[dict]: A list of dictionaries, where each dictionary represents a row of column data. The keys of the dictionaries are the column names, and the values are the corresponding
+        * values for each column.
+
+        Example usage:
+            columns = ['name', 'age', 'email']
+            criteria = ('age > 18', 'email LIKE "%example.com"')
+            data = column_data(columns, *criteria)
+
+            Result:
+            [
+                {'name': 'John', 'age': 25, 'email': 'john@example.com'},
+                {'name': 'Sarah', 'age': 32, 'email': 'sarah@example.com'},
+                ...
+            ]
+        """
         if criteria:
             result = self.session_factory().query(self.entities).filter(*criteria).options(load_only(*columns)).all()
         else:
@@ -199,6 +307,46 @@ class BaseDao(object):
         return self._single_func('*', 'count', condition)
 
     def _single_func(self, column: str, func: str, condition: str = ""):
+        """
+
+        Method: _single_func
+
+        Description:
+        This method performs a SQL query to execute an aggregate function on a specified column in a table. The result of the query is returned.
+
+        Parameters:
+        - column (str): The name of the column on which to execute the aggregate function.
+        - func (str): The type of aggregate function to execute. Supported functions include "COUNT", "SUM", "MIN", "MAX", "AVG", etc.
+        - condition (str): Optional parameter to filter the rows before executing the aggregate function. If not provided, all rows in the table are included in the calculation.
+
+        Returns:
+        - value: The result of the aggregate function.
+
+        Example Usage:
+        ```python
+        result = obj._single_func('quantity', 'SUM', 'product_id = 12345')
+        print(result)
+        ```
+        ```python
+        result = obj._single_func('price', 'AVG')
+        print(result)
+        ```
+
+        ```python
+        result = obj._single_func('name', 'COUNT', 'category = "Books"')
+        print(result)
+        ```
+        ```python
+        result = obj._single_func('quantity', 'MIN')
+        print(result)
+        ```
+
+        Note:
+        - The method requires an active connection to the database.
+        - The column name and function type should be passed as strings.
+        - The condition parameter is optional, and if not provided, the aggregate function will be applied to all rows in the table.
+        - The result of the aggregate function is returned as a single value.
+        """
         with self.engine.connect() as con:
             if condition.strip() == '':
                 sql = 'SELECT {}({}) FROM {}'.format(func, column, self.table_name)

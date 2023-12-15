@@ -60,6 +60,9 @@ class ProcessStatusEnum(OrderedEnum):
 
 
 class ProcessTask:
+    """
+    ProcessTask is a class that represents a process task and provides methods to manage the task's status and progress.
+    """
     def __init__(self, input_params):
         self.input_params = input_params
         self.run_params = None
@@ -121,6 +124,9 @@ class ProcessTask:
 
 
 class ProcessStatus:
+    """
+    The ProcessStatus class represents the status of a process.
+    """
     def __init__(self, name, params):
         self.params = params
         self.name = name
@@ -177,8 +183,15 @@ class ProcessStatus:
 
 class DataProcess:
     """
-    获取保存数据的核心类，用以实现获取数据到保存数据的过程，封装了中间的限流、异常、重试、日志、多线程等的一些处理步骤，每个具体的接口都继承这个类，
-    在每个具体的实现类中实现获取数据和保存的具体操作
+    DataProcess
+
+    This class represents a data processing task. It provides methods for processing data, preparing data for writing, and checking the data.
+
+    Attributes:
+        name (str): The name of the data process.
+        config (Config): The configuration object for the data process.
+        max_repeat (int): The maximum number of times the process can be repeated.
+        forbidden_config (dict): The forbidden configuration for the data process.
     """
 
     def __init__(self, name, config):
@@ -248,6 +261,19 @@ class DataProcess:
         return self._process_by_func(self.prepare_write, self.query_parameters, fetch_and_append, writer, **kwargs)
 
     def _process_by_func(self, prepare_write, query_parameters, fetch_and_append, writer, **kwargs):
+        """
+        Process the data using the provided functions.
+
+        :param prepare_write: The function that prepares the writer before processing.
+        :param query_parameters: The function that retrieves the query parameters.
+        :param fetch_and_append: The function that fetches and appends the data.
+        :param writer: The writer object used to commit the data.
+        :param **kwargs: Additional keyword arguments.
+            - entrypoint: The name of the entrypoint.
+            - last_task: Specifies whether this is the last task.
+
+        :return: The status of the process.
+        """
         entrypoint = kwargs.get("entrypoint")
         if self._forbidden_entrypoint(entrypoint):
             task_logger.warning(f"Ignore process {self.name()}. forbidden by {entrypoint} entrypoint")
@@ -293,6 +319,25 @@ class DataProcess:
 
     def _inner_process(self, process_params, fetch_and_append, status: ProcessStatus, writer: BatchWriter = None,
                        retry_cnt=0, entrypoint=None):
+        """
+        Inner process method used for performing specific tasks.
+
+        Args:
+            self: The object instance.
+            process_params: A list of parameters for the process.
+            fetch_and_append: A function for fetching and appending records.
+            status: An instance of ProcessStatus class representing the current process status.
+            writer: An instance of BatchWriter class for adding records (optional).
+            retry_cnt: An integer representing the retry count (default: 0).
+            entrypoint: A string representing the entry point for the process (default: None).
+
+        Returns:
+            An instance of ProcessStatus class representing the final process status.
+
+        Raises:
+            None.
+
+        """
         if retry_cnt > self.max_repeat:
             # TODO
             status.break_down = True

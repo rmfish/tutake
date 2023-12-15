@@ -18,14 +18,13 @@ Take data from Tushare, respect Tushare!
 
 ## 使用
 
-分成几种场景：  
-1. 有tushare账号且分数超过5000积分的，推荐自己下载数据的使用，具体配置使用，参考 [详细使用说明](https://github.com/rmfish/tutake/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
-2. 没有tushare账号或着分数比较低的，可以下载数据并使用
+该项目主要针对的用户有两种情况：
+1. 如果你有tushare账号且账号积分超过5000，强烈建议你根据自己的需求下载并使用数据。具体的配置和使用指南可以参考我们的 [详细使用说明](https://github.com/rmfish/tutake/wiki/%E8%AF%A6%E7%BB%86%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E)
+2. 对于没有tushare账号或者账号积分较低的用户，你可以选择下载我们提供的数据并进行使用。
 
-下载数据，使用的参考：
-
-数据文件使用了git lfs, 所以先使用git lfs clone数据文件，数据文件在 database 目录（由于Github LFS配额的限制，目前只上传了daily/stock_basic/adj_factor截止到23年12月14日的最新数据，可以满足股票日数据的处理分析了）
-下载好文件后，参考 main.py 执行：
+我们的数据保存在 git lfs中，可以通过 git lfs clone 获取。由于Github LFS的配额限制，目前我们只上传了截止到2023年12月14日的daily/stock_basic/adj_factor等数据，这些数据主要包含股票的日数据处理分析。
+数据文件在项目的 database 目录中，下载后你可以按照以下的指南进行下载和使用。
+首先，运行 main.py，代码如下：
 ```python
 def quick_start():
     tushare = tt.Tutake().tushare_api()
@@ -46,6 +45,8 @@ if __name__ == '__main__':
     load_data()
     quick_start()
 ```
+在执行 main.py 之前，需要通过调用 load_data() 函数来加载 database 目录中的数据生成数据库文件，一般只需要执行一次，除非 database 中的数据有更新再执行即可。
+运行 quick_start() 函数后，就可以进行数据查询了，例如查询股票列表、查询股票日K数据、查询股票复权因子等等。还可以根据需要构建SQL查询语句来进行定制化查询
 
 显示日志如下，完成了数据库的加载和本地查询：
 ```python
@@ -57,6 +58,8 @@ COPY tushare_daily with tushare_daily-2020~2022.parquet
 COPY tushare_daily with tushare_daily-2023~.parquet
 Create tushare_stock_basic with tushare_stock_basic.parquet
 Tutake config file [None] is not exists. use the default configfile. /mnt/d/Develop/projects/Github/tutake/config.yml
+```
+```python
 ========查询股票列表========
         ts_code  symbol  name area  ... list_status list_date delist_date is_hs
 0     000001.SZ  000001  平安银行   深圳  ...           L  19910403        None     S
@@ -72,6 +75,8 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5323  873833.BJ  873833  美心翼申   重庆  ...           L  20231108        None     N
 
 [5324 rows x 15 columns]
+```
+```python
 ========查询股票日K数据========
         ts_code trade_date   open   high  ...  change  pct_chg       vol      amount
 0     873833.BJ   20231214  14.64  15.31  ...    0.76   5.2270  44108.90   65738.804
@@ -87,6 +92,8 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  688121.SH   20231213  23.48  23.57  ...   -0.28  -1.1900   6609.85   15454.148
 
 [6000 rows x 11 columns]
+```
+```python
 ========查询股票复权因子========
         ts_code trade_date  adj_factor
 0     873833.BJ   20231215       1.000
@@ -102,6 +109,8 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  688150.SH   20231214       1.008
 
 [6000 rows x 3 columns]
+```
+```python
 ========查询股票000002.SZ后复权日K数据=========
         ts_code trade_date       open  ...  pct_chg         vol        amount
 0     000002.SZ   20231214  1938.7817  ...  -1.3158   611202.34  6.477785e+05
@@ -117,6 +126,8 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 5999  000002.SZ   19980504        NaN  ...      NaN    60605.00  8.786420e+04
 
 [6000 rows x 11 columns]
+```
+```python
 ========使用sql自定义查询：20221230日收盘价大于开盘价的5个股票日K数据=========
      ts_code trade_date  open  high  ...  change  pct_chg        vol      amount
 0  002198.SZ   20221230  6.39  6.57  ...    0.12   1.8750  101579.12   65646.164
@@ -136,7 +147,7 @@ Tutake config file [None] is not exists. use the default configfile. /mnt/d/Deve
 欢迎提交PR
 
 ## 说明
-因为数据量比较大，全量的数据超过百G，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，
+因为数据量比较大，全量的数据超过数GB，但是tushare有限速限量的各种约束，所以建议使用多个高等级的账号（5000积分以上的账号），工程支持配置多个账号，然后自动适配限流下载，全量数据下载完后，每天的增量数据量很小，通常10分钟内下载完毕，
 目前调试的接口是按照个人需要生成的，还有很多接口没有生成，如果有需要的可以留言，或者阅读代码自行添加。目前的接口基本覆盖了股票、基金、指数、期货相关的接口
 
 由于之前的数据存储使用了sqlite，如果使用了之前的版本代码，可以自行查询将sqlite升级为duckdb的存储，sqlite的版本后续也不会继续维护

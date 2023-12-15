@@ -7,6 +7,22 @@ import tutake as tt
 
 
 def load_data():
+    """
+    Loads data from parquet files into a DuckDB database.
+
+    This method searches for parquet files in the specified directory and creates or copies data into DuckDB tables for each
+    distinct name found in the file names. The method drops existing tables with the same names before creating new ones.
+
+    Example usage:
+    ```
+    load_data()
+    ```
+
+    Before calling this method, make sure to provide the path to the directory containing the parquet files by assigning it to
+    the `dir` variable.
+
+    :return: None
+    """
     dir = "database"
     con = duckdb.connect(str(Path(dir,'tutake.duckdb')))
     datas = {}
@@ -34,6 +50,12 @@ def load_data():
     con.close()
 
 def quick_start():
+    """
+    This method provides a quick start guide on how to use the 'quick_start' function.
+
+    It initializes an instance of the 'Tutake' class from the 'tt' module and retrieves the Tushare API.
+    It then demonstrates various functionalities of the Tushare API by printing the results of different queries.
+    """
     tushare = tt.Tutake().tushare_api()
     print("========查询股票列表========")
     print(tushare.stock_basic())
@@ -80,6 +102,15 @@ def complete():
 
 
 def cron_task():
+    """
+    This method is used to perform a cron task.
+
+    Returns:
+        None
+
+    Example Usage:
+        cron_task()
+    """
     tutake = tt.Tutake("./config.yml")
     tutake.task_api().start(True)  # 启动全量的数据同步任务
 
