@@ -148,9 +148,9 @@ class BaseDao(object):
         self.logger.warning(f"Export data of {self.table_name} to {pq_file}")
         conn = self.engine.connect()
         if condition is None:
-            conn.execute(f"COPY (SELECT * FROM {self.table_name}) TO '{pq_file}' (FORMAT PARQUET);")
+            conn.execute(f"COPY (SELECT * FROM {self.table_name}) TO '{pq_file}' (FORMAT PARQUET, COMPRESSION 'ZSTD');")
         else:
-            conn.execute(f"COPY (SELECT * FROM {self.table_name} where {condition}) TO '{pq_file}' (FORMAT PARQUET);")
+            conn.execute(f"COPY (SELECT * FROM {self.table_name} where {condition}) TO '{pq_file}' (FORMAT PARQUET, COMPRESSION 'ZSTD');")
         conn.close()
 
     def columns_meta(self):
