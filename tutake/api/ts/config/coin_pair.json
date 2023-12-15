@@ -1,139 +1,139 @@
 {
-    "database": "tushare_digital_currency",
-    "default_limit": null,
-    "desc": "",
-    "id": 258,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易对代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "default": "Y",
-            "desc": "",
-            "must": "N",
-            "name": "status"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 258,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易对代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "default": "Y",
+      "desc": "",
+      "must": "N",
+      "name": "status"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "coin_pair",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "交易对",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "IS_CONTRACT",
+      "data_type": "str",
+      "desc": "是否合约",
+      "must": "Y",
+      "name": "is_contract"
+    },
+    {
+      "column": "STATUS",
+      "data_type": "str",
+      "desc": "状态Y可用N不可用",
+      "must": "Y",
+      "name": "status"
+    },
+    {
+      "column": "BASE_COIN",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "base_coin"
+    },
+    {
+      "column": "PRICE_COIN",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "price_coin"
+    },
+    {
+      "column": "LISTING",
+      "data_type": "datetime",
+      "desc": "",
+      "must": "Y",
+      "name": "listing"
+    },
+    {
+      "column": "DELIVERY",
+      "data_type": "datetime",
+      "desc": "",
+      "must": "Y",
+      "name": "delivery"
+    },
+    {
+      "column": "LISTING",
+      "data_type": "datetime",
+      "desc": "",
+      "must": "Y",
+      "name": "listing"
+    },
+    {
+      "column": "DELIVERY",
+      "data_type": "datetime",
+      "desc": "",
+      "must": "Y",
+      "name": "delivery"
+    },
+    {
+      "column": "CREATE_TIME",
+      "data_type": "datetime",
+      "desc": "",
+      "must": "Y",
+      "name": "create_time"
+    }
+  ],
+  "parent_id": 52,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "coin_pair",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "交易对",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "IS_CONTRACT",
-            "data_type": "str",
-            "desc": "是否合约",
-            "must": "Y",
-            "name": "is_contract"
-        },
-        {
-            "column": "STATUS",
-            "data_type": "str",
-            "desc": "状态Y可用N不可用",
-            "must": "Y",
-            "name": "status"
-        },
-        {
-            "column": "BASE_COIN",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "base_coin"
-        },
-        {
-            "column": "PRICE_COIN",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "price_coin"
-        },
-        {
-            "column": "LISTING",
-            "data_type": "datetime",
-            "desc": "",
-            "must": "Y",
-            "name": "listing"
-        },
-        {
-            "column": "DELIVERY",
-            "data_type": "datetime",
-            "desc": "",
-            "must": "Y",
-            "name": "delivery"
-        },
-        {
-            "column": "LISTING",
-            "data_type": "datetime",
-            "desc": "",
-            "must": "Y",
-            "name": "listing"
-        },
-        {
-            "column": "DELIVERY",
-            "data_type": "datetime",
-            "desc": "",
-            "must": "Y",
-            "name": "delivery"
-        },
-        {
-            "column": "CREATE_TIME",
-            "data_type": "datetime",
-            "desc": "",
-            "must": "Y",
-            "name": "create_time"
-        }
+    [
+      52,
+      "行情数据"
     ],
-    "parent_id": 52,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            52,
-            "行情数据"
-        ],
-        [
-            258,
-            "交易所交易对（新）"
-        ]
-    ],
-    "title": "交易所交易对（新）",
-    "validations": []
+    [
+      258,
+      "交易所交易对（新）"
+    ]
+  ],
+  "title": "交易所交易对（新）",
+  "validations": []
 }

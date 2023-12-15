@@ -15,13 +15,6 @@ class TushareQuery(object):
         self.config = config
         self.api = TushareAPI(config)
         self._remote_client = None
-        self._init_remote_client()
-
-    def _init_remote_client(self):
-        remote_address = self.config.get_remote_address()
-        if remote_address is not None:
-            from tutake.remote.client import TutakeClient
-            self._remote_client = TutakeClient(remote_address)
 
     def query(self, api_name, fields='', **kwargs) -> DataFrame:
         if self._remote_client is not None:

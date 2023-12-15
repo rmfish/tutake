@@ -8,22 +8,22 @@ Tushare index_dailybasic接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.index_dailybasic_ext import *
+from tutake.api.ts import index_dailybasic_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareIndexDailybasic(Base):
+class TushareIndexDailybasic(TutakeTableBase):
     __tablename__ = "tushare_index_dailybasic"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String, index=True, comment='TS代码')
     trade_date = Column(String, index=True, comment='交易日期')
     total_mv = Column(Float, comment='当日总市值')
@@ -48,8 +48,8 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_index_dailybasic"
-        self.database = 'tushare_index.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -58,6 +58,8 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexDailybasic.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareIndexDailybasic),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['trade_date', 'ts_code', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -159,7 +161,7 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -167,6 +169,7 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"trade_date": "", "ts_code": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -191,21 +194,18 @@ class IndexDailybasic(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(IndexDailybasic, 'default_limit', default_limit_ext)
-setattr(IndexDailybasic, 'default_cron_express', default_cron_express_ext)
-setattr(IndexDailybasic, 'default_order_by', default_order_by_ext)
-setattr(IndexDailybasic, 'prepare', prepare_ext)
-setattr(IndexDailybasic, 'query_parameters', query_parameters_ext)
-setattr(IndexDailybasic, 'param_loop_process', param_loop_process_ext)
+extends_attr(IndexDailybasic, index_dailybasic_ext)
 
 if __name__ == '__main__':
     import tushare as ts

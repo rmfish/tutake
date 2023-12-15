@@ -1,313 +1,313 @@
 {
-    "database": "tushare_cb",
-    "default_limit": null,
-    "desc": "获取可转债发行数据",
-    "id": 186,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "发行公告日",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取可转债发行数据",
+  "id": 186,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "发行公告日",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "cb_issue",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "转债代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "发行公告日",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "RES_ANN_DATE",
+      "data_type": "str",
+      "desc": "发行结果公告日",
+      "must": "Y",
+      "name": "res_ann_date"
+    },
+    {
+      "column": "PLAN_ISSUE_SIZE",
+      "data_type": "float",
+      "desc": "计划发行总额（元）",
+      "must": "Y",
+      "name": "plan_issue_size"
+    },
+    {
+      "column": "ISSUE_SIZE",
+      "data_type": "float",
+      "desc": "发行总额（元）",
+      "must": "Y",
+      "name": "issue_size"
+    },
+    {
+      "column": "ISSUE_PRICE",
+      "data_type": "float",
+      "desc": "发行价格",
+      "must": "Y",
+      "name": "issue_price"
+    },
+    {
+      "column": "ISSUE_TYPE",
+      "data_type": "str",
+      "desc": "发行方式",
+      "must": "Y",
+      "name": "issue_type"
+    },
+    {
+      "column": "ISSUE_COST",
+      "data_type": "float",
+      "desc": "发行费用（元）",
+      "must": "N",
+      "name": "issue_cost"
+    },
+    {
+      "column": "ONL_CODE",
+      "data_type": "str",
+      "desc": "网上申购代码",
+      "must": "Y",
+      "name": "onl_code"
+    },
+    {
+      "column": "ONL_NAME",
+      "data_type": "str",
+      "desc": "网上申购简称",
+      "must": "Y",
+      "name": "onl_name"
+    },
+    {
+      "column": "ONL_DATE",
+      "data_type": "str",
+      "desc": "网上发行日期",
+      "must": "Y",
+      "name": "onl_date"
+    },
+    {
+      "column": "ONL_SIZE",
+      "data_type": "float",
+      "desc": "网上发行总额（元）",
+      "must": "Y",
+      "name": "onl_size"
+    },
+    {
+      "column": "ONL_PCH_VOL",
+      "data_type": "float",
+      "desc": "网上发行有效申购数量（张）",
+      "must": "Y",
+      "name": "onl_pch_vol"
+    },
+    {
+      "column": "ONL_PCH_NUM",
+      "data_type": "int",
+      "desc": "网上发行有效申购户数",
+      "must": "Y",
+      "name": "onl_pch_num"
+    },
+    {
+      "column": "ONL_PCH_EXCESS",
+      "data_type": "float",
+      "desc": "网上发行超额认购倍数",
+      "must": "Y",
+      "name": "onl_pch_excess"
+    },
+    {
+      "column": "ONL_WINNING_RATE",
+      "data_type": "float",
+      "desc": "网上发行中签率（%）",
+      "must": "N",
+      "name": "onl_winning_rate"
+    },
+    {
+      "column": "SHD_RATION_CODE",
+      "data_type": "str",
+      "desc": "老股东配售代码",
+      "must": "Y",
+      "name": "shd_ration_code"
+    },
+    {
+      "column": "SHD_RATION_NAME",
+      "data_type": "str",
+      "desc": "老股东配售简称",
+      "must": "Y",
+      "name": "shd_ration_name"
+    },
+    {
+      "column": "SHD_RATION_DATE",
+      "data_type": "str",
+      "desc": "老股东配售日",
+      "must": "Y",
+      "name": "shd_ration_date"
+    },
+    {
+      "column": "SHD_RATION_RECORD_DATE",
+      "data_type": "str",
+      "desc": "老股东配售股权登记日",
+      "must": "Y",
+      "name": "shd_ration_record_date"
+    },
+    {
+      "column": "SHD_RATION_PAY_DATE",
+      "data_type": "str",
+      "desc": "老股东配售缴款日",
+      "must": "Y",
+      "name": "shd_ration_pay_date"
+    },
+    {
+      "column": "SHD_RATION_PRICE",
+      "data_type": "float",
+      "desc": "老股东配售价格",
+      "must": "Y",
+      "name": "shd_ration_price"
+    },
+    {
+      "column": "SHD_RATION_RATIO",
+      "data_type": "float",
+      "desc": "老股东配售比例",
+      "must": "Y",
+      "name": "shd_ration_ratio"
+    },
+    {
+      "column": "SHD_RATION_SIZE",
+      "data_type": "float",
+      "desc": "老股东配售数量（张）",
+      "must": "Y",
+      "name": "shd_ration_size"
+    },
+    {
+      "column": "SHD_RATION_VOL",
+      "data_type": "float",
+      "desc": "老股东配售有效申购数量（张）",
+      "must": "N",
+      "name": "shd_ration_vol"
+    },
+    {
+      "column": "SHD_RATION_NUM",
+      "data_type": "int",
+      "desc": "老股东配售有效申购户数",
+      "must": "N",
+      "name": "shd_ration_num"
+    },
+    {
+      "column": "SHD_RATION_EXCESS",
+      "data_type": "float",
+      "desc": "老股东配售超额认购倍数",
+      "must": "N",
+      "name": "shd_ration_excess"
+    },
+    {
+      "column": "OFFL_SIZE",
+      "data_type": "float",
+      "desc": "网下发行总额（元）",
+      "must": "Y",
+      "name": "offl_size"
+    },
+    {
+      "column": "OFFL_DEPOSIT",
+      "data_type": "float",
+      "desc": "网下发行定金比例（%）",
+      "must": "N",
+      "name": "offl_deposit"
+    },
+    {
+      "column": "OFFL_PCH_VOL",
+      "data_type": "float",
+      "desc": "网下发行有效申购数量（张）",
+      "must": "N",
+      "name": "offl_pch_vol"
+    },
+    {
+      "column": "OFFL_PCH_NUM",
+      "data_type": "int",
+      "desc": "网下发行有效申购户数",
+      "must": "N",
+      "name": "offl_pch_num"
+    },
+    {
+      "column": "OFFL_PCH_EXCESS",
+      "data_type": "float",
+      "desc": "网下发行超额认购倍数",
+      "must": "N",
+      "name": "offl_pch_excess"
+    },
+    {
+      "column": "OFFL_WINNING_RATE",
+      "data_type": "float",
+      "desc": "网下发行中签率",
+      "must": "N",
+      "name": "offl_winning_rate"
+    },
+    {
+      "column": "LEAD_UNDERWRITER",
+      "data_type": "str",
+      "desc": "主承销商",
+      "must": "N",
+      "name": "lead_underwriter"
+    },
+    {
+      "column": "LEAD_UNDERWRITER_VOL",
+      "data_type": "float",
+      "desc": "主承销商包销数量（张）",
+      "must": "N",
+      "name": "lead_underwriter_vol"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "cb_issue",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "转债代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "发行公告日",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "RES_ANN_DATE",
-            "data_type": "str",
-            "desc": "发行结果公告日",
-            "must": "Y",
-            "name": "res_ann_date"
-        },
-        {
-            "column": "PLAN_ISSUE_SIZE",
-            "data_type": "float",
-            "desc": "计划发行总额（元）",
-            "must": "Y",
-            "name": "plan_issue_size"
-        },
-        {
-            "column": "ISSUE_SIZE",
-            "data_type": "float",
-            "desc": "发行总额（元）",
-            "must": "Y",
-            "name": "issue_size"
-        },
-        {
-            "column": "ISSUE_PRICE",
-            "data_type": "float",
-            "desc": "发行价格",
-            "must": "Y",
-            "name": "issue_price"
-        },
-        {
-            "column": "ISSUE_TYPE",
-            "data_type": "str",
-            "desc": "发行方式",
-            "must": "Y",
-            "name": "issue_type"
-        },
-        {
-            "column": "ISSUE_COST",
-            "data_type": "float",
-            "desc": "发行费用（元）",
-            "must": "N",
-            "name": "issue_cost"
-        },
-        {
-            "column": "ONL_CODE",
-            "data_type": "str",
-            "desc": "网上申购代码",
-            "must": "Y",
-            "name": "onl_code"
-        },
-        {
-            "column": "ONL_NAME",
-            "data_type": "str",
-            "desc": "网上申购简称",
-            "must": "Y",
-            "name": "onl_name"
-        },
-        {
-            "column": "ONL_DATE",
-            "data_type": "str",
-            "desc": "网上发行日期",
-            "must": "Y",
-            "name": "onl_date"
-        },
-        {
-            "column": "ONL_SIZE",
-            "data_type": "float",
-            "desc": "网上发行总额（元）",
-            "must": "Y",
-            "name": "onl_size"
-        },
-        {
-            "column": "ONL_PCH_VOL",
-            "data_type": "float",
-            "desc": "网上发行有效申购数量（张）",
-            "must": "Y",
-            "name": "onl_pch_vol"
-        },
-        {
-            "column": "ONL_PCH_NUM",
-            "data_type": "int",
-            "desc": "网上发行有效申购户数",
-            "must": "Y",
-            "name": "onl_pch_num"
-        },
-        {
-            "column": "ONL_PCH_EXCESS",
-            "data_type": "float",
-            "desc": "网上发行超额认购倍数",
-            "must": "Y",
-            "name": "onl_pch_excess"
-        },
-        {
-            "column": "ONL_WINNING_RATE",
-            "data_type": "float",
-            "desc": "网上发行中签率（%）",
-            "must": "N",
-            "name": "onl_winning_rate"
-        },
-        {
-            "column": "SHD_RATION_CODE",
-            "data_type": "str",
-            "desc": "老股东配售代码",
-            "must": "Y",
-            "name": "shd_ration_code"
-        },
-        {
-            "column": "SHD_RATION_NAME",
-            "data_type": "str",
-            "desc": "老股东配售简称",
-            "must": "Y",
-            "name": "shd_ration_name"
-        },
-        {
-            "column": "SHD_RATION_DATE",
-            "data_type": "str",
-            "desc": "老股东配售日",
-            "must": "Y",
-            "name": "shd_ration_date"
-        },
-        {
-            "column": "SHD_RATION_RECORD_DATE",
-            "data_type": "str",
-            "desc": "老股东配售股权登记日",
-            "must": "Y",
-            "name": "shd_ration_record_date"
-        },
-        {
-            "column": "SHD_RATION_PAY_DATE",
-            "data_type": "str",
-            "desc": "老股东配售缴款日",
-            "must": "Y",
-            "name": "shd_ration_pay_date"
-        },
-        {
-            "column": "SHD_RATION_PRICE",
-            "data_type": "float",
-            "desc": "老股东配售价格",
-            "must": "Y",
-            "name": "shd_ration_price"
-        },
-        {
-            "column": "SHD_RATION_RATIO",
-            "data_type": "float",
-            "desc": "老股东配售比例",
-            "must": "Y",
-            "name": "shd_ration_ratio"
-        },
-        {
-            "column": "SHD_RATION_SIZE",
-            "data_type": "float",
-            "desc": "老股东配售数量（张）",
-            "must": "Y",
-            "name": "shd_ration_size"
-        },
-        {
-            "column": "SHD_RATION_VOL",
-            "data_type": "float",
-            "desc": "老股东配售有效申购数量（张）",
-            "must": "N",
-            "name": "shd_ration_vol"
-        },
-        {
-            "column": "SHD_RATION_NUM",
-            "data_type": "int",
-            "desc": "老股东配售有效申购户数",
-            "must": "N",
-            "name": "shd_ration_num"
-        },
-        {
-            "column": "SHD_RATION_EXCESS",
-            "data_type": "float",
-            "desc": "老股东配售超额认购倍数",
-            "must": "N",
-            "name": "shd_ration_excess"
-        },
-        {
-            "column": "OFFL_SIZE",
-            "data_type": "float",
-            "desc": "网下发行总额（元）",
-            "must": "Y",
-            "name": "offl_size"
-        },
-        {
-            "column": "OFFL_DEPOSIT",
-            "data_type": "float",
-            "desc": "网下发行定金比例（%）",
-            "must": "N",
-            "name": "offl_deposit"
-        },
-        {
-            "column": "OFFL_PCH_VOL",
-            "data_type": "float",
-            "desc": "网下发行有效申购数量（张）",
-            "must": "N",
-            "name": "offl_pch_vol"
-        },
-        {
-            "column": "OFFL_PCH_NUM",
-            "data_type": "int",
-            "desc": "网下发行有效申购户数",
-            "must": "N",
-            "name": "offl_pch_num"
-        },
-        {
-            "column": "OFFL_PCH_EXCESS",
-            "data_type": "float",
-            "desc": "网下发行超额认购倍数",
-            "must": "N",
-            "name": "offl_pch_excess"
-        },
-        {
-            "column": "OFFL_WINNING_RATE",
-            "data_type": "float",
-            "desc": "网下发行中签率",
-            "must": "N",
-            "name": "offl_winning_rate"
-        },
-        {
-            "column": "LEAD_UNDERWRITER",
-            "data_type": "str",
-            "desc": "主承销商",
-            "must": "N",
-            "name": "lead_underwriter"
-        },
-        {
-            "column": "LEAD_UNDERWRITER_VOL",
-            "data_type": "float",
-            "desc": "主承销商包销数量（张）",
-            "must": "N",
-            "name": "lead_underwriter_vol"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            186,
-            "可转债发行"
-        ]
-    ],
-    "title": "可转债发行",
-    "validations": []
+    [
+      186,
+      "可转债发行"
+    ]
+  ],
+  "title": "可转债发行",
+  "validations": []
 }

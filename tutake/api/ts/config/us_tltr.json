@@ -1,104 +1,104 @@
 {
-    "database": "tushare_macroeconomic",
-    "default_limit": "2000",
-    "desc": "获取美国国债长期利率数据",
-    "id": 222,
-    "integral_required": 120,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "指定字段",
-            "must": "N",
-            "name": "fields"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "获取美国国债长期利率数据",
+  "id": 222,
+  "integral_required": 120,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "指定字段",
+      "must": "N",
+      "name": "fields"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "us_tltr",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "LTC",
+      "data_type": "float",
+      "desc": "收益率 LT COMPOSITE (>10 Yrs)",
+      "must": "Y",
+      "name": "ltc"
+    },
+    {
+      "column": "CMT",
+      "data_type": "float",
+      "desc": "20年期CMT利率(TREASURY 20-Yr CMT)",
+      "must": "Y",
+      "name": "cmt"
+    },
+    {
+      "column": "E_FACTOR",
+      "data_type": "float",
+      "desc": "外推因子EXTRAPOLATION FACTOR",
+      "must": "Y",
+      "name": "e_factor"
+    }
+  ],
+  "parent_id": 218,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "us_tltr",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "LTC",
-            "data_type": "float",
-            "desc": "收益率 LT COMPOSITE (>10 Yrs)",
-            "must": "Y",
-            "name": "ltc"
-        },
-        {
-            "column": "CMT",
-            "data_type": "float",
-            "desc": "20年期CMT利率(TREASURY 20-Yr CMT)",
-            "must": "Y",
-            "name": "cmt"
-        },
-        {
-            "column": "E_FACTOR",
-            "data_type": "float",
-            "desc": "外推因子EXTRAPOLATION FACTOR",
-            "must": "Y",
-            "name": "e_factor"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 218,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            217,
-            "国际宏观"
-        ],
-        [
-            218,
-            "美国利率"
-        ],
-        [
-            222,
-            "国债长期利率"
-        ]
+    [
+      217,
+      "国际宏观"
     ],
-    "title": "国债长期利率",
-    "validations": []
+    [
+      218,
+      "美国利率"
+    ],
+    [
+      222,
+      "国债长期利率"
+    ]
+  ],
+  "title": "国债长期利率",
+  "validations": []
 }

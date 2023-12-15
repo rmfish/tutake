@@ -1,176 +1,176 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "获取每日结算参数数据，包括交易和交割费率等，数据开始月2012年1月",
-    "id": 141,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "合约代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所代码",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "获取每日结算参数数据，包括交易和交割费率等，数据开始月2012年1月",
+  "id": 141,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "合约代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所代码",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "fut_settle",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "合约代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "SETTLE",
+      "data_type": "float",
+      "desc": "结算价",
+      "must": "Y",
+      "name": "settle"
+    },
+    {
+      "column": "TRADING_FEE_RATE",
+      "data_type": "float",
+      "desc": "交易手续费率",
+      "must": "Y",
+      "name": "trading_fee_rate"
+    },
+    {
+      "column": "TRADING_FEE",
+      "data_type": "float",
+      "desc": "交易手续费",
+      "must": "Y",
+      "name": "trading_fee"
+    },
+    {
+      "column": "DELIVERY_FEE",
+      "data_type": "float",
+      "desc": "交割手续费",
+      "must": "Y",
+      "name": "delivery_fee"
+    },
+    {
+      "column": "B_HEDGING_MARGIN_RATE",
+      "data_type": "float",
+      "desc": "买套保交易保证金率",
+      "must": "Y",
+      "name": "b_hedging_margin_rate"
+    },
+    {
+      "column": "S_HEDGING_MARGIN_RATE",
+      "data_type": "float",
+      "desc": "卖套保交易保证金率",
+      "must": "Y",
+      "name": "s_hedging_margin_rate"
+    },
+    {
+      "column": "LONG_MARGIN_RATE",
+      "data_type": "float",
+      "desc": "买投机交易保证金率",
+      "must": "Y",
+      "name": "long_margin_rate"
+    },
+    {
+      "column": "SHORT_MARGIN_RATE",
+      "data_type": "float",
+      "desc": "卖投机交易保证金率",
+      "must": "Y",
+      "name": "short_margin_rate"
+    },
+    {
+      "column": "OFFSET_TODAY_FEE",
+      "data_type": "float",
+      "desc": "平今仓手续率",
+      "must": "N",
+      "name": "offset_today_fee"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "N",
+      "name": "exchange"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "fut_settle",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "合约代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "SETTLE",
-            "data_type": "float",
-            "desc": "结算价",
-            "must": "Y",
-            "name": "settle"
-        },
-        {
-            "column": "TRADING_FEE_RATE",
-            "data_type": "float",
-            "desc": "交易手续费率",
-            "must": "Y",
-            "name": "trading_fee_rate"
-        },
-        {
-            "column": "TRADING_FEE",
-            "data_type": "float",
-            "desc": "交易手续费",
-            "must": "Y",
-            "name": "trading_fee"
-        },
-        {
-            "column": "DELIVERY_FEE",
-            "data_type": "float",
-            "desc": "交割手续费",
-            "must": "Y",
-            "name": "delivery_fee"
-        },
-        {
-            "column": "B_HEDGING_MARGIN_RATE",
-            "data_type": "float",
-            "desc": "买套保交易保证金率",
-            "must": "Y",
-            "name": "b_hedging_margin_rate"
-        },
-        {
-            "column": "S_HEDGING_MARGIN_RATE",
-            "data_type": "float",
-            "desc": "卖套保交易保证金率",
-            "must": "Y",
-            "name": "s_hedging_margin_rate"
-        },
-        {
-            "column": "LONG_MARGIN_RATE",
-            "data_type": "float",
-            "desc": "买投机交易保证金率",
-            "must": "Y",
-            "name": "long_margin_rate"
-        },
-        {
-            "column": "SHORT_MARGIN_RATE",
-            "data_type": "float",
-            "desc": "卖投机交易保证金率",
-            "must": "Y",
-            "name": "short_margin_rate"
-        },
-        {
-            "column": "OFFSET_TODAY_FEE",
-            "data_type": "float",
-            "desc": "平今仓手续率",
-            "must": "N",
-            "name": "offset_today_fee"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "N",
-            "name": "exchange"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            141,
-            "每日结算参数"
-        ]
-    ],
-    "title": "每日结算参数",
-    "validations": [
-        {
-            "message": "trade_date,ts_code不能都为空",
-            "name": "trade_date",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "ts_code",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      141,
+      "每日结算参数"
     ]
+  ],
+  "title": "每日结算参数",
+  "validations": [
+    {
+      "message": "trade_date,ts_code不能都为空",
+      "name": "trade_date",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "ts_code",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

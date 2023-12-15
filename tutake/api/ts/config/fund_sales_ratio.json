@@ -1,96 +1,96 @@
 {
-    "database": "tushare_fund",
-    "default_limit": "100",
-    "desc": "获取各渠道公募基金销售保有规模占比数据，年度更新",
-    "id": 265,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "年度",
-            "must": "N",
-            "name": "年份"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "100",
+  "desc": "获取各渠道公募基金销售保有规模占比数据，年度更新",
+  "id": 265,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "年度",
+      "must": "N",
+      "name": "年份"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "fund_sales_ratio",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "YEAR",
+      "data_type": "int",
+      "desc": "年度",
+      "must": "Y",
+      "name": "year"
+    },
+    {
+      "column": "BANK",
+      "data_type": "float",
+      "desc": "商业银行（%）",
+      "must": "Y",
+      "name": "bank"
+    },
+    {
+      "column": "SEC_COMP",
+      "data_type": "float",
+      "desc": "证券公司（%）",
+      "must": "Y",
+      "name": "sec_comp"
+    },
+    {
+      "column": "FUND_COMP",
+      "data_type": "float",
+      "desc": "基金公司直销（%）",
+      "must": "Y",
+      "name": "fund_comp"
+    },
+    {
+      "column": "INDEP_COMP",
+      "data_type": "float",
+      "desc": "独立基金销售机构（%）",
+      "must": "Y",
+      "name": "indep_comp"
+    },
+    {
+      "column": "RESTS",
+      "data_type": "float",
+      "desc": "其他（%）",
+      "must": "Y",
+      "name": "rests"
+    }
+  ],
+  "parent_id": 264,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "fund_sales_ratio",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "YEAR",
-            "data_type": "int",
-            "desc": "年度",
-            "must": "Y",
-            "name": "year"
-        },
-        {
-            "column": "BANK",
-            "data_type": "float",
-            "desc": "商业银行（%）",
-            "must": "Y",
-            "name": "bank"
-        },
-        {
-            "column": "SEC_COMP",
-            "data_type": "float",
-            "desc": "证券公司（%）",
-            "must": "Y",
-            "name": "sec_comp"
-        },
-        {
-            "column": "FUND_COMP",
-            "data_type": "float",
-            "desc": "基金公司直销（%）",
-            "must": "Y",
-            "name": "fund_comp"
-        },
-        {
-            "column": "INDEP_COMP",
-            "data_type": "float",
-            "desc": "独立基金销售机构（%）",
-            "must": "Y",
-            "name": "indep_comp"
-        },
-        {
-            "column": "RESTS",
-            "data_type": "float",
-            "desc": "其他（%）",
-            "must": "Y",
-            "name": "rests"
-        }
+    [
+      263,
+      "财富管理"
     ],
-    "parent_id": 264,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            263,
-            "财富管理"
-        ],
-        [
-            264,
-            "基金销售行业数据"
-        ],
-        [
-            265,
-            "各渠道公募基金销售保有规模占比"
-        ]
+    [
+      264,
+      "基金销售行业数据"
     ],
-    "title": "各渠道公募基金销售保有规模占比",
-    "validations": []
+    [
+      265,
+      "各渠道公募基金销售保有规模占比"
+    ]
+  ],
+  "title": "各渠道公募基金销售保有规模占比",
+  "validations": []
 }

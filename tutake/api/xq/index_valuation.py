@@ -9,18 +9,19 @@ Xueqiu index_valuation接口
 import pandas as pd
 from sqlalchemy import Integer, String, Float, Boolean, Column, create_engine
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import QueuePool
 
-from tutake.api.base_dao import Base, BatchWriter, Records, BaseDao
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.xq.index_valuation_ext import *
+from tutake.api.xq import index_valuation_ext
 from tutake.api.xq.xueqiu_base import XueQiuBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class XueqiuIndexValuation(Base):
+class XueqiuIndexValuation(TutakeTableBase):
     __tablename__ = "xueqiu_index_valuation"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String, index=True, comment='股票代码')
     trade_date = Column(String, index=True, comment='交易日期')
     name = Column(String, comment='名称')
@@ -45,16 +46,14 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "xueqiu_index_valuation"
-        self.database = 'xueqiu.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
-        self.engine = create_engine(self.database_url,
-                                    connect_args={
-                                        'check_same_thread': False,
-                                        'timeout': config.get_sqlite_timeout()
-                                    })
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
+        self.engine = create_engine(self.database_url, poolclass=QueuePool)
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         XueqiuIndexValuation.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(XueqiuIndexValuation)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'offset', 'limit']
         entity_fields = [
@@ -150,7 +149,8 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -158,6 +158,7 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"ts_code": "", "trade_date": "", "start_date": "", "end_date": "", "offset": "", "limit": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -187,18 +188,15 @@ class IndexValuation(BaseDao, XueQiuBase, DataProcess):
 
         df = fetch_save(offset)
         offset += df.shape[0]
+        if is_test:
+            return offset - init_offset
         while kwargs['limit'] != "" and str(df.shape[0]) == kwargs['limit']:
             df = fetch_save(offset)
             offset += df.shape[0]
         return offset - init_offset
 
 
-setattr(IndexValuation, 'default_limit', default_limit_ext)
-setattr(IndexValuation, 'default_cron_express', default_cron_express_ext)
-setattr(IndexValuation, 'default_order_by', default_order_by_ext)
-setattr(IndexValuation, 'prepare', prepare_ext)
-setattr(IndexValuation, 'query_parameters', query_parameters_ext)
-setattr(IndexValuation, 'param_loop_process', param_loop_process_ext)
+extends_attr(IndexValuation, index_valuation_ext)
 
 if __name__ == '__main__':
     pd.set_option('display.max_columns', 50)    # 显示列数

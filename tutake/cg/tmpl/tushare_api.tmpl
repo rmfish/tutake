@@ -11,20 +11,20 @@ import pandas as pd
 from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.{{name}}_ext import *
+from tutake.api.ts import {{name}}_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class {{entity_name}}(Base):
+class {{entity_name}}(TutakeTableBase):
     __tablename__ = "{{table_name}}"
-    {% if not exist_primary_key %}id = Column(Integer, primary_key=True , autoincrement=True)
-    {% endif %}{% for output in outputs %}{% if output.get('column_name') is defined and output.column_name %}{{output.column_name}}{% else %}{{output.name}}{% endif %} = Column({{output.data_type|get_sql_type}}{% if output.primary_key %}, primary_key=True{% endif %}{% if output.index %}, index=True{% endif %}, comment='{% autoescape false %}{{output.desc}}{% endautoescape %}')
+    {% for output in outputs %}{% if output.get('column_name') is defined and output.column_name %}{{output.column_name}}{% else %}{{output.name}}{% endif %} = Column({{output.data_type|get_sql_type}}{% if output.primary_key %}, primary_key=True{% endif %}{% if output.index %}, index=True{% endif %}, comment='{% autoescape false %}{{output.desc}}{% endautoescape %}')
     {% endfor %}
 
 
@@ -38,12 +38,13 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "{{table_name}}"
-        self.database = '{{database}}.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = '{{database}}.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url, connect_args={'check_same_thread': False, 'timeout': config.get_sqlite_timeout()})
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         {{entity_name}}.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema({{entity_name}}), config.get_tutake_data_dir())
 
         query_fields = [{% for input in inputs %}'{{input.name}}'{% if not loop.last %}, {% endif %}{% endfor %}]
         self.tushare_fields = [{% for output in outputs %}"{{output.name}}"{% if not loop.last %}, {% endif %}{% endfor %}]
@@ -76,7 +77,7 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -84,6 +85,7 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = { {% for input in inputs %}"{{input.name}}": ""{% if not loop.last %},{% endif %}{% endfor %} }
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -110,21 +112,17 @@ class {{title_name}}(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
-setattr({{title_name}}, 'default_limit', default_limit_ext)
-setattr({{title_name}}, 'default_cron_express', default_cron_express_ext)
-setattr({{title_name}}, 'default_order_by', default_order_by_ext)
-setattr({{title_name}}, 'prepare', prepare_ext)
-setattr({{title_name}}, 'query_parameters', query_parameters_ext)
-setattr({{title_name}}, 'param_loop_process', param_loop_process_ext)
-{% if checker %}setattr({{title_name}}, 'check', check_ext){% endif %}
+extends_attr({{title_name}}, {{name}}_ext)
 
 
 if __name__ == '__main__':

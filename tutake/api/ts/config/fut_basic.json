@@ -1,174 +1,174 @@
 {
-    "database": null,
-    "default_limit": "10000",
-    "desc": "期货合约列表",
-    "id": 135,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易所代码",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "合约类型",
-            "must": "N",
-            "name": "fut_type"
-        },
-        {
-            "data_type": "str",
-            "desc": "合约代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "10000",
+  "desc": "期货合约列表",
+  "id": 135,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易所代码",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "合约类型",
+      "must": "N",
+      "name": "fut_type"
+    },
+    {
+      "data_type": "str",
+      "desc": "合约代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "fut_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": null,
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "交易代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易市场",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "FUT_SHORT_NAME",
+      "data_type": "str",
+      "desc": "中文简称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "FUT_CODE",
+      "data_type": "str",
+      "desc": "合约产品代码",
+      "must": "Y",
+      "name": "fut_code"
+    },
+    {
+      "column": "FUT_MULTIPLIER",
+      "data_type": "float",
+      "desc": "合约乘数",
+      "must": "Y",
+      "name": "multiplier"
+    },
+    {
+      "column": "TRADE_UNIT",
+      "data_type": "str",
+      "desc": "交易计量单位",
+      "must": "Y",
+      "name": "trade_unit"
+    },
+    {
+      "column": "PER_UNIT",
+      "data_type": "float",
+      "desc": "交易单位(每手)",
+      "must": "Y",
+      "name": "per_unit"
+    },
+    {
+      "column": "QUOTE_UNIT",
+      "data_type": "str",
+      "desc": "报价单位",
+      "must": "Y",
+      "name": "quote_unit"
+    },
+    {
+      "column": "QUOTE_UNIT_DESC",
+      "data_type": "str",
+      "desc": "最小报价单位说明",
+      "must": "Y",
+      "name": "quote_unit_desc"
+    },
+    {
+      "column": "D_MODE_DESC",
+      "data_type": "str",
+      "desc": "交割方式说明",
+      "must": "Y",
+      "name": "d_mode_desc"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "DELIST_DATE",
+      "data_type": "str",
+      "desc": "最后交易日期",
+      "must": "Y",
+      "name": "delist_date"
+    },
+    {
+      "column": "D_MONTH",
+      "data_type": "str",
+      "desc": "交割月份",
+      "must": "Y",
+      "name": "d_month"
+    },
+    {
+      "column": "LAST_DDATE",
+      "data_type": "str",
+      "desc": "最后交割日",
+      "must": "Y",
+      "name": "last_ddate"
+    },
+    {
+      "column": "TRADE_TIME_DESC",
+      "data_type": "str",
+      "desc": "交易时间说明",
+      "must": "N",
+      "name": "trade_time_desc"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "fut_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": null,
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "交易代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易市场",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "FUT_SHORT_NAME",
-            "data_type": "str",
-            "desc": "中文简称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "FUT_CODE",
-            "data_type": "str",
-            "desc": "合约产品代码",
-            "must": "Y",
-            "name": "fut_code"
-        },
-        {
-            "column": "FUT_MULTIPLIER",
-            "data_type": "float",
-            "desc": "合约乘数",
-            "must": "Y",
-            "name": "multiplier"
-        },
-        {
-            "column": "TRADE_UNIT",
-            "data_type": "str",
-            "desc": "交易计量单位",
-            "must": "Y",
-            "name": "trade_unit"
-        },
-        {
-            "column": "PER_UNIT",
-            "data_type": "float",
-            "desc": "交易单位(每手)",
-            "must": "Y",
-            "name": "per_unit"
-        },
-        {
-            "column": "QUOTE_UNIT",
-            "data_type": "str",
-            "desc": "报价单位",
-            "must": "Y",
-            "name": "quote_unit"
-        },
-        {
-            "column": "QUOTE_UNIT_DESC",
-            "data_type": "str",
-            "desc": "最小报价单位说明",
-            "must": "Y",
-            "name": "quote_unit_desc"
-        },
-        {
-            "column": "D_MODE_DESC",
-            "data_type": "str",
-            "desc": "交割方式说明",
-            "must": "Y",
-            "name": "d_mode_desc"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "DELIST_DATE",
-            "data_type": "str",
-            "desc": "最后交易日期",
-            "must": "Y",
-            "name": "delist_date"
-        },
-        {
-            "column": "D_MONTH",
-            "data_type": "str",
-            "desc": "交割月份",
-            "must": "Y",
-            "name": "d_month"
-        },
-        {
-            "column": "LAST_DDATE",
-            "data_type": "str",
-            "desc": "最后交割日",
-            "must": "Y",
-            "name": "last_ddate"
-        },
-        {
-            "column": "TRADE_TIME_DESC",
-            "data_type": "str",
-            "desc": "交易时间说明",
-            "must": "N",
-            "name": "trade_time_desc"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            135,
-            "期货合约信息"
-        ]
-    ],
-    "title": "期货合约信息",
-    "validations": []
+    [
+      135,
+      "期货合约信息"
+    ]
+  ],
+  "title": "期货合约信息",
+  "validations": []
 }

@@ -1,5 +1,5 @@
 {
-  "database": "tushare_stock",
+  "database": null,
   "desc": "获取各大期货交易所交易日历数据，数据开始月1996年1月",
   "id": 137,
   "default_query_params": {
@@ -67,7 +67,7 @@
     },
     {
       "column": "IS_OPEN",
-      "data_type": "str",
+      "data_type": "int",
       "desc": "是否交易 0休市 1交易",
       "must": "Y",
       "name": "is_open"

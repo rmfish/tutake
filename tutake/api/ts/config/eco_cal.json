@@ -1,143 +1,143 @@
 {
-    "database": "tushare_macroeconomic",
-    "default_limit": "100",
-    "desc": "获取全球财经日历、包括经济事件数据更新",
-    "id": 233,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "货币代码",
-            "must": "N",
-            "name": "currency"
-        },
-        {
-            "data_type": "str",
-            "desc": "国家",
-            "must": "N",
-            "name": "country"
-        },
-        {
-            "data_type": "str",
-            "desc": "事件",
-            "must": "N",
-            "name": "event"
-        },
-        {
-            "data_type": "str",
-            "default": "Y",
-            "desc": "是否最新",
-            "must": "N",
-            "name": "is_new"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "100",
+  "desc": "获取全球财经日历、包括经济事件数据更新",
+  "id": 233,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "货币代码",
+      "must": "N",
+      "name": "currency"
+    },
+    {
+      "data_type": "str",
+      "desc": "国家",
+      "must": "N",
+      "name": "country"
+    },
+    {
+      "data_type": "str",
+      "desc": "事件",
+      "must": "N",
+      "name": "event"
+    },
+    {
+      "data_type": "str",
+      "default": "Y",
+      "desc": "是否最新",
+      "must": "N",
+      "name": "is_new"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": true,
+  "name": "eco_cal",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "TIME",
+      "data_type": "str",
+      "desc": "时间",
+      "must": "Y",
+      "name": "time"
+    },
+    {
+      "column": "CURRENCY",
+      "data_type": "str",
+      "desc": "货币代码",
+      "must": "Y",
+      "name": "currency"
+    },
+    {
+      "column": "COUNTRY",
+      "data_type": "str",
+      "desc": "国家",
+      "must": "Y",
+      "name": "country"
+    },
+    {
+      "column": "EVENT",
+      "data_type": "str",
+      "desc": "经济事件",
+      "must": "Y",
+      "name": "event"
+    },
+    {
+      "column": "VALUE",
+      "data_type": "str",
+      "desc": "今值",
+      "must": "Y",
+      "name": "value"
+    },
+    {
+      "column": "PRE_VALUE",
+      "data_type": "str",
+      "desc": "前值",
+      "must": "Y",
+      "name": "pre_value"
+    },
+    {
+      "column": "FORE_VALUE",
+      "data_type": "str",
+      "desc": "预测值",
+      "must": "Y",
+      "name": "fore_value"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": true,
-    "name": "eco_cal",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "TIME",
-            "data_type": "str",
-            "desc": "时间",
-            "must": "Y",
-            "name": "time"
-        },
-        {
-            "column": "CURRENCY",
-            "data_type": "str",
-            "desc": "货币代码",
-            "must": "Y",
-            "name": "currency"
-        },
-        {
-            "column": "COUNTRY",
-            "data_type": "str",
-            "desc": "国家",
-            "must": "Y",
-            "name": "country"
-        },
-        {
-            "column": "EVENT",
-            "data_type": "str",
-            "desc": "经济事件",
-            "must": "Y",
-            "name": "event"
-        },
-        {
-            "column": "VALUE",
-            "data_type": "str",
-            "desc": "今值",
-            "must": "Y",
-            "name": "value"
-        },
-        {
-            "column": "PRE_VALUE",
-            "data_type": "str",
-            "desc": "前值",
-            "must": "Y",
-            "name": "pre_value"
-        },
-        {
-            "column": "FORE_VALUE",
-            "data_type": "str",
-            "desc": "预测值",
-            "must": "Y",
-            "name": "fore_value"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            233,
-            "全球财经事件"
-        ]
-    ],
-    "title": "全球财经事件",
-    "validations": []
+    [
+      233,
+      "全球财经事件"
+    ]
+  ],
+  "title": "全球财经事件",
+  "validations": []
 }

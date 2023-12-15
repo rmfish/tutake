@@ -1,169 +1,169 @@
 {
-    "database": null,
-    "default_limit": "1000",
-    "desc": "获取2009年以来全国拍摄制作电视剧备案公示数据",
-    "id": 180,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "备案月份",
-            "must": "N",
-            "name": "report_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "备案开始月份（YYYYMM）",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "备案结束月份（YYYYMM）",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "备案机构",
-            "must": "N",
-            "name": "org"
-        },
-        {
-            "data_type": "str",
-            "desc": "电视剧名称",
-            "must": "N",
-            "name": "name"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "获取2009年以来全国拍摄制作电视剧备案公示数据",
+  "id": 180,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "备案月份",
+      "must": "N",
+      "name": "report_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "备案开始月份（YYYYMM）",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "备案结束月份（YYYYMM）",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "备案机构",
+      "must": "N",
+      "name": "org"
+    },
+    {
+      "data_type": "str",
+      "desc": "电视剧名称",
+      "must": "N",
+      "name": "name"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "teleplay_record",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "电视剧名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "CLASSIFY",
+      "data_type": "str",
+      "desc": "题材",
+      "must": "Y",
+      "name": "classify"
+    },
+    {
+      "column": "TYPES",
+      "data_type": "str",
+      "desc": "体裁",
+      "must": "Y",
+      "name": "types"
+    },
+    {
+      "column": "ORG",
+      "data_type": "str",
+      "desc": "报备机构",
+      "must": "Y",
+      "name": "org"
+    },
+    {
+      "column": "REPORT_DATE",
+      "data_type": "str",
+      "desc": "报备时间",
+      "must": "Y",
+      "name": "report_date"
+    },
+    {
+      "column": "LICENSE_KEY",
+      "data_type": "str",
+      "desc": "许可证号",
+      "must": "Y",
+      "name": "license_key"
+    },
+    {
+      "column": "EPISODES",
+      "data_type": "str",
+      "desc": "集数",
+      "must": "Y",
+      "name": "episodes"
+    },
+    {
+      "column": "SHOOTING_DATE",
+      "data_type": "str",
+      "desc": "拍摄时间",
+      "must": "Y",
+      "name": "shooting_date"
+    },
+    {
+      "column": "PROD_CYCLE",
+      "data_type": "str",
+      "desc": "制作周期",
+      "must": "Y",
+      "name": "prod_cycle"
+    },
+    {
+      "column": "CONTENT",
+      "data_type": "str",
+      "desc": "内容提要",
+      "must": "Y",
+      "name": "content"
+    },
+    {
+      "column": "PRO_OPI",
+      "data_type": "str",
+      "desc": "省级管理部门备案意见",
+      "must": "Y",
+      "name": "pro_opi"
+    },
+    {
+      "column": "DEPT_OPI",
+      "data_type": "str",
+      "desc": "相关部门意见",
+      "must": "Y",
+      "name": "dept_opi"
+    },
+    {
+      "column": "REMARKS",
+      "data_type": "str",
+      "desc": "备注",
+      "must": "Y",
+      "name": "remarks"
+    }
+  ],
+  "parent_id": 83,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "teleplay_record",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "电视剧名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "CLASSIFY",
-            "data_type": "str",
-            "desc": "题材",
-            "must": "Y",
-            "name": "classify"
-        },
-        {
-            "column": "TYPES",
-            "data_type": "str",
-            "desc": "体裁",
-            "must": "Y",
-            "name": "types"
-        },
-        {
-            "column": "ORG",
-            "data_type": "str",
-            "desc": "报备机构",
-            "must": "Y",
-            "name": "org"
-        },
-        {
-            "column": "REPORT_DATE",
-            "data_type": "str",
-            "desc": "报备时间",
-            "must": "Y",
-            "name": "report_date"
-        },
-        {
-            "column": "LICENSE_KEY",
-            "data_type": "str",
-            "desc": "许可证号",
-            "must": "Y",
-            "name": "license_key"
-        },
-        {
-            "column": "EPISODES",
-            "data_type": "str",
-            "desc": "集数",
-            "must": "Y",
-            "name": "episodes"
-        },
-        {
-            "column": "SHOOTING_DATE",
-            "data_type": "str",
-            "desc": "拍摄时间",
-            "must": "Y",
-            "name": "shooting_date"
-        },
-        {
-            "column": "PROD_CYCLE",
-            "data_type": "str",
-            "desc": "制作周期",
-            "must": "Y",
-            "name": "prod_cycle"
-        },
-        {
-            "column": "CONTENT",
-            "data_type": "str",
-            "desc": "内容提要",
-            "must": "Y",
-            "name": "content"
-        },
-        {
-            "column": "PRO_OPI",
-            "data_type": "str",
-            "desc": "省级管理部门备案意见",
-            "must": "Y",
-            "name": "pro_opi"
-        },
-        {
-            "column": "DEPT_OPI",
-            "data_type": "str",
-            "desc": "相关部门意见",
-            "must": "Y",
-            "name": "dept_opi"
-        },
-        {
-            "column": "REMARKS",
-            "data_type": "str",
-            "desc": "备注",
-            "must": "Y",
-            "name": "remarks"
-        }
+    [
+      82,
+      "行业经济"
     ],
-    "parent_id": 83,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            82,
-            "行业经济"
-        ],
-        [
-            83,
-            "TMT行业"
-        ],
-        [
-            180,
-            "全国电视剧备案公示数据"
-        ]
+    [
+      83,
+      "TMT行业"
     ],
-    "title": "全国电视剧备案公示数据",
-    "validations": []
+    [
+      180,
+      "全国电视剧备案公示数据"
+    ]
+  ],
+  "title": "全国电视剧备案公示数据",
+  "validations": []
 }

@@ -1,147 +1,147 @@
 {
-    "database": null,
-    "default_limit": "100",
-    "desc": "获取上海黄金交易所现货合约基础信息",
-    "id": 284,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "合约代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "100",
+  "desc": "获取上海黄金交易所现货合约基础信息",
+  "id": 284,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "合约代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "sge_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "品种代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TS_NAME",
+      "data_type": "str",
+      "desc": "品种名称",
+      "must": "Y",
+      "name": "ts_name"
+    },
+    {
+      "column": "TRADE_TYPE",
+      "data_type": "str",
+      "desc": "交易类型",
+      "must": "Y",
+      "name": "trade_type"
+    },
+    {
+      "column": "T_UNIT",
+      "data_type": "float",
+      "desc": "交易单位(克/手)",
+      "must": "Y",
+      "name": "t_unit"
+    },
+    {
+      "column": "P_UNIT",
+      "data_type": "float",
+      "desc": "报价单位",
+      "must": "Y",
+      "name": "p_unit"
+    },
+    {
+      "column": "MIN_CHANGE",
+      "data_type": "float",
+      "desc": "最小变动价位",
+      "must": "Y",
+      "name": "min_change"
+    },
+    {
+      "column": "PRICE_LIMIT",
+      "data_type": "float",
+      "desc": "每日价格最大波动限制",
+      "must": "Y",
+      "name": "price_limit"
+    },
+    {
+      "column": "MIN_VOL",
+      "data_type": "int",
+      "desc": "最小单笔报价量(手)",
+      "must": "Y",
+      "name": "min_vol"
+    },
+    {
+      "column": "MAX_VOL",
+      "data_type": "int",
+      "desc": "最大单笔报价量(手)",
+      "must": "Y",
+      "name": "max_vol"
+    },
+    {
+      "column": "TRADE_MODE",
+      "data_type": "str",
+      "desc": "交易期限",
+      "must": "Y",
+      "name": "trade_mode"
+    },
+    {
+      "column": "MARGIN_RATE",
+      "data_type": "float",
+      "desc": "保证金比例",
+      "must": "Y",
+      "name": "margin_rate"
+    },
+    {
+      "column": "LIQ_RATE",
+      "data_type": "float",
+      "desc": "违约金比例(%)",
+      "must": "Y",
+      "name": "liq_rate"
+    },
+    {
+      "column": "TRADE_TIME",
+      "data_type": "str",
+      "desc": "交易时间",
+      "must": "Y",
+      "name": "trade_time"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期\t",
+      "must": "Y",
+      "name": "list_date"
+    }
+  ],
+  "parent_id": 283,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "sge_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "品种代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TS_NAME",
-            "data_type": "str",
-            "desc": "品种名称",
-            "must": "Y",
-            "name": "ts_name"
-        },
-        {
-            "column": "TRADE_TYPE",
-            "data_type": "str",
-            "desc": "交易类型",
-            "must": "Y",
-            "name": "trade_type"
-        },
-        {
-            "column": "T_UNIT",
-            "data_type": "float",
-            "desc": "交易单位(克/手)",
-            "must": "Y",
-            "name": "t_unit"
-        },
-        {
-            "column": "P_UNIT",
-            "data_type": "float",
-            "desc": "报价单位",
-            "must": "Y",
-            "name": "p_unit"
-        },
-        {
-            "column": "MIN_CHANGE",
-            "data_type": "float",
-            "desc": "最小变动价位",
-            "must": "Y",
-            "name": "min_change"
-        },
-        {
-            "column": "PRICE_LIMIT",
-            "data_type": "float",
-            "desc": "每日价格最大波动限制",
-            "must": "Y",
-            "name": "price_limit"
-        },
-        {
-            "column": "MIN_VOL",
-            "data_type": "int",
-            "desc": "最小单笔报价量(手)",
-            "must": "Y",
-            "name": "min_vol"
-        },
-        {
-            "column": "MAX_VOL",
-            "data_type": "int",
-            "desc": "最大单笔报价量(手)",
-            "must": "Y",
-            "name": "max_vol"
-        },
-        {
-            "column": "TRADE_MODE",
-            "data_type": "str",
-            "desc": "交易期限",
-            "must": "Y",
-            "name": "trade_mode"
-        },
-        {
-            "column": "MARGIN_RATE",
-            "data_type": "float",
-            "desc": "保证金比例",
-            "must": "Y",
-            "name": "margin_rate"
-        },
-        {
-            "column": "LIQ_RATE",
-            "data_type": "float",
-            "desc": "违约金比例(%)",
-            "must": "Y",
-            "name": "liq_rate"
-        },
-        {
-            "column": "TRADE_TIME",
-            "data_type": "str",
-            "desc": "交易时间",
-            "must": "Y",
-            "name": "trade_time"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期\t",
-            "must": "Y",
-            "name": "list_date"
-        }
+    [
+      283,
+      "现货"
     ],
-    "parent_id": 283,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            283,
-            "现货"
-        ],
-        [
-            284,
-            "上海黄金基础信息"
-        ]
-    ],
-    "title": "上海黄金基础信息",
-    "validations": []
+    [
+      284,
+      "上海黄金基础信息"
+    ]
+  ],
+  "title": "上海黄金基础信息",
+  "validations": []
 }

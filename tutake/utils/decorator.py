@@ -1,5 +1,7 @@
 import re
 import time
+from inspect import getmembers, isfunction
+from typing import Type
 
 
 def sleep(timeout, time_append=0, retry=3, match=None):
@@ -27,6 +29,15 @@ def sleep(timeout, time_append=0, retry=3, match=None):
 @sleep(1, time_append=3, match="^test")
 def test(val):
     raise Exception("testadf")
+
+
+def extends_attr(clazz: Type, ext):
+    functions_list = getmembers(ext, isfunction)
+    for function in functions_list:
+        name = function[0]
+        if name.endswith("_ext"):
+            name = name[:-4]
+            setattr(clazz, name, function[1])
 
 
 if __name__ == '__main__':

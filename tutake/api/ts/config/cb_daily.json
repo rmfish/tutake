@@ -1,145 +1,145 @@
 {
-    "database": "tushare_cb",
-    "default_limit": null,
-    "desc": "获取可转债行情",
-    "id": 187,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取可转债行情",
+  "id": 187,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "cb_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "转债代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "PRE_CLOSE",
+      "data_type": "float",
+      "desc": "昨收盘价(元)",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "OPEN",
+      "data_type": "float",
+      "desc": "开盘价(元)",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "HIGH",
+      "data_type": "float",
+      "desc": "最高价(元)",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "LOW",
+      "data_type": "float",
+      "desc": "最低价(元)",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "收盘价(元)",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "CHANGE",
+      "data_type": "float",
+      "desc": "涨跌(元)",
+      "must": "Y",
+      "name": "change"
+    },
+    {
+      "column": "PCT_CHANGE",
+      "data_type": "float",
+      "desc": "涨跌幅(%)",
+      "must": "Y",
+      "name": "pct_chg"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "成交量(手)",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "成交金额(万元)",
+      "must": "Y",
+      "name": "amount"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "cb_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "转债代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "PRE_CLOSE",
-            "data_type": "float",
-            "desc": "昨收盘价(元)",
-            "must": "Y",
-            "name": "pre_close"
-        },
-        {
-            "column": "OPEN",
-            "data_type": "float",
-            "desc": "开盘价(元)",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "HIGH",
-            "data_type": "float",
-            "desc": "最高价(元)",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "LOW",
-            "data_type": "float",
-            "desc": "最低价(元)",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "收盘价(元)",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "CHANGE",
-            "data_type": "float",
-            "desc": "涨跌(元)",
-            "must": "Y",
-            "name": "change"
-        },
-        {
-            "column": "PCT_CHANGE",
-            "data_type": "float",
-            "desc": "涨跌幅(%)",
-            "must": "Y",
-            "name": "pct_chg"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "成交量(手)",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "成交金额(万元)",
-            "must": "Y",
-            "name": "amount"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            187,
-            "可转债行情"
-        ]
-    ],
-    "title": "可转债行情",
-    "validations": []
+    [
+      187,
+      "可转债行情"
+    ]
+  ],
+  "title": "可转债行情",
+  "validations": []
 }

@@ -1,124 +1,124 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取电影日度票房,当日更新上一日数据,数据从2018年9月开始，更多历史数据正在补充",
-    "id": 115,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取电影日度票房,当日更新上一日数据,数据从2018年9月开始，更多历史数据正在补充",
+  "id": 115,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 500,
+  "is_ready": null,
+  "name": "bo_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "影片名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "AVG_PRICE",
+      "data_type": "float",
+      "desc": "平均票价",
+      "must": "Y",
+      "name": "avg_price"
+    },
+    {
+      "column": "DAY_AMOUNT",
+      "data_type": "float",
+      "desc": "当日票房（万）",
+      "must": "Y",
+      "name": "day_amount"
+    },
+    {
+      "column": "TOTAL",
+      "data_type": "float",
+      "desc": "累计票房（万）",
+      "must": "Y",
+      "name": "total"
+    },
+    {
+      "column": "LIST_DAY",
+      "data_type": "int",
+      "desc": "上映天数",
+      "must": "Y",
+      "name": "list_day"
+    },
+    {
+      "column": "P_PC",
+      "data_type": "int",
+      "desc": "场均人次",
+      "must": "Y",
+      "name": "p_pc"
+    },
+    {
+      "column": "WOM_INDEX",
+      "data_type": "float",
+      "desc": "口碑指数",
+      "must": "Y",
+      "name": "wom_index"
+    },
+    {
+      "column": "UP_RATIO",
+      "data_type": "float",
+      "desc": "环比变化 （%）",
+      "must": "Y",
+      "name": "up_ratio"
+    },
+    {
+      "column": "RANK",
+      "data_type": "int",
+      "desc": "排名",
+      "must": "Y",
+      "name": "rank"
+    }
+  ],
+  "parent_id": 83,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 500,
-    "is_ready": null,
-    "name": "bo_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "影片名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "AVG_PRICE",
-            "data_type": "float",
-            "desc": "平均票价",
-            "must": "Y",
-            "name": "avg_price"
-        },
-        {
-            "column": "DAY_AMOUNT",
-            "data_type": "float",
-            "desc": "当日票房（万）",
-            "must": "Y",
-            "name": "day_amount"
-        },
-        {
-            "column": "TOTAL",
-            "data_type": "float",
-            "desc": "累计票房（万）",
-            "must": "Y",
-            "name": "total"
-        },
-        {
-            "column": "LIST_DAY",
-            "data_type": "int",
-            "desc": "上映天数",
-            "must": "Y",
-            "name": "list_day"
-        },
-        {
-            "column": "P_PC",
-            "data_type": "int",
-            "desc": "场均人次",
-            "must": "Y",
-            "name": "p_pc"
-        },
-        {
-            "column": "WOM_INDEX",
-            "data_type": "float",
-            "desc": "口碑指数",
-            "must": "Y",
-            "name": "wom_index"
-        },
-        {
-            "column": "UP_RATIO",
-            "data_type": "float",
-            "desc": "环比变化 （%）",
-            "must": "Y",
-            "name": "up_ratio"
-        },
-        {
-            "column": "RANK",
-            "data_type": "int",
-            "desc": "排名",
-            "must": "Y",
-            "name": "rank"
-        }
+    [
+      82,
+      "行业经济"
     ],
-    "parent_id": 83,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            82,
-            "行业经济"
-        ],
-        [
-            83,
-            "TMT行业"
-        ],
-        [
-            115,
-            "电影日度票房"
-        ]
+    [
+      83,
+      "TMT行业"
     ],
-    "title": "电影日度票房",
-    "validations": []
+    [
+      115,
+      "电影日度票房"
+    ]
+  ],
+  "title": "电影日度票房",
+  "validations": []
 }

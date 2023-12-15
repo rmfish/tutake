@@ -1,105 +1,105 @@
 {
-    "database": "tushare_stock",
-    "default_limit": "5000",
-    "desc": "每日停复牌信息",
-    "id": 214,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码(可输入多值)",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "停复牌类型：S-停牌,R-复牌",
-            "must": "N",
-            "name": "suspend_type"
-        },
-        {
-            "data_type": "str",
-            "desc": "停复牌日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "停复牌查询开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "停复牌查询结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "5000",
+  "desc": "每日停复牌信息",
+  "id": 214,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码(可输入多值)",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "停复牌类型：S-停牌,R-复牌",
+      "must": "N",
+      "name": "suspend_type"
+    },
+    {
+      "data_type": "str",
+      "desc": "停复牌日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "停复牌查询开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "停复牌查询结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": 1,
+  "name": "suspend_d",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "SUSPEND_DATE",
+      "data_type": "str",
+      "desc": "停复牌日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "SUSPEND_TIMING",
+      "data_type": "str",
+      "desc": "日内停牌时间段",
+      "must": "Y",
+      "name": "suspend_timing"
+    },
+    {
+      "column": "SUSPEND_TYPE",
+      "data_type": "str",
+      "desc": "停复牌类型：S-停牌，R-复牌",
+      "must": "Y",
+      "name": "suspend_type"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": 1,
-    "name": "suspend_d",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "SUSPEND_DATE",
-            "data_type": "str",
-            "desc": "停复牌日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "SUSPEND_TIMING",
-            "data_type": "str",
-            "desc": "日内停牌时间段",
-            "must": "Y",
-            "name": "suspend_timing"
-        },
-        {
-            "column": "SUSPEND_TYPE",
-            "data_type": "str",
-            "desc": "停复牌类型：S-停牌，R-复牌",
-            "must": "Y",
-            "name": "suspend_type"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            214,
-            "每日停复牌信息"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "每日停复牌信息",
-    "validations": []
+    [
+      214,
+      "每日停复牌信息"
+    ]
+  ],
+  "title": "每日停复牌信息",
+  "validations": []
 }

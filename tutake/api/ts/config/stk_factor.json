@@ -1,335 +1,335 @@
 {
-    "database": "tushare_stk",
-    "default_limit": "10000",
-    "desc": "获取股票每日技术面因子数据，用于跟踪股票当前走势情况，数据由Tushare社区自产，覆盖全历史 1、本接口的前复权行情是从最新一个交易日开始往前复权，跟行情软件一致。\n2、pro_bar接口的前复权是动态复权，即以end_date参数开始往前复权，与本接口会存在不一致的可能，属正常。\n3、本接口技术指标都是基于前复权价格计算。",
-    "id": 296,
-    "if_exists": null,
-    "integral_required": 5000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "10000",
+  "desc": "获取股票每日技术面因子数据，用于跟踪股票当前走势情况，数据由Tushare社区自产，覆盖全历史 1、本接口的前复权行情是从最新一个交易日开始往前复权，跟行情软件一致。\n2、pro_bar接口的前复权是动态复权，即以end_date参数开始往前复权，与本接口会存在不一致的可能，属正常。\n3、本接口技术指标都是基于前复权价格计算。",
+  "id": 296,
+  "if_exists": null,
+  "integral_required": 5000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "stk_factor",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "ts_code",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "trade_date",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "close",
+      "data_type": "float",
+      "desc": "收盘价",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "open",
+      "data_type": "float",
+      "desc": "开盘价",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "high",
+      "data_type": "float",
+      "desc": "最高价",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "low",
+      "data_type": "float",
+      "desc": "最低价",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "pre_close",
+      "data_type": "float",
+      "desc": "昨收价",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "change",
+      "data_type": "float",
+      "desc": "涨跌额",
+      "must": "Y",
+      "name": "change"
+    },
+    {
+      "column": "pct_change",
+      "data_type": "float",
+      "desc": "涨跌幅",
+      "must": "Y",
+      "name": "pct_change"
+    },
+    {
+      "column": "vol",
+      "data_type": "float",
+      "desc": "成交量 （手）",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "amount",
+      "data_type": "float",
+      "desc": "成交额 （千元）",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "adj_factor",
+      "data_type": "float",
+      "desc": "复权因子",
+      "must": "Y",
+      "name": "adj_factor"
+    },
+    {
+      "column": "open_hfq",
+      "data_type": "float",
+      "desc": "开盘价后复权",
+      "must": "Y",
+      "name": "open_hfq"
+    },
+    {
+      "column": "open_qfq",
+      "data_type": "float",
+      "desc": "开盘价前复权",
+      "must": "Y",
+      "name": "open_qfq"
+    },
+    {
+      "column": "close_hfq",
+      "data_type": "float",
+      "desc": "收盘价后复权",
+      "must": "Y",
+      "name": "close_hfq"
+    },
+    {
+      "column": "close_qfq",
+      "data_type": "float",
+      "desc": "收盘价前复权",
+      "must": "Y",
+      "name": "close_qfq"
+    },
+    {
+      "column": "high_hfq",
+      "data_type": "float",
+      "desc": "最高价后复权",
+      "must": "Y",
+      "name": "high_hfq"
+    },
+    {
+      "column": "high_qfq",
+      "data_type": "float",
+      "desc": "最高价前复权",
+      "must": "Y",
+      "name": "high_qfq"
+    },
+    {
+      "column": "low_hfq",
+      "data_type": "float",
+      "desc": "最低价后复权",
+      "must": "Y",
+      "name": "low_hfq"
+    },
+    {
+      "column": "low_qfq",
+      "data_type": "float",
+      "desc": "最低价前复权",
+      "must": "Y",
+      "name": "low_qfq"
+    },
+    {
+      "column": "pre_close_hfq",
+      "data_type": "float",
+      "desc": "昨收价后复权",
+      "must": "Y",
+      "name": "pre_close_hfq"
+    },
+    {
+      "column": "pre_close_qfq",
+      "data_type": "float",
+      "desc": "昨收价前复权",
+      "must": "Y",
+      "name": "pre_close_qfq"
+    },
+    {
+      "column": "MCAD_DIF",
+      "data_type": "float",
+      "desc": "macd_diff",
+      "must": "Y",
+      "name": "macd_dif"
+    },
+    {
+      "column": "MCAD_DEA",
+      "data_type": "float",
+      "desc": "macd_dea",
+      "must": "Y",
+      "name": "macd_dea"
+    },
+    {
+      "column": "MCAD",
+      "data_type": "float",
+      "desc": "macd",
+      "must": "Y",
+      "name": "macd"
+    },
+    {
+      "column": "KDJ_K",
+      "data_type": "float",
+      "desc": "KDJ_K",
+      "must": "Y",
+      "name": "kdj_k"
+    },
+    {
+      "column": "KDJ_D",
+      "data_type": "float",
+      "desc": "KDJ_D",
+      "must": "Y",
+      "name": "kdj_d"
+    },
+    {
+      "column": "KDJ_J",
+      "data_type": "float",
+      "desc": "KDJ_J",
+      "must": "Y",
+      "name": "kdj_j"
+    },
+    {
+      "column": "RSI_6",
+      "data_type": "float",
+      "desc": "RSI_6",
+      "must": "Y",
+      "name": "rsi_6"
+    },
+    {
+      "column": "RSI_12",
+      "data_type": "float",
+      "desc": "RSI_12",
+      "must": "Y",
+      "name": "rsi_12"
+    },
+    {
+      "column": "RSI_24",
+      "data_type": "float",
+      "desc": "RSI_24",
+      "must": "Y",
+      "name": "rsi_24"
+    },
+    {
+      "column": "BOLL_UPPER",
+      "data_type": "float",
+      "desc": "BOLL_UPPER",
+      "must": "Y",
+      "name": "boll_upper"
+    },
+    {
+      "column": "BOLL_MID",
+      "data_type": "float",
+      "desc": "BOLL_MID",
+      "must": "Y",
+      "name": "boll_mid"
+    },
+    {
+      "column": "BOLL_LOWER",
+      "data_type": "float",
+      "desc": "BOLL_LOWER",
+      "must": "Y",
+      "name": "boll_lower"
+    },
+    {
+      "column": "CCI",
+      "data_type": "float",
+      "desc": "CCI",
+      "must": "Y",
+      "name": "cci"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "stk_factor",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "ts_code",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "trade_date",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "close",
-            "data_type": "float",
-            "desc": "收盘价",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "open",
-            "data_type": "float",
-            "desc": "开盘价",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "high",
-            "data_type": "float",
-            "desc": "最高价",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "low",
-            "data_type": "float",
-            "desc": "最低价",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "pre_close",
-            "data_type": "float",
-            "desc": "昨收价",
-            "must": "Y",
-            "name": "pre_close"
-        },
-        {
-            "column": "change",
-            "data_type": "float",
-            "desc": "涨跌额",
-            "must": "Y",
-            "name": "change"
-        },
-        {
-            "column": "pct_change",
-            "data_type": "float",
-            "desc": "涨跌幅",
-            "must": "Y",
-            "name": "pct_change"
-        },
-        {
-            "column": "vol",
-            "data_type": "float",
-            "desc": "成交量 （手）",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "amount",
-            "data_type": "float",
-            "desc": "成交额 （千元）",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "adj_factor",
-            "data_type": "float",
-            "desc": "复权因子",
-            "must": "Y",
-            "name": "adj_factor"
-        },
-        {
-            "column": "open_hfq",
-            "data_type": "float",
-            "desc": "开盘价后复权",
-            "must": "Y",
-            "name": "open_hfq"
-        },
-        {
-            "column": "open_qfq",
-            "data_type": "float",
-            "desc": "开盘价前复权",
-            "must": "Y",
-            "name": "open_qfq"
-        },
-        {
-            "column": "close_hfq",
-            "data_type": "float",
-            "desc": "收盘价后复权",
-            "must": "Y",
-            "name": "close_hfq"
-        },
-        {
-            "column": "close_qfq",
-            "data_type": "float",
-            "desc": "收盘价前复权",
-            "must": "Y",
-            "name": "close_qfq"
-        },
-        {
-            "column": "high_hfq",
-            "data_type": "float",
-            "desc": "最高价后复权",
-            "must": "Y",
-            "name": "high_hfq"
-        },
-        {
-            "column": "high_qfq",
-            "data_type": "float",
-            "desc": "最高价前复权",
-            "must": "Y",
-            "name": "high_qfq"
-        },
-        {
-            "column": "low_hfq",
-            "data_type": "float",
-            "desc": "最低价后复权",
-            "must": "Y",
-            "name": "low_hfq"
-        },
-        {
-            "column": "low_qfq",
-            "data_type": "float",
-            "desc": "最低价前复权",
-            "must": "Y",
-            "name": "low_qfq"
-        },
-        {
-            "column": "pre_close_hfq",
-            "data_type": "float",
-            "desc": "昨收价后复权",
-            "must": "Y",
-            "name": "pre_close_hfq"
-        },
-        {
-            "column": "pre_close_qfq",
-            "data_type": "float",
-            "desc": "昨收价前复权",
-            "must": "Y",
-            "name": "pre_close_qfq"
-        },
-        {
-            "column": "MCAD_DIF",
-            "data_type": "float",
-            "desc": "macd_diff",
-            "must": "Y",
-            "name": "macd_dif"
-        },
-        {
-            "column": "MCAD_DEA",
-            "data_type": "float",
-            "desc": "macd_dea",
-            "must": "Y",
-            "name": "macd_dea"
-        },
-        {
-            "column": "MCAD",
-            "data_type": "float",
-            "desc": "macd",
-            "must": "Y",
-            "name": "macd"
-        },
-        {
-            "column": "KDJ_K",
-            "data_type": "float",
-            "desc": "KDJ_K",
-            "must": "Y",
-            "name": "kdj_k"
-        },
-        {
-            "column": "KDJ_D",
-            "data_type": "float",
-            "desc": "KDJ_D",
-            "must": "Y",
-            "name": "kdj_d"
-        },
-        {
-            "column": "KDJ_J",
-            "data_type": "float",
-            "desc": "KDJ_J",
-            "must": "Y",
-            "name": "kdj_j"
-        },
-        {
-            "column": "RSI_6",
-            "data_type": "float",
-            "desc": "RSI_6",
-            "must": "Y",
-            "name": "rsi_6"
-        },
-        {
-            "column": "RSI_12",
-            "data_type": "float",
-            "desc": "RSI_12",
-            "must": "Y",
-            "name": "rsi_12"
-        },
-        {
-            "column": "RSI_24",
-            "data_type": "float",
-            "desc": "RSI_24",
-            "must": "Y",
-            "name": "rsi_24"
-        },
-        {
-            "column": "BOLL_UPPER",
-            "data_type": "float",
-            "desc": "BOLL_UPPER",
-            "must": "Y",
-            "name": "boll_upper"
-        },
-        {
-            "column": "BOLL_MID",
-            "data_type": "float",
-            "desc": "BOLL_MID",
-            "must": "Y",
-            "name": "boll_mid"
-        },
-        {
-            "column": "BOLL_LOWER",
-            "data_type": "float",
-            "desc": "BOLL_LOWER",
-            "must": "Y",
-            "name": "boll_lower"
-        },
-        {
-            "column": "CCI",
-            "data_type": "float",
-            "desc": "CCI",
-            "must": "Y",
-            "name": "cci"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            296,
-            "股票技术面因子"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "股票技术面因子",
-    "validations": [
-        {
-            "message": "ts_code,trade_date至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      296,
+      "股票技术面因子"
     ]
+  ],
+  "title": "股票技术面因子",
+  "validations": [
+    {
+      "message": "ts_code,trade_date至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

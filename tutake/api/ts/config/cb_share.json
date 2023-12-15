@@ -1,154 +1,154 @@
 {
-    "database": "tushare_cb",
-    "default_limit": null,
-    "desc": "获取可转债转股结果",
-    "id": 247,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "转债代码，支持多值输入",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取可转债转股结果",
+  "id": 247,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "转债代码，支持多值输入",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "cb_share",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "债券代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "BOND_SHORT_NAME",
+      "data_type": "str",
+      "desc": "债券简称",
+      "must": "Y",
+      "name": "bond_short_name"
+    },
+    {
+      "column": "PUBLISH_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "publish_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "统计截止日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "ISSUE_SIZE",
+      "data_type": "float",
+      "desc": "可转债发行总额",
+      "must": "Y",
+      "name": "issue_size"
+    },
+    {
+      "column": "CONVERT_PRICE_INITIAL",
+      "data_type": "float",
+      "desc": "初始转换价格",
+      "must": "Y",
+      "name": "convert_price_initial"
+    },
+    {
+      "column": "CONVERT_PRICE",
+      "data_type": "float",
+      "desc": "本次转换价格",
+      "must": "Y",
+      "name": "convert_price"
+    },
+    {
+      "column": "CONVERT_VAL",
+      "data_type": "float",
+      "desc": "本次转股金额",
+      "must": "Y",
+      "name": "convert_val"
+    },
+    {
+      "column": "CONVERT_VOL",
+      "data_type": "float",
+      "desc": "本次转股数量",
+      "must": "Y",
+      "name": "convert_vol"
+    },
+    {
+      "column": "CONVERT_RATIO",
+      "data_type": "float",
+      "desc": "本次转股比例",
+      "must": "Y",
+      "name": "convert_ratio"
+    },
+    {
+      "column": "ACC_CONVERT_VAL",
+      "data_type": "float",
+      "desc": "累计转股金额",
+      "must": "Y",
+      "name": "acc_convert_val"
+    },
+    {
+      "column": "ACC_CONVERT_VOL",
+      "data_type": "float",
+      "desc": "累计转股数量",
+      "must": "Y",
+      "name": "acc_convert_vol"
+    },
+    {
+      "column": "ACC_CONVERT_RATIO",
+      "data_type": "float",
+      "desc": "累计转股比例",
+      "must": "Y",
+      "name": "acc_convert_ratio"
+    },
+    {
+      "column": "REMAIN_SIZE",
+      "data_type": "float",
+      "desc": "可转债剩余金额",
+      "must": "Y",
+      "name": "remain_size"
+    },
+    {
+      "column": "TOTAL_SHARES",
+      "data_type": "float",
+      "desc": "转股后总股本",
+      "must": "Y",
+      "name": "total_shares"
+    }
+  ],
+  "parent_id": 184,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "cb_share",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "债券代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "BOND_SHORT_NAME",
-            "data_type": "str",
-            "desc": "债券简称",
-            "must": "Y",
-            "name": "bond_short_name"
-        },
-        {
-            "column": "PUBLISH_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "publish_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "统计截止日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "ISSUE_SIZE",
-            "data_type": "float",
-            "desc": "可转债发行总额",
-            "must": "Y",
-            "name": "issue_size"
-        },
-        {
-            "column": "CONVERT_PRICE_INITIAL",
-            "data_type": "float",
-            "desc": "初始转换价格",
-            "must": "Y",
-            "name": "convert_price_initial"
-        },
-        {
-            "column": "CONVERT_PRICE",
-            "data_type": "float",
-            "desc": "本次转换价格",
-            "must": "Y",
-            "name": "convert_price"
-        },
-        {
-            "column": "CONVERT_VAL",
-            "data_type": "float",
-            "desc": "本次转股金额",
-            "must": "Y",
-            "name": "convert_val"
-        },
-        {
-            "column": "CONVERT_VOL",
-            "data_type": "float",
-            "desc": "本次转股数量",
-            "must": "Y",
-            "name": "convert_vol"
-        },
-        {
-            "column": "CONVERT_RATIO",
-            "data_type": "float",
-            "desc": "本次转股比例",
-            "must": "Y",
-            "name": "convert_ratio"
-        },
-        {
-            "column": "ACC_CONVERT_VAL",
-            "data_type": "float",
-            "desc": "累计转股金额",
-            "must": "Y",
-            "name": "acc_convert_val"
-        },
-        {
-            "column": "ACC_CONVERT_VOL",
-            "data_type": "float",
-            "desc": "累计转股数量",
-            "must": "Y",
-            "name": "acc_convert_vol"
-        },
-        {
-            "column": "ACC_CONVERT_RATIO",
-            "data_type": "float",
-            "desc": "累计转股比例",
-            "must": "Y",
-            "name": "acc_convert_ratio"
-        },
-        {
-            "column": "REMAIN_SIZE",
-            "data_type": "float",
-            "desc": "可转债剩余金额",
-            "must": "Y",
-            "name": "remain_size"
-        },
-        {
-            "column": "TOTAL_SHARES",
-            "data_type": "float",
-            "desc": "转股后总股本",
-            "must": "Y",
-            "name": "total_shares"
-        }
+    [
+      184,
+      "债券"
     ],
-    "parent_id": 184,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            184,
-            "债券"
-        ],
-        [
-            247,
-            "可转债转股结果"
-        ]
-    ],
-    "title": "可转债转股结果",
-    "validations": []
+    [
+      247,
+      "可转债转股结果"
+    ]
+  ],
+  "title": "可转债转股结果",
+  "validations": []
 }

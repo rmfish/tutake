@@ -1,141 +1,141 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "获取港股列表信息",
-    "id": 191,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "default": "L",
-            "desc": "上市状态 L上市 D退市 P暂停上市",
-            "must": "N",
-            "name": "list_status"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取港股列表信息",
+  "id": 191,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "default": "L",
+      "desc": "上市状态 L上市 D退市 P暂停上市",
+      "must": "N",
+      "name": "list_status"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "hk_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票简称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "FULLNAME",
+      "data_type": "str",
+      "desc": "公司全称",
+      "must": "Y",
+      "name": "fullname"
+    },
+    {
+      "column": "ENNAME",
+      "data_type": "str",
+      "desc": "英文名称",
+      "must": "Y",
+      "name": "enname"
+    },
+    {
+      "column": "CN_SPELL",
+      "data_type": "str",
+      "desc": "拼音",
+      "must": "Y",
+      "name": "cn_spell"
+    },
+    {
+      "column": "MARKET",
+      "data_type": "str",
+      "desc": "市场类别",
+      "must": "Y",
+      "name": "market"
+    },
+    {
+      "column": "LIST_STATUS",
+      "data_type": "str",
+      "desc": "上市状态",
+      "must": "Y",
+      "name": "list_status"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "DELIST_DATE",
+      "data_type": "str",
+      "desc": "退市日期",
+      "must": "Y",
+      "name": "delist_date"
+    },
+    {
+      "column": "TRADE_UNIT",
+      "data_type": "float",
+      "desc": "交易单位",
+      "must": "Y",
+      "name": "trade_unit"
+    },
+    {
+      "column": "ISIN",
+      "data_type": "str",
+      "desc": "ISIN代码",
+      "must": "Y",
+      "name": "isin"
+    },
+    {
+      "column": "CURR_TYPE",
+      "data_type": "str",
+      "desc": "货币代码",
+      "must": "Y",
+      "name": "curr_type"
+    }
+  ],
+  "parent_id": 190,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "hk_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票简称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "FULLNAME",
-            "data_type": "str",
-            "desc": "公司全称",
-            "must": "Y",
-            "name": "fullname"
-        },
-        {
-            "column": "ENNAME",
-            "data_type": "str",
-            "desc": "英文名称",
-            "must": "Y",
-            "name": "enname"
-        },
-        {
-            "column": "CN_SPELL",
-            "data_type": "str",
-            "desc": "拼音",
-            "must": "Y",
-            "name": "cn_spell"
-        },
-        {
-            "column": "MARKET",
-            "data_type": "str",
-            "desc": "市场类别",
-            "must": "Y",
-            "name": "market"
-        },
-        {
-            "column": "LIST_STATUS",
-            "data_type": "str",
-            "desc": "上市状态",
-            "must": "Y",
-            "name": "list_status"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "DELIST_DATE",
-            "data_type": "str",
-            "desc": "退市日期",
-            "must": "Y",
-            "name": "delist_date"
-        },
-        {
-            "column": "TRADE_UNIT",
-            "data_type": "float",
-            "desc": "交易单位",
-            "must": "Y",
-            "name": "trade_unit"
-        },
-        {
-            "column": "ISIN",
-            "data_type": "str",
-            "desc": "ISIN代码",
-            "must": "Y",
-            "name": "isin"
-        },
-        {
-            "column": "CURR_TYPE",
-            "data_type": "str",
-            "desc": "货币代码",
-            "must": "Y",
-            "name": "curr_type"
-        }
+    [
+      190,
+      "港股"
     ],
-    "parent_id": 190,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            190,
-            "港股"
-        ],
-        [
-            191,
-            "港股列表"
-        ]
-    ],
-    "title": "港股列表",
-    "validations": []
+    [
+      191,
+      "港股列表"
+    ]
+  ],
+  "title": "港股列表",
+  "validations": []
 }

@@ -1,11 +1,6 @@
 import pendulum
 
 
-
-def default_cron_express_ext(self) -> str:
-    return ""
-
-
 def default_order_by_ext(self) -> str:
     """
     查询时默认的排序
@@ -18,12 +13,6 @@ def default_limit_ext(self) -> str:
     每次取数的默认Limit
     """
     return '4000'
-
-
-def prepare_ext(self):
-    """
-    同步历史数据准备工作
-    """
 
 
 def query_parameters_ext(self):

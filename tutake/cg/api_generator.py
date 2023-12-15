@@ -78,7 +78,8 @@ class CodeGenerator(object):
             if not api_config.get('if_exists'):
                 api_config['if_exists'] = 'append'
             if not api_config.get('database'):
-                api_config['database'] = f"{prefix}_{api_config.get('name')}"
+                api_config['database'] = "tutake"
+                # api_config['database'] = f"{prefix}_{api_config.get('name')}"
             if not api_config.get('default_limit'):
                 api_config['default_limit'] = ""
 
@@ -98,7 +99,6 @@ class CodeGenerator(object):
                     if column_rename is None:
                         column_rename = {}
                     column_rename[field.get('column_name')] = field.get('name')
-
 
             # [(o.get('column_name') is not None and o['column_name'] or o['name']) for o in api['outputs']
             #                       if o['must'] == 'Y']

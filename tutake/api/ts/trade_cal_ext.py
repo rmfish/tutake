@@ -1,5 +1,4 @@
-def default_cron_express_ext(self) -> str:
-    return ""
+from datetime import datetime, timedelta
 
 
 def default_order_by_ext(self) -> str:
@@ -8,14 +7,6 @@ def default_order_by_ext(self) -> str:
 
 def default_limit_ext(self):
     return ''
-
-
-def prepare_ext(self):
-    """
-    同步历史数据准备工作
-    :return:
-    """
-    self.delete_all()
 
 
 def query_parameters_ext(self):
@@ -27,8 +18,15 @@ def query_parameters_ext(self):
             {'exchange': 'CZCE'}, {'exchange': 'DCE'}, {'exchange': 'INE'}]
 
 
-def param_loop_process_ext(self, **params):
+def need_to_process_ext(self, **kwargs):
     """
-    每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
+    同步历史数据准备工作
     """
-    return params
+    max_date = self.max("cal_date")
+    if max_date is not None:
+        return max_date < (datetime.now() + timedelta(days=-31)).strftime("%Y%m")
+    return True
+
+
+def prepare_write_ext(self, writer, **kwargs) -> bool:
+    self.delete_all()

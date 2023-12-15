@@ -1,130 +1,130 @@
 {
-    "database": "tushare_fund",
-    "default_limit": "200",
-    "desc": "获取公募基金持仓数据，季度更新",
-    "id": 121,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "基金代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "报告期",
-            "must": "N",
-            "name": "period"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "200",
+  "desc": "获取公募基金持仓数据，季度更新",
+  "id": 121,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "基金代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "报告期",
+      "must": "N",
+      "name": "period"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "fund_portfolio",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS基金代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "截止日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "SYMBOL",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "MKV",
+      "data_type": "float",
+      "desc": "持有股票市值(元)",
+      "must": "Y",
+      "name": "mkv"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "持有股票数量（股）",
+      "must": "Y",
+      "name": "amount"
+    },
+    {
+      "column": "STK_MKV_RATIO",
+      "data_type": "float",
+      "desc": "占股票市值比",
+      "must": "Y",
+      "name": "stk_mkv_ratio"
+    },
+    {
+      "column": "STK_FLOAT_RATIO",
+      "data_type": "float",
+      "desc": "占流通股本比例",
+      "must": "Y",
+      "name": "stk_float_ratio"
+    }
+  ],
+  "parent_id": 18,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "fund_portfolio",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS基金代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "截止日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "SYMBOL",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "MKV",
-            "data_type": "float",
-            "desc": "持有股票市值(元)",
-            "must": "Y",
-            "name": "mkv"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "持有股票数量（股）",
-            "must": "Y",
-            "name": "amount"
-        },
-        {
-            "column": "STK_MKV_RATIO",
-            "data_type": "float",
-            "desc": "占股票市值比",
-            "must": "Y",
-            "name": "stk_mkv_ratio"
-        },
-        {
-            "column": "STK_FLOAT_RATIO",
-            "data_type": "float",
-            "desc": "占流通股本比例",
-            "must": "Y",
-            "name": "stk_float_ratio"
-        }
+    [
+      18,
+      "公募基金"
     ],
-    "parent_id": 18,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            18,
-            "公募基金"
-        ],
-        [
-            121,
-            "基金持仓"
-        ]
-    ],
-    "title": "基金持仓",
-    "validations": []
+    [
+      121,
+      "基金持仓"
+    ]
+  ],
+  "title": "基金持仓",
+  "validations": []
 }

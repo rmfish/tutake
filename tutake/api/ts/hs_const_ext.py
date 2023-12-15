@@ -1,23 +1,9 @@
-
-
-def default_cron_express_ext(self) -> str:
-    return ""
-
-
 def default_order_by_ext(self) -> str:
     return "in_date"
 
 
 def default_limit_ext(self):
     return ''
-
-
-def prepare_ext(self):
-    """
-    同步历史数据准备工作
-    :return:
-    """
-    self.delete_all()
 
 
 def query_parameters_ext(self):
@@ -28,8 +14,13 @@ def query_parameters_ext(self):
     return [{"hs_type": "SH"}, {"hs_type": "SZ"}]
 
 
-def param_loop_process_ext(self, **params):
+def need_to_process_ext(self, **kwargs):
+    from tutake.api.ts.date_utils import min_count_and_last_process
+    return min_count_and_last_process(self, last_process_day=30)
+
+
+def prepare_write_ext(self, writer, **kwargs):
     """
-    每执行一次fetch_and_append前，做一次参数的处理，如果返回None就中断这次执行
+    同步历史数据准备工作
     """
-    return params
+    self.delete_all()

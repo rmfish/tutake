@@ -1,90 +1,90 @@
 {
-    "database": null,
-    "default_limit": null,
-    "desc": "",
-    "id": 73,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "datetime",
-            "desc": "开始时间",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "data_type": "datetime",
-            "desc": "结束时间",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 73,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "datetime",
+      "desc": "开始时间",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "data_type": "datetime",
+      "desc": "结束时间",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "bishijie",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "title",
+      "data_type": "str",
+      "desc": "标题",
+      "must": "Y",
+      "name": "title"
+    },
+    {
+      "column": "content",
+      "data_type": "str",
+      "desc": "内容",
+      "must": "Y",
+      "name": "content"
+    },
+    {
+      "column": "type",
+      "data_type": "str",
+      "desc": "类型",
+      "must": "Y",
+      "name": "type"
+    },
+    {
+      "column": "url",
+      "data_type": "str",
+      "desc": "URL",
+      "must": "Y",
+      "name": "url"
+    },
+    {
+      "column": "src_time",
+      "data_type": "str",
+      "desc": "时间",
+      "must": "Y",
+      "name": "datetime"
+    }
+  ],
+  "parent_id": 69,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "bishijie",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "title",
-            "data_type": "str",
-            "desc": "标题",
-            "must": "Y",
-            "name": "title"
-        },
-        {
-            "column": "content",
-            "data_type": "str",
-            "desc": "内容",
-            "must": "Y",
-            "name": "content"
-        },
-        {
-            "column": "type",
-            "data_type": "str",
-            "desc": "类型",
-            "must": "Y",
-            "name": "type"
-        },
-        {
-            "column": "url",
-            "data_type": "str",
-            "desc": "URL",
-            "must": "Y",
-            "name": "url"
-        },
-        {
-            "column": "src_time",
-            "data_type": "str",
-            "desc": "时间",
-            "must": "Y",
-            "name": "datetime"
-        }
+    [
+      69,
+      "资讯公告"
     ],
-    "parent_id": 69,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            69,
-            "资讯公告"
-        ],
-        [
-            73,
-            "币世界"
-        ]
-    ],
-    "title": "币世界",
-    "validations": []
+    [
+      73,
+      "币世界"
+    ]
+  ],
+  "title": "币世界",
+  "validations": []
 }

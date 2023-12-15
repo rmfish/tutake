@@ -8,22 +8,22 @@ Tushare fund_company接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.fund_company_ext import *
+from tutake.api.ts import fund_company_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareFundCompany(Base):
+class TushareFundCompany(TutakeTableBase):
     __tablename__ = "tushare_fund_company"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, comment='公司名称')
     shortname = Column(String, comment='简称')
     short_enname = Column(String, comment='英文缩写')
@@ -54,8 +54,8 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_fund_company"
-        self.database = 'tushare_fund.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -64,6 +64,8 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundCompany.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareFundCompany),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['setup_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -197,7 +199,7 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -205,6 +207,7 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"setup_date": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -229,21 +232,18 @@ class FundCompany(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(FundCompany, 'default_limit', default_limit_ext)
-setattr(FundCompany, 'default_cron_express', default_cron_express_ext)
-setattr(FundCompany, 'default_order_by', default_order_by_ext)
-setattr(FundCompany, 'prepare', prepare_ext)
-setattr(FundCompany, 'query_parameters', query_parameters_ext)
-setattr(FundCompany, 'param_loop_process', param_loop_process_ext)
+extends_attr(FundCompany, fund_company_ext)
 
 if __name__ == '__main__':
     import tushare as ts

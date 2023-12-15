@@ -23,9 +23,10 @@ def realpath(file):
     :param file:
     :return:
     """
-    if file.startswith("~"):
-        return os.path.expanduser(file)
-    return os.path.realpath(file)
+    path = str(file)
+    if path.startswith("~"):
+        return os.path.expanduser(path)
+    return os.path.realpath(path)
 
 
 def project_root():

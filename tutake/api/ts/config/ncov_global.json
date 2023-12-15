@@ -1,164 +1,164 @@
 {
-    "database": null,
-    "default_limit": "10000",
-    "desc": "获取全球新冠疫情数据，包括国家和地区，同一日期可能有多条数据，当日可能多次公布，可以采用update_time最新时间的数据。如果取country=‘中国'，包含了各省市的明细数据。",
-    "id": 213,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "国家名称",
-            "must": "N",
-            "name": "country"
-        },
-        {
-            "data_type": "str",
-            "desc": "省份简称（北京、上海）",
-            "must": "N",
-            "name": "province"
-        },
-        {
-            "data_type": "datetime",
-            "desc": "公布日期",
-            "must": "N",
-            "name": "publish_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期（YYYYMMDD）",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期（YYYYMMDD）",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "10000",
+  "desc": "获取全球新冠疫情数据，包括国家和地区，同一日期可能有多条数据，当日可能多次公布，可以采用update_time最新时间的数据。如果取country=‘中国'，包含了各省市的明细数据。",
+  "id": 213,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "国家名称",
+      "must": "N",
+      "name": "country"
+    },
+    {
+      "data_type": "str",
+      "desc": "省份简称（北京、上海）",
+      "must": "N",
+      "name": "province"
+    },
+    {
+      "data_type": "datetime",
+      "desc": "公布日期",
+      "must": "N",
+      "name": "publish_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期（YYYYMMDD）",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期（YYYYMMDD）",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "ncov_global",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "AREA_ID",
+      "data_type": "str",
+      "desc": "地区代码",
+      "must": "N",
+      "name": "area_id"
+    },
+    {
+      "column": "PUBLISH_DATE",
+      "data_type": "str",
+      "desc": "发布日期",
+      "must": "Y",
+      "name": "publish_date"
+    },
+    {
+      "column": "COUNTRY",
+      "data_type": "str",
+      "desc": "国家",
+      "must": "Y",
+      "name": "country"
+    },
+    {
+      "column": "COUNTRY_ENNAME",
+      "data_type": "str",
+      "desc": "国家英文名",
+      "must": "Y",
+      "name": "country_enname"
+    },
+    {
+      "column": "PROVINCE",
+      "data_type": "str",
+      "desc": "省份",
+      "must": "Y",
+      "name": "province"
+    },
+    {
+      "column": "PROVINCE_SHORT",
+      "data_type": "str",
+      "desc": "省份简称",
+      "must": "Y",
+      "name": "province_short"
+    },
+    {
+      "column": "PROVINCE_ENNAME",
+      "data_type": "str",
+      "desc": "省份英文名",
+      "must": "Y",
+      "name": "province_enname"
+    },
+    {
+      "column": "CONFIRMED_NUM",
+      "data_type": "int",
+      "desc": "累计确诊病例",
+      "must": "Y",
+      "name": "confirmed_num"
+    },
+    {
+      "column": "CONFIRMED_NUM_NOW",
+      "data_type": "int",
+      "desc": "现有确诊病例",
+      "must": "Y",
+      "name": "confirmed_num_now"
+    },
+    {
+      "column": "SUSPECTED_NUM",
+      "data_type": "int",
+      "desc": "疑似感染病例",
+      "must": "Y",
+      "name": "suspected_num"
+    },
+    {
+      "column": "CURED_NUM",
+      "data_type": "int",
+      "desc": "治愈人数",
+      "must": "Y",
+      "name": "cured_num"
+    },
+    {
+      "column": "DEAD_NUM",
+      "data_type": "int",
+      "desc": "死亡人数",
+      "must": "Y",
+      "name": "dead_num"
+    },
+    {
+      "column": "update_time",
+      "data_type": "str",
+      "desc": "更新时间",
+      "must": "Y",
+      "name": "update_time"
+    }
+  ],
+  "parent_id": 142,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "ncov_global",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "AREA_ID",
-            "data_type": "str",
-            "desc": "地区代码",
-            "must": "N",
-            "name": "area_id"
-        },
-        {
-            "column": "PUBLISH_DATE",
-            "data_type": "str",
-            "desc": "发布日期",
-            "must": "Y",
-            "name": "publish_date"
-        },
-        {
-            "column": "COUNTRY",
-            "data_type": "str",
-            "desc": "国家",
-            "must": "Y",
-            "name": "country"
-        },
-        {
-            "column": "COUNTRY_ENNAME",
-            "data_type": "str",
-            "desc": "国家英文名",
-            "must": "Y",
-            "name": "country_enname"
-        },
-        {
-            "column": "PROVINCE",
-            "data_type": "str",
-            "desc": "省份",
-            "must": "Y",
-            "name": "province"
-        },
-        {
-            "column": "PROVINCE_SHORT",
-            "data_type": "str",
-            "desc": "省份简称",
-            "must": "Y",
-            "name": "province_short"
-        },
-        {
-            "column": "PROVINCE_ENNAME",
-            "data_type": "str",
-            "desc": "省份英文名",
-            "must": "Y",
-            "name": "province_enname"
-        },
-        {
-            "column": "CONFIRMED_NUM",
-            "data_type": "int",
-            "desc": "累计确诊病例",
-            "must": "Y",
-            "name": "confirmed_num"
-        },
-        {
-            "column": "CONFIRMED_NUM_NOW",
-            "data_type": "int",
-            "desc": "现有确诊病例",
-            "must": "Y",
-            "name": "confirmed_num_now"
-        },
-        {
-            "column": "SUSPECTED_NUM",
-            "data_type": "int",
-            "desc": "疑似感染病例",
-            "must": "Y",
-            "name": "suspected_num"
-        },
-        {
-            "column": "CURED_NUM",
-            "data_type": "int",
-            "desc": "治愈人数",
-            "must": "Y",
-            "name": "cured_num"
-        },
-        {
-            "column": "DEAD_NUM",
-            "data_type": "int",
-            "desc": "死亡人数",
-            "must": "Y",
-            "name": "dead_num"
-        },
-        {
-            "column": "update_time",
-            "data_type": "str",
-            "desc": "更新时间",
-            "must": "Y",
-            "name": "update_time"
-        }
+    [
+      142,
+      "另类数据"
     ],
-    "parent_id": 142,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            142,
-            "另类数据"
-        ],
-        [
-            213,
-            "全球新冠疫情数据"
-        ]
-    ],
-    "title": "全球新冠疫情数据",
-    "validations": []
+    [
+      213,
+      "全球新冠疫情数据"
+    ]
+  ],
+  "title": "全球新冠疫情数据",
+  "validations": []
 }

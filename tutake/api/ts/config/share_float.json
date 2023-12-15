@@ -1,163 +1,163 @@
 {
-    "database": null,
-    "default_limit": "5000",
-    "desc": "限售股解禁",
-    "id": 160,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "解禁日期",
-            "must": "N",
-            "name": "float_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "解禁开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "解禁结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "5000",
+  "desc": "限售股解禁",
+  "id": 160,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "解禁日期",
+      "must": "N",
+      "name": "float_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "解禁开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "解禁结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 1000,
+  "is_ready": null,
+  "name": "share_float",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "FLOAT_DATE",
+      "data_type": "str",
+      "desc": "解禁日期",
+      "must": "Y",
+      "name": "float_date"
+    },
+    {
+      "column": "FLOAT_SHARE",
+      "data_type": "float",
+      "desc": "流通股份",
+      "must": "Y",
+      "name": "float_share"
+    },
+    {
+      "column": "FLOAT_RATIO",
+      "data_type": "float",
+      "desc": "流通股份占总股本比率",
+      "must": "Y",
+      "name": "float_ratio"
+    },
+    {
+      "column": "HOLDER_NAME",
+      "data_type": "str",
+      "desc": "股东名称",
+      "must": "Y",
+      "name": "holder_name"
+    },
+    {
+      "column": "SHARE_TYPE",
+      "data_type": "str",
+      "desc": "股份类型",
+      "must": "Y",
+      "name": "share_type"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 1000,
-    "is_ready": null,
-    "name": "share_float",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "FLOAT_DATE",
-            "data_type": "str",
-            "desc": "解禁日期",
-            "must": "Y",
-            "name": "float_date"
-        },
-        {
-            "column": "FLOAT_SHARE",
-            "data_type": "float",
-            "desc": "流通股份",
-            "must": "Y",
-            "name": "float_share"
-        },
-        {
-            "column": "FLOAT_RATIO",
-            "data_type": "float",
-            "desc": "流通股份占总股本比率",
-            "must": "Y",
-            "name": "float_ratio"
-        },
-        {
-            "column": "HOLDER_NAME",
-            "data_type": "str",
-            "desc": "股东名称",
-            "must": "Y",
-            "name": "holder_name"
-        },
-        {
-            "column": "SHARE_TYPE",
-            "data_type": "str",
-            "desc": "股份类型",
-            "must": "Y",
-            "name": "share_type"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            160,
-            "限售股解禁"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "限售股解禁",
-    "validations": [
-        {
-            "message": "至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "float_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "ann_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "start_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "end_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      160,
+      "限售股解禁"
     ]
+  ],
+  "title": "限售股解禁",
+  "validations": [
+    {
+      "message": "至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "float_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "ann_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "start_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "end_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

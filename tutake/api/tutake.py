@@ -4,7 +4,7 @@ from tutake.utils.config import TutakeConfig
 
 
 class Tutake(object):
-    def __init__(self, config_file_path):
+    def __init__(self, config_file_path=None):
         self.config = TutakeConfig(config_file_path)
         self._ts = None
         self._xq = None

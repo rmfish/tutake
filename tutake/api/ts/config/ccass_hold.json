@@ -1,127 +1,127 @@
 {
-    "database": "tushare_stock",
-    "default_limit": null,
-    "desc": "获取中央结算系统持股汇总数据，覆盖全部历史数据，根据交易所披露时间，当日数据在下一交易日早上9点前完成入库",
-    "id": 295,
-    "if_exists": null,
-    "integral_required": 5000,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "default": 3,
-            "desc": "类型",
-            "must": "N",
-            "name": "type"
-        },
-        {
-            "data_type": "str",
-            "desc": "港交所代码",
-            "must": "N",
-            "name": "hk_hold"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取中央结算系统持股汇总数据，覆盖全部历史数据，根据交易所披露时间，当日数据在下一交易日早上9点前完成入库",
+  "id": 295,
+  "if_exists": null,
+  "integral_required": 5000,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "default": 3,
+      "desc": "类型",
+      "must": "N",
+      "name": "type"
+    },
+    {
+      "data_type": "str",
+      "desc": "港交所代码",
+      "must": "N",
+      "name": "hk_hold"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": true,
+  "name": "ccass_hold",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代号",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "SHAREHOLDING",
+      "data_type": "str",
+      "desc": "于中央结算系统的持股量(股)",
+      "must": "Y",
+      "name": "shareholding"
+    },
+    {
+      "column": "NUMBER_OF_PARTICIPANTS",
+      "data_type": "str",
+      "desc": "参与者数目（个）",
+      "must": "Y",
+      "name": "hold_nums"
+    },
+    {
+      "column": "PERCENT_OF_PARTICIPANTS",
+      "data_type": "str",
+      "desc": "占于上交所/深交所上市及交易的A股总数的百分比（%）",
+      "must": "Y",
+      "name": "hold_ratio"
+    }
+  ],
+  "parent_id": 291,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": true,
-    "name": "ccass_hold",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代号",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "SHAREHOLDING",
-            "data_type": "str",
-            "desc": "于中央结算系统的持股量(股)",
-            "must": "Y",
-            "name": "shareholding"
-        },
-        {
-            "column": "NUMBER_OF_PARTICIPANTS",
-            "data_type": "str",
-            "desc": "参与者数目（个）",
-            "must": "Y",
-            "name": "hold_nums"
-        },
-        {
-            "column": "PERCENT_OF_PARTICIPANTS",
-            "data_type": "str",
-            "desc": "占于上交所/深交所上市及交易的A股总数的百分比（%）",
-            "must": "Y",
-            "name": "hold_ratio"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 291,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            291,
-            "特色数据"
-        ],
-        [
-            295,
-            "中央结算系统持股统计"
-        ]
+    [
+      291,
+      "特色数据"
     ],
-    "title": "中央结算系统持股统计",
-    "validations": []
+    [
+      295,
+      "中央结算系统持股统计"
+    ]
+  ],
+  "title": "中央结算系统持股统计",
+  "validations": []
 }

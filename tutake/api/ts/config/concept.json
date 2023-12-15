@@ -1,76 +1,76 @@
 {
-    "database": "tushare_stock",
-    "default_limit": null,
-    "desc": "获取概念股分类，目前只有ts一个来源，未来将逐步增加来源",
-    "id": 125,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "default": "ts",
-            "desc": "来源",
-            "must": "N",
-            "name": "src"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取概念股分类，目前只有ts一个来源，未来将逐步增加来源",
+  "id": 125,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "default": "ts",
+      "desc": "来源",
+      "must": "N",
+      "name": "src"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "concept",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "CODE",
+      "data_type": "str",
+      "desc": "概念分类ID",
+      "must": "Y",
+      "name": "code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "概念分类名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "SRC",
+      "data_type": "str",
+      "desc": "来源",
+      "must": "Y",
+      "name": "src"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "concept",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "CODE",
-            "data_type": "str",
-            "desc": "概念分类ID",
-            "must": "Y",
-            "name": "code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "概念分类名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "SRC",
-            "data_type": "str",
-            "desc": "来源",
-            "must": "Y",
-            "name": "src"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            125,
-            "概念股分类表"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "概念股分类表",
-    "validations": []
+    [
+      125,
+      "概念股分类表"
+    ]
+  ],
+  "title": "概念股分类表",
+  "validations": []
 }

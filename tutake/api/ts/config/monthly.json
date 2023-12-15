@@ -1,169 +1,169 @@
 {
-    "database": null,
-    "default_limit": "4500",
-    "default_query": "ts_code='000001.SZ'",
-    "desc": "获取A股月线行情,全部历史，每月更新",
-    "id": 145,
-    "if_exists": null,
-    "checker": true,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "4500",
+  "default_query": "ts_code='000001.SZ'",
+  "desc": "获取A股月线行情,全部历史，每月更新",
+  "id": 145,
+  "if_exists": null,
+  "checker": true,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": 1,
+  "name": "monthly",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "CLOSE",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "close"
+    },
+    {
+      "column": "OPEN",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "open"
+    },
+    {
+      "column": "HIGH",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "high"
+    },
+    {
+      "column": "LOW",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "low"
+    },
+    {
+      "column": "PRE_CLOSE",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "pre_close"
+    },
+    {
+      "column": "CHANGE",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "change"
+    },
+    {
+      "column": "PCT_CHANGE",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "pct_chg"
+    },
+    {
+      "column": "VOL",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "AMOUNT",
+      "data_type": "float",
+      "desc": "",
+      "must": "Y",
+      "name": "amount"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": 1,
-    "name": "monthly",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "CLOSE",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "close"
-        },
-        {
-            "column": "OPEN",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "open"
-        },
-        {
-            "column": "HIGH",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "high"
-        },
-        {
-            "column": "LOW",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "low"
-        },
-        {
-            "column": "PRE_CLOSE",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "pre_close"
-        },
-        {
-            "column": "CHANGE",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "change"
-        },
-        {
-            "column": "PCT_CHANGE",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "pct_chg"
-        },
-        {
-            "column": "VOL",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "AMOUNT",
-            "data_type": "float",
-            "desc": "",
-            "must": "Y",
-            "name": "amount"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            145,
-            "月线行情"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "月线行情",
-    "validations": [
-        {
-            "message": "ts_code,trade_date至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      145,
+      "月线行情"
     ]
+  ],
+  "title": "月线行情",
+  "validations": [
+    {
+      "message": "ts_code,trade_date至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

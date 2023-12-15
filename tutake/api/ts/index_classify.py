@@ -8,22 +8,22 @@ Tushare index_classify接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.index_classify_ext import *
+from tutake.api.ts import index_classify_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareIndexClassify(Base):
+class TushareIndexClassify(TutakeTableBase):
     __tablename__ = "tushare_index_classify"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     index_code = Column(String, index=True, comment='指数代码')
     industry_name = Column(String, comment='行业名称')
     level = Column(String, index=True, comment='行业名称')
@@ -43,8 +43,8 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_index_classify"
-        self.database = 'tushare_index.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -53,6 +53,8 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareIndexClassify.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareIndexClassify),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['index_code', 'level', 'src', 'parent_code', 'limit', 'offset']
         self.tushare_fields = ["index_code", "industry_name", "level", "industry_code", "is_pub", "parent_code", "src"]
@@ -123,7 +125,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -131,6 +133,7 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"index_code": "", "level": "", "src": "", "parent_code": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -155,21 +158,18 @@ class IndexClassify(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(IndexClassify, 'default_limit', default_limit_ext)
-setattr(IndexClassify, 'default_cron_express', default_cron_express_ext)
-setattr(IndexClassify, 'default_order_by', default_order_by_ext)
-setattr(IndexClassify, 'prepare', prepare_ext)
-setattr(IndexClassify, 'query_parameters', query_parameters_ext)
-setattr(IndexClassify, 'param_loop_process', param_loop_process_ext)
+extends_attr(IndexClassify, index_classify_ext)
 
 if __name__ == '__main__':
     import tushare as ts

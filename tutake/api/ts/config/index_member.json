@@ -1,111 +1,111 @@
 {
-    "database": "tushare_index",
-    "default_limit": "3000",
-    "desc": "申万行业成分构成",
-    "id": 182,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "N",
-            "name": "index_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "是否最新",
-            "must": "N",
-            "name": "is_new"
-        },
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "3000",
+  "desc": "申万行业成分构成",
+  "id": 182,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "N",
+      "name": "index_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "是否最新",
+      "must": "N",
+      "name": "is_new"
+    },
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "index_member",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "INDEX_CODE",
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "Y",
+      "name": "index_code"
+    },
+    {
+      "column": "INDEX_NAME",
+      "data_type": "str",
+      "desc": "指数名称",
+      "must": "N",
+      "name": "index_name"
+    },
+    {
+      "column": "CON_CODE",
+      "data_type": "str",
+      "desc": "成分股票代码",
+      "must": "Y",
+      "name": "con_code"
+    },
+    {
+      "column": "CON_NAME",
+      "data_type": "str",
+      "desc": "成分股票名称",
+      "must": "N",
+      "name": "con_name"
+    },
+    {
+      "column": "IN_DATE",
+      "data_type": "str",
+      "desc": "纳入日期",
+      "must": "Y",
+      "name": "in_date"
+    },
+    {
+      "column": "OUT_DATE",
+      "data_type": "str",
+      "desc": "剔除日期",
+      "must": "Y",
+      "name": "out_date"
+    },
+    {
+      "column": "IS_NEW",
+      "data_type": "str",
+      "desc": "是否最新Y是N否",
+      "must": "Y",
+      "name": "is_new"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "index_member",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "INDEX_CODE",
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "Y",
-            "name": "index_code"
-        },
-        {
-            "column": "INDEX_NAME",
-            "data_type": "str",
-            "desc": "指数名称",
-            "must": "N",
-            "name": "index_name"
-        },
-        {
-            "column": "CON_CODE",
-            "data_type": "str",
-            "desc": "成分股票代码",
-            "must": "Y",
-            "name": "con_code"
-        },
-        {
-            "column": "CON_NAME",
-            "data_type": "str",
-            "desc": "成分股票名称",
-            "must": "N",
-            "name": "con_name"
-        },
-        {
-            "column": "IN_DATE",
-            "data_type": "str",
-            "desc": "纳入日期",
-            "must": "Y",
-            "name": "in_date"
-        },
-        {
-            "column": "OUT_DATE",
-            "data_type": "str",
-            "desc": "剔除日期",
-            "must": "Y",
-            "name": "out_date"
-        },
-        {
-            "column": "IS_NEW",
-            "data_type": "str",
-            "desc": "是否最新Y是N否",
-            "must": "Y",
-            "name": "is_new"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            182,
-            "申万行业成分"
-        ]
-    ],
-    "title": "申万行业成分",
-    "validations": []
+    [
+      182,
+      "申万行业成分"
+    ]
+  ],
+  "title": "申万行业成分",
+  "validations": []
 }

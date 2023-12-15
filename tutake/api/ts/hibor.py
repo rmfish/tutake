@@ -8,22 +8,22 @@ Hibor利率,每日12点更新，HIBOR (Hongkong InterBank Offered Rate)，是香
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.hibor_ext import *
+from tutake.api.ts import hibor_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareHibor(Base):
+class TushareHibor(TutakeTableBase):
     __tablename__ = "tushare_hibor"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     date = Column(String, index=True, comment='日期')
     on_night = Column(Float, comment='隔夜')
     t_1w = Column(Float, comment='1周')
@@ -45,8 +45,8 @@ class Hibor(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_hibor"
-        self.database = 'tushare_macroeconomic.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -55,6 +55,8 @@ class Hibor(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareHibor.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareHibor),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = ["date", "on", "1w", "2w", "1m", "2m", "3m", "6m", "12m"]
@@ -143,7 +145,7 @@ class Hibor(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -151,6 +153,7 @@ class Hibor(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"date": "", "start_date": "", "end_date": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -175,21 +178,18 @@ class Hibor(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(Hibor, 'default_limit', default_limit_ext)
-setattr(Hibor, 'default_cron_express', default_cron_express_ext)
-setattr(Hibor, 'default_order_by', default_order_by_ext)
-setattr(Hibor, 'prepare', prepare_ext)
-setattr(Hibor, 'query_parameters', query_parameters_ext)
-setattr(Hibor, 'param_loop_process', param_loop_process_ext)
+extends_attr(Hibor, hibor_ext)
 
 if __name__ == '__main__':
     import tushare as ts

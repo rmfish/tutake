@@ -81,7 +81,8 @@ class DotConfig(dict):
         return __set(self, key, val)
 
 
-TUTAKE_SQLITE_DRIVER_URL_KEY = "tutake.data.driver_url"
+TUTAKE_TEST_MODE = "tutake.test_mode"
+TUTAKE_DRIVER_URL_KEY = "tutake.data.driver_url"
 TUTAKE_DATA_DIR_KEY = "tutake.data.dir"
 TUTAKE_REMOTE_SERVER_KEY = "tutake.remote.address"
 TUTAKE_SERVER_PORT_KEY = "tutake.server.port"
@@ -96,20 +97,25 @@ TUTAKE_LOGGING_CONFIG_KEY = 'tutake.logger.config_file'
 TUTAKE_SCHEDULER_CONFIG_KEY = 'tutake.scheduler'
 TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY = 'tutake.sqlite.timeout'
 TUTAKE_PROCESS_FORBIDDEN_CONFIG_KEY = 'tutake.process.forbidden'
+TUTAKE_DATABASE_TYPE = 'duckdb'
 
 
 class TutakeConfig(object):
 
-    def __init__(self, absolute_config_path):
-        if absolute_config_path and os.path.isdir(absolute_config_path):
-            absolute_config_path = f'{absolute_config_path}/config.yml'
-        if absolute_config_path and not os.path.exists(absolute_config_path):
-            absolute_config_path = f'{project_root()}/config.yml'
-            if os.path.exists(absolute_config_path):
-                print(f"Tutake config file is None or not exists. use default configfile. {absolute_config_path}")
+    def __init__(self, absolute_config_path=None):
+        self.empty = False
+        _config_path = absolute_config_path
+        if absolute_config_path is not None and os.path.isdir(absolute_config_path):
+            _config_path = Path(f'{absolute_config_path}/config.yml')
+        if absolute_config_path is None or not os.path.exists(_config_path):
+            _config_path = Path(f'{project_root()}/config.yml')
+            if not os.path.exists(_config_path):
+                print(f"Tutake config file [{absolute_config_path}] is not exists. use empty config.")
+                self.empty = True
             else:
-                raise Exception(f"Tutake config file is None or not exists. pls set it.")
-        self.config_file = absolute_config_path
+                print(
+                    f"Tutake config file [{absolute_config_path}] is not exists. use the default configfile. {_config_path}")
+        self.config_file = _config_path
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
         self._remote_client = None
@@ -136,14 +142,16 @@ class TutakeConfig(object):
         确认必须的配置项
         :return:
         """
-        data_dir = realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data'))
-        if not os.path.exists(data_dir):
-            os.makedirs(data_dir)
+        data_dir = Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('database')))
+        if not data_dir.exists():
+            data_dir.mkdir(parents=True)
+            # os.makedirs(data_dir)
         self.set_tutake_data_dir(data_dir)
 
-        meta_dir = realpath(self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta'))
-        if not os.path.exists(meta_dir):
-            os.makedirs(meta_dir)
+        meta_dir = Path(realpath(self.get_config(TUSHARE_META_DIR_KEY) or self._get_default_data_dir('meta')))
+        if not meta_dir.exists():
+            meta_dir.mkdir(parents=True)
+            # os.makedirs(meta_dir)
         self.set_tutake_meta_dir(meta_dir)
 
         self.logger_config_file = self._get_logger_config()
@@ -154,18 +162,23 @@ class TutakeConfig(object):
 
     def __str__(self):
         return f"ConfigFile: {self.config_file}" \
-               f"\n\t{TUTAKE_SQLITE_DRIVER_URL_KEY}:\t{self.get_config(TUTAKE_SQLITE_DRIVER_URL_KEY)}" \
+               f"\n\t{TUTAKE_DRIVER_URL_KEY}:\t{self.get_config(TUTAKE_DRIVER_URL_KEY)}" \
                f"\n\t{TUSHARE_TOKEN_KEY}:\t{self.get_tushare_token()}" \
                f"\n\t{TUTAKE_PROCESS_THREAD_CNT_KEY}:\t{self.get_process_thread_cnt()}" \
                f"\n\t{TUTAKE_LOGGING_CONFIG_KEY}:\t{self.logger_config_file}" \
                f"\n\t{TUTAKE_SCHEDULER_CONFIG_KEY}:\t{self.get_config(TUTAKE_SCHEDULER_CONFIG_KEY)}"
+
+    def check(self):
+        if self.empty:
+            raise Exception(f"Tutake config is empty, not support invoke process api.")
+
 
     def _load_config_file(self, config_file: str) -> DotConfig:
         if config_file and os.path.exists(config_file):
             with open(config_file, 'r', encoding='utf8') as stream:
                 return DotConfig(yaml.safe_load(stream))
         else:
-            print("Config file is not exits. %s" % config_file)
+            print("Config file is not exits, use default empty config instead. Pls set config in %s" % config_file)
         return DotConfig()
 
     def merge_config(self, **_config):
@@ -193,33 +206,45 @@ class TutakeConfig(object):
     def set_config(self, key, val) -> True:
         return self.__config.set(key, val)
 
-    def set_tutake_data_dir(self, _dir=None):
+    def is_test_mode(self):
+        return self.get_config(TUTAKE_TEST_MODE, False)
+
+    def set_tutake_data_dir(self, _dir: Path = None):
         if _dir:
-            self.set_config(TUTAKE_SQLITE_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
+            self.set_config(TUTAKE_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
     def set_tutake_meta_dir(self, _dir=None):
         if _dir:
             self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
     def _get_default_data_dir(self, dir_name):
-        db_name = 'tushare_stock_basic.db'
+        # db_name = 'tushare_stock_basic.db'
         if dir_name == 'meta':
             db_name = 'tushare_meta.db'
-        _dir = "%s/%s" % (dirname(self.config_file), dir_name)
-        if os.path.exists("%s/%s" % (_dir, db_name)):
+        _dir = Path(dirname(self.config_file), dir_name)
+        # "%s/%s" % (dirname(self.config_file), dir_name)
+        # _dir = Path(dirname(self.config_file), dir_name)
+        if _dir.exists():
+            # os.path.exists("%s/%s" % (_dir, db_name)):
             return _dir
         else:
-            return "%s/%s" % (Path.home(), '.tutake')
+            return Path.home().joinpath(".tutake")
+            # return "%s/%s" % (Path.home(), '.tutake')
 
-    def _get_default_driver_url(self, path, sub_dir=None):
+    def get_tutake_data_dir(self):
+        return Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('database')))
+
+    def _get_default_driver_url(self, path: Path, sub_dir=None):
         if path is None:
-            path = "%s/.tutake" % Path.home()
+            path = Path.home().joinpath(".tutake")
         if sub_dir:
-            path = "%s/%s" % (path, sub_dir)
-        if not os.path.exists(path):
-            os.makedirs(path)
+            path = path.joinpath(sub_dir)
+            # "%s/%s" % (path, sub_dir)
+        if not path.exists():
+            path.mkdir(parents=True)
+            # os.makedirs(path)
         path = os.path.expanduser(path)
-        return f'sqlite:///{path}'
+        return f'{TUTAKE_DATABASE_TYPE}:///{path}'
 
     @staticmethod
     def __set(config: DotConfig, k, v):
@@ -240,14 +265,19 @@ class TutakeConfig(object):
     def get_sqlite_timeout(self):
         return self.get_config(TUTAKE_SQLITE_TIMEOUT_CONFIG_KEY, 5)
 
-    def get_data_sqlite_driver_url(self, data_file=None):
-        url = self.require_config(TUTAKE_SQLITE_DRIVER_URL_KEY)
+    def get_data_driver_url(self, data_file="tutake.duckdb"):
+        url = self.require_config(TUTAKE_DRIVER_URL_KEY)
+        suffix = ""
+        if self.is_test_mode():
+            suffix = ".test"
         if not data_file:
-            return url
-        if os.name == 'nt':
-            return f"{url}{os.sep}{data_file}".replace("\\", "\\\\")
+            return f"{url}{suffix}"
         else:
-            return f"{url}{os.sep}{data_file}"
+            return f"{url}{os.sep}{data_file}{suffix}"
+        # if os.name == 'nt':
+        #     return f"{url}{os.sep}{data_file}".replace("\\", "\\\\")
+        # else:
+        #     return f"{url}{os.sep}{data_file}"
 
     def get_meta_sqlite_driver_url(self):
         return self.require_config(TUSHARE_META_DRIVER_URL_KEY)
@@ -257,6 +287,7 @@ class TutakeConfig(object):
             self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
 
     def get_tushare_token(self):
+        self.check()
         token = self.get_config(TUSHARE_TOKEN_KEY)
         if token is None:
             tokens = self.get_config(TUSHARE_TOKENS_KEY)

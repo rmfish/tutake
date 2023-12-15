@@ -1,76 +1,76 @@
 {
-    "database": "tushare_digital_currency",
-    "default_limit": null,
-    "desc": "",
-    "id": 77,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "开始时间",
-            "must": "Y",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束时间",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "",
+  "id": 77,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "开始时间",
+      "must": "Y",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束时间",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "btc_pricevol",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "date",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "price",
+      "data_type": "float",
+      "desc": "价格",
+      "must": "Y",
+      "name": "price"
+    },
+    {
+      "column": "volume",
+      "data_type": "float",
+      "desc": "交易量",
+      "must": "Y",
+      "name": "volume"
+    }
+  ],
+  "parent_id": 52,
+  "path": [
+    [
+      41,
+      "另类数据"
     ],
-    "is_ready": null,
-    "name": "btc_pricevol",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "date",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "price",
-            "data_type": "float",
-            "desc": "价格",
-            "must": "Y",
-            "name": "price"
-        },
-        {
-            "column": "volume",
-            "data_type": "float",
-            "desc": "交易量",
-            "must": "Y",
-            "name": "volume"
-        }
+    [
+      52,
+      "行情数据"
     ],
-    "parent_id": 52,
-    "path": [
-        [
-            41,
-            "另类数据"
-        ],
-        [
-            52,
-            "行情数据"
-        ],
-        [
-            77,
-            "比特币每日量价"
-        ]
-    ],
-    "title": "比特币每日量价",
-    "validations": []
+    [
+      77,
+      "比特币每日量价"
+    ]
+  ],
+  "title": "比特币每日量价",
+  "validations": []
 }

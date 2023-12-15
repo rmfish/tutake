@@ -1,156 +1,156 @@
 {
-    "database": "tushare_stk",
-    "default_limit": "4000",
-    "desc": "上市公司管理层",
-    "id": 193,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "4000",
+  "desc": "上市公司管理层",
+  "id": 193,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": 1,
+  "name": "stk_managers",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "姓名",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "GENDER",
+      "data_type": "str",
+      "desc": "性别",
+      "must": "Y",
+      "name": "gender"
+    },
+    {
+      "column": "LEV",
+      "data_type": "str",
+      "desc": "岗位类别",
+      "must": "Y",
+      "name": "lev"
+    },
+    {
+      "column": "TITLE",
+      "data_type": "str",
+      "desc": "岗位",
+      "must": "Y",
+      "name": "title"
+    },
+    {
+      "column": "EDU",
+      "data_type": "str",
+      "desc": "学历",
+      "must": "Y",
+      "name": "edu"
+    },
+    {
+      "column": "NATIONAL",
+      "data_type": "str",
+      "desc": "国籍",
+      "must": "Y",
+      "name": "national"
+    },
+    {
+      "column": "BIRTHDAY",
+      "data_type": "str",
+      "desc": "出生年份",
+      "must": "Y",
+      "name": "birthday"
+    },
+    {
+      "column": "BEGIN_DATE",
+      "data_type": "str",
+      "desc": "上任日期",
+      "must": "Y",
+      "name": "begin_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "离任日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "RESUME",
+      "data_type": "str",
+      "desc": "个人简历",
+      "must": "N",
+      "name": "resume"
+    }
+  ],
+  "parent_id": 24,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": 1,
-    "name": "stk_managers",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "姓名",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "GENDER",
-            "data_type": "str",
-            "desc": "性别",
-            "must": "Y",
-            "name": "gender"
-        },
-        {
-            "column": "LEV",
-            "data_type": "str",
-            "desc": "岗位类别",
-            "must": "Y",
-            "name": "lev"
-        },
-        {
-            "column": "TITLE",
-            "data_type": "str",
-            "desc": "岗位",
-            "must": "Y",
-            "name": "title"
-        },
-        {
-            "column": "EDU",
-            "data_type": "str",
-            "desc": "学历",
-            "must": "Y",
-            "name": "edu"
-        },
-        {
-            "column": "NATIONAL",
-            "data_type": "str",
-            "desc": "国籍",
-            "must": "Y",
-            "name": "national"
-        },
-        {
-            "column": "BIRTHDAY",
-            "data_type": "str",
-            "desc": "出生年份",
-            "must": "Y",
-            "name": "birthday"
-        },
-        {
-            "column": "BEGIN_DATE",
-            "data_type": "str",
-            "desc": "上任日期",
-            "must": "Y",
-            "name": "begin_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "离任日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "RESUME",
-            "data_type": "str",
-            "desc": "个人简历",
-            "must": "N",
-            "name": "resume"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 24,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            24,
-            "基础数据"
-        ],
-        [
-            193,
-            "上市公司管理层"
-        ]
+    [
+      24,
+      "基础数据"
     ],
-    "title": "上市公司管理层",
-    "validations": []
+    [
+      193,
+      "上市公司管理层"
+    ]
+  ],
+  "title": "上市公司管理层",
+  "validations": []
 }

@@ -1,165 +1,165 @@
 {
-    "database": "tushare_index",
-    "default_limit": "8000",
-    "desc": "获取指数基础信息。",
-    "id": 94,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所或服务商",
-            "must": "N",
-            "name": "market"
-        },
-        {
-            "data_type": "str",
-            "desc": "发布商",
-            "must": "N",
-            "name": "publisher"
-        },
-        {
-            "data_type": "str",
-            "desc": "指数类别",
-            "must": "N",
-            "name": "category"
-        },
-        {
-            "data_type": "str",
-            "desc": "指数名称",
-            "must": "N",
-            "name": "name"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "8000",
+  "desc": "获取指数基础信息。",
+  "id": 94,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所或服务商",
+      "must": "N",
+      "name": "market"
+    },
+    {
+      "data_type": "str",
+      "desc": "发布商",
+      "must": "N",
+      "name": "publisher"
+    },
+    {
+      "data_type": "str",
+      "desc": "指数类别",
+      "must": "N",
+      "name": "category"
+    },
+    {
+      "data_type": "str",
+      "desc": "指数名称",
+      "must": "N",
+      "name": "name"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 200,
+  "is_ready": null,
+  "name": "index_basic",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "简称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "FULLNAME",
+      "data_type": "str",
+      "desc": "指数全称",
+      "must": "N",
+      "name": "fullname"
+    },
+    {
+      "column": "MARKET",
+      "data_type": "str",
+      "desc": "市场",
+      "must": "Y",
+      "name": "market"
+    },
+    {
+      "column": "PUBLISHER",
+      "data_type": "str",
+      "desc": "发布方",
+      "must": "Y",
+      "name": "publisher"
+    },
+    {
+      "column": "INDEX_TYPE",
+      "data_type": "str",
+      "desc": "指数风格",
+      "must": "N",
+      "name": "index_type"
+    },
+    {
+      "column": "INDEX_CATEGORY",
+      "data_type": "str",
+      "desc": "指数类别",
+      "must": "Y",
+      "name": "category"
+    },
+    {
+      "column": "BASE_DATE",
+      "data_type": "str",
+      "desc": "基期",
+      "must": "Y",
+      "name": "base_date"
+    },
+    {
+      "column": "BASE_POINT",
+      "data_type": "float",
+      "desc": "基点",
+      "must": "Y",
+      "name": "base_point"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "发布日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "WEIGHT_RULE",
+      "data_type": "str",
+      "desc": "加权方式",
+      "must": "N",
+      "name": "weight_rule"
+    },
+    {
+      "column": "DESC",
+      "data_type": "str",
+      "desc": "描述",
+      "must": "N",
+      "name": "desc"
+    },
+    {
+      "column": "EXP_DATE",
+      "data_type": "str",
+      "desc": "终止日期",
+      "must": "N",
+      "name": "exp_date"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 200,
-    "is_ready": null,
-    "name": "index_basic",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "简称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "FULLNAME",
-            "data_type": "str",
-            "desc": "指数全称",
-            "must": "N",
-            "name": "fullname"
-        },
-        {
-            "column": "MARKET",
-            "data_type": "str",
-            "desc": "市场",
-            "must": "Y",
-            "name": "market"
-        },
-        {
-            "column": "PUBLISHER",
-            "data_type": "str",
-            "desc": "发布方",
-            "must": "Y",
-            "name": "publisher"
-        },
-        {
-            "column": "INDEX_TYPE",
-            "data_type": "str",
-            "desc": "指数风格",
-            "must": "N",
-            "name": "index_type"
-        },
-        {
-            "column": "INDEX_CATEGORY",
-            "data_type": "str",
-            "desc": "指数类别",
-            "must": "Y",
-            "name": "category"
-        },
-        {
-            "column": "BASE_DATE",
-            "data_type": "str",
-            "desc": "基期",
-            "must": "Y",
-            "name": "base_date"
-        },
-        {
-            "column": "BASE_POINT",
-            "data_type": "float",
-            "desc": "基点",
-            "must": "Y",
-            "name": "base_point"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "发布日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "WEIGHT_RULE",
-            "data_type": "str",
-            "desc": "加权方式",
-            "must": "N",
-            "name": "weight_rule"
-        },
-        {
-            "column": "DESC",
-            "data_type": "str",
-            "desc": "描述",
-            "must": "N",
-            "name": "desc"
-        },
-        {
-            "column": "EXP_DATE",
-            "data_type": "str",
-            "desc": "终止日期",
-            "must": "N",
-            "name": "exp_date"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            94,
-            "指数基本信息"
-        ]
-    ],
-    "title": "指数基本信息",
-    "validations": []
+    [
+      94,
+      "指数基本信息"
+    ]
+  ],
+  "title": "指数基本信息",
+  "validations": []
 }

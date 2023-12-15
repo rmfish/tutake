@@ -8,25 +8,25 @@ Tushare trade_cal接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.trade_cal_ext import *
+from tutake.api.ts import trade_cal_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareTradeCal(Base):
+class TushareTradeCal(TutakeTableBase):
     __tablename__ = "tushare_trade_cal"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     exchange = Column(String, index=True, comment='交易所 SSE上交所 SZSE深交所')
     cal_date = Column(String, index=True, comment='日历日期')
-    is_open = Column(String, index=True, comment='是否交易 0休市 1交易')
+    is_open = Column(Integer, index=True, comment='是否交易 0休市 1交易')
     pretrade_date = Column(String, comment='上一个交易日')
 
 
@@ -40,8 +40,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_trade_cal"
-        self.database = 'tushare_stock.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -50,6 +50,8 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareTradeCal.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareTradeCal),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['exchange', 'cal_date', 'start_date', 'end_date', 'is_open', 'limit', 'offset']
         self.tushare_fields = ["exchange", "cal_date", "is_open", "pretrade_date"]
@@ -72,7 +74,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
             "comment": "日历日期"
         }, {
             "name": "is_open",
-            "type": "String",
+            "type": "Integer",
             "comment": "是否交易 0休市 1交易"
         }, {
             "name": "pretrade_date",
@@ -95,7 +97,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         :return: DataFrame
          exchange(str)  交易所 SSE上交所 SZSE深交所 Y
          cal_date(str)  日历日期 Y
-         is_open(str)  是否交易 0休市 1交易 Y
+         is_open(int)  是否交易 0休市 1交易 Y
          pretrade_date(str)  上一个交易日 Y
         
         """
@@ -108,7 +110,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -124,6 +126,7 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
             "limit": "",
             "offset": ""
         }
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -148,21 +151,18 @@ class TradeCal(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(TradeCal, 'default_limit', default_limit_ext)
-setattr(TradeCal, 'default_cron_express', default_cron_express_ext)
-setattr(TradeCal, 'default_order_by', default_order_by_ext)
-setattr(TradeCal, 'prepare', prepare_ext)
-setattr(TradeCal, 'query_parameters', query_parameters_ext)
-setattr(TradeCal, 'param_loop_process', param_loop_process_ext)
+extends_attr(TradeCal, trade_cal_ext)
 
 if __name__ == '__main__':
     import tushare as ts

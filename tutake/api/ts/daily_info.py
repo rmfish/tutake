@@ -8,22 +8,22 @@ Tushare daily_info接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.daily_info_ext import *
+from tutake.api.ts import daily_info_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareDailyInfo(Base):
+class TushareDailyInfo(TutakeTableBase):
     __tablename__ = "tushare_daily_info"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     trade_date = Column(String, index=True, comment='交易日期')
     ts_code = Column(String, index=True, comment='市场代码')
     ts_name = Column(String, comment='市场名称')
@@ -50,8 +50,8 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_daily_info"
-        self.database = 'tushare_stock.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -60,6 +60,8 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareDailyInfo.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareDailyInfo),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['trade_date', 'ts_code', 'exchange', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -172,7 +174,7 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -188,6 +190,7 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
             "limit": "",
             "offset": ""
         }
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -212,21 +215,18 @@ class DailyInfo(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(DailyInfo, 'default_limit', default_limit_ext)
-setattr(DailyInfo, 'default_cron_express', default_cron_express_ext)
-setattr(DailyInfo, 'default_order_by', default_order_by_ext)
-setattr(DailyInfo, 'prepare', prepare_ext)
-setattr(DailyInfo, 'query_parameters', query_parameters_ext)
-setattr(DailyInfo, 'param_loop_process', param_loop_process_ext)
+extends_attr(DailyInfo, daily_info_ext)
 
 if __name__ == '__main__':
     import tushare as ts

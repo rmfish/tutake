@@ -1,162 +1,162 @@
 {
-    "database": null,
-    "default_limit": "2000",
-    "desc": "每日持仓排名，数据开始月2022年1月",
-    "id": 139,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "合约或产品代码",
-            "must": "N",
-            "name": "symbol"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易所代码",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "2000",
+  "desc": "每日持仓排名，数据开始月2022年1月",
+  "id": 139,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "合约或产品代码",
+      "must": "N",
+      "name": "symbol"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易所代码",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "fut_holding",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "FUT_CODE",
+      "data_type": "str",
+      "desc": "合约代码或类型",
+      "must": "Y",
+      "name": "symbol"
+    },
+    {
+      "column": "BROKER",
+      "data_type": "str",
+      "desc": "期货公司会员简称",
+      "must": "Y",
+      "name": "broker"
+    },
+    {
+      "column": "VOL",
+      "data_type": "int",
+      "desc": "成交量",
+      "must": "Y",
+      "name": "vol"
+    },
+    {
+      "column": "VOL_CHG",
+      "data_type": "int",
+      "desc": "成交量变化",
+      "must": "Y",
+      "name": "vol_chg"
+    },
+    {
+      "column": "LONG_HLD",
+      "data_type": "int",
+      "desc": "持买仓量",
+      "must": "Y",
+      "name": "long_hld"
+    },
+    {
+      "column": "LONG_CHG",
+      "data_type": "int",
+      "desc": "持买仓量变化",
+      "must": "Y",
+      "name": "long_chg"
+    },
+    {
+      "column": "SHORT_HLD",
+      "data_type": "int",
+      "desc": "持卖仓量",
+      "must": "Y",
+      "name": "short_hld"
+    },
+    {
+      "column": "SHORT_CHG",
+      "data_type": "int",
+      "desc": "持卖仓量变化",
+      "must": "Y",
+      "name": "short_chg"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "N",
+      "name": "exchange"
+    }
+  ],
+  "parent_id": 134,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "fut_holding",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "FUT_CODE",
-            "data_type": "str",
-            "desc": "合约代码或类型",
-            "must": "Y",
-            "name": "symbol"
-        },
-        {
-            "column": "BROKER",
-            "data_type": "str",
-            "desc": "期货公司会员简称",
-            "must": "Y",
-            "name": "broker"
-        },
-        {
-            "column": "VOL",
-            "data_type": "int",
-            "desc": "成交量",
-            "must": "Y",
-            "name": "vol"
-        },
-        {
-            "column": "VOL_CHG",
-            "data_type": "int",
-            "desc": "成交量变化",
-            "must": "Y",
-            "name": "vol_chg"
-        },
-        {
-            "column": "LONG_HLD",
-            "data_type": "int",
-            "desc": "持买仓量",
-            "must": "Y",
-            "name": "long_hld"
-        },
-        {
-            "column": "LONG_CHG",
-            "data_type": "int",
-            "desc": "持买仓量变化",
-            "must": "Y",
-            "name": "long_chg"
-        },
-        {
-            "column": "SHORT_HLD",
-            "data_type": "int",
-            "desc": "持卖仓量",
-            "must": "Y",
-            "name": "short_hld"
-        },
-        {
-            "column": "SHORT_CHG",
-            "data_type": "int",
-            "desc": "持卖仓量变化",
-            "must": "Y",
-            "name": "short_chg"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "N",
-            "name": "exchange"
-        }
+    [
+      134,
+      "期货"
     ],
-    "parent_id": 134,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            134,
-            "期货"
-        ],
-        [
-            139,
-            "每日持仓排名"
-        ]
-    ],
-    "title": "每日持仓排名",
-    "validations": [
-        {
-            "message": "trade_date,symbol参数不能都为空",
-            "name": "trade_date",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "symbol",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      139,
+      "每日持仓排名"
     ]
+  ],
+  "title": "每日持仓排名",
+  "validations": [
+    {
+      "message": "trade_date,symbol参数不能都为空",
+      "name": "trade_date",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "symbol",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

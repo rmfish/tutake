@@ -8,22 +8,22 @@ Tushare fund_sales_vol接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.fund_sales_vol_ext import *
+from tutake.api.ts import fund_sales_vol_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareFundSalesVol(Base):
+class TushareFundSalesVol(TutakeTableBase):
     __tablename__ = "tushare_fund_sales_vol"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     year = Column(Integer, index=True, comment='年度')
     quarter = Column(String, index=True, comment='季度')
     inst_name = Column(String, comment='销售机构')
@@ -42,8 +42,8 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_fund_sales_vol"
-        self.database = 'tushare_fund.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -52,6 +52,8 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareFundSalesVol.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareFundSalesVol),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['year', 'quarter', 'name', 'limit', 'offset']
         self.tushare_fields = ["year", "quarter", "inst_name", "fund_scale", "scale", "rank"]
@@ -116,7 +118,7 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -124,6 +126,7 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"year": "", "quarter": "", "name": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -148,21 +151,18 @@ class FundSalesVol(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(FundSalesVol, 'default_limit', default_limit_ext)
-setattr(FundSalesVol, 'default_cron_express', default_cron_express_ext)
-setattr(FundSalesVol, 'default_order_by', default_order_by_ext)
-setattr(FundSalesVol, 'prepare', prepare_ext)
-setattr(FundSalesVol, 'query_parameters', query_parameters_ext)
-setattr(FundSalesVol, 'param_loop_process', param_loop_process_ext)
+extends_attr(FundSalesVol, fund_sales_vol_ext)
 
 if __name__ == '__main__':
     import tushare as ts

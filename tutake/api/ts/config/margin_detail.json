@@ -1,149 +1,149 @@
 {
-    "database": "tushare_stock_market",
-    "default_limit": null,
-    "desc": "获取沪深两市每日融资融券明细,数据开始于2010年，每日9点更新",
-    "id": 59,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取沪深两市每日融资融券明细,数据开始于2010年，每日9点更新",
+  "id": 59,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 600,
+  "is_ready": null,
+  "name": "margin_detail",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "股票名称",
+      "must": "N",
+      "name": "name"
+    },
+    {
+      "column": "RZYE",
+      "data_type": "float",
+      "desc": "融资余额(元)",
+      "must": "Y",
+      "name": "rzye"
+    },
+    {
+      "column": "RQYE",
+      "data_type": "float",
+      "desc": "融券余额(元)",
+      "must": "Y",
+      "name": "rqye"
+    },
+    {
+      "column": "RZMRE",
+      "data_type": "float",
+      "desc": "融资买入额(元)",
+      "must": "Y",
+      "name": "rzmre"
+    },
+    {
+      "column": "RQYL",
+      "data_type": "float",
+      "desc": "融券余量（手）",
+      "must": "Y",
+      "name": "rqyl"
+    },
+    {
+      "column": "RZCHE",
+      "data_type": "float",
+      "desc": "融资偿还额(元)",
+      "must": "Y",
+      "name": "rzche"
+    },
+    {
+      "column": "RQCHL",
+      "data_type": "float",
+      "desc": "融券偿还量(手)",
+      "must": "Y",
+      "name": "rqchl"
+    },
+    {
+      "column": "RQMCL",
+      "data_type": "float",
+      "desc": "融券卖出量(股,份,手)",
+      "must": "Y",
+      "name": "rqmcl"
+    },
+    {
+      "column": "RZRQYE",
+      "data_type": "float",
+      "desc": "融资融券余额(元)",
+      "must": "Y",
+      "name": "rzrqye"
+    }
+  ],
+  "parent_id": 17,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 600,
-    "is_ready": null,
-    "name": "margin_detail",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "股票名称",
-            "must": "N",
-            "name": "name"
-        },
-        {
-            "column": "RZYE",
-            "data_type": "float",
-            "desc": "融资余额(元)",
-            "must": "Y",
-            "name": "rzye"
-        },
-        {
-            "column": "RQYE",
-            "data_type": "float",
-            "desc": "融券余额(元)",
-            "must": "Y",
-            "name": "rqye"
-        },
-        {
-            "column": "RZMRE",
-            "data_type": "float",
-            "desc": "融资买入额(元)",
-            "must": "Y",
-            "name": "rzmre"
-        },
-        {
-            "column": "RQYL",
-            "data_type": "float",
-            "desc": "融券余量（手）",
-            "must": "Y",
-            "name": "rqyl"
-        },
-        {
-            "column": "RZCHE",
-            "data_type": "float",
-            "desc": "融资偿还额(元)",
-            "must": "Y",
-            "name": "rzche"
-        },
-        {
-            "column": "RQCHL",
-            "data_type": "float",
-            "desc": "融券偿还量(手)",
-            "must": "Y",
-            "name": "rqchl"
-        },
-        {
-            "column": "RQMCL",
-            "data_type": "float",
-            "desc": "融券卖出量(股,份,手)",
-            "must": "Y",
-            "name": "rqmcl"
-        },
-        {
-            "column": "RZRQYE",
-            "data_type": "float",
-            "desc": "融资融券余额(元)",
-            "must": "Y",
-            "name": "rzrqye"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 17,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            17,
-            "市场参考数据"
-        ],
-        [
-            59,
-            "融资融券交易明细"
-        ]
+    [
+      17,
+      "市场参考数据"
     ],
-    "title": "融资融券交易明细",
-    "validations": []
+    [
+      59,
+      "融资融券交易明细"
+    ]
+  ],
+  "title": "融资融券交易明细",
+  "validations": []
 }

@@ -1,104 +1,104 @@
 {
-    "database": "tushare_ths",
-    "default_limit": "5000",
-    "desc": "获取同花顺板块指数",
-    "id": 259,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "市场类型A-a股票 HK-港股 US-美股",
-            "must": "N",
-            "name": "exchange"
-        },
-        {
-            "data_type": "str",
-            "desc": "指数类型 N-板块指数 S-同花顺特色指数",
-            "must": "N",
-            "name": "type"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "5000",
+  "desc": "获取同花顺板块指数",
+  "id": 259,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "市场类型A-a股票 HK-港股 US-美股",
+      "must": "N",
+      "name": "exchange"
+    },
+    {
+      "data_type": "str",
+      "desc": "指数类型 N-板块指数 S-同花顺特色指数",
+      "must": "N",
+      "name": "type"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "ths_index",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "COUNT",
+      "data_type": "int",
+      "desc": "成分个数",
+      "must": "Y",
+      "name": "count"
+    },
+    {
+      "column": "EXCHANGE",
+      "data_type": "str",
+      "desc": "交易所",
+      "must": "Y",
+      "name": "exchange"
+    },
+    {
+      "column": "LIST_DATE",
+      "data_type": "str",
+      "desc": "上市日期",
+      "must": "Y",
+      "name": "list_date"
+    },
+    {
+      "column": "TYPE",
+      "data_type": "str",
+      "desc": "N概念指数S特色指数",
+      "must": "Y",
+      "name": "type"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "ths_index",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "COUNT",
-            "data_type": "int",
-            "desc": "成分个数",
-            "must": "Y",
-            "name": "count"
-        },
-        {
-            "column": "EXCHANGE",
-            "data_type": "str",
-            "desc": "交易所",
-            "must": "Y",
-            "name": "exchange"
-        },
-        {
-            "column": "LIST_DATE",
-            "data_type": "str",
-            "desc": "上市日期",
-            "must": "Y",
-            "name": "list_date"
-        },
-        {
-            "column": "TYPE",
-            "data_type": "str",
-            "desc": "N概念指数S特色指数",
-            "must": "Y",
-            "name": "type"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            259,
-            "同花顺概念和行业列表"
-        ]
-    ],
-    "title": "同花顺概念和行业列表",
-    "validations": []
+    [
+      259,
+      "同花顺概念和行业列表"
+    ]
+  ],
+  "title": "同花顺概念和行业列表",
+  "validations": []
 }

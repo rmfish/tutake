@@ -1,118 +1,118 @@
 {
-    "database": "tushare_index",
-    "default_limit": null,
-    "desc": "获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息",
-    "id": 181,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "N",
-            "name": "index_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "行业分级（L1/L2/L3）",
-            "must": "N",
-            "name": "level"
-        },
-        {
-            "data_type": "str",
-            "default": "SW2014",
-            "desc": "指数来源（SW申万）",
-            "must": "N",
-            "name": "src"
-        },
-        {
-            "data_type": "str",
-            "desc": "父级代码",
-            "must": "N",
-            "name": "parent_code"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取申万行业分类，可以获取申万2014年版本（28个一级分类，104个二级分类，227个三级分类）和2021年本版（31个一级分类，134个二级分类，346个三级分类）列表信息",
+  "id": 181,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "N",
+      "name": "index_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "行业分级（L1/L2/L3）",
+      "must": "N",
+      "name": "level"
+    },
+    {
+      "data_type": "str",
+      "default": "SW2014",
+      "desc": "指数来源（SW申万）",
+      "must": "N",
+      "name": "src"
+    },
+    {
+      "data_type": "str",
+      "desc": "父级代码",
+      "must": "N",
+      "name": "parent_code"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "index_classify",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "INDEX_CODE",
+      "data_type": "str",
+      "desc": "指数代码",
+      "must": "Y",
+      "name": "index_code"
+    },
+    {
+      "column": "INDUSTRY_NAME",
+      "data_type": "str",
+      "desc": "行业名称",
+      "must": "Y",
+      "name": "industry_name"
+    },
+    {
+      "column": "LEVEL",
+      "data_type": "str",
+      "desc": "行业名称",
+      "must": "Y",
+      "name": "level"
+    },
+    {
+      "column": "INDUSTRY_CODE",
+      "data_type": "str",
+      "desc": "行业代码",
+      "must": "Y",
+      "name": "industry_code"
+    },
+    {
+      "column": "IS_PUB",
+      "data_type": "str",
+      "desc": "是否发布指数",
+      "must": "Y",
+      "name": "is_pub"
+    },
+    {
+      "column": "PARENT_CODE",
+      "data_type": "str",
+      "desc": "父级代码",
+      "must": "Y",
+      "name": "parent_code"
+    },
+    {
+      "column": "SRC",
+      "data_type": "str",
+      "desc": "行业分类（SW申万）",
+      "must": "N",
+      "name": "src"
+    }
+  ],
+  "parent_id": 93,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "index_classify",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "INDEX_CODE",
-            "data_type": "str",
-            "desc": "指数代码",
-            "must": "Y",
-            "name": "index_code"
-        },
-        {
-            "column": "INDUSTRY_NAME",
-            "data_type": "str",
-            "desc": "行业名称",
-            "must": "Y",
-            "name": "industry_name"
-        },
-        {
-            "column": "LEVEL",
-            "data_type": "str",
-            "desc": "行业名称",
-            "must": "Y",
-            "name": "level"
-        },
-        {
-            "column": "INDUSTRY_CODE",
-            "data_type": "str",
-            "desc": "行业代码",
-            "must": "Y",
-            "name": "industry_code"
-        },
-        {
-            "column": "IS_PUB",
-            "data_type": "str",
-            "desc": "是否发布指数",
-            "must": "Y",
-            "name": "is_pub"
-        },
-        {
-            "column": "PARENT_CODE",
-            "data_type": "str",
-            "desc": "父级代码",
-            "must": "Y",
-            "name": "parent_code"
-        },
-        {
-            "column": "SRC",
-            "data_type": "str",
-            "desc": "行业分类（SW申万）",
-            "must": "N",
-            "name": "src"
-        }
+    [
+      93,
+      "指数"
     ],
-    "parent_id": 93,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            93,
-            "指数"
-        ],
-        [
-            181,
-            "申万行业分类"
-        ]
-    ],
-    "title": "申万行业分类",
-    "validations": []
+    [
+      181,
+      "申万行业分类"
+    ]
+  ],
+  "title": "申万行业分类",
+  "validations": []
 }

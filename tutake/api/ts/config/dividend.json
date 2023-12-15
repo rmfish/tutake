@@ -1,246 +1,246 @@
 {
-    "database": "tushare_report",
-    "default_limit": null,
-    "default_query": "ts_code='000002.SZ'",
-    "desc": "分红送股数据",
-    "id": 103,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "公告日",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "分红年度",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "股权登记日期",
-            "must": "N",
-            "name": "record_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "除权除息日",
-            "must": "N",
-            "name": "ex_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "除权除息日",
-            "must": "N",
-            "name": "imp_ann_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "default_query": "ts_code='000002.SZ'",
+  "desc": "分红送股数据",
+  "id": 103,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "公告日",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "分红年度",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "股权登记日期",
+      "must": "N",
+      "name": "record_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "除权除息日",
+      "must": "N",
+      "name": "ex_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "除权除息日",
+      "must": "N",
+      "name": "imp_ann_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 800,
+  "is_ready": null,
+  "name": "dividend",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "分送年度",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "预案公告日（董事会）",
+      "must": "Y",
+      "name": "ann_date"
+    },
+    {
+      "column": "DIV_PROC",
+      "data_type": "str",
+      "desc": "实施进度",
+      "must": "Y",
+      "name": "div_proc"
+    },
+    {
+      "column": "STK_DIV",
+      "data_type": "float",
+      "desc": "每股送转",
+      "must": "Y",
+      "name": "stk_div"
+    },
+    {
+      "column": "STK_BO_RATE",
+      "data_type": "float",
+      "desc": "每股送股比例",
+      "must": "Y",
+      "name": "stk_bo_rate"
+    },
+    {
+      "column": "STK_CO_RATE",
+      "data_type": "float",
+      "desc": "每股转增比例",
+      "must": "Y",
+      "name": "stk_co_rate"
+    },
+    {
+      "column": "CASH_DIV",
+      "data_type": "float",
+      "desc": "每股分红（税后）",
+      "must": "Y",
+      "name": "cash_div"
+    },
+    {
+      "column": "CASH_DIV_TAX",
+      "data_type": "float",
+      "desc": "每股分红（税前）",
+      "must": "Y",
+      "name": "cash_div_tax"
+    },
+    {
+      "column": "RECORD_DATE",
+      "data_type": "str",
+      "desc": "股权登记日",
+      "must": "Y",
+      "name": "record_date"
+    },
+    {
+      "column": "EX_DATE",
+      "data_type": "str",
+      "desc": "除权除息日",
+      "must": "Y",
+      "name": "ex_date"
+    },
+    {
+      "column": "PAY_DATE",
+      "data_type": "str",
+      "desc": "派息日",
+      "must": "Y",
+      "name": "pay_date"
+    },
+    {
+      "column": "DIV_LISTDATE",
+      "data_type": "str",
+      "desc": "红股上市日",
+      "must": "Y",
+      "name": "div_listdate"
+    },
+    {
+      "column": "IMP_ANN_DATE",
+      "data_type": "str",
+      "desc": "实施公告日",
+      "must": "Y",
+      "name": "imp_ann_date"
+    },
+    {
+      "column": "BASE_DATE",
+      "data_type": "str",
+      "desc": "基准日",
+      "must": "N",
+      "name": "base_date"
+    },
+    {
+      "column": "BASE_SHARE",
+      "data_type": "float",
+      "desc": "实施基准股本（万）",
+      "must": "N",
+      "name": "base_share"
+    },
+    {
+      "column": "IF_CHANGE",
+      "data_type": "str",
+      "desc": "是否变更过（1表示变更）",
+      "must": "N",
+      "name": "update_flag"
+    }
+  ],
+  "parent_id": 16,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 800,
-    "is_ready": null,
-    "name": "dividend",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "分送年度",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "预案公告日（董事会）",
-            "must": "Y",
-            "name": "ann_date"
-        },
-        {
-            "column": "DIV_PROC",
-            "data_type": "str",
-            "desc": "实施进度",
-            "must": "Y",
-            "name": "div_proc"
-        },
-        {
-            "column": "STK_DIV",
-            "data_type": "float",
-            "desc": "每股送转",
-            "must": "Y",
-            "name": "stk_div"
-        },
-        {
-            "column": "STK_BO_RATE",
-            "data_type": "float",
-            "desc": "每股送股比例",
-            "must": "Y",
-            "name": "stk_bo_rate"
-        },
-        {
-            "column": "STK_CO_RATE",
-            "data_type": "float",
-            "desc": "每股转增比例",
-            "must": "Y",
-            "name": "stk_co_rate"
-        },
-        {
-            "column": "CASH_DIV",
-            "data_type": "float",
-            "desc": "每股分红（税后）",
-            "must": "Y",
-            "name": "cash_div"
-        },
-        {
-            "column": "CASH_DIV_TAX",
-            "data_type": "float",
-            "desc": "每股分红（税前）",
-            "must": "Y",
-            "name": "cash_div_tax"
-        },
-        {
-            "column": "RECORD_DATE",
-            "data_type": "str",
-            "desc": "股权登记日",
-            "must": "Y",
-            "name": "record_date"
-        },
-        {
-            "column": "EX_DATE",
-            "data_type": "str",
-            "desc": "除权除息日",
-            "must": "Y",
-            "name": "ex_date"
-        },
-        {
-            "column": "PAY_DATE",
-            "data_type": "str",
-            "desc": "派息日",
-            "must": "Y",
-            "name": "pay_date"
-        },
-        {
-            "column": "DIV_LISTDATE",
-            "data_type": "str",
-            "desc": "红股上市日",
-            "must": "Y",
-            "name": "div_listdate"
-        },
-        {
-            "column": "IMP_ANN_DATE",
-            "data_type": "str",
-            "desc": "实施公告日",
-            "must": "Y",
-            "name": "imp_ann_date"
-        },
-        {
-            "column": "BASE_DATE",
-            "data_type": "str",
-            "desc": "基准日",
-            "must": "N",
-            "name": "base_date"
-        },
-        {
-            "column": "BASE_SHARE",
-            "data_type": "float",
-            "desc": "实施基准股本（万）",
-            "must": "N",
-            "name": "base_share"
-        },
-        {
-            "column": "IF_CHANGE",
-            "data_type": "str",
-            "desc": "是否变更过（1表示变更）",
-            "must": "N",
-            "name": "update_flag"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 16,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            16,
-            "财务数据"
-        ],
-        [
-            103,
-            "分红送股数据"
-        ]
+    [
+      16,
+      "财务数据"
     ],
-    "title": "分红送股数据",
-    "validations": [
-        {
-            "message": "ts_code/ann_date/record_date/ex_date/imp_ann_date参数不能都为空。",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "ann_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "record_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "ex_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "imp_ann_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "end_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      103,
+      "分红送股数据"
     ]
+  ],
+  "title": "分红送股数据",
+  "validations": [
+    {
+      "message": "ts_code/ann_date/record_date/ex_date/imp_ann_date参数不能都为空。",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "ann_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "record_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "ex_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "imp_ann_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "end_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

@@ -1,133 +1,133 @@
 {
-    "database": "tushare_stock",
-    "default_limit": null,
-    "desc": "获取股票停复牌信息",
-    "id": 31,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "停牌日期",
-            "must": "N",
-            "name": "suspend_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "复牌日期",
-            "must": "N",
-            "name": "resume_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取股票停复牌信息",
+  "id": 31,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "停牌日期",
+      "must": "N",
+      "name": "suspend_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "复牌日期",
+      "must": "N",
+      "name": "resume_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "is_ready": null,
+  "name": "suspend",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "SUSPEND_DATE",
+      "data_type": "str",
+      "desc": "停牌日期",
+      "must": "Y",
+      "name": "suspend_date"
+    },
+    {
+      "column": "RESUME_DATE",
+      "data_type": "str",
+      "desc": "复牌日期",
+      "must": "Y",
+      "name": "resume_date"
+    },
+    {
+      "column": "ANN_DATE",
+      "data_type": "str",
+      "desc": "公告日期",
+      "must": "N",
+      "name": "ann_date"
+    },
+    {
+      "column": "SUSPEND_REASON",
+      "data_type": "str",
+      "desc": "停牌原因",
+      "must": "Y",
+      "name": "suspend_reason"
+    },
+    {
+      "column": "REASON_TYPE",
+      "data_type": "str",
+      "desc": "停牌原因类别",
+      "must": "N",
+      "name": "reason_type"
+    },
+    {
+      "column": "SUSPEND_TIMING",
+      "data_type": "str",
+      "desc": "停牌时间段",
+      "must": "N",
+      "name": "suspend_timing"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "is_ready": null,
-    "name": "suspend",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "SUSPEND_DATE",
-            "data_type": "str",
-            "desc": "停牌日期",
-            "must": "Y",
-            "name": "suspend_date"
-        },
-        {
-            "column": "RESUME_DATE",
-            "data_type": "str",
-            "desc": "复牌日期",
-            "must": "Y",
-            "name": "resume_date"
-        },
-        {
-            "column": "ANN_DATE",
-            "data_type": "str",
-            "desc": "公告日期",
-            "must": "N",
-            "name": "ann_date"
-        },
-        {
-            "column": "SUSPEND_REASON",
-            "data_type": "str",
-            "desc": "停牌原因",
-            "must": "Y",
-            "name": "suspend_reason"
-        },
-        {
-            "column": "REASON_TYPE",
-            "data_type": "str",
-            "desc": "停牌原因类别",
-            "must": "N",
-            "name": "reason_type"
-        },
-        {
-            "column": "SUSPEND_TIMING",
-            "data_type": "str",
-            "desc": "停牌时间段",
-            "must": "N",
-            "name": "suspend_timing"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            31,
-            "停复牌信息(停)"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "停复牌信息(停)",
-    "validations": [
-        {
-            "name": "ts_code",
-            "trigger": [
-                {
-                    "name": "suspend_date",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                },
-                {
-                    "name": "resume_date",
-                    "operator": "=",
-                    "type": "builtin",
-                    "value": "None"
-                }
-            ],
-            "validator": "required"
-        }
+    [
+      31,
+      "停复牌信息(停)"
     ]
+  ],
+  "title": "停复牌信息(停)",
+  "validations": [
+    {
+      "name": "ts_code",
+      "trigger": [
+        {
+          "name": "suspend_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        },
+        {
+          "name": "resume_date",
+          "operator": "=",
+          "type": "builtin",
+          "value": "None"
+        }
+      ],
+      "validator": "required"
+    }
+  ]
 }

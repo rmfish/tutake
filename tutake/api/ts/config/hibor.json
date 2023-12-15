@@ -1,141 +1,141 @@
 {
-    "database": "tushare_macroeconomic",
-    "default_limit": "4000",
-    "desc": "Hibor利率,每日12点更新，HIBOR (Hongkong InterBank Offered Rate)，是香港银行同行业拆借利率。指香港货币市场上，银行与银行之间的一年期以下的短期资金借贷利率，从伦敦同业拆借利率（LIBOR）变化出来的。",
-    "id": 153,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "日期",
-            "must": "N",
-            "name": "date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "4000",
+  "desc": "Hibor利率,每日12点更新，HIBOR (Hongkong InterBank Offered Rate)，是香港银行同行业拆借利率。指香港货币市场上，银行与银行之间的一年期以下的短期资金借贷利率，从伦敦同业拆借利率（LIBOR）变化出来的。",
+  "id": 153,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "日期",
+      "must": "N",
+      "name": "date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 120,
+  "is_ready": true,
+  "name": "hibor",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "DATE",
+      "data_type": "str",
+      "desc": "日期",
+      "must": "Y",
+      "name": "date"
+    },
+    {
+      "column": "ON",
+      "data_type": "float",
+      "desc": "隔夜",
+      "must": "Y",
+      "name": "on",
+      "column_name": "on_night"
+    },
+    {
+      "column": "1W",
+      "data_type": "float",
+      "desc": "1周",
+      "must": "Y",
+      "name": "1w",
+      "column_name": "t_1w"
+    },
+    {
+      "column": "2W",
+      "data_type": "float",
+      "desc": "2周",
+      "must": "Y",
+      "name": "2w",
+      "column_name": "t_2w"
+    },
+    {
+      "column": "1M",
+      "data_type": "float",
+      "desc": "1个月",
+      "must": "Y",
+      "name": "1m",
+      "column_name": "t_1m"
+    },
+    {
+      "column": "2M",
+      "data_type": "float",
+      "desc": "2个月",
+      "must": "Y",
+      "name": "2m",
+      "column_name": "t_2m"
+    },
+    {
+      "column": "3M",
+      "data_type": "float",
+      "desc": "3个月",
+      "must": "Y",
+      "name": "3m",
+      "column_name": "t_3m"
+    },
+    {
+      "column": "6M",
+      "data_type": "float",
+      "desc": "6个月",
+      "must": "Y",
+      "name": "6m",
+      "column_name": "t_6m"
+    },
+    {
+      "column": "12M",
+      "data_type": "float",
+      "desc": "12个月",
+      "must": "Y",
+      "name": "12m",
+      "column_name": "t_12m"
+    }
+  ],
+  "parent_id": 148,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 120,
-    "is_ready": true,
-    "name": "hibor",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "DATE",
-            "data_type": "str",
-            "desc": "日期",
-            "must": "Y",
-            "name": "date"
-        },
-        {
-            "column": "ON",
-            "data_type": "float",
-            "desc": "隔夜",
-            "must": "Y",
-            "name": "on",
-            "column_name": "on_night"
-        },
-        {
-            "column": "1W",
-            "data_type": "float",
-            "desc": "1周",
-            "must": "Y",
-            "name": "1w",
-            "column_name": "t_1w"
-        },
-        {
-            "column": "2W",
-            "data_type": "float",
-            "desc": "2周",
-            "must": "Y",
-            "name": "2w",
-            "column_name": "t_2w"
-        },
-        {
-            "column": "1M",
-            "data_type": "float",
-            "desc": "1个月",
-            "must": "Y",
-            "name": "1m",
-            "column_name": "t_1m"
-        },
-        {
-            "column": "2M",
-            "data_type": "float",
-            "desc": "2个月",
-            "must": "Y",
-            "name": "2m",
-            "column_name": "t_2m"
-        },
-        {
-            "column": "3M",
-            "data_type": "float",
-            "desc": "3个月",
-            "must": "Y",
-            "name": "3m",
-            "column_name": "t_3m"
-        },
-        {
-            "column": "6M",
-            "data_type": "float",
-            "desc": "6个月",
-            "must": "Y",
-            "name": "6m",
-            "column_name": "t_6m"
-        },
-        {
-            "column": "12M",
-            "data_type": "float",
-            "desc": "12个月",
-            "must": "Y",
-            "name": "12m",
-            "column_name": "t_12m"
-        }
+    [
+      147,
+      "宏观经济"
     ],
-    "parent_id": 148,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            147,
-            "宏观经济"
-        ],
-        [
-            224,
-            "国内宏观"
-        ],
-        [
-            148,
-            "利率数据"
-        ],
-        [
-            153,
-            "Hibor利率"
-        ]
+    [
+      224,
+      "国内宏观"
     ],
-    "title": "Hibor利率",
-    "validations": []
+    [
+      148,
+      "利率数据"
+    ],
+    [
+      153,
+      "Hibor利率"
+    ]
+  ],
+  "title": "Hibor利率",
+  "validations": []
 }

@@ -1,101 +1,101 @@
 {
-    "database": "tushare_ggt",
-    "default_limit": "1000",
-    "desc": "获取港股通每日成交信息，数据从2014年开始",
-    "id": 196,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "1000",
+  "desc": "获取港股通每日成交信息，数据从2014年开始",
+  "id": 196,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 5000,
+  "is_ready": null,
+  "name": "ggt_daily",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "BUY_AMOUNT",
+      "data_type": "float",
+      "desc": "买入成交金额（亿元）",
+      "must": "Y",
+      "name": "buy_amount"
+    },
+    {
+      "column": "BUY_VOLUME",
+      "data_type": "float",
+      "desc": "买入成交笔数（万笔）",
+      "must": "Y",
+      "name": "buy_volume"
+    },
+    {
+      "column": "SELL_AMOUNT",
+      "data_type": "float",
+      "desc": "卖出成交金额（亿元）",
+      "must": "Y",
+      "name": "sell_amount"
+    },
+    {
+      "column": "SELL_VOLUME",
+      "data_type": "float",
+      "desc": "卖出成交笔数（万笔）",
+      "must": "Y",
+      "name": "sell_volume"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 5000,
-    "is_ready": null,
-    "name": "ggt_daily",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "BUY_AMOUNT",
-            "data_type": "float",
-            "desc": "买入成交金额（亿元）",
-            "must": "Y",
-            "name": "buy_amount"
-        },
-        {
-            "column": "BUY_VOLUME",
-            "data_type": "float",
-            "desc": "买入成交笔数（万笔）",
-            "must": "Y",
-            "name": "buy_volume"
-        },
-        {
-            "column": "SELL_AMOUNT",
-            "data_type": "float",
-            "desc": "卖出成交金额（亿元）",
-            "must": "Y",
-            "name": "sell_amount"
-        },
-        {
-            "column": "SELL_VOLUME",
-            "data_type": "float",
-            "desc": "卖出成交笔数（万笔）",
-            "must": "Y",
-            "name": "sell_volume"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            196,
-            "港股通每日成交统计"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "港股通每日成交统计",
-    "validations": []
+    [
+      196,
+      "港股通每日成交统计"
+    ]
+  ],
+  "title": "港股通每日成交统计",
+  "validations": []
 }

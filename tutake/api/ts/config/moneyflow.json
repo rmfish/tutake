@@ -1,250 +1,250 @@
 {
-    "database": "tushare_moneyflow",
-    "default_limit": "5000",
-    "default_query": "ts_code='000001.SH'",
-    "desc": "获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向，每日晚19点更新",
-    "id": 170,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": "5000",
+  "default_query": "ts_code='000001.SH'",
+  "desc": "获取沪深A股票资金流向数据，分析大单小单成交情况，用于判别资金动向，每日晚19点更新",
+  "id": 170,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": 1,
+  "name": "moneyflow",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "BUY_SM_VOL",
+      "data_type": "int",
+      "desc": "小单买入量（手）",
+      "must": "Y",
+      "name": "buy_sm_vol"
+    },
+    {
+      "column": "BUY_SM_AMOUNT",
+      "data_type": "float",
+      "desc": "小单买入金额（万元）",
+      "must": "Y",
+      "name": "buy_sm_amount"
+    },
+    {
+      "column": "SELL_SM_VOL",
+      "data_type": "int",
+      "desc": "小单卖出量（手）",
+      "must": "Y",
+      "name": "sell_sm_vol"
+    },
+    {
+      "column": "SELL_SM_AMOUNT",
+      "data_type": "float",
+      "desc": "小单卖出金额（万元）",
+      "must": "Y",
+      "name": "sell_sm_amount"
+    },
+    {
+      "column": "BUY_MD_VOL",
+      "data_type": "int",
+      "desc": "中单买入量（手）",
+      "must": "Y",
+      "name": "buy_md_vol"
+    },
+    {
+      "column": "BUY_MD_AMOUNT",
+      "data_type": "float",
+      "desc": "中单买入金额（万元）",
+      "must": "Y",
+      "name": "buy_md_amount"
+    },
+    {
+      "column": "SELL_MD_VOL",
+      "data_type": "int",
+      "desc": "中单卖出量（手）",
+      "must": "Y",
+      "name": "sell_md_vol"
+    },
+    {
+      "column": "SELL_MD_AMOUNT",
+      "data_type": "float",
+      "desc": "中单卖出金额（万元）",
+      "must": "Y",
+      "name": "sell_md_amount"
+    },
+    {
+      "column": "BUY_LG_VOL",
+      "data_type": "int",
+      "desc": "大单买入量（手）",
+      "must": "Y",
+      "name": "buy_lg_vol"
+    },
+    {
+      "column": "BUY_LG_AMOUNT",
+      "data_type": "float",
+      "desc": "大单买入金额（万元）",
+      "must": "Y",
+      "name": "buy_lg_amount"
+    },
+    {
+      "column": "SELL_LG_VOL",
+      "data_type": "int",
+      "desc": "大单卖出量（手）",
+      "must": "Y",
+      "name": "sell_lg_vol"
+    },
+    {
+      "column": "SELL_LG_AMOUNT",
+      "data_type": "float",
+      "desc": "大单卖出金额（万元）",
+      "must": "Y",
+      "name": "sell_lg_amount"
+    },
+    {
+      "column": "BUY_ELG_VOL",
+      "data_type": "int",
+      "desc": "特大单买入量（手）",
+      "must": "Y",
+      "name": "buy_elg_vol"
+    },
+    {
+      "column": "BUY_ELG_AMOUNT",
+      "data_type": "float",
+      "desc": "特大单买入金额（万元）",
+      "must": "Y",
+      "name": "buy_elg_amount"
+    },
+    {
+      "column": "SELL_ELG_VOL",
+      "data_type": "int",
+      "desc": "特大单卖出量（手）",
+      "must": "Y",
+      "name": "sell_elg_vol"
+    },
+    {
+      "column": "SELL_ELG_AMOUNT",
+      "data_type": "float",
+      "desc": "特大单卖出金额（万元）",
+      "must": "Y",
+      "name": "sell_elg_amount"
+    },
+    {
+      "column": "NET_MF_VOL",
+      "data_type": "int",
+      "desc": "净流入量（手）",
+      "must": "Y",
+      "name": "net_mf_vol"
+    },
+    {
+      "column": "NET_MF_AMOUNT",
+      "data_type": "float",
+      "desc": "净流入额（万元）",
+      "must": "Y",
+      "name": "net_mf_amount"
+    },
+    {
+      "column": "TRADE_COUNT",
+      "data_type": "int",
+      "desc": "交易笔数",
+      "must": "N",
+      "name": "trade_count"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": 1,
-    "name": "moneyflow",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "BUY_SM_VOL",
-            "data_type": "int",
-            "desc": "小单买入量（手）",
-            "must": "Y",
-            "name": "buy_sm_vol"
-        },
-        {
-            "column": "BUY_SM_AMOUNT",
-            "data_type": "float",
-            "desc": "小单买入金额（万元）",
-            "must": "Y",
-            "name": "buy_sm_amount"
-        },
-        {
-            "column": "SELL_SM_VOL",
-            "data_type": "int",
-            "desc": "小单卖出量（手）",
-            "must": "Y",
-            "name": "sell_sm_vol"
-        },
-        {
-            "column": "SELL_SM_AMOUNT",
-            "data_type": "float",
-            "desc": "小单卖出金额（万元）",
-            "must": "Y",
-            "name": "sell_sm_amount"
-        },
-        {
-            "column": "BUY_MD_VOL",
-            "data_type": "int",
-            "desc": "中单买入量（手）",
-            "must": "Y",
-            "name": "buy_md_vol"
-        },
-        {
-            "column": "BUY_MD_AMOUNT",
-            "data_type": "float",
-            "desc": "中单买入金额（万元）",
-            "must": "Y",
-            "name": "buy_md_amount"
-        },
-        {
-            "column": "SELL_MD_VOL",
-            "data_type": "int",
-            "desc": "中单卖出量（手）",
-            "must": "Y",
-            "name": "sell_md_vol"
-        },
-        {
-            "column": "SELL_MD_AMOUNT",
-            "data_type": "float",
-            "desc": "中单卖出金额（万元）",
-            "must": "Y",
-            "name": "sell_md_amount"
-        },
-        {
-            "column": "BUY_LG_VOL",
-            "data_type": "int",
-            "desc": "大单买入量（手）",
-            "must": "Y",
-            "name": "buy_lg_vol"
-        },
-        {
-            "column": "BUY_LG_AMOUNT",
-            "data_type": "float",
-            "desc": "大单买入金额（万元）",
-            "must": "Y",
-            "name": "buy_lg_amount"
-        },
-        {
-            "column": "SELL_LG_VOL",
-            "data_type": "int",
-            "desc": "大单卖出量（手）",
-            "must": "Y",
-            "name": "sell_lg_vol"
-        },
-        {
-            "column": "SELL_LG_AMOUNT",
-            "data_type": "float",
-            "desc": "大单卖出金额（万元）",
-            "must": "Y",
-            "name": "sell_lg_amount"
-        },
-        {
-            "column": "BUY_ELG_VOL",
-            "data_type": "int",
-            "desc": "特大单买入量（手）",
-            "must": "Y",
-            "name": "buy_elg_vol"
-        },
-        {
-            "column": "BUY_ELG_AMOUNT",
-            "data_type": "float",
-            "desc": "特大单买入金额（万元）",
-            "must": "Y",
-            "name": "buy_elg_amount"
-        },
-        {
-            "column": "SELL_ELG_VOL",
-            "data_type": "int",
-            "desc": "特大单卖出量（手）",
-            "must": "Y",
-            "name": "sell_elg_vol"
-        },
-        {
-            "column": "SELL_ELG_AMOUNT",
-            "data_type": "float",
-            "desc": "特大单卖出金额（万元）",
-            "must": "Y",
-            "name": "sell_elg_amount"
-        },
-        {
-            "column": "NET_MF_VOL",
-            "data_type": "int",
-            "desc": "净流入量（手）",
-            "must": "Y",
-            "name": "net_mf_vol"
-        },
-        {
-            "column": "NET_MF_AMOUNT",
-            "data_type": "float",
-            "desc": "净流入额（万元）",
-            "must": "Y",
-            "name": "net_mf_amount"
-        },
-        {
-            "column": "TRADE_COUNT",
-            "data_type": "int",
-            "desc": "交易笔数",
-            "must": "N",
-            "name": "trade_count"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            170,
-            "个股资金流向"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "个股资金流向",
-    "validations": [
-        {
-            "message": "股票代码和日期至少输入一个参数",
-            "name": "ts_code",
-            "options": null,
-            "trigger": {
-                "exp": [
-                    {
-                        "name": "trade_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "start_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    },
-                    {
-                        "name": "end_date",
-                        "operator": "=",
-                        "type": "builtin",
-                        "value": "None"
-                    }
-                ],
-                "link": "and"
-            },
-            "validator": "required"
-        }
+    [
+      170,
+      "个股资金流向"
     ]
+  ],
+  "title": "个股资金流向",
+  "validations": [
+    {
+      "message": "股票代码和日期至少输入一个参数",
+      "name": "ts_code",
+      "options": null,
+      "trigger": {
+        "exp": [
+          {
+            "name": "trade_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "start_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          },
+          {
+            "name": "end_date",
+            "operator": "=",
+            "type": "builtin",
+            "value": "None"
+          }
+        ],
+        "link": "and"
+      },
+      "validator": "required"
+    }
+  ]
 }

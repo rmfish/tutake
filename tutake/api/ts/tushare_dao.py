@@ -10,7 +10,12 @@ engine_pool = {}
 
 
 def create_shared_engine(url: str, **connect_args):
-    return create_engine(url, poolclass=QueuePool, **connect_args)
+    # return create_engine("duckdb:///D:\\Dataset\\quant\\tutake\\tutake.duckdb", poolclass=QueuePool, **connect_args)
+    if url.startswith("duckdb"):
+        return create_engine(url, poolclass=QueuePool)
+    else:
+        return create_engine(url, poolclass=QueuePool, **connect_args)
+    # return create_engine("duckdb:///D:\\Dataset\\quant\\tutake\\tutake1.duckdb", poolclass=QueuePool)
 
 
 class TushareDAO(BaseDao):

@@ -1,20 +1,22 @@
 import pandas as pd
 import pendulum
 
-from tutake.api.base_dao import TutakeCheckerPoint, checker_logger, BatchWriter
+from tutake.api.base_dao import checker_logger, BatchWriter
 
 
-def _auto_data_repair(self, trade_date, ts_codes):
+def _auto_data_repair(self, trade_date, ts_codes, tushare):
     writer = BatchWriter(self.engine, self.table_name)
     if len(ts_codes) < 100:
         for ts_code in ts_codes:
             checker_logger.info(f"Auto fix {self.name} data of {ts_code}")
-            checker_logger.info(self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
-                                        self.fetch_and_append, writer))
+            checker_logger.info(
+                self._process_by_func(lambda: self.delete_by(ts_code=ts_code), lambda: [{"ts_code": ts_code}],
+                                      self.fetch_and_append, writer))
     else:
         checker_logger.info(f"Auto fix {self.name} data of {trade_date}")
-        checker_logger.info(self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
-                                    self.fetch_and_append, writer))
+        checker_logger.info(
+            self._process_by_func(lambda: self.delete_by(trade_date=trade_date), lambda: [{"trade_date": trade_date}],
+                                  self.fetch_and_append, writer))
 
 
 def check_by_date(self, method, default_start, force_start=None, date_apply=lambda d: d.add(days=1), print_step=30,
@@ -54,11 +56,10 @@ def check_by_date(self, method, default_start, force_start=None, date_apply=lamb
             tushare_pd = pd.DataFrame(tushare.items, columns=tushare.fields)
             diff = list(set(tushare_pd[diff_column].unique().tolist()) - set(db[diff_column].unique().tolist()))
             if diff_repair is not None:
-                diff_repair(self, trade_date, diff)
-                continue
+                diff_repair(self, trade_date, diff, tushare)
             else:
                 checker_logger.warning(
-                    f"Not equals data. The date is {trade_date}. tushare size is {tushare.size()}, db size is {db.shape[0]}, diff is {diff}")
+                    f"Not equals data {self.name}. The date is {trade_date}. tushare size is {tushare.size()}, db size is {db.shape[0]}, diff is {diff}")
                 if force_start is None:
                     self.checker.error_point(trade_date=trade_date)
             return

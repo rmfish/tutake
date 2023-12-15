@@ -1,177 +1,177 @@
 {
-    "database": "tushare_fund",
-    "default_limit": null,
-    "desc": "获取公募基金管理人列表",
-    "id": 118,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "default": "19900101",
-            "desc": "成立日期",
-            "must": "N",
-            "name": "setup_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "单次返回数据长度",
-            "must": "N",
-            "name": "limit"
-        },
-        {
-            "data_type": "int",
-            "desc": "请求数据的开始位移量",
-            "must": "N",
-            "name": "offset"
-        }
+  "database": null,
+  "default_limit": null,
+  "desc": "获取公募基金管理人列表",
+  "id": 118,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "default": "19900101",
+      "desc": "成立日期",
+      "must": "N",
+      "name": "setup_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "单次返回数据长度",
+      "must": "N",
+      "name": "limit"
+    },
+    {
+      "data_type": "int",
+      "desc": "请求数据的开始位移量",
+      "must": "N",
+      "name": "offset"
+    }
+  ],
+  "integral_required": 1500,
+  "is_ready": null,
+  "name": "fund_company",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "NAME",
+      "data_type": "str",
+      "desc": "公司名称",
+      "must": "Y",
+      "name": "name"
+    },
+    {
+      "column": "SHORTNAME",
+      "data_type": "str",
+      "desc": "简称",
+      "must": "Y",
+      "name": "shortname"
+    },
+    {
+      "column": "SHORT_ENNAME",
+      "data_type": "str",
+      "desc": "英文缩写",
+      "must": "N",
+      "name": "short_enname"
+    },
+    {
+      "column": "PROVINCE",
+      "data_type": "str",
+      "desc": "省份",
+      "must": "Y",
+      "name": "province"
+    },
+    {
+      "column": "CITY",
+      "data_type": "str",
+      "desc": "城市",
+      "must": "Y",
+      "name": "city"
+    },
+    {
+      "column": "ADDRESS",
+      "data_type": "str",
+      "desc": "注册地址",
+      "must": "Y",
+      "name": "address"
+    },
+    {
+      "column": "PHONE",
+      "data_type": "str",
+      "desc": "电话",
+      "must": "Y",
+      "name": "phone"
+    },
+    {
+      "column": "OFFICE",
+      "data_type": "str",
+      "desc": "办公地址",
+      "must": "Y",
+      "name": "office"
+    },
+    {
+      "column": "WEBSITE",
+      "data_type": "str",
+      "desc": "公司网址",
+      "must": "Y",
+      "name": "website"
+    },
+    {
+      "column": "CHAIRMAN",
+      "data_type": "str",
+      "desc": "法人代表",
+      "must": "Y",
+      "name": "chairman"
+    },
+    {
+      "column": "MANAGER",
+      "data_type": "str",
+      "desc": "总经理",
+      "must": "Y",
+      "name": "manager"
+    },
+    {
+      "column": "REG_CAPITAL",
+      "data_type": "float",
+      "desc": "注册资本",
+      "must": "Y",
+      "name": "reg_capital"
+    },
+    {
+      "column": "SETUP_DATE",
+      "data_type": "str",
+      "desc": "成立日期",
+      "must": "Y",
+      "name": "setup_date"
+    },
+    {
+      "column": "END_DATE",
+      "data_type": "str",
+      "desc": "公司终止日期",
+      "must": "Y",
+      "name": "end_date"
+    },
+    {
+      "column": "EMPLOYEES",
+      "data_type": "float",
+      "desc": "员工总数",
+      "must": "Y",
+      "name": "employees"
+    },
+    {
+      "column": "MAIN_BUSINESS",
+      "data_type": "str",
+      "desc": "主要产品及业务",
+      "must": "Y",
+      "name": "main_business"
+    },
+    {
+      "column": "ORG_CODE",
+      "data_type": "str",
+      "desc": "组织机构代码",
+      "must": "Y",
+      "name": "org_code"
+    },
+    {
+      "column": "CREDIT_CODE",
+      "data_type": "str",
+      "desc": "统一社会信用代码",
+      "must": "Y",
+      "name": "credit_code"
+    }
+  ],
+  "parent_id": 18,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 1500,
-    "is_ready": null,
-    "name": "fund_company",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "NAME",
-            "data_type": "str",
-            "desc": "公司名称",
-            "must": "Y",
-            "name": "name"
-        },
-        {
-            "column": "SHORTNAME",
-            "data_type": "str",
-            "desc": "简称",
-            "must": "Y",
-            "name": "shortname"
-        },
-        {
-            "column": "SHORT_ENNAME",
-            "data_type": "str",
-            "desc": "英文缩写",
-            "must": "N",
-            "name": "short_enname"
-        },
-        {
-            "column": "PROVINCE",
-            "data_type": "str",
-            "desc": "省份",
-            "must": "Y",
-            "name": "province"
-        },
-        {
-            "column": "CITY",
-            "data_type": "str",
-            "desc": "城市",
-            "must": "Y",
-            "name": "city"
-        },
-        {
-            "column": "ADDRESS",
-            "data_type": "str",
-            "desc": "注册地址",
-            "must": "Y",
-            "name": "address"
-        },
-        {
-            "column": "PHONE",
-            "data_type": "str",
-            "desc": "电话",
-            "must": "Y",
-            "name": "phone"
-        },
-        {
-            "column": "OFFICE",
-            "data_type": "str",
-            "desc": "办公地址",
-            "must": "Y",
-            "name": "office"
-        },
-        {
-            "column": "WEBSITE",
-            "data_type": "str",
-            "desc": "公司网址",
-            "must": "Y",
-            "name": "website"
-        },
-        {
-            "column": "CHAIRMAN",
-            "data_type": "str",
-            "desc": "法人代表",
-            "must": "Y",
-            "name": "chairman"
-        },
-        {
-            "column": "MANAGER",
-            "data_type": "str",
-            "desc": "总经理",
-            "must": "Y",
-            "name": "manager"
-        },
-        {
-            "column": "REG_CAPITAL",
-            "data_type": "float",
-            "desc": "注册资本",
-            "must": "Y",
-            "name": "reg_capital"
-        },
-        {
-            "column": "SETUP_DATE",
-            "data_type": "str",
-            "desc": "成立日期",
-            "must": "Y",
-            "name": "setup_date"
-        },
-        {
-            "column": "END_DATE",
-            "data_type": "str",
-            "desc": "公司终止日期",
-            "must": "Y",
-            "name": "end_date"
-        },
-        {
-            "column": "EMPLOYEES",
-            "data_type": "float",
-            "desc": "员工总数",
-            "must": "Y",
-            "name": "employees"
-        },
-        {
-            "column": "MAIN_BUSINESS",
-            "data_type": "str",
-            "desc": "主要产品及业务",
-            "must": "Y",
-            "name": "main_business"
-        },
-        {
-            "column": "ORG_CODE",
-            "data_type": "str",
-            "desc": "组织机构代码",
-            "must": "Y",
-            "name": "org_code"
-        },
-        {
-            "column": "CREDIT_CODE",
-            "data_type": "str",
-            "desc": "统一社会信用代码",
-            "must": "Y",
-            "name": "credit_code"
-        }
+    [
+      18,
+      "公募基金"
     ],
-    "parent_id": 18,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            18,
-            "公募基金"
-        ],
-        [
-            118,
-            "基金管理人"
-        ]
-    ],
-    "title": "基金管理人",
-    "validations": []
+    [
+      118,
+      "基金管理人"
+    ]
+  ],
+  "title": "基金管理人",
+  "validations": []
 }

@@ -13,7 +13,7 @@ import tushare as ts
 from sqlalchemy import Integer, String, Float, Column, create_engine
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import Base, BatchWriter, Records, BaseDao, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
 from tutake.api.ts.monthly_ext import *
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
@@ -23,9 +23,8 @@ from tutake.utils.config import TutakeConfig
 from tutake.utils.utils import project_root
 
 
-class TushareMonthly(Base):
+class TushareMonthlyAdj(TutakeTableBase):
     __tablename__ = "tushare_monthly_adj"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     ts_code = Column(String, index=True, comment='')
     trade_date = Column(String, index=True, comment='')
     close_adj = Column(Float, comment='')
@@ -42,8 +41,9 @@ class MonthlyAdj(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_monthly_adj"
-        self.database = 'tushare_monthly.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_dir = config.get_tutake_data_dir()
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -51,7 +51,8 @@ class MonthlyAdj(TushareDAO, TuShareBase, DataProcess):
                                            })
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
-        TushareMonthly.__table__.create(bind=self.engine, checkfirst=True)
+        TushareMonthlyAdj.__table__.create(bind=self.engine, checkfirst=True)
+        self.schema = BaseDao.parquet_schema(TushareMonthlyAdj)
 
         query_fields = ['ts_code', 'trade_date', 'start_date', 'end_date', 'limit', 'offset']
         self.tushare_fields = [
@@ -61,7 +62,7 @@ class MonthlyAdj(TushareDAO, TuShareBase, DataProcess):
             "ts_code", "trade_date", "close_adj", "open_adj"
         ]
         column_mapping = None
-        TushareDAO.__init__(self, self.engine, session_factory, TushareMonthly, self.database, self.table_name,
+        TushareDAO.__init__(self, self.engine, session_factory, TushareMonthlyAdj, self.database, self.table_name,
                             query_fields, entity_fields, column_mapping, config)
         DataProcess.__init__(self, "monthly_adj", config)
         TuShareBase.__init__(self, "monthly_adj", config, 600)
@@ -110,7 +111,8 @@ class MonthlyAdj(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append,
+                                BatchWriter(self.engine, self.table_name, self.schema, self.database_dir), **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -260,8 +262,9 @@ if __name__ == '__main__':
     result_df = pd.merge(df, result_df, on='ts_code')
     result_df = result_df.loc[
         (result_df['trade_date'] == result_df['min_date']) | (result_df['trade_date'] == result_df['max_date'])]
-    # print(result_df)
 
+
+    # print(result_df)
 
     # 按照 'code'、'min_date'、'max_date' 进行分组，并比较对应的最小和最大日期的 'val' 值，得到最小值和最大值
     def group_df(df):

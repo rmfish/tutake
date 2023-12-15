@@ -8,22 +8,22 @@ Tushare cn_cpi接口
 @author: rmfish
 """
 import pandas as pd
-from sqlalchemy import Integer, String, Float, Column, create_engine
+from sqlalchemy import Integer, String, Float, Column
 from sqlalchemy.orm import sessionmaker
 
-from tutake.api.base_dao import Base, BatchWriter, Records
+from tutake.api.base_dao import BaseDao, BatchWriter, TutakeTableBase
 from tutake.api.process import DataProcess, ProcessException
-from tutake.api.ts.cn_cpi_ext import *
+from tutake.api.ts import cn_cpi_ext
 from tutake.api.ts.tushare_dao import TushareDAO, create_shared_engine
 from tutake.api.ts.tushare_api import TushareAPI
 from tutake.api.ts.tushare_base import TuShareBase
 from tutake.utils.config import TutakeConfig
+from tutake.utils.decorator import extends_attr
 from tutake.utils.utils import project_root
 
 
-class TushareCnCpi(Base):
+class TushareCnCpi(TutakeTableBase):
     __tablename__ = "tushare_cn_cpi"
-    id = Column(Integer, primary_key=True, autoincrement=True)
     month = Column(String, comment='月份YYYYMM')
     nt_val = Column(Float, comment='全国当月至')
     nt_yoy = Column(Float, comment='全国同比（%）')
@@ -49,8 +49,8 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
 
     def __init__(self, config):
         self.table_name = "tushare_cn_cpi"
-        self.database = 'tushare_macroeconomic.db'
-        self.database_url = config.get_data_sqlite_driver_url(self.database)
+        self.database = 'tutake.duckdb'
+        self.database_url = config.get_data_driver_url(self.database)
         self.engine = create_shared_engine(self.database_url,
                                            connect_args={
                                                'check_same_thread': False,
@@ -59,6 +59,8 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         session_factory = sessionmaker()
         session_factory.configure(bind=self.engine)
         TushareCnCpi.__table__.create(bind=self.engine, checkfirst=True)
+        self.writer = BatchWriter(self.engine, self.table_name, BaseDao.parquet_schema(TushareCnCpi),
+                                  config.get_tutake_data_dir())
 
         query_fields = ['m', 'start_m', 'end_m', 'limit', 'offset']
         self.tushare_fields = [
@@ -164,7 +166,7 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         同步历史数据
         :return:
         """
-        return super()._process(self.fetch_and_append, BatchWriter(self.engine, self.table_name), **kwargs)
+        return super()._process(self.fetch_and_append, self.writer, **kwargs)
 
     def fetch_and_append(self, **kwargs):
         """
@@ -172,6 +174,7 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         :return: 数量行数
         """
         init_args = {"m": "", "start_m": "", "end_m": "", "limit": "", "offset": ""}
+        is_test = kwargs.get('test') or False
         if len(kwargs.keys()) == 0:
             kwargs = init_args
         # 初始化offset和limit
@@ -196,21 +199,18 @@ class CnCpi(TushareDAO, TuShareBase, DataProcess):
         res = fetch_save(offset)
         size = res.size()
         offset += size
+        res.fields = self.entity_fields
+        if is_test:
+            return res
         while kwargs['limit'] != "" and size == int(kwargs['limit']):
             result = fetch_save(offset)
             size = result.size()
             offset += size
             res.append(result)
-        res.fields = self.entity_fields
         return res
 
 
-setattr(CnCpi, 'default_limit', default_limit_ext)
-setattr(CnCpi, 'default_cron_express', default_cron_express_ext)
-setattr(CnCpi, 'default_order_by', default_order_by_ext)
-setattr(CnCpi, 'prepare', prepare_ext)
-setattr(CnCpi, 'query_parameters', query_parameters_ext)
-setattr(CnCpi, 'param_loop_process', param_loop_process_ext)
+extends_attr(CnCpi, cn_cpi_ext)
 
 if __name__ == '__main__':
     import tushare as ts

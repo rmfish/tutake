@@ -1,107 +1,107 @@
 {
-    "database": "tushare_stk",
-    "default_limit": "5800",
-    "desc": "获取全市场（包含A/B股和基金）每日涨跌停价格，包括涨停价格，跌停价格等，每个交易日8点40左右更新当日股票涨跌停价格。交易日9点更新",
-    "id": 183,
-    "if_exists": null,
-    "inputs": [
-        {
-            "data_type": "str",
-            "desc": "股票代码",
-            "must": "N",
-            "name": "ts_code"
-        },
-        {
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "N",
-            "name": "trade_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "开始日期",
-            "must": "N",
-            "name": "start_date"
-        },
-        {
-            "data_type": "str",
-            "desc": "结束日期",
-            "must": "N",
-            "name": "end_date"
-        },
-        {
-            "data_type": "int",
-            "desc": "开始行数",
-            "must": "N",
-            "name": "offset"
-        },
-        {
-            "data_type": "int",
-            "desc": "每页最大条数",
-            "must": "N",
-            "name": "limit"
-        }
+  "database": null,
+  "default_limit": "5800",
+  "desc": "获取全市场（包含A/B股和基金）每日涨跌停价格，包括涨停价格，跌停价格等，每个交易日8点40左右更新当日股票涨跌停价格。交易日9点更新",
+  "id": 183,
+  "if_exists": null,
+  "inputs": [
+    {
+      "data_type": "str",
+      "desc": "股票代码",
+      "must": "N",
+      "name": "ts_code"
+    },
+    {
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "N",
+      "name": "trade_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "开始日期",
+      "must": "N",
+      "name": "start_date"
+    },
+    {
+      "data_type": "str",
+      "desc": "结束日期",
+      "must": "N",
+      "name": "end_date"
+    },
+    {
+      "data_type": "int",
+      "desc": "开始行数",
+      "must": "N",
+      "name": "offset"
+    },
+    {
+      "data_type": "int",
+      "desc": "每页最大条数",
+      "must": "N",
+      "name": "limit"
+    }
+  ],
+  "integral_required": 2000,
+  "is_ready": null,
+  "name": "stk_limit",
+  "order_by": null,
+  "outputs": [
+    {
+      "column": "TRADE_DATE",
+      "data_type": "str",
+      "desc": "交易日期",
+      "must": "Y",
+      "name": "trade_date"
+    },
+    {
+      "column": "TS_CODE",
+      "data_type": "str",
+      "desc": "TS股票代码",
+      "must": "Y",
+      "name": "ts_code"
+    },
+    {
+      "column": "PRE_CLOSE",
+      "data_type": "float",
+      "desc": "昨日收盘价",
+      "must": "N",
+      "name": "pre_close"
+    },
+    {
+      "column": "UP_LIMIT",
+      "data_type": "float",
+      "desc": "涨停价",
+      "must": "Y",
+      "name": "up_limit"
+    },
+    {
+      "column": "DOWN_LIMIT",
+      "data_type": "float",
+      "desc": "跌停价",
+      "must": "Y",
+      "name": "down_limit"
+    }
+  ],
+  "parent_id": 15,
+  "path": [
+    [
+      2,
+      "数据接口"
     ],
-    "integral_required": 2000,
-    "is_ready": null,
-    "name": "stk_limit",
-    "order_by": null,
-    "outputs": [
-        {
-            "column": "TRADE_DATE",
-            "data_type": "str",
-            "desc": "交易日期",
-            "must": "Y",
-            "name": "trade_date"
-        },
-        {
-            "column": "TS_CODE",
-            "data_type": "str",
-            "desc": "TS股票代码",
-            "must": "Y",
-            "name": "ts_code"
-        },
-        {
-            "column": "PRE_CLOSE",
-            "data_type": "float",
-            "desc": "昨日收盘价",
-            "must": "N",
-            "name": "pre_close"
-        },
-        {
-            "column": "UP_LIMIT",
-            "data_type": "float",
-            "desc": "涨停价",
-            "must": "Y",
-            "name": "up_limit"
-        },
-        {
-            "column": "DOWN_LIMIT",
-            "data_type": "float",
-            "desc": "跌停价",
-            "must": "Y",
-            "name": "down_limit"
-        }
+    [
+      14,
+      "沪深股票"
     ],
-    "parent_id": 15,
-    "path": [
-        [
-            2,
-            "数据接口"
-        ],
-        [
-            14,
-            "沪深股票"
-        ],
-        [
-            15,
-            "行情数据"
-        ],
-        [
-            183,
-            "每日涨跌停价格"
-        ]
+    [
+      15,
+      "行情数据"
     ],
-    "title": "每日涨跌停价格",
-    "validations": []
+    [
+      183,
+      "每日涨跌停价格"
+    ]
+  ],
+  "title": "每日涨跌停价格",
+  "validations": []
 }
