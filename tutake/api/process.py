@@ -239,6 +239,8 @@ class DataProcess:
         return False
 
     def _process(self, fetch_and_append, writer: BatchWriter = None, **kwargs) -> ProcessStatus:
+        if self.config.check():
+            raise Exception(f"Tutake config is empty, not support invoke process api.")
         """
         同步历史数据
         :return:

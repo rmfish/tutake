@@ -102,16 +102,20 @@ TUTAKE_DATABASE_TYPE = 'duckdb'
 
 class TutakeConfig(object):
 
-    def __init__(self, absolute_config_path):
-        if absolute_config_path and os.path.isdir(absolute_config_path):
-            absolute_config_path = Path(f'{absolute_config_path}/config.yml')
-        if absolute_config_path and not os.path.exists(absolute_config_path):
-            absolute_config_path = Path(f'{project_root()}/config.yml')
-            if os.path.exists(absolute_config_path):
-                print(f"Tutake config file is None or not exists. use default configfile. {absolute_config_path}")
+    def __init__(self, absolute_config_path=None):
+        self.empty = False
+        _config_path = absolute_config_path
+        if absolute_config_path is not None and os.path.isdir(absolute_config_path):
+            _config_path = Path(f'{absolute_config_path}/config.yml')
+        if absolute_config_path is None or not os.path.exists(_config_path):
+            _config_path = Path(f'{project_root()}/config.yml')
+            if not os.path.exists(_config_path):
+                print(f"Tutake config file [{absolute_config_path}] is not exists. use empty config.")
+                self.empty = True
             else:
-                raise Exception(f"Tutake config file is None or not exists. pls set it.")
-        self.config_file = absolute_config_path
+                print(
+                    f"Tutake config file [{absolute_config_path}] is not exists. use the default configfile. {_config_path}")
+        self.config_file = _config_path
         self.__config = self._load_config_file(self.config_file)
         self._default_config()
         self._remote_client = None
@@ -138,7 +142,7 @@ class TutakeConfig(object):
         确认必须的配置项
         :return:
         """
-        data_dir = Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('data')))
+        data_dir = Path(realpath(self.get_config(TUTAKE_DATA_DIR_KEY) or self._get_default_data_dir('database')))
         if not data_dir.exists():
             data_dir.mkdir(parents=True)
             # os.makedirs(data_dir)
@@ -164,12 +168,17 @@ class TutakeConfig(object):
                f"\n\t{TUTAKE_LOGGING_CONFIG_KEY}:\t{self.logger_config_file}" \
                f"\n\t{TUTAKE_SCHEDULER_CONFIG_KEY}:\t{self.get_config(TUTAKE_SCHEDULER_CONFIG_KEY)}"
 
+    def check(self):
+        if self.empty:
+            raise Exception(f"Tutake config is empty, not support invoke process api.")
+
+
     def _load_config_file(self, config_file: str) -> DotConfig:
         if config_file and os.path.exists(config_file):
             with open(config_file, 'r', encoding='utf8') as stream:
                 return DotConfig(yaml.safe_load(stream))
         else:
-            print("Config file is not exits. %s" % config_file)
+            print("Config file is not exits, use default empty config instead. Pls set config in %s" % config_file)
         return DotConfig()
 
     def merge_config(self, **_config):
@@ -209,13 +218,13 @@ class TutakeConfig(object):
             self.set_config(TUSHARE_META_DRIVER_URL_KEY, self._get_default_driver_url(_dir))
 
     def _get_default_data_dir(self, dir_name):
-        db_name = 'tushare_stock_basic.db'
+        # db_name = 'tushare_stock_basic.db'
         if dir_name == 'meta':
             db_name = 'tushare_meta.db'
         _dir = Path(dirname(self.config_file), dir_name)
         # "%s/%s" % (dirname(self.config_file), dir_name)
-        _dir = Path(dirname(self.config_file), dir_name)
-        if _dir.joinpath(db_name).exists():
+        # _dir = Path(dirname(self.config_file), dir_name)
+        if _dir.exists():
             # os.path.exists("%s/%s" % (_dir, db_name)):
             return _dir
         else:
@@ -278,6 +287,7 @@ class TutakeConfig(object):
             self.set_config(TUSHARE_TOKEN_KEY, tushare_token)
 
     def get_tushare_token(self):
+        self.check()
         token = self.get_config(TUSHARE_TOKEN_KEY)
         if token is None:
             tokens = self.get_config(TUSHARE_TOKENS_KEY)

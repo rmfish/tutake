@@ -2,18 +2,14 @@ import tutake as tt
 
 
 def quick_start():
-    tutake = tt.Tutake("./config.yml")
-    print("========同步股票数据========")
-    tutake.process_api().stock_basic()
+    tushare = tt.Tutake().tushare_api()
+    # tutake = tt.Tutake("./config.yml")
     print("========查询股票数据========")
-    print(tutake.tushare_api().stock_basic())
-
-
-def remote_query():
-    tutake = tt.Tutake("./config.yml")
-    print("========查询股票数据========")
-    print(tutake.tushare_api().stock_basic())
-    print(tutake.tushare_api().stock_basic())
+    print(tushare.stock_basic())
+    print(tushare.daily())
+    print(tushare.adj_factor())
+    print(tushare.pro_bar(ts_code='000002.SZ', adj='hfq'))
+    print(tushare._daily.sql("select * from {table} where trade_date='20221230' and close>open limit 5"))
 
 
 def complete():
@@ -43,12 +39,10 @@ def cron_task():
 
 if __name__ == '__main__':
     # 可以查看这个接口入门
-    # quick_start()
-
-    remote_query()
+    quick_start()
 
     # 全量的演示代码都在complete接口，但这个接口数据量很大，耗时很长，可以先尝试前面的小数据量的接口
-    # complete(tutake)
+    # complete()
 
     # 正式部署使用时，用这个接口
     # cron_task()

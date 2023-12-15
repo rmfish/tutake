@@ -1,7 +1,7 @@
 #执行时需要将这个文件调整为 config.yml
 tutake:
-  data:
-    dir: ~/.tutake/data  #单独指定数据的目录
+#  data:
+#    dir:   #单独指定数据的目录
   scheduler:
     tasks:  #配置每个任务的定时任务，使用crontab的参数，具体的配置参考下方注释或者上网查询
       - xueqiu: 0 10 * * *  #代表xueqiu的所有接口都用这个cron参数

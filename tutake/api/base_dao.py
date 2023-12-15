@@ -1,5 +1,6 @@
 import logging
 import os
+import pathlib
 import threading
 import time
 from datetime import datetime
@@ -133,6 +134,14 @@ class BaseDao(object):
                    table_type.__dict__ if (not column.startswith("_") and (not column == 'id'))]
         columns.insert(0, pa.field('id', pa.int64()))
         return pa.schema(columns)
+
+    def export(self, _dir=None):
+        pq_file = f"{self.table_name}.parquet"
+        if _dir is not None:
+            pq_file = pathlib.Path(_dir, pq_file)
+        conn = self.engine.connect()
+        conn.execute(f"COPY (SELECT * FROM {self.table_name}) TO '{pq_file}' (FORMAT PARQUET);")
+        conn.close()
 
     def columns_meta(self):
         pass
